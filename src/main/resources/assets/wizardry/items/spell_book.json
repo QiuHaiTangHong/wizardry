@@ -1,0 +1,27 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:component",
+    "component": "wizardry:spell_state",
+    "cases": [
+      {
+        "when": "discovered",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/spell_book_discovered"
+        }
+      },
+      {
+        "when": "festive",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/festive_spell_book"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "wizardry:item/spell_book_undiscovered"
+    }
+  }
+}

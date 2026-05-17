@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "wizardry:battlemage_armour_sorcery"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "wizardry:battlemage_armour_sorcery_legs"
+      }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+    "parent": "wizardry:block/runestone",
+    "textures": {
+        "side": "wizardry:block/runestone_sorcery_0",
+        "rune": "wizardry:block/runestone_sorcery_1",
+        "overlay": "wizardry:block/runestone_sorcery_1_overlay"
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "parent": "wizardry:block/runestone_pedestal",
+    "textures": {
+        "side": "wizardry:block/runestone_pedestal_necromancy",
+        "top": "wizardry:block/runestone_necromancy_0",
+        "bottom": "wizardry:block/runestone_necromancy_0",
+        "overlay": "wizardry:block/runestone_pedestal_necromancy_overlay"
+    }
+}

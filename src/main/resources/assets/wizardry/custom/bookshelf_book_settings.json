@@ -1,0 +1,25 @@
+{
+  "parser": "wizardry:bookshelf_book_settings_parser",
+  "texture_mapping": {
+    "minecraft:book": "wizardry:block/books_brown",
+    "minecraft:writable_book": "wizardry:block/books_brown",
+    "minecraft:written_book": "wizardry:block/books_brown",
+    "minecraft:enchanted_book": "wizardry:block/books_enchanted",
+    "wizardry:spell_book": "wizardry:block/books_red",
+    "wizardry:wizard_handbook": "wizardry:block/books_blue",
+    "wizardry:arcane_tome": "wizardry:block/books_purple",
+    "wizardry:ruined_spell_book": "wizardry:block/books_brown",
+    "wizardry:scroll": "wizardry:block/scrolls_blue",
+    "wizardry:blank_scroll": "wizardry:block/scrolls_blue",
+    "wizardry:identification_scroll": "wizardry:block/scrolls_purple",
+    "wizardry:storage_upgrade": "wizardry:block/scrolls_wooden",
+    "wizardry:siphon_upgrade": "wizardry:block/scrolls_wooden",
+    "wizardry:condenser_upgrade": "wizardry:block/scrolls_wooden",
+    "wizardry:range_upgrade": "wizardry:block/scrolls_wooden",
+    "wizardry:duration_upgrade": "wizardry:block/scrolls_wooden",
+    "wizardry:cooldown_upgrade": "wizardry:block/scrolls_wooden",
+    "wizardry:blast_upgrade": "wizardry:block/scrolls_wooden",
+    "wizardry:attunement_upgrade": "wizardry:block/scrolls_wooden",
+    "wizardry:melee_upgrade": "wizardry:block/scrolls_wooden"
+  }
+}

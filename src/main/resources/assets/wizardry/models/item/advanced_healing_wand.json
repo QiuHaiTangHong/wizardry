@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "wizardry:item/wand_advanced_healing"
+  }
+}

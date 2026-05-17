@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "element=earth": {"model": "wizardry:block/earth_crystal_block"},
+    "element=fire": {"model": "wizardry:block/fire_crystal_block"},
+    "element=healing": {"model": "wizardry:block/healing_crystal_block"},
+    "element=ice": {"model": "wizardry:block/ice_crystal_block"},
+    "element=lightning": {"model": "wizardry:block/lightning_crystal_block"},
+    "element=magic": {"model": "wizardry:block/magic_crystal_block"},
+    "element=necromancy": {"model": "wizardry:block/necromancy_crystal_block"},
+    "element=sorcery": {"model": "wizardry:block/sorcery_crystal_block"}
+  }
+}

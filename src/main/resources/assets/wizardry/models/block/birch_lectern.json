@@ -1,0 +1,10 @@
+{
+    "parent": "wizardry:block/lectern",
+	"textures": {
+		"particle": "wizardry:block/birch_lectern_top",
+		"base": "wizardry:block/birch_lectern_base",
+		"side": "wizardry:block/birch_lectern_side",
+		"top": "wizardry:block/birch_lectern_top",
+		"underside": "wizardry:block/birch_lectern_underside"
+	}
+}

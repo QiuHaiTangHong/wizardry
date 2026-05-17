@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lectern_wood_type=oak": {"model": "wizardry:block/oak_lectern"},
+    "lectern_wood_type=spruce": {"model": "wizardry:block/spruce_lectern"},
+    "lectern_wood_type=birch": {"model": "wizardry:block/birch_lectern"},
+    "lectern_wood_type=jungle": {"model": "wizardry:block/jungle_lectern"},
+    "lectern_wood_type=acacia": {"model": "wizardry:block/acacia_lectern"},
+    "lectern_wood_type=dark_oak": {"model": "wizardry:block/dark_oak_lectern"}
+  }
+}

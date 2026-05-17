@@ -1,0 +1,65 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:component",
+    "component": "wizardry:crystal_type",
+    "cases": [
+      {
+        "when": "magic",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/crystal_magic"
+        }
+      },
+      {
+        "when": "fire",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/crystal_fire"
+        }
+      },
+      {
+        "when": "ice",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/crystal_ice"
+        }
+      },
+      {
+        "when": "lightning",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/crystal_lightning"
+        }
+      },
+      {
+        "when": "necromancy",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/crystal_necromancy"
+        }
+      },
+      {
+        "when": "earth",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/crystal_earth"
+        }
+      },
+      {
+        "when": "sorcery",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/crystal_sorcery"
+        }
+      },
+      {
+        "when": "healing",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/crystal_healing"
+        }
+      }
+    ]
+  }
+}

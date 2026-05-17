@@ -1,0 +1,6 @@
+{
+    "model": {
+        "type": "minecraft:model",
+        "model": "wizardry:block/arcane_workbench"
+    }
+}

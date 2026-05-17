@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "bookshelf_wood_type=oak": {"model": "wizardry:block/oak_bookshelf"},
+    "bookshelf_wood_type=spruce": {"model": "wizardry:block/spruce_bookshelf"},
+    "bookshelf_wood_type=birch": {"model": "wizardry:block/birch_bookshelf"},
+    "bookshelf_wood_type=jungle": {"model": "wizardry:block/jungle_bookshelf"},
+    "bookshelf_wood_type=acacia": {"model": "wizardry:block/acacia_bookshelf"},
+    "bookshelf_wood_type=dark_oak": {"model": "wizardry:block/dark_oak_bookshelf"}
+  }
+}

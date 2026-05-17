@@ -1,0 +1,41 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:block_state",
+    "block_state_property": "element",
+    "cases": [
+      {
+        "when": "magic",
+        "model": { "type": "minecraft:model", "model": "wizardry:item/magic_runestone" }
+      },
+      {
+        "when": "fire",
+        "model": { "type": "minecraft:model", "model": "wizardry:item/fire_runestone" }
+      },
+      {
+        "when": "ice",
+        "model": { "type": "minecraft:model", "model": "wizardry:item/ice_runestone" }
+      },
+      {
+        "when": "lightning",
+        "model": { "type": "minecraft:model", "model": "wizardry:item/lightning_runestone" }
+      },
+      {
+        "when": "necromancy",
+        "model": { "type": "minecraft:model", "model": "wizardry:item/necromancy_runestone" }
+      },
+      {
+        "when": "earth",
+        "model": { "type": "minecraft:model", "model": "wizardry:item/earth_runestone" }
+      },
+      {
+        "when": "sorcery",
+        "model": { "type": "minecraft:model", "model": "wizardry:item/sorcery_runestone" }
+      },
+      {
+        "when": "healing",
+        "model": { "type": "minecraft:model", "model": "wizardry:item/healing_runestone" }
+      }
+    ]
+  }
+}

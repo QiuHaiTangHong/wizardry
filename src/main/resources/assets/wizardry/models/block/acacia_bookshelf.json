@@ -1,0 +1,9 @@
+{
+    "parent": "wizardry:block/bookshelf",
+    "textures": {
+        "particle": "wizardry:block/acacia_bookshelf_side",
+        "side": "wizardry:block/acacia_bookshelf_side",
+        "inside": "wizardry:block/acacia_bookshelf_inside",
+        "top": "wizardry:block/acacia_bookshelf_top"
+    }
+}

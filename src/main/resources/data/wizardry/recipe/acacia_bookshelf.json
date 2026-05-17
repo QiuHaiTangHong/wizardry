@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "www",
+        " c ",
+        "www"
+    ],
+    "key": {
+        "c": {
+            "item": "wizardry:grand_crystal"
+        },
+        "w": {
+            "item": "wizardry:gilded_wood",
+            "data": 4
+        }
+    },
+    "result": {
+        "item": "wizardry:acacia_bookshelf"
+    }
+}

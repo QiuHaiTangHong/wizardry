@@ -1,0 +1,10 @@
+{
+    "parent": "wizardry:block/lectern",
+	"textures": {
+		"particle": "wizardry:block/acacia_lectern_top",
+		"base": "wizardry:block/acacia_lectern_base",
+		"side": "wizardry:block/acacia_lectern_side",
+		"top": "wizardry:block/acacia_lectern_top",
+		"underside": "wizardry:block/acacia_lectern_underside"
+	}
+}

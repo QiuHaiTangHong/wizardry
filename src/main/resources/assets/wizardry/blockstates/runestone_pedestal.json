@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "element=earth": [
+      { "model": "wizardry:block/earth_runestone_pedestal"}
+    ],
+    "element=fire": [
+      { "model": "wizardry:block/fire_runestone_pedestal"}
+    ],
+    "element=healing": [
+      { "model": "wizardry:block/healing_runestone_pedestal"}
+    ],
+    "element=ice": [
+      { "model": "wizardry:block/ice_runestone_pedestal"}
+    ],
+    "element=lightning": [
+      { "model": "wizardry:block/lightning_runestone_pedestal"}
+    ],
+    "element=necromancy": [
+      { "model": "wizardry:block/necromancy_runestone_pedestal"}
+    ],
+    "element=sorcery": [
+      { "model": "wizardry:block/sorcery_runestone_pedestal"}
+    ]
+  }
+}

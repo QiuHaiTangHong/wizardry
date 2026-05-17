@@ -1,0 +1,58 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:component",
+    "component": "wizardry:element",
+    "cases": [
+      {
+        "when": "fire",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/fire_spectral_dust"
+        }
+      },
+      {
+        "when": "ice",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/ice_spectral_dust"
+        }
+      },
+      {
+        "when": "lightning",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/lightning_spectral_dust"
+        }
+      },
+      {
+        "when": "necromancy",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/necromancy_spectral_dust"
+        }
+      },
+      {
+        "when": "earth",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/earth_spectral_dust"
+        }
+      },
+      {
+        "when": "sorcery",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/sorcery_spectral_dust"
+        }
+      },
+      {
+        "when": "healing",
+        "model": {
+          "type": "minecraft:model",
+          "model": "wizardry:item/healing_spectral_dust"
+        }
+      }
+    ]
+  }
+}
