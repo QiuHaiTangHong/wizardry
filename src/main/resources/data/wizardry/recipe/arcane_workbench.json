@@ -6,58 +6,66 @@
         "zzz"
     ],
     "key": {
-        "v": {
-            "type": "forge:ore_dict",
-            "ore": "nuggetGold"
-        },
-        "w": {
-            "item": "minecraft:carpet",
-            "data": 10
-        },
-        "x": [
-            {
-				"item": "ebwizardry:magic_crystal",
-				"data": 0
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 1
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 2
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 3
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 4
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 5
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 6
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 7
-			}
-        ],
-        "y": {
-            "type": "forge:ore_dict",
-            "ore": "blockLapis"
-        },
-        "z": {
-            "type": "forge:ore_dict",
-            "ore": "stone"
-        }
+        "v": "#c:nuggets/gold",
+        "w": "minecraft:purple_carpet",
+        "x": {
+			"neoforge:ingredient_type": "neoforge:compound",
+			"ingredients": [
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "magic" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "fire" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "ice" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "lightning" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "necromancy" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "earth" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "sorcery" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "healing" },
+					"strict": false
+				}
+			]
+		},
+        "y": "#c:storage_blocks/lapis",
+        "z": "#c:stones"
     },
     "result": {
-        "item": "ebwizardry:arcane_workbench"
+		"id": "wizardry:arcane_workbench",
+		"count": 1
     }
 }

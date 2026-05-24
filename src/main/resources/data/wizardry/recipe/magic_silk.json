@@ -1,52 +1,61 @@
 {
-    "type": "minecraft:crafting_shaped",
-    "pattern": [
-        " x ",
-        "xyx",
-        " x "
-    ],
-    "key": {
-        "x": {
-            "type": "forge:ore_dict",
-            "ore": "string"
-        },
-        "y": [
-            {
-				"item": "ebwizardry:magic_crystal",
-				"data": 0
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 1
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 2
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 3
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 4
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 5
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 6
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 7
-			}
-        ]
-    },
-    "result": {
-        "item": "ebwizardry:magic_silk",
-        "count": 2
-    }
+	"type": "minecraft:crafting_shaped",
+	"category": "misc",
+	"pattern": [
+		" x ",
+		"xyx",
+		" x "
+	],
+	"key": {
+		"x": "#c:strings",
+		"y": {
+			"neoforge:ingredient_type": "neoforge:compound",
+			"ingredients": [
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "magic" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "fire" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "ice" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "lightning" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "necromancy" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "earth" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "sorcery" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "healing" }
+				}
+			]
+		}
+	},
+	"result": {
+		"id": "wizardry:magic_silk",
+		"count": 2
+	}
 }

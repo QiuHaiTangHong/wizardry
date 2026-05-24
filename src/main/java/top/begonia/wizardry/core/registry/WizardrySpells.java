@@ -3,13 +3,19 @@ package top.begonia.wizardry.core.registry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.core.entity.projectile.arrow.MagicMissileEntity;
+import top.begonia.wizardry.core.entity.projectile.bomb.FireBombEntity;
+import top.begonia.wizardry.core.entity.projectile.bomb.PoisonBombEntity;
+import top.begonia.wizardry.core.entity.projectile.bomb.SmokeBombEntity;
+import top.begonia.wizardry.core.entity.projectile.bomb.SparkBombEntity;
 import top.begonia.wizardry.core.spell.AbstractSpell;
-import top.begonia.wizardry.core.spell.impl.Arc;
 import top.begonia.wizardry.core.spell.impl.*;
+import top.begonia.wizardry.core.spell.impl.projectile.ProjectileSpell;
 
 public final class WizardrySpells {
     public static final ResourceKey<Registry<AbstractSpell>> SPELLS_KEY = ResourceKey.createRegistryKey(
@@ -18,137 +24,74 @@ public final class WizardrySpells {
     public static final DeferredRegister<AbstractSpell> SPELLS = DeferredRegister.create(SPELLS_KEY, Wizardry.MODID);
 
     public static final DeferredHolder<AbstractSpell, None> NONE = SPELLS.register("none", None::new);
-    public static final DeferredHolder<AbstractSpell, SpellArrow> MAGIC_MISSILE = SPELLS.register("magic_missile", SpellArrow::new);
-    public static final DeferredHolder<AbstractSpell, Arc> ARC = SPELLS.register("arc", Arc::new);
-    public static final DeferredHolder<AbstractSpell, ArcaneJammer> ARCANE_JAMMER = SPELLS.register("arcane_jammer", ArcaneJammer::new);
-    public static final DeferredHolder<AbstractSpell, ArcaneLock> ARCANE_LOCK = SPELLS.register("arcane_lock", ArcaneLock::new);
-    public static final DeferredHolder<AbstractSpell, ArrowRain> ARROW_RAIN = SPELLS.register("arrow_rain", ArrowRain::new);
-    public static final DeferredHolder<AbstractSpell, Banish> BANISH = SPELLS.register("banish", Banish::new);
-    public static final DeferredHolder<AbstractSpell, BlindingFlash> BLINDING_FLASH = SPELLS.register("blinding_flash", BlindingFlash::new);
-    public static final DeferredHolder<AbstractSpell, Blink> BLINK = SPELLS.register("blink", Blink::new);
-    public static final DeferredHolder<AbstractSpell, Boulder> BOULDER = SPELLS.register("boulder", Boulder::new);
-    public static final DeferredHolder<AbstractSpell, Bubble> BUBBLE = SPELLS.register("bubble", Bubble::new);
-    public static final DeferredHolder<AbstractSpell, CelestialSmite> CELESTIAL_SMITE = SPELLS.register("celestial_smite", CelestialSmite::new);
-    public static final DeferredHolder<AbstractSpell, ChainLightning> CHAIN_LIGHTNING = SPELLS.register("chain_lightning", ChainLightning::new);
-    public static final DeferredHolder<AbstractSpell, Charge> CHARGE = SPELLS.register("charge", Charge::new);
-    public static final DeferredHolder<AbstractSpell, Clairvoyance> CLAIRVOYANCE = SPELLS.register("clairvoyance", Clairvoyance::new);
-    public static final DeferredHolder<AbstractSpell, Cobwebs> COBWEBS = SPELLS.register("cobwebs", Cobwebs::new);
-    public static final DeferredHolder<AbstractSpell, ConjureArmour> CONJURE_ARMOUR = SPELLS.register("conjure_armour", ConjureArmour::new);
-    public static final DeferredHolder<AbstractSpell, ConjureBlock> CONJURE_BLOCK = SPELLS.register("conjure_block", ConjureBlock::new);
-    public static final DeferredHolder<AbstractSpell, Containment> CONTAINMENT = SPELLS.register("containment", Containment::new);
-    public static final DeferredHolder<AbstractSpell, CureEffects> CURE_EFFECTS = SPELLS.register("cure_effects", CureEffects::new);
-    public static final DeferredHolder<AbstractSpell, CurseOfEnfeeblement> CURSE_OF_ENFEEBLEMENT = SPELLS.register("curse_of_enfeeblement", CurseOfEnfeeblement::new);
-    public static final DeferredHolder<AbstractSpell, CurseOfSoulbinding> CURSE_OF_SOULBINDING = SPELLS.register("curse_of_soulbinding", CurseOfSoulbinding::new);
-    public static final DeferredHolder<AbstractSpell, CurseOfUndeath> CURSE_OF_UNDEATH = SPELLS.register("curse_of_undeath", CurseOfUndeath::new);
-    public static final DeferredHolder<AbstractSpell, Decay> DECAY = SPELLS.register("decay", Decay::new);
-    public static final DeferredHolder<AbstractSpell, Decoy> DECOY = SPELLS.register("decoy", Decoy::new);
-    public static final DeferredHolder<AbstractSpell, Detonate> DETONATE = SPELLS.register("detonate", Detonate::new);
-    public static final DeferredHolder<AbstractSpell, Disintegration> DISINTEGRATION = SPELLS.register("disintegration", Disintegration::new);
-    public static final DeferredHolder<AbstractSpell, Divination> DIVINATION = SPELLS.register("divination", Divination::new);
-    public static final DeferredHolder<AbstractSpell, DragonFireball> DRAGON_FIREBALL = SPELLS.register("dragon_fireball", DragonFireball::new);
-    public static final DeferredHolder<AbstractSpell, Earthquake> EARTHQUAKE = SPELLS.register("earthquake", Earthquake::new);
-    public static final DeferredHolder<AbstractSpell, EmpoweringPresence> EMPOWERING_PRESENCE = SPELLS.register("empowering_presence", EmpoweringPresence::new);
-    public static final DeferredHolder<AbstractSpell, Enrage> ENRAGE = SPELLS.register("enrage", Enrage::new);
-    public static final DeferredHolder<AbstractSpell, Entrapment> ENTRAPMENT = SPELLS.register("entrapment", Entrapment::new);
-    public static final DeferredHolder<AbstractSpell, Evade> EVADE = SPELLS.register("evade", Evade::new);
-    public static final DeferredHolder<AbstractSpell, Fangs> FANGS = SPELLS.register("fangs", Fangs::new);
-    public static final DeferredHolder<AbstractSpell, FireBreath> FIRE_BREATH = SPELLS.register("fire_breath", FireBreath::new);
-    public static final DeferredHolder<AbstractSpell, Firestorm> FIRESTORM = SPELLS.register("firestorm", Firestorm::new);
-    public static final DeferredHolder<AbstractSpell, Flamecatcher> FLAMECATCHER = SPELLS.register("flamecatcher", Flamecatcher::new);
-    public static final DeferredHolder<AbstractSpell, FlameRay> FLAME_RAY = SPELLS.register("flame_ray", FlameRay::new);
-    public static final DeferredHolder<AbstractSpell, FlamingAxe> FLAMING_AXE = SPELLS.register("flaming_axe", FlamingAxe::new);
-    public static final DeferredHolder<AbstractSpell, FlamingWeapon> FLAMING_WEAPON = SPELLS.register("flaming_weapon", FlamingWeapon::new);
-    public static final DeferredHolder<AbstractSpell, Flight> FLIGHT = SPELLS.register("flight", Flight::new);
-    public static final DeferredHolder<AbstractSpell, FontOfMana> FONT_OF_MANA = SPELLS.register("font_of_mana", FontOfMana::new);
-    public static final DeferredHolder<AbstractSpell, ForceArrow> FORCE_ARROW = SPELLS.register("force_arrow", ForceArrow::new);
-    public static final DeferredHolder<AbstractSpell, Forcefield> FORCEFIELD = SPELLS.register("forcefield", Forcefield::new);
-    public static final DeferredHolder<AbstractSpell, ForestOfThorns> FOREST_OF_THORNS = SPELLS.register("forest_of_thorns", ForestOfThorns::new);
-    public static final DeferredHolder<AbstractSpell, ForestsCurse> FORESTS_CURSE = SPELLS.register("forests_curse", ForestsCurse::new);
-    public static final DeferredHolder<AbstractSpell, Freeze> FREEZE = SPELLS.register("freeze", Freeze::new);
-    public static final DeferredHolder<AbstractSpell, FreezingWeapon> FREEZING_WEAPON = SPELLS.register("freezing_weapon", FreezingWeapon::new);
-    public static final DeferredHolder<AbstractSpell, FrostAxe> FROST_AXE = SPELLS.register("frost_axe", FrostAxe::new);
-    public static final DeferredHolder<AbstractSpell, FrostBarrier> FROST_BARRIER = SPELLS.register("frost_barrier", FrostBarrier::new);
-    public static final DeferredHolder<AbstractSpell, FrostRay> FROST_RAY = SPELLS.register("frost_ray", FrostRay::new);
-    public static final DeferredHolder<AbstractSpell, Glide> GLIDE = SPELLS.register("glide", Glide::new);
-    public static final DeferredHolder<AbstractSpell, Grapple> GRAPPLE = SPELLS.register("grapple", Grapple::new);
-    public static final DeferredHolder<AbstractSpell, GreaterHeal> GREATER_HEAL = SPELLS.register("greater_heal", GreaterHeal::new);
-    public static final DeferredHolder<AbstractSpell, GreaterTelekinesis> GREATER_TELEKINESIS = SPELLS.register("greater_telekinesis", GreaterTelekinesis::new);
-    public static final DeferredHolder<AbstractSpell, GroupHeal> GROUP_HEAL = SPELLS.register("group_heal", GroupHeal::new);
-    public static final DeferredHolder<AbstractSpell, GrowthAura> GROWTH_AURA = SPELLS.register("growth_aura", GrowthAura::new);
-    public static final DeferredHolder<AbstractSpell, GuardianBeam> GUARDIAN_BEAM = SPELLS.register("guardian_beam", GuardianBeam::new);
-    public static final DeferredHolder<AbstractSpell, Hailstorm> HAILSTORM = SPELLS.register("hailstorm", Hailstorm::new);
-    public static final DeferredHolder<AbstractSpell, Heal> HEAL = SPELLS.register("heal", Heal::new);
-    public static final DeferredHolder<AbstractSpell, HealAlly> HEAL_ALLY = SPELLS.register("heal_ally", HealAlly::new);
-    public static final DeferredHolder<AbstractSpell, IceAge> ICE_AGE = SPELLS.register("ice_age", IceAge::new);
-    public static final DeferredHolder<AbstractSpell, IceSpikes> ICE_SPIKES = SPELLS.register("ice_spikes", IceSpikes::new);
-    public static final DeferredHolder<AbstractSpell, IceStatue> ICE_STATUE = SPELLS.register("ice_statue", IceStatue::new);
-    public static final DeferredHolder<AbstractSpell, Ignite> IGNITE = SPELLS.register("ignite", Ignite::new);
-    public static final DeferredHolder<AbstractSpell, ImbueWeapon> IMBUE_WEAPON = SPELLS.register("imbue_weapon", ImbueWeapon::new);
-    public static final DeferredHolder<AbstractSpell, Intimidate> INTIMIDATE = SPELLS.register("intimidate", Intimidate::new);
-    public static final DeferredHolder<AbstractSpell, InvigoratingPresence> INVIGORATING_PRESENCE = SPELLS.register("invigorating_presence", InvigoratingPresence::new);
-    public static final DeferredHolder<AbstractSpell, InvokeWeather> INVOKE_WEATHER = SPELLS.register("invoke_weather", InvokeWeather::new);
-    public static final DeferredHolder<AbstractSpell, Leap> LEAP = SPELLS.register("leap", Leap::new);
-    public static final DeferredHolder<AbstractSpell, Levitation> LEVITATION = SPELLS.register("levitation", Levitation::new);
-    public static final DeferredHolder<AbstractSpell, LifeDrain> LIFE_DRAIN = SPELLS.register("life_drain", LifeDrain::new);
-    public static final DeferredHolder<AbstractSpell, Light> LIGHT = SPELLS.register("light", Light::new);
-    public static final DeferredHolder<AbstractSpell, LightningBolt> LIGHTNING_BOLT = SPELLS.register("lightning_bolt", LightningBolt::new);
-    public static final DeferredHolder<AbstractSpell, LightningHammer> LIGHTNING_HAMMER = SPELLS.register("lightning_hammer", LightningHammer::new);
-    public static final DeferredHolder<AbstractSpell, LightningPulse> LIGHTNING_PULSE = SPELLS.register("lightning_pulse", LightningPulse::new);
-    public static final DeferredHolder<AbstractSpell, LightningRay> LIGHTNING_RAY = SPELLS.register("lightning_ray", LightningRay::new);
-    public static final DeferredHolder<AbstractSpell, LightningWeb> LIGHTNING_WEB = SPELLS.register("lightning_web", LightningWeb::new);
-    public static final DeferredHolder<AbstractSpell, MarkSacrifice> MARK_SACRIFICE = SPELLS.register("mark_sacrifice", MarkSacrifice::new);
-    public static final DeferredHolder<AbstractSpell, Metamorphosis> METAMORPHOSIS = SPELLS.register("metamorphosis", Metamorphosis::new);
-    public static final DeferredHolder<AbstractSpell, Meteor> METEOR = SPELLS.register("meteor", Meteor::new);
-    public static final DeferredHolder<AbstractSpell, MindControl> MIND_CONTROL = SPELLS.register("mind_control", MindControl::new);
-    public static final DeferredHolder<AbstractSpell, MindTrick> MIND_TRICK = SPELLS.register("mind_trick", MindTrick::new);
-    public static final DeferredHolder<AbstractSpell, Mine> MINE = SPELLS.register("mine", Mine::new);
-    public static final DeferredHolder<AbstractSpell, Paralysis> PARALYSIS = SPELLS.register("paralysis", Paralysis::new);
-    public static final DeferredHolder<AbstractSpell, Permafrost> PERMAFROST = SPELLS.register("permafrost", Permafrost::new);
-    public static final DeferredHolder<AbstractSpell, Petrify> PETRIFY = SPELLS.register("petrify", Petrify::new);
-    public static final DeferredHolder<AbstractSpell, PhaseStep> PHASE_STEP = SPELLS.register("phase_step", PhaseStep::new);
-    public static final DeferredHolder<AbstractSpell, PlagueOfDarkness> PLAGUE_OF_DARKNESS = SPELLS.register("plague_of_darkness", PlagueOfDarkness::new);
-    public static final DeferredHolder<AbstractSpell, PocketFurnace> POCKET_FURNACE = SPELLS.register("pocket_furnace", PocketFurnace::new);
-    public static final DeferredHolder<AbstractSpell, PocketWorkbench> POCKET_WORKBENCH = SPELLS.register("pocket_workbench", PocketWorkbench::new);
-    public static final DeferredHolder<AbstractSpell, Poison> POISON = SPELLS.register("poison", Poison::new);
-    public static final DeferredHolder<AbstractSpell, Possession> POSSESSION = SPELLS.register("possession", Possession::new);
-    public static final DeferredHolder<AbstractSpell, RadiantTotem> RADIANT_TOTEM = SPELLS.register("radiant_totem", RadiantTotem::new);
-    public static final DeferredHolder<AbstractSpell, RayOfPurification> RAY_OF_PURIFICATION = SPELLS.register("ray_of_purification", RayOfPurification::new);
-    public static final DeferredHolder<AbstractSpell, RemoveCurse> REMOVE_CURSE = SPELLS.register("remove_curse", RemoveCurse::new);
-    public static final DeferredHolder<AbstractSpell, ReplenishHunger> REPLENISH_HUNGER = SPELLS.register("replenish_hunger", ReplenishHunger::new);
-    public static final DeferredHolder<AbstractSpell, Resurrection> RESURRECTION = SPELLS.register("resurrection", Resurrection::new);
-    public static final DeferredHolder<AbstractSpell, Reversal> REVERSAL = SPELLS.register("reversal", Reversal::new);
-    public static final DeferredHolder<AbstractSpell, Satiety> SATIETY = SPELLS.register("satiety", Satiety::new);
-    public static final DeferredHolder<AbstractSpell, ShadowWard> SHADOW_WARD = SPELLS.register("shadow_ward", ShadowWard::new);
-    public static final DeferredHolder<AbstractSpell, Shield> SHIELD = SPELLS.register("shield", Shield::new);
-    public static final DeferredHolder<AbstractSpell, Shockwave> SHOCKWAVE = SPELLS.register("shockwave", Shockwave::new);
-    public static final DeferredHolder<AbstractSpell, ShulkerBullet> SHULKER_BULLET = SPELLS.register("shulker_bullet", ShulkerBullet::new);
-    public static final DeferredHolder<AbstractSpell, SixthSense> SIXTH_SENSE = SPELLS.register("sixth_sense", SixthSense::new);
-    public static final DeferredHolder<AbstractSpell, Slime> SLIME = SPELLS.register("slime", Slime::new);
-    public static final DeferredHolder<AbstractSpell, SlowTime> SLOW_TIME = SPELLS.register("slow_time", SlowTime::new);
-    public static final DeferredHolder<AbstractSpell, Snare> SNARE = SPELLS.register("snare", Snare::new);
-    public static final DeferredHolder<AbstractSpell, SpectralPathway> SPECTRAL_PATHWAY = SPELLS.register("spectral_pathway", SpectralPathway::new);
-    public static final DeferredHolder<AbstractSpell, SpeedTime> SPEED_TIME = SPELLS.register("speed_time", SpeedTime::new);
-    public static final DeferredHolder<AbstractSpell, Stormcloud> STORMCLOUD = SPELLS.register("stormcloud", Stormcloud::new);
-    public static final DeferredHolder<AbstractSpell, SummonShadowWraith> SUMMON_SHADOW_WRAITH = SPELLS.register("summon_shadow_wraith", SummonShadowWraith::new);
-    public static final DeferredHolder<AbstractSpell, SummonSkeleton> SUMMON_SKELETON = SPELLS.register("summon_skeleton", SummonSkeleton::new);
-    public static final DeferredHolder<AbstractSpell, SummonSkeletonLegion> SUMMON_SKELETON_LEGION = SPELLS.register("summon_skeleton_legion", SummonSkeletonLegion::new);
-    public static final DeferredHolder<AbstractSpell, SummonSnowGolem> SUMMON_SNOW_GOLEM = SPELLS.register("summon_snow_golem", SummonSnowGolem::new);
-    public static final DeferredHolder<AbstractSpell, SummonSpiritHorse> SUMMON_SPIRIT_HORSE = SPELLS.register("summon_spirit_horse", SummonSpiritHorse::new);
-    public static final DeferredHolder<AbstractSpell, SummonSpiritWolf> SUMMON_SPIRIT_WOLF = SPELLS.register("summon_spirit_wolf", SummonSpiritWolf::new);
-    public static final DeferredHolder<AbstractSpell, SummonWitherSkeleton> SUMMON_WITHER_SKELETON = SPELLS.register("summon_wither_skeleton", SummonWitherSkeleton::new);
-    public static final DeferredHolder<AbstractSpell, SummonZombie> SUMMON_ZOMBIE = SPELLS.register("summon_zombie", SummonZombie::new);
-    public static final DeferredHolder<AbstractSpell, Telekinesis> TELEKINESIS = SPELLS.register("telekinesis", Telekinesis::new);
-    public static final DeferredHolder<AbstractSpell, Thunderstorm> THUNDERSTORM = SPELLS.register("thunderstorm", Thunderstorm::new);
-    public static final DeferredHolder<AbstractSpell, Tornado> TORNADO = SPELLS.register("tornado", Tornado::new);
-    public static final DeferredHolder<AbstractSpell, Transience> TRANSIENCE = SPELLS.register("transience", Transience::new);
-    public static final DeferredHolder<AbstractSpell, Transportation> TRANSPORTATION = SPELLS.register("transportation", Transportation::new);
-    public static final DeferredHolder<AbstractSpell, VanishingBox> VANISHING_BOX = SPELLS.register("vanishing_box", VanishingBox::new);
-    public static final DeferredHolder<AbstractSpell, WallOfFrost> WALL_OF_FROST = SPELLS.register("wall_of_frost", WallOfFrost::new);
-    public static final DeferredHolder<AbstractSpell, Whirlwind> WHIRLWIND = SPELLS.register("whirlwind", Whirlwind::new);
-    public static final DeferredHolder<AbstractSpell, Wither> WITHER = SPELLS.register("wither", Wither::new);
-    public static final DeferredHolder<AbstractSpell, WitheringTotem> WITHERING_TOTEM = SPELLS.register("withering_totem", WitheringTotem::new);
-    public static final DeferredHolder<AbstractSpell, WitherSkull> WITHER_SKULL = SPELLS.register("wither_skull", WitherSkull::new);
-    public static final DeferredHolder<AbstractSpell, ZombieApocalypse> ZOMBIE_APOCALYPSE = SPELLS.register("zombie_apocalypse", ZombieApocalypse::new);
+    public static final DeferredHolder<AbstractSpell, ArrowSpell<MagicMissileEntity>> MAGIC_MISSILE = SPELLS.register(
+            "magic_missile",
+            () -> {
+                ArrowSpell<MagicMissileEntity> spell = new ArrowSpell<>(
+                        Identifier.fromNamespaceAndPath(Wizardry.MODID, "magic_missile"),
+                        WizardryEntities.MAGIC_MISSILE,
+                        MagicMissileEntity::new
+                );
+                spell.soundValues(1, 1.4f, 0.4f);
+                return spell;
+            }
+    );
+
+    public static final DeferredHolder<AbstractSpell, ProjectileSpell<FireBombEntity>> FIRE_BOMB = SPELLS.register(
+            "fire_bomb",
+            () -> {
+                ProjectileSpell<FireBombEntity> spell = new ProjectileSpell<>(
+                        Identifier.fromNamespaceAndPath(Wizardry.MODID, "fire_bomb"),
+                        WizardryEntities.FIRE_BOMB,
+                        () -> new ItemStack(WizardryItems.FIRE_BOMB.get()),
+                        FireBombEntity::new
+                );
+                spell.soundValues(0.5f, 0.4f, 0.2f);
+                return spell;
+            }
+    );
+
+    public static final DeferredHolder<AbstractSpell, ProjectileSpell<PoisonBombEntity>> POISON_BOMB = SPELLS.register(
+            "poison_bomb",
+            () -> {
+                ProjectileSpell<PoisonBombEntity> spell = new ProjectileSpell<>(
+                        Identifier.fromNamespaceAndPath(Wizardry.MODID, "poison_bomb"),
+                        WizardryEntities.POISON_BOMB,
+                        () -> new ItemStack(WizardryItems.POISON_BOMB.get()),
+                        PoisonBombEntity::new
+                );
+                spell.soundValues(0.5f, 0.4f, 0.2f);
+                return spell;
+            }
+    );
+
+    public static final DeferredHolder<AbstractSpell, ProjectileSpell<SmokeBombEntity>> SMOKE_BOMB = SPELLS.register(
+            "smoke_bomb",
+            () -> {
+                ProjectileSpell<SmokeBombEntity> spell = new ProjectileSpell<>(
+                        Identifier.fromNamespaceAndPath(Wizardry.MODID, "smoke_bomb"),
+                        WizardryEntities.SMOKE_BOMB,
+                        () -> new ItemStack(WizardryItems.SMOKE_BOMB.get()),
+                        SmokeBombEntity::new
+                );
+                spell.soundValues(0.5f, 0.4f, 0.2f);
+                return spell;
+            }
+    );
+
+    public static final DeferredHolder<AbstractSpell, ProjectileSpell<SparkBombEntity>> SPARK_BOMB = SPELLS.register(
+            "spark_bomb",
+            () -> {
+                ProjectileSpell<SparkBombEntity> spell = new ProjectileSpell<>(
+                        Identifier.fromNamespaceAndPath(Wizardry.MODID, "spark_bomb"),
+                        WizardryEntities.SPARK_BOMB,
+                        () -> new ItemStack(WizardryItems.SPARK_BOMB.get()),
+                        SparkBombEntity::new
+                );
+                spell.soundValues(0.5f, 0.4f, 0.2f);
+                return spell;
+            }
+    );
 
     public static void register(IEventBus modBus) {
         SPELLS.makeRegistry(builder -> builder
@@ -156,5 +99,6 @@ public final class WizardrySpells {
                 .maxId(65535)
         );
         SPELLS.register(modBus);
+
     }
 }

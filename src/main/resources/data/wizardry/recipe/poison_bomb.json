@@ -1,21 +1,13 @@
 {
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
-        {
-            "item": "minecraft:spider_eye"
-        },
-        {
-            "item": "minecraft:spider_eye"
-        },
-        {
-            "item": "minecraft:glass_bottle"
-        },
-        {
-            "item": "minecraft:gunpowder"
-        }
+        "minecraft:spider_eye",
+        "minecraft:spider_eye",
+        "minecraft:glass_bottle",
+        "minecraft:gunpowder"
     ],
     "result": {
-        "item": "ebwizardry:poison_bomb",
+        "id": "wizardry:poison_bomb",
 		"count": 3
     }
 }

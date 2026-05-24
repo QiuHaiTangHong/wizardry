@@ -10,12 +10,12 @@ import org.joml.Vector3fc;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.data.definition.model.BookshelfModel;
 import top.begonia.wizardry.client.data.definition.model.OnlyModelQuads;
-import top.begonia.wizardry.core.api.data.IDataParser;
+import top.begonia.wizardry.core.api.data.IStaticDataParser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookshelfModelParser implements IDataParser<OnlyModelQuads> {
+public class BookshelfModelParser implements IStaticDataParser<OnlyModelQuads> {
     public static final Identifier PARSER_NAME = Identifier.fromNamespaceAndPath(Wizardry.MODID, "bookshelf_model_parser");
 
     @Override
@@ -29,7 +29,7 @@ public class BookshelfModelParser implements IDataParser<OnlyModelQuads> {
     }
 
     @Override
-    public OnlyModelQuads parser(JsonElement json) {
+    public OnlyModelQuads parserItem(JsonElement json) {
         BookshelfModel rawModel = BookshelfModel.CODEC.parse(JsonOps.INSTANCE, json)
                 .resultOrPartial(error -> Wizardry.LOGGER.error("书架局部 JSON 配置解析失败: {}", error))
                 .orElse(null);

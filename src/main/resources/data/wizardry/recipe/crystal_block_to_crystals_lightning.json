@@ -1,15 +1,24 @@
 {
-    "type": "minecraft:crafting_shapeless",
-	"group": "magic_crystal",
-    "ingredients": [
-        {
-            "item": "ebwizardry:crystal_block",
-			"data": 3
+  "type": "minecraft:crafting_shapeless",
+  "group": "magic_crystal",
+  "ingredients": [
+    {
+      "neoforge:ingredient_type": "neoforge:components",
+      "items": [
+        "wizardry:crystal_block"
+      ],
+      "components": {
+        "minecraft:block_state": {
+          "element": "lightning"
         }
-    ],
-    "result": {
-        "item": "ebwizardry:magic_crystal",
-		"data": 3,
-        "count": 9
+      }
     }
+  ],
+  "result": {
+    "id": "wizardry:magic_crystal",
+    "count": 9,
+    "components": {
+      "wizardry:element": "lightning"
+    }
+  }
 }

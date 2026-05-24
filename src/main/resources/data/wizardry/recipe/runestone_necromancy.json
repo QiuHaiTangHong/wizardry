@@ -1,5 +1,6 @@
 {
     "type": "minecraft:crafting_shaped",
+    "category": "building",
     "pattern": [
         "zzz",
         "zyz",
@@ -7,17 +8,24 @@
     ],
     "key": {
         "y": {
-            "item": "ebwizardry:magic_crystal",
-			"data": 4
+            "neoforge:ingredient_type": "neoforge:components",
+            "items": [
+                "wizardry:magic_crystal"
+            ],
+            "components": {
+                "wizardry:element": "necromancy"
+            },
+            "strict": false
         },
-        "z": {
-            "type": "forge:ore_dict",
-            "ore": "stone"
-        }
+        "z": "#c:stones"
     },
     "result": {
-        "item": "ebwizardry:runestone",
-		"data": 4,
-        "count": 8
+        "id": "wizardry:runestone",
+        "count": 8,
+        "components": {
+            "minecraft:block_state": {
+                "element": "necromancy"
+            }
+        }
     }
 }

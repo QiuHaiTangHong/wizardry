@@ -4,7 +4,16 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -12,11 +21,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import top.begonia.wizardry.client.particle.WizardryParticleOptions;
+import top.begonia.wizardry.client.util.GeometryUtils;
+import top.begonia.wizardry.client.util.ParticleBuilder;
 import top.begonia.wizardry.core.constants.ElementEnum;
+import top.begonia.wizardry.core.entity.block.ReceptacleBlockEntity;
+import top.begonia.wizardry.core.item.impl.SpectralDustItem;
+import top.begonia.wizardry.core.registry.*;
 
 import java.util.Collections;
 import java.util.EnumMap;
@@ -50,10 +67,11 @@ public class ReceptacleBlock extends BaseEntityBlock {
 
     public ReceptacleBlock(Properties properties) {
         super(properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP));
     }
 
     @Override
-    public @NonNull VoxelShape getShape(BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @NonNull CollisionContext context) {
+    public @NonNull VoxelShape getShape(@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @NonNull CollisionContext context) {
         return switch (state.getValue(FACING)) {
             case EAST -> EAST_WALL_SHAPE;
             case WEST -> WEST_WALL_SHAPE;
@@ -61,6 +79,108 @@ public class ReceptacleBlock extends BaseEntityBlock {
             case NORTH -> NORTH_WALL_SHAPE;
             default -> STANDING_SHAPE;
         };
+    }
+
+    @Override
+    public int getLightEmission(@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos) {
+        if (level.getBlockEntity(pos) instanceof ReceptacleBlockEntity receptacle && receptacle.getElement() != null) {
+            return super.getLightEmission(state, level, pos);
+        }
+        return 0;
+    }
+
+    @Override
+    protected @NonNull InteractionResult useItemOn(@NonNull ItemStack itemStack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        ItemStack stack = player.getItemInHand(hand);
+        if (blockEntity instanceof ReceptacleBlockEntity receptacleBlockEntity) {
+            ElementEnum currentElement = receptacleBlockEntity.getElement();
+            if (currentElement == null) {
+                ElementEnum element = stack.get(WizardryComponents.ELEMENT.get());
+                if (stack.getItem() instanceof SpectralDustItem && element != null) {
+                    receptacleBlockEntity.setElement(element);
+                    if (!player.getAbilities().instabuild) {
+                        stack.shrink(1);
+                    }
+                    level.playSound(null, pos, WizardrySounds.BLOCK_RECEPTACLE_IGNITE.get(), SoundSource.BLOCKS, 0.7f, 0.7f);
+                    return InteractionResult.SUCCESS;
+                }
+            }
+        }
+        return super.useItemOn(itemStack, state, level, pos, player, hand, hitResult);
+    }
+
+    @Override
+    protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult hitResult) {
+        if (level.getBlockEntity(pos) instanceof ReceptacleBlockEntity receptacle) {
+            ElementEnum currentElement = receptacle.getElement();
+            if (currentElement != null) {
+                if (!level.isClientSide()) {
+                    ItemStack dust = new ItemStack(WizardryItems.SPECTRAL_DUST.get());
+                    dust.set(WizardryComponents.ELEMENT.get(), currentElement);
+                    receptacle.setElement(null);
+                    ItemStack heldItem = player.getItemInHand(InteractionHand.MAIN_HAND);
+                    if (heldItem.isEmpty()) {
+                        player.setItemInHand(InteractionHand.MAIN_HAND, dust);
+                        return InteractionResult.SUCCESS;
+                    } else {
+                        if (!player.getInventory().add(dust)) {
+                            player.drop(dust, false);
+                        }
+                    }
+                }
+                return InteractionResult.SUCCESS;
+            }
+        }
+        return super.useWithoutItem(state, level, pos, player, hitResult);
+    }
+
+    @Override
+    public void animateTick(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull RandomSource rand) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof ReceptacleBlockEntity receptacleBlockEntity) {
+            ElementEnum element = receptacleBlockEntity.getElement();
+            if (element != null) {
+                Direction facing = state.getValue(FACING).getOpposite();
+                Vec3 centre = GeometryUtils.getCentre(pos);
+                if (facing.getAxis().isHorizontal()) {
+                    centre = centre.add(facing.getUnitVec3().scale(WALL_PARTICLE_OFFSET)).add(0, 0.125, 0);
+                }
+                int[] colours = PARTICLE_COLOURS.get(element);
+                ParticleBuilder.create(WizardryParticles.FLASH.get()).pos(centre).scale(0.35f).time(48).clr(colours[0]).spawn(level);
+                double r = 0.12;
+                for (int i = 0; i < 3; i++) {
+                    double x = r * (rand.nextDouble() * 2 - 1);
+                    double y = r * (rand.nextDouble() * 2 - 1);
+                    double z = r * (rand.nextDouble() * 2 - 1);
+                    ParticleBuilder.create(WizardryParticles.DUST.get()).pos(centre.x + x, centre.y + y, centre.z + z)
+                            .vel(x * -0.03, 0.02, z * -0.03).time(24 + rand.nextInt(8)).clr(colours[1]).fade(colours[2]).spawn(level);
+                }
+            }
+        }
+    }
+
+    @Override
+    @Nullable
+    public BlockState getStateForPlacement(@NonNull BlockPlaceContext context) {
+        LevelReader level = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        Direction clickedFace = context.getClickedFace();
+        if (clickedFace != Direction.DOWN) {
+            BlockState state = this.defaultBlockState().setValue(FACING, clickedFace);
+            if (this.canSurvive(state, level, pos)) {
+                return state;
+            }
+        }
+        for (Direction direction : Direction.values()) {
+            if (direction != Direction.DOWN) {
+                BlockState state = this.defaultBlockState().setValue(FACING, direction);
+                if (this.canSurvive(state, level, pos)) {
+                    return state;
+                }
+            }
+        }
+        return null;
     }
 
     @Override
@@ -75,6 +195,6 @@ public class ReceptacleBlock extends BaseEntityBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(@NonNull BlockPos blockPos, @NonNull BlockState blockState) {
-        return null;
+        return WizardryBlockEntities.RECEPTACLE.get().create(blockPos, blockState);
     }
 }

@@ -3,16 +3,16 @@ package top.begonia.wizardry.client.data.definition.model;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.client.model.quad.BakedNormals;
 import org.joml.Vector3fc;
-import top.begonia.wizardry.core.api.data.IData;
+import top.begonia.wizardry.core.api.data.IResultData;
 
 import java.util.List;
 
 public record OnlyModelQuads(
         List<QuadGeometry> quads
-) implements IData {
+) implements IResultData {
 
     @Override
-    public Class<? extends IData> getDataClass() {
+    public Class<? extends IResultData> getDataClass() {
         return OnlyModelQuads.class;
     }
 

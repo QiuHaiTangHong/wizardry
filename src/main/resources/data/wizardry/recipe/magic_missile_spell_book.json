@@ -7,15 +7,20 @@
     ],
     "key": {
         "x": {
-            "item": "ebwizardry:magic_crystal",
-			"data": 0
+            "neoforge:ingredient_type": "neoforge:components",
+            "items": [
+                "wizardry:magic_crystal"
+            ],
+            "components": {
+                "wizardry:element": "magic"
+            }
         },
-        "y": {
-            "item": "minecraft:book"
-        }
+        "y": "minecraft:book"
     },
     "result": {
-        "item": "ebwizardry:spell_book",
-        "data": 1
+        "id": "wizardry:spell_book",
+        "components": {
+            "wizardry:spell": "wizardry:magic_missile"
+        }
     }
 }

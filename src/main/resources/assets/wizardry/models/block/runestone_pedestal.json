@@ -1,4 +1,5 @@
 {
+    "loader": "wizardry:special_model_loader",
 	"parent": "minecraft:block/block",
     "textures": {
         "particle": "#side"

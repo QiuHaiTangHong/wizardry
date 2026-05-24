@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.client.config.ClientConfig;
+import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.client.gui.widget.SpellSortButton;
 import top.begonia.wizardry.core.inventory.menu.ArcaneWorkbenchMenu;
 import top.begonia.wizardry.client.util.ISpellSortable;
@@ -57,8 +57,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                 this.menu,
                 this,
                 button -> {
-                },
-                null
+                }
         ));
         this.addRenderableWidget(sortButtons[1] = new SpellSortButton(
                 this.leftPos - 31, this.topPos + 8,
@@ -66,8 +65,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                 this.menu,
                 this,
                 button -> {
-                },
-                null
+                }
         ));
         this.addRenderableWidget(sortButtons[2] = new SpellSortButton(
                 this.leftPos - 18, this.topPos + 8,
@@ -75,8 +73,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                 this.menu,
                 this,
                 button -> {
-                },
-                null
+                }
         ));
 
         this.searchField = new EditBox(

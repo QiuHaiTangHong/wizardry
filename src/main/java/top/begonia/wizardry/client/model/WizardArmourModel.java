@@ -1,35 +1,35 @@
 package top.begonia.wizardry.client.model;
 
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.Wizardry;
 
-import java.time.LocalDate;
-
-public class WizardArmourModel<T extends HumanoidRenderState> extends HumanoidModel<T> implements IWizardryArmour {
-
-    private final ModelPart robe;
+public class WizardArmourModel<T extends HumanoidRenderState> extends AbstractWizardArmourModel<T> {
     private final ModelPart hatBobble;
-    private static final boolean IS_CHRISTMAS = LocalDate.now().getMonthValue() == 12;
 
     public WizardArmourModel(ModelPart root) {
         super(root);
-        this.robe = root.getChild("robe");
+        root.getChild("robe");
         this.hatBobble = this.head.getChild("hat_bobble");
     }
 
-    public static LayerDefinition createLayerDefinition(CubeDeformation delta, int textureWidth, int textureHeight) {
-        MeshDefinition mesh = HumanoidModel.createMesh(delta, 0.0F);
+    public static @NonNull ArmorModelSetExtension<MeshDefinition> createArmorMeshSetExtension(
+            @NonNull CubeDeformation innerDeformation,
+            @NonNull CubeDeformation outerDeformation
+    ) {
+        return AbstractWizardArmourModel.createArmorMeshSetExtension(
+                WizardArmourModel::createBaseArmorMesh,
+                innerDeformation,
+                outerDeformation
+        );
+    }
+
+    protected static @NonNull MeshDefinition createBaseArmorMesh(CubeDeformation cubeDeformation) {
+        MeshDefinition mesh = AbstractWizardArmourModel.createBaseArmorMesh(cubeDeformation);
         PartDefinition root = mesh.getRoot();
-        root.addOrReplaceChild("body",
-                CubeListBuilder.create()
-                        .texOffs(16, 16)
-                        .mirror()
-                        .addBox(-4.0F, 0.0F, -2.0F, 8.0F, 11.0F, 4.0F, delta),
-                PartPose.ZERO);
         PartDefinition head = root.addOrReplaceChild("head",
                 CubeListBuilder.create()
                         .texOffs(0, 0)
@@ -65,27 +65,12 @@ public class WizardArmourModel<T extends HumanoidRenderState> extends HumanoidMo
                         .mirror()
                         .addBox(0.0F, 0.0F, 0.0F, 3.0F, 3.0F, 3.0F),
                 PartPose.offsetAndRotation(-1.5F, -15.1F, 4.0F, -0.65F, 0.0F, 0.0F));
-        root.addOrReplaceChild("robe",
-                CubeListBuilder.create()
-                        .texOffs(40, 32)
-                        .mirror()
-                        .addBox(-4.0F, 0.0F, -2.0F, 8.0F, 7.0F, 4.0F, delta),
-                PartPose.offset(0.0F, 12.0F, 0.0F));
-        return LayerDefinition.create(mesh, textureWidth, textureHeight);
+        return mesh;
     }
 
     @Override
     public void setupAnim(@NonNull T state) {
         super.setupAnim(state);
-        this.robe.visible = this.body.visible;
-        this.hatBobble.visible = IS_CHRISTMAS;
-        if (state.isCrouching) {
-            this.robe.z = 4.0F;
-        } else {
-            this.robe.z = 0.0F;
-        }
-        this.robe.xRot = (this.leftLeg.xRot + this.rightLeg.xRot) / 2.0F;
-        this.robe.yRot = this.body.yRot;
-        this.robe.zRot = (this.leftLeg.zRot + this.rightLeg.zRot) / 2.0F;
+        this.hatBobble.visible = Wizardry.tisTheSeason;
     }
 }

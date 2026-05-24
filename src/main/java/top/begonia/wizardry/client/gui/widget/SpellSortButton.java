@@ -25,15 +25,14 @@ public class SpellSortButton extends Button {
             ISpellSortable.SortType sortType,
             ISpellSortable sortable,
             Screen parent,
-            OnPress onPress,
-            CreateNarration createNarration
+            OnPress onPress
     ) {
         super(
                 x, y,
                 10, 10,
                 Component.translatable("container." + Wizardry.MODID + ".arcane_workbench.sort_" + sortType.name),
                 onPress,
-                createNarration
+                DEFAULT_NARRATION
         );
         this.sortType = sortType;
         this.sortable = sortable;

@@ -1,20 +1,33 @@
 {
     "type": "minecraft:crafting_shaped",
+    "category": "building",
     "pattern": [
         "www",
         " c ",
         "www"
     ],
     "key": {
-        "c": {
-            "item": "ebwizardry:grand_crystal"
-        },
+        "c": "wizardry:grand_crystal",
         "w": {
-            "item": "ebwizardry:gilded_wood",
-            "data": 1
+            "neoforge:ingredient_type": "neoforge:components",
+            "items": [
+                "wizardry:gilded_wood"
+            ],
+            "components": {
+                "minecraft:block_state": {
+                    "wood_type": "spruce"
+                }
+            },
+            "strict": false
         }
     },
     "result": {
-        "item": "ebwizardry:spruce_bookshelf"
+        "id": "wizardry:bookshelf",
+        "count": 1,
+        "components": {
+            "minecraft:block_state": {
+                "wood_type": "spruce"
+            }
+        }
     }
 }

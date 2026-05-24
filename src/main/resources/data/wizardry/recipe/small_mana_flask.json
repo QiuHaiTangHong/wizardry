@@ -6,14 +6,14 @@
         "yyy"
     ],
     "key": {
-        "x": {
-            "item": "minecraft:glass_bottle"
-        },
-        "y": {
-			"item": "ebwizardry:crystal_shard"
-		}
+        "x": "minecraft:glass_bottle",
+        "y": "wizardry:crystal_shard"
     },
     "result": {
-        "item": "ebwizardry:small_mana_flask"
+        "id": "wizardry:mana_flask",
+        "count": 1,
+        "components": {
+            "wizardry:mana_flask_type": "small"
+        }
     }
 }

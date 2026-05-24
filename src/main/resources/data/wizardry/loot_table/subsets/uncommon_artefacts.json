@@ -1,0 +1,130 @@
+{
+  "pools": [
+    {
+      "name": "uncommon_artefacts",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_siphoning",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_battlemage",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_fire_melee",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_fire_biome",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_ice_melee",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_ice_biome",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_lightning_melee",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_necromancy_melee",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_earth_melee",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_earth_biome",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_extraction",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_paladin",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:amulet_warding",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:amulet_fire_protection",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:amulet_ice_protection",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:amulet_channeling",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:amulet_lich",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:amulet_banishing",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:amulet_recovery",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:charm_spell_discovery",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:charm_minion_health",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:charm_minion_variants",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:charm_growth",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:charm_feeding",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

@@ -7,17 +7,24 @@
     ],
     "key": {
         "y": {
-            "item": "ebwizardry:magic_crystal",
-			"data": 7
+            "neoforge:ingredient_type": "neoforge:components",
+            "items": [
+                "wizardry:magic_crystal"
+            ],
+            "components": {
+                "wizardry:element": "healing"
+            },
+            "strict": false
         },
-        "z": {
-            "type": "forge:ore_dict",
-            "ore": "stone"
-        }
+        "z": "#c:stones"
     },
     "result": {
-        "item": "ebwizardry:runestone_pedestal",
-		"data": 7,
-        "count": 2
+        "id": "wizardry:runestone_pedestal",
+        "count": 2,
+        "components": {
+            "minecraft:block_state": {
+                "element": "healing"
+            }
+        }
     }
 }

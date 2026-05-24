@@ -1,19 +1,16 @@
 {
     "type": "minecraft:crafting_shaped",
+    "category": "misc",
     "pattern": [
         "gpg",
         " g "
     ],
     "key": {
-        "g": {
-            "type": "forge:ore_dict",
-            "ore": "ingotGold"
-        },
-        "p": {
-            "item": "minecraft:flower_pot"
-        }
+        "g": "#c:ingots/gold",
+        "p": "minecraft:flower_pot"
     },
     "result": {
-        "item": "ebwizardry:receptacle"
+        "id": "wizardry:receptacle",
+        "count": 1
     }
 }

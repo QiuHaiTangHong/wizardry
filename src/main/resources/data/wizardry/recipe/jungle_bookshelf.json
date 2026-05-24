@@ -6,15 +6,27 @@
         "www"
     ],
     "key": {
-        "c": {
-            "item": "ebwizardry:grand_crystal"
-        },
+        "c": "wizardry:grand_crystal",
         "w": {
-            "item": "ebwizardry:gilded_wood",
-            "data": 3
+            "neoforge:ingredient_type": "neoforge:components",
+            "items": [
+                "wizardry:gilded_wood"
+            ],
+            "components": {
+                "minecraft:block_state": {
+                    "wood_type": "jungle"
+                }
+            },
+            "strict": false
         }
     },
     "result": {
-        "item": "ebwizardry:jungle_bookshelf"
+        "id": "wizardry:bookshelf",
+        "count": 1,
+        "components": {
+            "minecraft:block_state": {
+                "wood_type": "jungle"
+            }
+        }
     }
 }

@@ -5,14 +5,18 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.constants.ArtefactTypeEnum;
+import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.constants.ManaFlaskTypeEnum;
+import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.data.WandUpgrades;
 import top.begonia.wizardry.core.spell.AbstractSpell;
+import top.begonia.wizardry.core.util.ArmourHelper;
 
 import java.util.List;
 
@@ -32,29 +36,32 @@ public final class WizardryComponents {
                             .persistent(Codec.INT)
                             .networkSynchronized(ByteBufCodecs.VAR_INT)
             );
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<Holder<AbstractSpell>>>> SPELL_ARRAY_KEY =
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<Holder<AbstractSpell>>>> SPELLS =
             COMPONENTS.registerComponentType("spells",
                     builder -> builder
                             .persistent(AbstractSpell.CODEC.listOf())
                             .networkSynchronized(AbstractSpell.STREAM_CODEC.apply(ByteBufCodecs.list()))
+            );
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<AbstractSpell>>> SPELL =
+            COMPONENTS.registerComponentType("spell",
+                    builder -> builder
+                            .persistent(AbstractSpell.CODEC)
+                            .networkSynchronized(AbstractSpell.STREAM_CODEC)
+                            .cacheEncoding()
             );
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> SPELL_STATE =
             COMPONENTS.registerComponentType("spell_state",
                     builder -> builder.persistent(Codec.STRING)
                             .networkSynchronized(ByteBufCodecs.STRING_UTF8)
             );
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<AbstractSpell>>> SPELL_BOOK_KEY =
-            COMPONENTS.registerComponentType("spell",
-                    builder -> builder
-                            .persistent(AbstractSpell.CODEC)
-                            .networkSynchronized(AbstractSpell.STREAM_CODEC)
-            );
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> SELECTED_SPELL_KEY =
-            COMPONENTS.registerComponentType("selected_spell",
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> CURRENT_SPELL =
+            COMPONENTS.registerComponentType("current_spell",
                     builder -> builder
                             .persistent(Codec.INT)
                             .networkSynchronized(ByteBufCodecs.VAR_INT)
             );
+
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<Integer>>> COOLDOWN_ARRAY_KEY =
             COMPONENTS.registerComponentType("cooldown",
                     builder -> builder
@@ -87,29 +94,27 @@ public final class WizardryComponents {
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build()
             );
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> CRYSTAL_TYPE =
-            COMPONENTS.registerComponentType("crystal_type",
-                    builder -> builder
-                            .persistent(Codec.STRING)
-                            .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ArmourHelper.ArmourMaterialType>> ARMOR_MATERIAL_TYPE =
+            COMPONENTS.registerComponentType("armor_material_type",
+                    builder -> builder.persistent(ArmourHelper.ArmourMaterialType.CODEC)
+                            .networkSynchronized(ByteBufCodecs.fromCodec(ArmourHelper.ArmourMaterialType.CODEC))
             );
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> CRYSTAL_BLOCK_TYPE =
-            COMPONENTS.registerComponentType("crystal_block_type",
-                    builder -> builder
-                            .persistent(Codec.STRING)
-                            .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ArmorType>> ARMOR_TYPE =
+            COMPONENTS.registerComponentType("armor_type",
+                    builder -> builder.persistent(ArmorType.CODEC)
+                            .networkSynchronized(ByteBufCodecs.fromCodec(ArmorType.CODEC))
             );
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> TIER =
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<TierEnum>> TIER =
             COMPONENTS.registerComponentType("tier",
                     builder -> builder
-                            .persistent(Codec.STRING)
-                            .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+                            .persistent(TierEnum.CODEC)
+                            .networkSynchronized(TierEnum.STREAM_CODEC)
             );
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> ELEMENT =
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ElementEnum>> ELEMENT =
             COMPONENTS.registerComponentType("element",
                     builder -> builder
-                            .persistent(Codec.STRING)
-                            .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+                            .persistent(ElementEnum.CODEC)
+                            .networkSynchronized(ElementEnum.STREAM_CODEC)
             );
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ManaFlaskTypeEnum>> MANA_FLASK_TYPE =
             COMPONENTS.registerComponentType("mana_flask_type",

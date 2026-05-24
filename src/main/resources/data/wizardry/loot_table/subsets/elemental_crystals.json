@@ -1,0 +1,101 @@
+{
+  "pools": [
+    {
+      "name": "crystals",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:magic_crystal",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:element": "fire"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:magic_crystal",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:element": "ice"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:magic_crystal",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:element": "lightning"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:magic_crystal",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:element": "necromancy"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:magic_crystal",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:element": "earth"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:magic_crystal",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:element": "sorcery"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:magic_crystal",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:element": "healing"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

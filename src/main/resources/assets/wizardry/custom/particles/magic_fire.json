@@ -1,0 +1,45 @@
+{
+  "parser": "wizardry:particle",
+  "textures": [
+    [
+      "wizardry:flame_0_0",
+      "wizardry:flame_0_1",
+      "wizardry:flame_0_2",
+      "wizardry:flame_0_3",
+      "wizardry:flame_0_4",
+      "wizardry:flame_0_5",
+      "wizardry:flame_0_6",
+      "wizardry:flame_0_7"
+    ],
+    [
+      "wizardry:flame_1_0",
+      "wizardry:flame_1_1",
+      "wizardry:flame_1_2",
+      "wizardry:flame_1_3",
+      "wizardry:flame_1_4",
+      "wizardry:flame_1_5",
+      "wizardry:flame_1_6",
+      "wizardry:flame_1_7"
+    ],
+    [
+      "wizardry:flame_2_0",
+      "wizardry:flame_2_1",
+      "wizardry:flame_2_2",
+      "wizardry:flame_2_3",
+      "wizardry:flame_2_4",
+      "wizardry:flame_2_5",
+      "wizardry:flame_2_6",
+      "wizardry:flame_2_7"
+    ],
+    [
+      "wizardry:flame_3_0",
+      "wizardry:flame_3_1",
+      "wizardry:flame_3_2",
+      "wizardry:flame_3_3",
+      "wizardry:flame_3_4",
+      "wizardry:flame_3_5",
+      "wizardry:flame_3_6",
+      "wizardry:flame_3_7"
+    ]
+  ]
+}

@@ -1,20 +1,33 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "www",
-        " c ",
+        "wbw",
+        "cwc",
         "www"
     ],
     "key": {
-        "c": {
-            "item": "ebwizardry:grand_crystal"
-        },
+        "b": "minecraft:book",
+        "c": "wizardry:grand_crystal",
         "w": {
-            "item": "ebwizardry:gilded_wood",
-            "data": 0
+            "neoforge:ingredient_type": "neoforge:components",
+            "items": [
+                "wizardry:gilded_wood"
+            ],
+            "components": {
+                "minecraft:block_state": {
+                    "wood_type": "oak"
+                }
+            },
+            "strict": false
         }
     },
     "result": {
-        "item": "ebwizardry:oak_bookshelf"
+        "id": "wizardry:lectern",
+        "count": 1,
+        "components": {
+            "minecraft:block_state": {
+                "wood_type": "oak"
+            }
+        }
     }
 }

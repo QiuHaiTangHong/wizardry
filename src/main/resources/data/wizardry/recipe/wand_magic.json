@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "  z",
+    " y ",
+    "x  "
+  ],
+  "key": {
+    "x": "minecraft:gold_nugget",
+    "y": "minecraft:stick",
+    "z": {
+      "neoforge:ingredient_type": "neoforge:components",
+      "items": [
+        "wizardry:magic_crystal"
+      ],
+      "components": {
+        "wizardry:element": "magic"
+      },
+      "strict": false
+    }
+  },
+  "result": {
+    "id": "wizardry:wand",
+    "count": 1,
+    "components": {
+      "wizardry:element": "magic",
+      "wizardry:tier": "novice"
+    }
+  }
+}

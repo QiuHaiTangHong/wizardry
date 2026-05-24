@@ -1,20 +1,19 @@
 package top.begonia.wizardry.core.block;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -24,10 +23,15 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import top.begonia.wizardry.client.gui.LecternScreen;
+import top.begonia.wizardry.client.util.ParticleBuilder;
+import top.begonia.wizardry.core.entity.block.LecternBlockEntity;
+import top.begonia.wizardry.core.registry.WizardryBlockEntities;
+import top.begonia.wizardry.core.registry.WizardryParticles;
 
-public class LecternBlock extends HorizontalDirectionalBlock implements EntityBlock {
+public class LecternBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final EnumProperty<WoodTypeEnum> LECTERN_WOOD_TYPE = EnumProperty.create("lectern_wood_type", WoodTypeEnum.class);
+    public static final EnumProperty<WoodTypeEnum> LECTERN_WOOD_TYPE = EnumProperty.create("wood_type", WoodTypeEnum.class);
     protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
     public static final MapCodec<LecternBlock> CODEC = simpleCodec(LecternBlock::new);
 
@@ -37,7 +41,7 @@ public class LecternBlock extends HorizontalDirectionalBlock implements EntityBl
     }
 
     @Override
-    protected @NonNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
+    protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
 
@@ -52,37 +56,50 @@ public class LecternBlock extends HorizontalDirectionalBlock implements EntityBl
         return SHAPE;
     }
 
-    @Override
-    public @NonNull RenderShape getRenderShape(@NonNull BlockState state) {
-        return RenderShape.MODEL;
-    }
-
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
+    public BlockState getStateForPlacement(@NonNull BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult hitResult) {
-        if (level.isClientSide()) return InteractionResult.SUCCESS;
-
-        BlockEntity be = level.getBlockEntity(pos);
-        if (be instanceof MenuProvider menuProvider) {
-            player.openMenu(menuProvider, pos);
-            return InteractionResult.CONSUME;
+    protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult hitResult) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (level.isClientSide() && blockEntity instanceof LecternBlockEntity lecternBlockEntity) {
+            Minecraft.getInstance().setScreen(new LecternScreen(lecternBlockEntity));
+            return InteractionResult.SUCCESS;
         }
-        return InteractionResult.PASS;
+        return InteractionResult.CONSUME;
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
-        return null;
+        return WizardryBlockEntities.LECTERN.get().create(pos, state);
     }
 
     @Override
-    public void animateTick(@NonNull BlockState state, Level level, BlockPos pos, @NonNull RandomSource random) {
-        Player closestPlayer = level.getNearestPlayer(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 3.0D, false);
+    public void animateTick(
+            @NonNull BlockState state,
+            @NonNull Level level,
+            @NonNull BlockPos pos,
+            @NonNull RandomSource random
+    ) {
+        Player entityplayer = level.getNearestPlayer(
+                pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                LecternBlockEntity.BOOK_OPEN_DISTANCE,
+                false
+        );
+
+        if (entityplayer != null) {
+            ParticleBuilder.create(WizardryParticles.DUST.get()).pos(pos.getX() + random.nextFloat(), pos.getY() + 1, pos.getZ() + random.nextFloat())
+                    .vel(0, 0.03, 0).clr(1, 1, 0.65f).fade(0.7f, 0, 1).shaded(false).spawn(level);
+        }
+    }
+
+    @javax.annotation.Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NonNull Level level, @NonNull BlockState state, @NonNull BlockEntityType<T> blockEntityType) {
+        return createTickerHelper(blockEntityType, WizardryBlockEntities.LECTERN.get(), (lvl, pos, st, blockEntity) -> blockEntity.tick(lvl, pos, st));
     }
 }

@@ -11,7 +11,7 @@ import top.begonia.wizardry.core.spell.AbstractSpell;
 
 public final class CommonHelper {
     public static MutableComponent getScrollDisplayName(ItemStack scroll) {
-        Holder<AbstractSpell> holder = scroll.get(WizardryComponents.SPELL_BOOK_KEY.get());
+        Holder<AbstractSpell> holder = scroll.get(WizardryComponents.SPELL.get());
         AbstractSpell spell = WizardrySpells.NONE.get();
         if (holder != null) {
             spell = holder.value();

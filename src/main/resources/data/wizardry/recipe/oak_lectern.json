@@ -6,18 +6,28 @@
         "www"
     ],
     "key": {
-        "b": {
-            "item": "minecraft:book"
-        },
-        "c": {
-            "item": "ebwizardry:grand_crystal"
-        },
+        "b": "minecraft:book",
+        "c": "wizardry:grand_crystal",
         "w": {
-            "item": "ebwizardry:gilded_wood",
-            "data": 0
+            "neoforge:ingredient_type": "neoforge:components",
+            "items": [
+                "wizardry:gilded_wood"
+            ],
+            "components": {
+                "minecraft:block_state": {
+                    "wood_type": "oak"
+                }
+            },
+            "strict": false
         }
     },
     "result": {
-        "item": "ebwizardry:oak_lectern"
+        "id": "wizardry:lectern",
+        "count": 1,
+        "components": {
+            "minecraft:block_state": {
+                "wood_type": "oak"
+            }
+        }
     }
 }

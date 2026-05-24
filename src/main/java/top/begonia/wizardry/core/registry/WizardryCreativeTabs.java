@@ -9,6 +9,8 @@ import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 
 import java.util.ArrayList;
@@ -40,7 +42,8 @@ public final class WizardryCreativeTabs {
             this.tab = Wizardry.MODID + tab;
         }
 
-        public MutableComponent getDisplayName() {
+        @Contract(" -> new")
+        public @NonNull MutableComponent getDisplayName() {
             return Component.translatable("itemGroup." + this.tab);
         }
 
@@ -70,7 +73,7 @@ public final class WizardryCreativeTabs {
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> GEAR = CREATIVE_TABS.register(TabsEnum.GEAR.toString(), () -> CreativeModeTab.builder()
             .title(TabsEnum.GEAR.getDisplayName())
-            .icon(() -> new ItemStack(WizardryItems.WIZARD_HAT.get()))
+            .icon(() -> new ItemStack(WizardryItems.ARMOUR.get()))
             .build()
     );
 

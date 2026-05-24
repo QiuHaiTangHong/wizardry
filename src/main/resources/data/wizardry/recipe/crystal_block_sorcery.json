@@ -7,12 +7,23 @@
     ],
     "key": {
         "z": {
-            "item": "ebwizardry:magic_crystal",
-			"data": 6
+            "neoforge:ingredient_type": "neoforge:components",
+            "items": [
+                "wizardry:magic_crystal"
+            ],
+            "components": {
+                "wizardry:element": "sorcery"
+            },
+            "strict": false
         }
     },
     "result": {
-        "item": "ebwizardry:crystal_block",
-		"data": 6
+        "id": "wizardry:crystal_block",
+        "count": 1,
+        "components": {
+            "minecraft:block_state": {
+                "element": "sorcery"
+            }
+        }
     }
 }

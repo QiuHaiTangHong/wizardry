@@ -1,0 +1,13 @@
+{
+  "parser": "wizardry:particle",
+  "textures": [
+    "wizardry:ice_0",
+    "wizardry:ice_1",
+    "wizardry:ice_2",
+    "wizardry:ice_3",
+    "wizardry:ice_4",
+    "wizardry:ice_5",
+    "wizardry:ice_6",
+    "wizardry:ice_7"
+  ]
+}

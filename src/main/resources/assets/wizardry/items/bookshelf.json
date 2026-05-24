@@ -2,7 +2,7 @@
   "model": {
     "type": "minecraft:select",
     "property": "minecraft:block_state",
-    "block_state_property": "bookshelf_wood_type",
+    "block_state_property": "wood_type",
     "cases": [
       {
         "when": "oak",

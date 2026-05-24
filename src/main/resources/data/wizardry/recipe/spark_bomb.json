@@ -2,22 +2,28 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
 		{
-			"item": "ebwizardry:magic_crystal",
-			"data": 3
+          "neoforge:ingredient_type": "neoforge:components",
+          "items": [
+            "wizardry:magic_crystal"
+          ],
+          "components": {
+            "wizardry:element": "lightning"
+          }
 		},
 		{
-			"item": "ebwizardry:magic_crystal",
-			"data": 3
+          "neoforge:ingredient_type": "neoforge:components",
+          "items": [
+            "wizardry:magic_crystal"
+          ],
+          "components": {
+            "wizardry:element": "lightning"
+          }
 		},
-        {
-            "item": "minecraft:glass_bottle"
-        },
-        {
-            "item": "minecraft:gunpowder"
-        }
+      "minecraft:glass_bottle",
+      "minecraft:gunpowder"
     ],
     "result": {
-        "item": "ebwizardry:spark_bomb",
+        "id": "wizardry:spark_bomb",
 		"count": 3
     }
 }

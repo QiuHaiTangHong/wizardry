@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "y y",
+        "yyy",
+        "yyy"
+    ],
+    "key": {
+        "y": "wizardry:magic_silk"
+    },
+    "result": {
+        "id": "wizardry:armour",
+        "components": {
+            "wizardry:element": "magic",
+            "wizardry:armor_type": "chestplate",
+            "wizardry:armor_material_type": "wizard"
+        },
+        "count": 1
+    }
+}

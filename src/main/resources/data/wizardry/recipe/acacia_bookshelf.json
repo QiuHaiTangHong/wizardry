@@ -1,20 +1,33 @@
 {
     "type": "minecraft:crafting_shaped",
+    "category": "building",
     "pattern": [
         "www",
         " c ",
         "www"
     ],
     "key": {
-        "c": {
-            "item": "wizardry:grand_crystal"
-        },
+        "c": "wizardry:grand_crystal",
         "w": {
-            "item": "wizardry:gilded_wood",
-            "data": 4
+            "neoforge:ingredient_type": "neoforge:components",
+            "items": [
+                "wizardry:gilded_wood"
+            ],
+            "components": {
+                "minecraft:block_state": {
+                    "wood_type": "acacia"
+                }
+            },
+            "strict": false
         }
     },
     "result": {
-        "item": "wizardry:acacia_bookshelf"
+        "id": "wizardry:bookshelf",
+        "count": 1,
+        "components": {
+            "minecraft:block_state": {
+                "wood_type": "acacia"
+            }
+        }
     }
 }

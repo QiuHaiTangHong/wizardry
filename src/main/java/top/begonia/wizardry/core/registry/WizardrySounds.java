@@ -3,15 +3,19 @@ package top.begonia.wizardry.core.registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 
 public final class WizardrySounds {
 
     private WizardrySounds() {
     }
+
+    public static final SoundSource SPELLS = SoundSource.PLAYERS;
 
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, Wizardry.MODID);
     public static final DeferredHolder<SoundEvent, SoundEvent> BLOCK_ARCANE_WORKBENCH_SPELLBIND = createSound("block.arcane_workbench.bind_spell");
@@ -152,8 +156,14 @@ public final class WizardrySounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> MISC_FREEZE = createSound("misc.freeze");
     public static final DeferredHolder<SoundEvent, SoundEvent> MISC_SPELL_FAIL = createSound("misc.spell_fail");
 
-    private static DeferredHolder<SoundEvent, SoundEvent> createSound(String name) {
-        return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(Wizardry.MODID, name)));
+    public static @NonNull DeferredHolder<SoundEvent, SoundEvent> createSound(String name) {
+        return createSound(Wizardry.MODID, name);
+    }
+
+    public static @NonNull DeferredHolder<SoundEvent, SoundEvent> createSound(String mod_id, String name) {
+        return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(
+                Identifier.fromNamespaceAndPath(mod_id, name)
+        ));
     }
 
     public static void register(IEventBus eventBus) {

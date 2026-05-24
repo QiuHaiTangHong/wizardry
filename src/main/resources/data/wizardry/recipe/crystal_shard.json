@@ -2,12 +2,13 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
         {
-            "item": "ebwizardry:magic_crystal",
-			"data": 0
+            "neoforge:ingredient_type": "neoforge:components",
+            "items": ["wizardry:magic_crystal"],
+            "components": { "wizardry:element": "magic" }
         }
     ],
     "result": {
-        "item": "ebwizardry:crystal_shard",
+        "id": "wizardry:crystal_shard",
 		"count": 9
     }
 }

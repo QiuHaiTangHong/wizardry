@@ -1,0 +1,9 @@
+{
+  "parser": "wizardry:particle",
+  "textures": [
+    "wizardry:snow_0",
+    "wizardry:snow_1",
+    "wizardry:snow_2",
+    "wizardry:snow_3"
+  ]
+}

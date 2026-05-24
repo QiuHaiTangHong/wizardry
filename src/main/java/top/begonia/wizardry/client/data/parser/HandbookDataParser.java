@@ -6,9 +6,9 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
-import top.begonia.wizardry.core.api.data.IDataParser;
+import top.begonia.wizardry.core.api.data.IStaticDataParser;
 
-public class HandbookDataParser implements IDataParser<HandbookData> {
+public class HandbookDataParser implements IStaticDataParser<HandbookData> {
     public static final Identifier PARSER_NAME = Identifier.fromNamespaceAndPath(Wizardry.MODID, "handbook_data_parser");
 
     @Override
@@ -22,7 +22,7 @@ public class HandbookDataParser implements IDataParser<HandbookData> {
     }
 
     @Override
-    public HandbookData parser(JsonElement json) {
+    public HandbookData parserItem(JsonElement json) {
         return HandbookData.CODEC.parse(JsonOps.INSTANCE, json)
                 .resultOrPartial(error -> Wizardry.LOGGER.error("手札解析错误: {}", error))
                 .orElse(null);

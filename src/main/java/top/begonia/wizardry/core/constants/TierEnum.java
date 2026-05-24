@@ -27,7 +27,6 @@ public enum TierEnum implements StringRepresentable {
     public final int upgradeLimit;
     public final int weight;
     private final Style colour;
-
     private final String unlocalisedName;
 
     public static final Codec<TierEnum> CODEC = StringRepresentable.fromEnum(TierEnum::values);
@@ -35,6 +34,7 @@ public enum TierEnum implements StringRepresentable {
             id -> id >= 0 && id < TierEnum.values().length ? TierEnum.values()[id] : TierEnum.NOVICE,
             TierEnum::ordinal
     ).cast();
+    public static final TierEnum DEFAULT = TierEnum.NOVICE;
 
     TierEnum(int maxCharge, int upgradeLimit, int weight, Style colour, String name) {
         this.maxCharge = maxCharge;
@@ -43,10 +43,6 @@ public enum TierEnum implements StringRepresentable {
         this.weight = weight;
         this.colour = colour;
         this.unlocalisedName = name;
-    }
-
-    public static TierEnum getDefault() {
-        return TierEnum.NOVICE;
     }
 
     public static TierEnum fromName(String name) {

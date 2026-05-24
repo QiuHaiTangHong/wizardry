@@ -1,0 +1,116 @@
+{
+  "pools": [
+    {
+      "name": "wizardry",
+      "rolls": {
+        "min": 1,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "wizardry:subsets/elemental_crystals",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wizardry:subsets/wizard_armour",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wizardry:subsets/arcane_tomes",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wizardry:subsets/wand_upgrades",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:magic_crystal",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:spell_book",
+          "weight": 40,
+          "functions": [
+            {
+              "function": "wizardry:random_spell",
+              "undiscovered_bias": 0.3
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:scroll",
+          "weight": 14,
+          "functions": [
+            {
+              "function": "wizardry:random_spell",
+              "undiscovered_bias": 0.3
+            },
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:identification_scroll",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:fire_bomb",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:poison_bomb",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:smoke_bomb",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:spark_bomb",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:astral_diamond",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:purifying_elixir",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:grand_crystal",
+          "weight": 2
+        }
+      ]
+    }
+  ]
+}

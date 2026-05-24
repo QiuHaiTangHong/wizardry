@@ -1,0 +1,295 @@
+{
+  "hand_animation_on_swap": true,
+  "oversized_in_gui": false,
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:component",
+    "component": "wizardry:tier",
+    "cases": [
+      {
+        "when": "novice",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:component",
+          "component": "wizardry:element",
+          "cases": [
+            {
+              "when": "magic",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/novice_magic_wand"
+              }
+            },
+            {
+              "when": "fire",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/novice_fire_wand"
+              }
+            },
+            {
+              "when": "ice",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/novice_ice_wand"
+              }
+            },
+            {
+              "when": "lightning",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/novice_lightning_wand"
+              }
+            },
+            {
+              "when": "necromancy",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/novice_necromancy_wand"
+              }
+            },
+            {
+              "when": "earth",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/novice_earth_wand"
+              }
+            },
+            {
+              "when": "sorcery",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/novice_sorcery_wand"
+              }
+            },
+            {
+              "when": "healing",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/novice_healing_wand"
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "wizardry:item/wand/novice_magic_wand"
+          }
+        }
+      },
+      {
+        "when": "apprentice",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:component",
+          "component": "wizardry:element",
+          "cases": [
+            {
+              "when": "magic",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/apprentice_magic_wand"
+              }
+            },
+            {
+              "when": "fire",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/apprentice_fire_wand"
+              }
+            },
+            {
+              "when": "ice",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/apprentice_ice_wand"
+              }
+            },
+            {
+              "when": "lightning",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/apprentice_lightning_wand"
+              }
+            },
+            {
+              "when": "necromancy",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/apprentice_necromancy_wand"
+              }
+            },
+            {
+              "when": "earth",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/apprentice_earth_wand"
+              }
+            },
+            {
+              "when": "sorcery",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/apprentice_sorcery_wand"
+              }
+            },
+            {
+              "when": "healing",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/apprentice_healing_wand"
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "wizardry:item/wand/apprentice_magic_wand"
+          }
+        }
+      },
+      {
+        "when": "advanced",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:component",
+          "component": "wizardry:element",
+          "cases": [
+            {
+              "when": "magic",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/advanced_magic_wand"
+              }
+            },
+            {
+              "when": "fire",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/advanced_fire_wand"
+              }
+            },
+            {
+              "when": "ice",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/advanced_ice_wand"
+              }
+            },
+            {
+              "when": "lightning",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/advanced_lightning_wand"
+              }
+            },
+            {
+              "when": "necromancy",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/advanced_necromancy_wand"
+              }
+            },
+            {
+              "when": "earth",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/advanced_earth_wand"
+              }
+            },
+            {
+              "when": "sorcery",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/advanced_sorcery_wand"
+              }
+            },
+            {
+              "when": "healing",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/advanced_healing_wand"
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "wizardry:item/wand/advanced_magic_wand"
+          }
+        }
+      },
+      {
+        "when": "master",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:component",
+          "component": "wizardry:element",
+          "cases": [
+            {
+              "when": "magic",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/master_magic_wand"
+              }
+            },
+            {
+              "when": "fire",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/master_fire_wand"
+              }
+            },
+            {
+              "when": "ice",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/master_ice_wand"
+              }
+            },
+            {
+              "when": "lightning",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/master_lightning_wand"
+              }
+            },
+            {
+              "when": "necromancy",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/master_necromancy_wand"
+              }
+            },
+            {
+              "when": "earth",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/master_earth_wand"
+              }
+            },
+            {
+              "when": "sorcery",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/master_sorcery_wand"
+              }
+            },
+            {
+              "when": "healing",
+              "model": {
+                "type": "minecraft:model",
+                "model": "wizardry:item/wand/master_healing_wand"
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "wizardry:item/wand/master_magic_wand"
+          }
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "wizardry:item/wand/novice_magic_wand"
+    }
+  }
+}

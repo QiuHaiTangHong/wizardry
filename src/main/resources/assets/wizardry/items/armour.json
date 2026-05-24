@@ -1,0 +1,1111 @@
+{
+  "hand_animation_on_swap": true,
+  "oversized_in_gui": false,
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:component",
+    "component": "wizardry:armor_material_type",
+    "cases": [
+      {
+        "when": "wizard",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:component",
+          "component": "wizardry:armor_type",
+          "cases": [
+            {
+              "when": "helmet",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_helmet_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_helmet_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_helmet_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_helmet_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_helmet_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_helmet_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_helmet_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_helmet_healing"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "when": "chestplate",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_chestplate_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_chestplate_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_chestplate_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_chestplate_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_chestplate_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_chestplate_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_chestplate_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_chestplate_healing"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "when": "leggings",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_leggings_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_leggings_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_leggings_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_leggings_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_leggings_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_leggings_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_leggings_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_leggings_healing"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "when": "boots",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_boots_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_boots_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_boots_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_boots_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_boots_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_boots_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_boots_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/wizard_boots_healing"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "when": "sage",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:component",
+          "component": "wizardry:armor_type",
+          "cases": [
+            {
+              "when": "helmet",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_helmet_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_helmet_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_helmet_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_helmet_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_helmet_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_helmet_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_helmet_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_helmet_healing"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "when": "chestplate",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_chestplate_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_chestplate_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_chestplate_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_chestplate_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_chestplate_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_chestplate_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_chestplate_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_chestplate_healing"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "when": "leggings",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_leggings_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_leggings_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_leggings_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_leggings_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_leggings_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_leggings_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_leggings_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_leggings_healing"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "when": "boots",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_boots_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_boots_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_boots_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_boots_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_boots_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_boots_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_boots_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/sage_boots_healing"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "when": "battlemage",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:component",
+          "component": "wizardry:armor_type",
+          "cases": [
+            {
+              "when": "helmet",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_helmet_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_helmet_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_helmet_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_helmet_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_helmet_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_helmet_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_helmet_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_helmet_healing"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "when": "chestplate",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_chestplate_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_chestplate_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_chestplate_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_chestplate_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_chestplate_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_chestplate_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_chestplate_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_chestplate_healing"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "when": "leggings",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_leggings_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_leggings_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_leggings_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_leggings_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_leggings_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_leggings_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_leggings_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_leggings_healing"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "when": "boots",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_boots_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_boots_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_boots_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_boots_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_boots_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_boots_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_boots_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/battlemage_boots_healing"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "when": "warlock",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:component",
+          "component": "wizardry:armor_type",
+          "cases": [
+            {
+              "when": "helmet",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_helmet_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_helmet_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_helmet_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_helmet_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_helmet_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_helmet_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_helmet_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_helmet_healing"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "when": "chestplate",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_chestplate_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_chestplate_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_chestplate_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_chestplate_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_chestplate_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_chestplate_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_chestplate_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_chestplate_healing"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "when": "leggings",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_leggings_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_leggings_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_leggings_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_leggings_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_leggings_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_leggings_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_leggings_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_leggings_healing"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "when": "boots",
+              "model": {
+                "type": "minecraft:select",
+                "property": "minecraft:component",
+                "component": "wizardry:element",
+                "cases": [
+                  {
+                    "when": "magic",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_boots_magic"
+                    }
+                  },
+                  {
+                    "when": "fire",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_boots_fire"
+                    }
+                  },
+                  {
+                    "when": "ice",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_boots_ice"
+                    }
+                  },
+                  {
+                    "when": "lightning",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_boots_lightning"
+                    }
+                  },
+                  {
+                    "when": "necromancy",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_boots_necromancy"
+                    }
+                  },
+                  {
+                    "when": "earth",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_boots_earth"
+                    }
+                  },
+                  {
+                    "when": "sorcery",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_boots_sorcery"
+                    }
+                  },
+                  {
+                    "when": "healing",
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "wizardry:item/armor/warlock_boots_healing"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "wizardry:item/armor/wizard_helmet_magic"
+    }
+  }
+}

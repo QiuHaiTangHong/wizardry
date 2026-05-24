@@ -26,6 +26,8 @@ public final class ServerConfig {
     public static final ModConfigSpec.IntValue CONDENSER_TICK_INTERVAL;
     public static final ModConfigSpec.IntValue SIPHON_MANA_PER_LEVEL;
     public static final ModConfigSpec.IntValue BASE_SPELL_SLOTS;
+    public static final ModConfigSpec.BooleanValue BONEMEAL_GROWS_CRYSTAL_FLOWERS;
+    public static final ModConfigSpec.IntValue RECENT_SPELL_EXPIRY_TIME;
 
     static {
         BUILDER.push("Gameplay");
@@ -97,6 +99,16 @@ public final class ServerConfig {
                 .translation("config." + Wizardry.MODID + ".base_spell_slots")
                 .defineInRange("baseSpellSlots", 5, 1, 5);
 
+        BONEMEAL_GROWS_CRYSTAL_FLOWERS = BUILDER
+                .comment("Whether using bonemeal on grass blocks has a chance to grow crystal flowers.")
+                .translation("config." + Wizardry.MODID + ".bonemeal_grows_crystal_flowers")
+                .define("bonemealGrowsCrystalFlowers", true);
+
+        RECENT_SPELL_EXPIRY_TIME = BUILDER
+                .comment("The time in ticks after which recent spell casts expire and no longer count toward progression penalties. Default is 1200 ticks (1 minute). Lower values make progression penalties shorter-lived, higher values make them last longer.")
+                .translation("config." + Wizardry.MODID + ".recent_spell_expiry_time")
+                .defineInRange("recentSpellExpiryTime", 1200, 60, 72000);
+
         SPEC = BUILDER.build();
     }
 
@@ -121,6 +133,8 @@ public final class ServerConfig {
     }
 
     public static int baseSpellSlots;
+    public static boolean bonemealGrowsCrystalFlowers;
+    public static int recentSpellExpiryTime;
 
     private static void valueChange() {
         Constants.MANA_PER_SHARD = MANA_PER_SHARD.get();
@@ -140,6 +154,8 @@ public final class ServerConfig {
         Constants.FROST_SLOWNESS_PER_LEVEL = FROST_SLOWNESS_PER_LEVEL.get();
 
         baseSpellSlots = BASE_SPELL_SLOTS.get();
+        bonemealGrowsCrystalFlowers = BONEMEAL_GROWS_CRYSTAL_FLOWERS.get();
+        recentSpellExpiryTime = RECENT_SPELL_EXPIRY_TIME.get();
     }
 
     @SubscribeEvent

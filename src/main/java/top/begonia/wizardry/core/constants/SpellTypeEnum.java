@@ -17,13 +17,10 @@ public enum SpellTypeEnum implements StringRepresentable {
     ALTERATION("alteration");
 
     private final String unlocalisedName;
+    public static final SpellTypeEnum DEFAULT = SpellTypeEnum.UTILITY;
 
     SpellTypeEnum(String name) {
         this.unlocalisedName = name;
-    }
-
-    public static SpellTypeEnum getDefault() {
-        return SpellTypeEnum.UTILITY;
     }
 
     public static SpellTypeEnum fromName(String name) {

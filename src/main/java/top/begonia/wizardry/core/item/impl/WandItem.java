@@ -1,28 +1,49 @@
 package top.begonia.wizardry.core.item.impl;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.data.json.definition.spell.part.SpellModifiers;
+import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.constants.TierEnum;
+import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.item.IManaStoringItem;
 import top.begonia.wizardry.core.item.ISpellCastingItem;
 import top.begonia.wizardry.core.item.IWorkbenchItem;
+import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 import top.begonia.wizardry.core.util.WandHelper;
 
-public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem, IManaStoringItem {
-    public TierEnum tier;
-    public ElementEnum element;
+import java.util.function.Consumer;
 
-    public WandItem(TierEnum tier, ElementEnum element, Properties properties) {
+public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem, IManaStoringItem {
+
+    public WandItem(Properties properties) {
         super(properties);
-        this.tier = tier;
-        this.element = element;
+    }
+
+    @Override
+    public @NonNull Component getName(@NonNull ItemStack itemStack) {
+        TierEnum tier = itemStack.getOrDefault(WizardryComponents.TIER, TierEnum.NOVICE);
+        ElementEnum element = itemStack.getOrDefault(WizardryComponents.ELEMENT, ElementEnum.MAGIC);
+        return Component.translatable("item." + Wizardry.MODID + "." + tier.getSerializedName() + "_" + element.getSerializedName() + "_wand").withStyle(element.getStyle());
+    }
+
+    @Override
+    public void appendHoverText(@NonNull ItemStack itemStack, @NonNull TooltipContext context, @NonNull TooltipDisplay display, @NonNull Consumer<Component> builder, @NonNull TooltipFlag tooltipFlag) {
+    }
+
+    @Override
+    public @NonNull ItemUseAnimation getUseAnimation(@NonNull ItemStack stack) {
+        return ItemUseAnimation.NONE;
     }
 
     @Override
@@ -85,27 +106,27 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
     }
 
     @Override
-    public void setMana(ItemStack stack, int mana) {
+    public void setMana(@NonNull ItemStack stack, int mana) {
         super.setDamage(stack, getManaCapacity(stack) - mana);
     }
 
     @Override
-    public int getMana(ItemStack stack) {
+    public int getMana(@NonNull ItemStack stack) {
         return getManaCapacity(stack) - getDamage(stack);
     }
 
     @Override
-    public int getManaCapacity(ItemStack stack) {
+    public int getManaCapacity(@NonNull ItemStack stack) {
         return this.getMaxDamage(stack);
     }
 
     @Override
-    public boolean canCast(ItemStack stack, AbstractSpell spell, Player caster, ItemUseAnimation hand, int castingTick, SpellModifiers modifiers) {
+    public boolean canCast(int castingTick, SpellContextFlow spellContextFlow) {
         return false;
     }
 
     @Override
-    public boolean cast(ItemStack stack, AbstractSpell spell, Player caster, ItemUseAnimation hand, int castingTick, SpellModifiers modifiers) {
+    public boolean cast(ItemStack stack, AbstractSpell spell, Player caster, InteractionHand hand, int castingTick, SpellContext spellContextFlow) {
         return false;
     }
 
@@ -119,14 +140,8 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
         return false;
     }
 
-    // hasEffect
     @Override
     public boolean isFoil(@NonNull ItemStack stack) {
         return false;
-    }
-
-    @Override
-    public int getMaxDamage(@NonNull ItemStack stack) {
-        return 1;
     }
 }

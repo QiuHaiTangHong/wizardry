@@ -23,7 +23,6 @@ import top.begonia.wizardry.core.registry.WizardryMenus;
 
 public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpellSortable {
     private final ContainerLevelAccess access;
-    private Inventory playerInventory;
     private final ISpellSortable.SortType sortType = ISpellSortable.SortType.TIER;
 
     public static final Identifier EMPTY_SLOT_CRYSTAL = Identifier.fromNamespaceAndPath(Wizardry.MODID, "container/empty_slot_crystal");
@@ -49,7 +48,6 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpell
 
     public ArcaneWorkbenchMenu(int containerId, Inventory playerInventory, ArcaneWorkbenchBlockEntity blockEntity, ContainerLevelAccess access) {
         super(WizardryMenus.ARCANE_WORKBENCH.get(), containerId);
-        this.playerInventory = playerInventory;
         this.access = access;
         for (int i = 0; i < 8; i++) {
             this.addSlot(new ItemClassListSlot(blockEntity.inventory, i, -999, -999, 1, SpellBookItem.class));

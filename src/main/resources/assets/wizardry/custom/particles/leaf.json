@@ -1,0 +1,21 @@
+{
+  "parser": "wizardry:particle",
+  "textures": [
+    "wizardry:leaf_0",
+    "wizardry:leaf_1",
+    "wizardry:leaf_2",
+    "wizardry:leaf_3",
+    "wizardry:leaf_4",
+    "wizardry:leaf_5",
+    "wizardry:leaf_6",
+    "wizardry:leaf_7",
+    "wizardry:leaf_8",
+    "wizardry:leaf_9",
+    "wizardry:leaf_10",
+    "wizardry:leaf_11",
+    "wizardry:leaf_12",
+    "wizardry:leaf_13",
+    "wizardry:leaf_14",
+    "wizardry:leaf_15"
+  ]
+}

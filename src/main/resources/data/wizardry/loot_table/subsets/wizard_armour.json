@@ -1,0 +1,490 @@
+{
+  "pools": [
+    {
+      "name": "armour",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "helmet",
+                "wizardry:element": "magic"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "helmet",
+                "wizardry:element": "fire"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "helmet",
+                "wizardry:element": "ice"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "helmet",
+                "wizardry:element": "lightning"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "helmet",
+                "wizardry:element": "necromancy"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "helmet",
+                "wizardry:element": "earth"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "helmet",
+                "wizardry:element": "sorcery"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "helmet",
+                "wizardry:element": "healing"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "chestplate",
+                "wizardry:element": "magic"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "chestplate",
+                "wizardry:element": "fire"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "chestplate",
+                "wizardry:element": "ice"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "chestplate",
+                "wizardry:element": "lightning"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "chestplate",
+                "wizardry:element": "necromancy"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "chestplate",
+                "wizardry:element": "earth"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "chestplate",
+                "wizardry:element": "sorcery"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "chestplate",
+                "wizardry:element": "healing"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "leggings",
+                "wizardry:element": "magic"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "leggings",
+                "wizardry:element": "fire"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "leggings",
+                "wizardry:element": "ice"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "leggings",
+                "wizardry:element": "lightning"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "leggings",
+                "wizardry:element": "necromancy"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "leggings",
+                "wizardry:element": "earth"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "leggings",
+                "wizardry:element": "sorcery"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "leggings",
+                "wizardry:element": "healing"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "boots",
+                "wizardry:element": "magic"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "boots",
+                "wizardry:element": "fire"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "boots",
+                "wizardry:element": "ice"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "boots",
+                "wizardry:element": "lightning"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "boots",
+                "wizardry:element": "necromancy"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "boots",
+                "wizardry:element": "earth"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "boots",
+                "wizardry:element": "sorcery"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:armour",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "boots",
+                "wizardry:element": "healing"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

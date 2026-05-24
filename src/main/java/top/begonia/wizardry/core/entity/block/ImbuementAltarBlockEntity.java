@@ -9,22 +9,34 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.NeoForge;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.util.GeometryUtils;
+import top.begonia.wizardry.client.util.ParticleBuilder;
+import top.begonia.wizardry.core.api.event.ImbuementActivateEvent;
 import top.begonia.wizardry.core.block.ReceptacleBlock;
 import top.begonia.wizardry.core.constants.ElementEnum;
-import top.begonia.wizardry.core.registry.WizardryBlockEntities;
-import top.begonia.wizardry.core.registry.WizardrySounds;
+import top.begonia.wizardry.core.item.impl.WizardArmourItem;
+import top.begonia.wizardry.core.registry.*;
+import top.begonia.wizardry.core.util.ArmourHelper;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class ImbuementAltarBlockEntity extends BlockEntity {
@@ -52,27 +64,20 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
     }
 
     public void checkRecipe() {
-
         if (getResult().isEmpty()) {
             imbuementTimer = 0;
         } else if (imbuementTimer == 0) {
             imbuementTimer = 1;
-        } else {
-            return;
-        }
-
-        if (this.level != null) {
-            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
         }
     }
 
     public ItemStack getStack() {
-        return stack;
+        return this.stack;
     }
 
     public void tick(@NonNull Level level, BlockPos pos, @NonNull BlockState state) {
         if (lastUserUUID != null && lastUser == null && level instanceof ServerLevel serverLevel) {
-            this.lastUser = serverLevel.getServer().getPlayerList().getPlayer(lastUserUUID);
+            this.lastUser = serverLevel.getServer().getPlayerList().getPlayer(this.lastUserUUID);
         }
         if (imbuementTimer > 0) {
             if (imbuementTimer == 1) {
@@ -84,11 +89,10 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
 
             if (result.isEmpty()) {
                 imbuementTimer = 0;
-
             } else {
-
                 if (imbuementTimer++ >= IMBUEMENT_DURATION) {
                     this.stack = result;
+                    Wizardry.LOGGER.info(this.stack.toString());
                     consumeReceptacleContents();
                     imbuementTimer = 0;
                     displayElement = null;
@@ -112,8 +116,8 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
 
                         int[] colours = ReceptacleBlock.PARTICLE_COLOURS.get(elements[i]);
 
-//                        ParticleBuilder.create(Type.DUST, level.getRandom(), vec.x, vec.y, vec.z, 0.1, false)
-//                                .vel(centre.subtract(vec).scale(0.02)).clr(colours[1]).fade(colours[2]).time(50).spawn(world);
+                        ParticleBuilder.create(WizardryParticles.DUST.get(), level.getRandom(), vec.x, vec.y, vec.z, 0.1, false)
+                                .vel(centre.subtract(vec).scale(0.02)).clr(colours[1]).fade(colours[2]).time(50).spawn(level);
                     }
                 }
             }
@@ -121,20 +125,85 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
     }
 
     public ElementEnum getDisplayElement() {
-        return displayElement;
+        return this.displayElement;
     }
 
-    public float getImbuementProgress() {
-        return (float) imbuementTimer / IMBUEMENT_DURATION;
+    private ElementEnum @NonNull [] getReceptacleElements() {
+        ElementEnum[] elements = new ElementEnum[4];
+        for (Direction side : Direction.Plane.HORIZONTAL) {
+            if (this.level != null) {
+                BlockEntity blockEntity = this.level.getBlockEntity(this.worldPosition.relative(side));
+                if (blockEntity instanceof ReceptacleBlockEntity receptacle) {
+                    elements[side.get2DDataValue()] = receptacle.getElement();
+                }
+            } else {
+                elements[side.get2DDataValue()] = null;
+            }
+        }
+
+        return elements;
+    }
+
+    private void consumeReceptacleContents() {
+        for (Direction side : Direction.Plane.HORIZONTAL) {
+            if (this.level != null) {
+                BlockEntity blockEntity = this.level.getBlockEntity(this.worldPosition.relative(side));
+                if (blockEntity instanceof ReceptacleBlockEntity receptacle) {
+                    receptacle.setElement(null);
+                }
+            }
+        }
+    }
+
+    public static ItemStack getImbuementResult(ItemStack input, ElementEnum[] receptacleElements, boolean fullLootGen, Level level, Player lastUser) {
+        ItemStack eventResult = ItemStack.EMPTY;
+        if (level == null) {
+            return eventResult;
+        }
+        if (!NeoForge.EVENT_BUS.post(new ImbuementActivateEvent(input, receptacleElements, level, lastUser, eventResult)).isCanceled()) {
+            if (!eventResult.isEmpty()) {
+                return eventResult;
+            }
+        }
+        if (input.getItem() instanceof WizardArmourItem wizardArmourItem && wizardArmourItem.getElement(input) == ElementEnum.DEFAULT) {
+            if (Arrays.stream(receptacleElements).distinct().count() == 1 && receptacleElements[0] != null) {
+                ItemStack result = ArmourHelper.generateArmour(wizardArmourItem, receptacleElements[0], wizardArmourItem.getArmourMaterial(input), wizardArmourItem.getArmorType(input));
+                wizardArmourItem.setMana(result, wizardArmourItem.getMana(input));
+                return result;
+            }
+        }
+        if ((input.getItem() == WizardryItems.MAGIC_CRYSTAL.get() || input.getItem() == Item.byBlock(WizardryBlocks.CRYSTAL_BLOCK.get()))) {
+            if (Arrays.stream(receptacleElements).distinct().count() == 1 && receptacleElements[0] != null) {
+                ItemStack result = new ItemStack(input.getItem(), input.getCount());
+                result.set(WizardryComponents.ELEMENT, receptacleElements[0]);
+                return result;
+            }
+        }
+        if (input.getItem() == WizardryItems.RUINED_SPELL_BOOK.get()) {
+            if (!ArrayUtils.contains(receptacleElements, null)) {
+                if (fullLootGen && level instanceof ServerLevel serverLevel) {
+                    ElementEnum element = receptacleElements[level.getRandom().nextInt(receptacleElements.length)];
+                    LootTable table = serverLevel.getServer().reloadableRegistries().getLootTable(WizardryLoots.RUINED_SPELL_BOOK_LOOT_TABLES.get(element.ordinal() - 1));
+                    LootParams params = new LootParams.Builder(serverLevel)
+                            .withParameter(LootContextParams.THIS_ENTITY, lastUser)
+                            .withLuck(lastUser.getLuck())
+                            .create(LootContextParamSets.EMPTY);
+                    List<ItemStack> stacks = table.getRandomItems(params);
+                    return stacks.isEmpty() ? ItemStack.EMPTY : stacks.getFirst();
+                }
+                return new ItemStack(WizardryItems.SPELL_BOOK);
+            }
+        }
+
+        return eventResult;
     }
 
     private @NonNull ItemStack getResult() {
 
-        boolean actuallyCrafting = imbuementTimer >= IMBUEMENT_DURATION - 1 && level instanceof ServerLevel;
+        boolean actuallyCrafting = imbuementTimer >= IMBUEMENT_DURATION - 1 && this.level instanceof ServerLevel;
         ElementEnum[] elements = getReceptacleElements();
 
-        ItemStack result = ItemStack.EMPTY;
-//                getImbuementResult(stack, elements, actuallyCrafting, level, lastUser);
+        ItemStack result = getImbuementResult(stack, elements, actuallyCrafting, this.level, lastUser);
 
         if (result.isEmpty()) {
             displayElement = null;
@@ -147,34 +216,8 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
         return result;
     }
 
-    private ElementEnum @NonNull [] getReceptacleElements() {
-
-        ElementEnum[] elements = new ElementEnum[4];
-
-        for (Direction side : Direction.Plane.HORIZONTAL) {
-
-            if (this.level != null) {
-                BlockEntity blockEntity = this.level.getBlockEntity(this.worldPosition.relative(side));
-                if (blockEntity instanceof ReceptacleBlockEntity receptacleBlockEntity) {
-                    elements[side.get2DDataValue()] = receptacleBlockEntity.getElement();
-                } else {
-                    elements[side.get2DDataValue()] = null;
-                }
-            }
-        }
-        return elements;
-    }
-
-    private void consumeReceptacleContents() {
-
-        for (Direction side : Direction.Plane.HORIZONTAL) {
-            if (this.level != null) {
-                BlockEntity blockEntity = this.level.getBlockEntity(this.worldPosition.relative(side));
-                if (blockEntity instanceof ReceptacleBlockEntity receptacleBlockEntity) {
-                    receptacleBlockEntity.setElement(null);
-                }
-            }
-        }
+    public float getImbuementProgress() {
+        return (float) imbuementTimer / IMBUEMENT_DURATION;
     }
 
     @Override
@@ -207,55 +250,4 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
-
-//    public static ItemStack getImbuementResult(ItemStack input, ElementEnum[] receptacleElements, boolean fullLootGen, Level level, Player lastUser) {
-//
-//        ItemStack eventResult = ItemStack.EMPTY;
-//
-//        if (level != null && MinecraftForge.EVENT_BUS.post(new ImbuementActivateEvent(input, receptacleElements, world, lastUser, eventResult))) {
-//            if (eventResult != ItemStack.EMPTY) return eventResult;
-//        }
-//
-//        if (input.getItem() instanceof ItemWizardArmour && ((ItemWizardArmour) input.getItem()).element == null) {
-//
-//            if (Arrays.stream(receptacleElements).distinct().count() == 1 && receptacleElements[0] != null) { // All the same element
-//
-//                ItemStack result = new ItemStack(ItemWizardArmour.getArmour(receptacleElements[0], ((ItemWizardArmour) input.getItem()).armourClass, ((ItemWizardArmour) input.getItem()).armorType));
-//
-//                result.setTagCompound(input.getTagCompound());
-//                ((IManaStoringItem) result.getItem()).setMana(result, ((ItemWizardArmour) input.getItem()).getMana(input));
-//
-//                return result;
-//            }
-//        }
-//
-//        if ((input.getItem() == WizardryItems.magic_crystal || input.getItem() == Item.getItemFromBlock(WizardryBlocks.crystal_block))
-//                && input.getMetadata() == 0) {
-//
-//            if (Arrays.stream(receptacleElements).distinct().count() == 1 && receptacleElements[0] != null) {
-//                return new ItemStack(input.getItem(), input.getCount(), receptacleElements[0].ordinal());
-//            }
-//        }
-//
-//        if (input.getItem() == WizardryItems.RUINED_SPELL_BOOK.get()) {
-//
-//            if (!ArrayUtils.contains(receptacleElements, null)) {
-//
-//                if (fullLootGen) {
-//                    ElementEnum element = receptacleElements[world.rand.nextInt(receptacleElements.length)];
-//                    LootTable table = world.getLootTableManager().getLootTableFromLocation(
-//                            WizardryLoot.RUINED_SPELL_BOOK_LOOT_TABLES[element.ordinal() - 1]);
-//                    LootContext context = new LootContext.Builder((WorldServer) world).withPlayer(lastUser)
-//                            .withLuck(lastUser == null ? 0 : lastUser.getLuck()).build();
-//
-//                    List<ItemStack> stacks = table.generateLootForPools(world.rand, context);
-//                    return stacks.isEmpty() ? ItemStack.EMPTY : stacks.get(0);
-//                }
-//
-//                return new ItemStack(WizardryItems.SPELL_BOOK);
-//            }
-//        }
-//
-//        return ItemStack.EMPTY;
-//    }
 }

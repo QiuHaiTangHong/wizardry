@@ -29,6 +29,8 @@ public final class CommonConfig {
 
     private static final ModConfigSpec.BooleanValue FLESH_SPELLS_CAUSE_SLOWNESS;
     private static final ModConfigSpec.DoubleValue IRON_FLESH_ARMOR_BONUS;
+    private static final ModConfigSpec.IntValue BOOKSHELF_SEARCH_RADIUS;
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> BOOKSHELF_BLOCKS;
 
     static {
         BUILDER.push("General Settings");
@@ -97,6 +99,16 @@ public final class CommonConfig {
                 .translation("config." + Wizardry.MODID + ".iron_flesh_armor_bonus")
                 .worldRestart()
                 .defineInRange("ironFleshArmorBonus", 4.0, 0.0, Double.MAX_VALUE);
+        BOOKSHELF_SEARCH_RADIUS = BUILDER
+                .translation("config." + Wizardry.MODID + ".bookshelf_search_radius")
+                .comment("The maximum number of blocks a bookshelf can be from an arcane workbench or lectern to be able to link to it.")
+                .worldRestart()
+                .defineInRange("bookshelfSearchRadius", 4, 1, 10);
+        BOOKSHELF_BLOCKS = BUILDER
+                .translation("config." + Wizardry.MODID + ".bookshelf_blocks")
+                .comment("List of registry names of blocks that count as bookshelves for the arcane workbench and lectern. Block names are not case sensitive. For mod blocks, prefix with the mod ID (e.g. " + Wizardry.MODID + ":oak_bookshelf).")
+                .worldRestart()
+                .defineList("bookshelfBlocks", List.of("oak", "spruce", "birch", "jungle", "acacia", "dark_oak"), o -> o instanceof String);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
@@ -118,6 +130,10 @@ public final class CommonConfig {
 
     public static double ironFleshArmorBonus;
 
+    public static int bookshelfSearchRadius;
+
+    public static List<? extends String> bookshelfBlocks;
+
     private static void valueChange() {
         noviceMaxCharge = NOVICE_MAX_CHARGE.get();
         apprenticeMaxCharge = APPRENTICE_MAX_CHARGE.get();
@@ -134,6 +150,9 @@ public final class CommonConfig {
 
         fleshSpellsCauseSlowness = FLESH_SPELLS_CAUSE_SLOWNESS.get();
         ironFleshArmorBonus = IRON_FLESH_ARMOR_BONUS.get();
+
+        bookshelfSearchRadius = BOOKSHELF_SEARCH_RADIUS.get();
+        bookshelfBlocks = BOOKSHELF_BLOCKS.get();
     }
 
     @SubscribeEvent

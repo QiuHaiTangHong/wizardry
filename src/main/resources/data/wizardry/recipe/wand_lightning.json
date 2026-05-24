@@ -1,25 +1,31 @@
 {
-    "type": "forge:ore_shaped",
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
     "pattern": [
         "  z",
         " y ",
         "x  "
     ],
     "key": {
-        "x": {
-            "type": "forge:ore_dict",
-			"ore": "nuggetGold"
-        },
-        "y": {
-            "type": "forge:ore_dict",
-			"ore": "stickWood"
-        },
+        "x": "minecraft:gold_nugget",
+        "y": "minecraft:stick",
         "z": {
-            "item": "ebwizardry:magic_crystal",
-			"data": 3
+            "neoforge:ingredient_type": "neoforge:components",
+            "items": [
+                "wizardry:magic_crystal"
+            ],
+            "components": {
+                "wizardry:element": "lightning"
+            },
+            "strict": false
         }
     },
     "result": {
-        "item": "ebwizardry:novice_lightning_wand"
+        "id": "wizardry:wand",
+        "count": 1,
+        "components": {
+            "wizardry:element": "lightning",
+            "wizardry:tier": "novice"
+        }
     }
 }

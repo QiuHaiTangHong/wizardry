@@ -1,0 +1,46 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/world/item/ItemUseAnimation",
+      "name": "WIZARDRY_POINT",
+      "constructor": "(ILjava/lang/String;Z)V",
+      "parameters": [ -1, "wizardry:point", false ]
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemUseAnimation",
+      "name": "WIZARDRY_POINT_UP",
+      "constructor": "(ILjava/lang/String;Z)V",
+      "parameters": [ -1, "wizardry:point_up", false ]
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemUseAnimation",
+      "name": "WIZARDRY_POINT_DOWN",
+      "constructor": "(ILjava/lang/String;Z)V",
+      "parameters": [ -1, "wizardry:point_down", false ]
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemUseAnimation",
+      "name": "WIZARDRY_SUMMON",
+      "constructor": "(ILjava/lang/String;Z)V",
+      "parameters": [ -1, "wizardry:summon", false ]
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemUseAnimation",
+      "name": "WIZARDRY_THRUST",
+      "constructor": "(ILjava/lang/String;Z)V",
+      "parameters": [ -1, "wizardry:thrust", false ]
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemUseAnimation",
+      "name": "WIZARDRY_IMBUE",
+      "constructor": "(ILjava/lang/String;Z)V",
+      "parameters": [ -1, "wizardry:imbue", false ]
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemUseAnimation",
+      "name": "WIZARDRY_GRAPPLE",
+      "constructor": "(ILjava/lang/String;Z)V",
+      "parameters": [ -1, "wizardry:grapple", false ]
+    }
+  ]
+}

@@ -2,11 +2,9 @@ package top.begonia.wizardry.client.particle;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.SingleQuadParticle;
-import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -16,46 +14,64 @@ import top.begonia.wizardry.core.entity.ICustomHitbox;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 
 public abstract class AbstractParticle extends SingleQuadParticle {
-    protected final SpriteSet sprites;
+    protected final MutableDoubleSpriteSet sprites;
     protected long seed;
-    protected Random random = new Random();
     protected boolean shaded = false;
-    protected float initialRed;
-    protected float initialGreen;
-    protected float initialBlue;
-    protected float fadeRed = 0;
-    protected float fadeGreen = 0;
-    protected float fadeBlue = 0;
+    protected int animationRowIndex = 0;
+    protected float initialRed = 1.0F;
+    protected float initialGreen = 1.0F;
+    protected float initialBlue = 1.0F;
+    protected float fadeRed = 1.0F;
+    protected float fadeGreen = 1.0F;
+    protected float fadeBlue = 1.0F;
     protected float angle;
     protected double radius = 0;
     protected double speed = 0;
     @Nullable
     protected Entity entity = null;
     protected double relativeX, relativeY, relativeZ;
+    protected double prevVelX, prevVelY, prevVelZ;
     protected double relativeMotionX, relativeMotionY, relativeMotionZ;
     protected float yaw = Float.NaN;
     protected float pitch = Float.NaN;
     private static final double SPREAD_FACTOR = 0.2;
     private static final double IMPACT_FRICTION = 0.2;
-    private double prevVelX, prevVelY, prevVelZ;
-    private final RandomSource randomSource;
 
-    public AbstractParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet sprites, RandomSource randomSource) {
-        super(level, x, y, z, xSpeed, ySpeed, zSpeed, sprites.get(0, 1));
+    public AbstractParticle(
+            @NonNull WizardryParticleOptions options,
+            ClientLevel level,
+            double x, double y, double z,
+            double xd, double yd, double zd,
+            @NonNull MutableDoubleSpriteSet sprites
+    ) {
+        super(level, x, y, z, xd, yd, zd, sprites.getSprite(0, 0));
         this.sprites = sprites;
         this.relativeX = x;
         this.relativeY = y;
         this.relativeZ = z;
-        this.randomSource = randomSource;
+        this.setSprite(sprites.getSprite(0, 0));
         this.setSpriteFromAge(sprites);
+        this.setParticleSpeed(xd, yd, zd);
+    }
+
+    public void setSpriteFromAge(MutableDoubleSpriteSet sprites) {
+        if (this.isAlive() && !sprites.isEmpty()) {
+            this.setSprite(sprites.getSprite(this.animationRowIndex, this.age, this.lifetime));
+        }
+    }
+
+    protected void extractRotatedQuad(@NonNull QuadParticleRenderState particleTypeRenderState, @NonNull Camera camera, Quaternionf rotation, float partialTickTime) {
+        Vec3 pos = camera.position();
+        float x = (float) (Mth.lerp(partialTickTime, this.xo, this.x) - pos.x());
+        float y = (float) (Mth.lerp(partialTickTime, this.yo, this.y) - pos.y());
+        float z = (float) (Mth.lerp(partialTickTime, this.zo, this.z) - pos.z());
+        this.extractRotatedQuad(particleTypeRenderState, rotation, x, y, z, partialTickTime);
     }
 
     public void setSeed(long seed) {
         this.seed = seed;
-        this.random = new Random(seed);
     }
 
     public void setShaded(boolean shaded) {
@@ -68,12 +84,6 @@ public abstract class AbstractParticle extends SingleQuadParticle {
 
     public void setCollisions(boolean canCollide) {
         this.hasPhysics = canCollide;
-    }
-
-    public void setVelocity(double vx, double vy, double vz) {
-        this.xd = vx;
-        this.yd = vy;
-        this.zd = vz;
     }
 
     public void setSpin(double radius, double speed) {
@@ -89,6 +99,11 @@ public abstract class AbstractParticle extends SingleQuadParticle {
         this.relativeMotionZ = zd;
     }
 
+    @Override
+    protected @NonNull Layer getLayer() {
+        return Layer.bySprite(this.sprite);
+    }
+
     public void setEntity(Entity entity) {
         this.entity = entity;
         if (entity != null) {
@@ -102,14 +117,13 @@ public abstract class AbstractParticle extends SingleQuadParticle {
         }
     }
 
-    public void setRBGColorF(float r, float g, float b) {
-        initialRed = r;
-        initialGreen = g;
-        initialBlue = b;
-        setFadeColour(r, g, b);
+    public void setInitialColor(float r, float g, float b) {
+        this.initialRed = r;
+        this.initialGreen = g;
+        this.initialBlue = b;
     }
 
-    public void setFadeColour(float r, float g, float b) {
+    public void setFadeColor(float r, float g, float b) {
         this.fadeRed = r;
         this.fadeGreen = g;
         this.fadeBlue = b;
@@ -133,11 +147,6 @@ public abstract class AbstractParticle extends SingleQuadParticle {
     }
 
     @Override
-    protected SingleQuadParticle.@NonNull Layer getLayer() {
-        return Layer.bySprite(this.sprite);
-    }
-
-    @Override
     protected int getLightCoords(float partialTick) {
         if (this.shaded) {
             return super.getLightCoords(partialTick);
@@ -152,7 +161,6 @@ public abstract class AbstractParticle extends SingleQuadParticle {
                 this.remove();
                 return;
             }
-            // 完美套用你写对的 1.21.4 现代新字段名！
             this.xo = this.x + this.entity.xOld - this.entity.getX() - this.relativeMotionX * (1.0F - partialTicks);
             this.yo = this.y + this.entity.yOld - this.entity.getY() - this.relativeMotionY * (1.0F - partialTicks);
             this.zo = this.z + this.entity.zOld - this.entity.getZ() - this.relativeMotionZ * (1.0F - partialTicks);
@@ -216,7 +224,7 @@ public abstract class AbstractParticle extends SingleQuadParticle {
             if (this.xd == 0 && this.prevVelX != 0) {
                 this.yd *= IMPACT_FRICTION;
                 this.zd *= IMPACT_FRICTION;
-                this.yd += (this.random.nextDouble() * 2 - 1) * this.prevVelX * SPREAD_FACTOR; // rand -> random
+                this.yd += (this.random.nextDouble() * 2 - 1) * this.prevVelX * SPREAD_FACTOR;
                 this.zd += (this.random.nextDouble() * 2 - 1) * this.prevVelX * SPREAD_FACTOR;
             }
 
@@ -235,7 +243,7 @@ public abstract class AbstractParticle extends SingleQuadParticle {
             }
             double searchRadius = 20.0D;
             AABB searchBox = new AABB(this.x, this.y, this.z, this.x, this.y, this.z).inflate(searchRadius);
-            List<Entity> nearbyEntities = this.level.getEntities((Entity) null, searchBox);
+            List<Entity> nearbyEntities = this.level.getEntities(null, searchBox);
             Vec3 currentPos = new Vec3(this.x, this.y, this.z);
             Vec3 previousPos = new Vec3(this.xo, this.yo, this.zo);
             for (Entity e : nearbyEntities) {

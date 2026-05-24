@@ -1,14 +1,14 @@
 {
     "type": "minecraft:crafting_shapeless",
-	"group": "magic_crystal",
+    "group": "magic_crystal",
     "ingredients": [
-        {
-            "item": "ebwizardry:crystal_flower"
-        }
+        "wizardry:crystal_flower"
     ],
     "result": {
-        "item": "ebwizardry:magic_crystal",
-		"data": 0,
-        "count": 2
+        "id": "wizardry:magic_crystal",
+        "count": 2,
+        "components": {
+            "wizardry:element": "magic"
+        }
     }
 }

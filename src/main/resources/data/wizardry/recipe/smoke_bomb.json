@@ -1,35 +1,19 @@
 {
-    "type": "minecraft:crafting_shapeless",
-    "ingredients": [
-        [
-			{
-				"item": "minecraft:coal",
-				"data": 0
-			},
-			{
-				"item": "minecraft:coal",
-				"data": 1
-			}
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		[
+			"minecraft:coal",
+			"minecraft:charcoal"
 		],
-        [
-			{
-				"item": "minecraft:coal",
-				"data": 0
-			},
-			{
-				"item": "minecraft:coal",
-				"data": 1
-			}
+		[
+			"minecraft:coal",
+			"minecraft:charcoal"
 		],
-        {
-            "item": "minecraft:glass_bottle"
-        },
-        {
-            "item": "minecraft:gunpowder"
-        }
-    ],
-    "result": {
-        "item": "ebwizardry:smoke_bomb",
+		"minecraft:glass_bottle",
+		"minecraft:gunpowder"
+	],
+	"result": {
+		"id": "wizardry:smoke_bomb",
 		"count": 3
-    }
+	}
 }

@@ -1,0 +1,25 @@
+{
+  "pools": [
+    {
+      "name": "wizardry",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:spell_book",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "wizardry:random_spell",
+              "tiers": [
+                "novice",
+                "apprentice",
+                "advanced"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

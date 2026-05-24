@@ -6,47 +6,63 @@
         " x "
     ],
     "key": {
-        "x": {
-            "type": "forge:ore_dict",
-            "ore": "stone"
-        },
-        "y": [
-            {
-				"item": "ebwizardry:magic_crystal",
-				"data": 0
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 1
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 2
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 3
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 4
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 5
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 6
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 7
-			}
-        ]
+		"x": "#c:stones",
+        "y": {
+			"neoforge:ingredient_type": "neoforge:compound",
+			"ingredients": [
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "magic" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "fire" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "ice" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "lightning" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "necromancy" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "earth" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "sorcery" },
+					"strict": false
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "healing" },
+					"strict": false
+				}
+			]
+		}
     },
-    "result": {
-        "item": "ebwizardry:transportation_stone",
-        "count": 2
-    }
+	"result": {
+		"id": "wizardry:transportation_stone",
+		"count": 2
+	}
 }

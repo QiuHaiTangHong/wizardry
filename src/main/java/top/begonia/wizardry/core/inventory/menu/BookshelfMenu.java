@@ -27,7 +27,7 @@ public class BookshelfMenu extends AbstractContainerMenu {
         for (int y = 0; y < 2; y++) {
             for (int x = 0; x < BookshelfBlockEntity.SLOT_COUNT / 2; x++) {
                 this.addSlot(new BookshelfSlot(
-                        blockEntity.inventory,
+                        blockEntity.getInventory(),
                         x + BookshelfBlockEntity.SLOT_COUNT / 2 * y,
                         35 + x * 18,
                         17 + y * 18,

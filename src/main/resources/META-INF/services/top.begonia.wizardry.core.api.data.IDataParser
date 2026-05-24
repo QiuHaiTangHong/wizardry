@@ -1,4 +1,7 @@
 top.begonia.wizardry.client.data.parser.BookshelfBookSettingsParser
 top.begonia.wizardry.client.data.parser.HandbookDataParser
 top.begonia.wizardry.client.data.parser.BookshelfModelParser
-top.begonia.wizardry.core.data.json.parser.SpellPropertiesParser
+top.begonia.wizardry.client.data.parser.ParticleParser
+top.begonia.wizardry.client.data.parser.SpellHubConfigParser
+top.begonia.wizardry.client.data.parser.SpellHubDescriptionParser
+top.begonia.wizardry.core.data.spell.parser.SpellPropertiesParser

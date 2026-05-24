@@ -1,5 +1,6 @@
 package top.begonia.wizardry.core.item.impl;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -16,8 +17,11 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.gui.SpellBookScreen;
+import top.begonia.wizardry.client.util.ClientHelper;
+import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.registry.WizardryComponents;
+import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
 import java.util.Map;
@@ -34,6 +38,11 @@ public class SpellBookItem extends Item {
 
     public SpellBookItem(Item.Properties properties) {
         super(properties);
+    }
+
+    public AbstractSpell getCurrentSpell(ItemStack itemStack) {
+        Holder<AbstractSpell> abstractSpellHolder = itemStack.get(WizardryComponents.SPELL);
+        return abstractSpellHolder != null ? abstractSpellHolder.value() : WizardrySpells.NONE.get();
     }
 
     public @NonNull InteractionResult use(@NonNull Level level, @NonNull Player player, @NonNull InteractionHand hand) {
@@ -53,18 +62,11 @@ public class SpellBookItem extends Item {
             @NonNull Consumer<Component> builder,
             @NonNull TooltipFlag tooltipFlag
     ) {
-        Holder<AbstractSpell> spellHolder = itemStack.get(WizardryComponents.SPELL_BOOK_KEY.get());
-        if (spellHolder == null) return;
-        AbstractSpell spell = spellHolder.value();
+        AbstractSpell spell = this.getCurrentSpell(itemStack);
         Level level = context.level();
         Player player = Minecraft.getInstance().player;
-        // TODO
-        boolean discovered = true;
-        if (discovered) {
-            builder.accept(spell.getDisplayNameWithFormatting());
-        } else {
-
-        }
+        boolean discovered = ClientHelper.shouldDisplayDiscovered(spell, itemStack);
+        builder.accept(discovered ? spell.getDisplayNameWithFormatting() : Component.literal(GlyphGenerator.getGlyphName(spell)).withStyle(ChatFormatting.GRAY));
         builder.accept(spell.getTier().getDisplayNameWithFormatting());
     }
 

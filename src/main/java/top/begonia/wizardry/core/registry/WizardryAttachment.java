@@ -5,7 +5,7 @@ import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.data.player.PlayerData;
+import top.begonia.wizardry.core.data.player.WizardPlayerData;
 
 import java.util.function.Supplier;
 
@@ -13,11 +13,11 @@ public final class WizardryAttachment {
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
             DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, Wizardry.MODID);
 
-    public static final Supplier<AttachmentType<PlayerData>> WIZARD_PLAYER_DATA = ATTACHMENT_TYPES.register(
+    public static final Supplier<AttachmentType<WizardPlayerData>> WIZARD_PLAYER_DATA = ATTACHMENT_TYPES.register(
             "wizard_player_data",
-            () -> AttachmentType.builder(PlayerData::getDefault)
-                    .serialize(PlayerData.CODEC)
-                    .sync(PlayerData.STREAM_CODEC)
+            () -> AttachmentType.builder(WizardPlayerData::getDefault)
+                    .serialize(WizardPlayerData.CODEC)
+                    .sync(WizardPlayerData.STREAM_CODEC)
                     .copyOnDeath()
                     .build()
     );

@@ -1,10 +1,33 @@
 {
-  "variants": {
-    "lectern_wood_type=oak": {"model": "wizardry:block/oak_lectern"},
-    "lectern_wood_type=spruce": {"model": "wizardry:block/spruce_lectern"},
-    "lectern_wood_type=birch": {"model": "wizardry:block/birch_lectern"},
-    "lectern_wood_type=jungle": {"model": "wizardry:block/jungle_lectern"},
-    "lectern_wood_type=acacia": {"model": "wizardry:block/acacia_lectern"},
-    "lectern_wood_type=dark_oak": {"model": "wizardry:block/dark_oak_lectern"}
-  }
+  "multipart": [
+    { "when": { "wood_type": "oak", "facing": "north" }, "apply": { "model": "wizardry:block/oak_lectern" } },
+    { "when": { "wood_type": "oak", "facing": "east" },  "apply": { "model": "wizardry:block/oak_lectern", "y": 90 } },
+    { "when": { "wood_type": "oak", "facing": "south" }, "apply": { "model": "wizardry:block/oak_lectern", "y": 180 } },
+    { "when": { "wood_type": "oak", "facing": "west" },  "apply": { "model": "wizardry:block/oak_lectern", "y": 270 } },
+
+    { "when": { "wood_type": "spruce", "facing": "north" }, "apply": { "model": "wizardry:block/spruce_lectern" } },
+    { "when": { "wood_type": "spruce", "facing": "east" },  "apply": { "model": "wizardry:block/spruce_lectern", "y": 90 } },
+    { "when": { "wood_type": "spruce", "facing": "south" }, "apply": { "model": "wizardry:block/spruce_lectern", "y": 180 } },
+    { "when": { "wood_type": "spruce", "facing": "west" },  "apply": { "model": "wizardry:block/spruce_lectern", "y": 270 } },
+
+    { "when": { "wood_type": "birch", "facing": "north" }, "apply": { "model": "wizardry:block/birch_lectern" } },
+    { "when": { "wood_type": "birch", "facing": "east" },  "apply": { "model": "wizardry:block/birch_lectern", "y": 90 } },
+    { "when": { "wood_type": "birch", "facing": "south" }, "apply": { "model": "wizardry:block/birch_lectern", "y": 180 } },
+    { "when": { "wood_type": "birch", "facing": "west" },  "apply": { "model": "wizardry:block/birch_lectern", "y": 270 } },
+
+    { "when": { "wood_type": "jungle", "facing": "north" }, "apply": { "model": "wizardry:block/jungle_lectern" } },
+    { "when": { "wood_type": "jungle", "facing": "east" },  "apply": { "model": "wizardry:block/jungle_lectern", "y": 90 } },
+    { "when": { "wood_type": "jungle", "facing": "south" }, "apply": { "model": "wizardry:block/jungle_lectern", "y": 180 } },
+    { "when": { "wood_type": "jungle", "facing": "west" },  "apply": { "model": "wizardry:block/jungle_lectern", "y": 270 } },
+
+    { "when": { "wood_type": "acacia", "facing": "north" }, "apply": { "model": "wizardry:block/acacia_lectern" } },
+    { "when": { "wood_type": "acacia", "facing": "east" },  "apply": { "model": "wizardry:block/acacia_lectern", "y": 90 } },
+    { "when": { "wood_type": "acacia", "facing": "south" }, "apply": { "model": "wizardry:block/acacia_lectern", "y": 180 } },
+    { "when": { "wood_type": "acacia", "facing": "west" },  "apply": { "model": "wizardry:block/acacia_lectern", "y": 270 } },
+
+    { "when": { "wood_type": "dark_oak", "facing": "north" }, "apply": { "model": "wizardry:block/dark_oak_lectern" } },
+    { "when": { "wood_type": "dark_oak", "facing": "east" },  "apply": { "model": "wizardry:block/dark_oak_lectern", "y": 90 } },
+    { "when": { "wood_type": "dark_oak", "facing": "south" }, "apply": { "model": "wizardry:block/dark_oak_lectern", "y": 180 } },
+    { "when": { "wood_type": "dark_oak", "facing": "west" },  "apply": { "model": "wizardry:block/dark_oak_lectern", "y": 270 } }
+  ]
 }

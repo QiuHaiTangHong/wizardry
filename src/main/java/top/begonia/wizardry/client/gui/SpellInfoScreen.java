@@ -11,8 +11,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.client.config.ClientConfig;
-import top.begonia.wizardry.client.data.ClientGlyphData;
+import top.begonia.wizardry.core.config.ClientConfig;
+import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.client.util.ClientHelper;
 import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.registry.WizardrySounds;
@@ -51,7 +51,7 @@ public abstract class SpellInfoScreen extends Screen {
         this.extractForegroundLayer(graphics, left, top, mouseX, mouseY);
     }
 
-    protected void extractBackgroundLayer(GuiGraphicsExtractor graphics, int left, int top, int mouseX, int mouseY) {
+    protected void extractBackgroundLayer(@NonNull GuiGraphicsExtractor graphics, int left, int top, int mouseX, int mouseY) {
         boolean discovered = ClientHelper.shouldDisplayDiscovered(getSpell(), null);
         Identifier iconTexture = discovered ? getSpell().getIcon() : WizardrySpells.NONE.get().getIcon();
         graphics.blit(
@@ -80,7 +80,7 @@ public abstract class SpellInfoScreen extends Screen {
             graphics.text(this.font, spell.getType().getDisplayName(), left + 17, top + 26, 0xFF777777, false);
         } else {
             Component glyphComponent = Component
-                    .literal(ClientGlyphData.getInstance().getGlyphName(spell)).withStyle(style ->
+                    .literal(GlyphGenerator.getGlyphName(spell)).withStyle(style ->
                             style.withFont(new FontDescription.Resource(Identifier.fromNamespaceAndPath("minecraft", "alt")))
                     );
             graphics.text(this.font, glyphComponent, left + 17, top + 15, 0xFF000000, false);
@@ -116,7 +116,7 @@ public abstract class SpellInfoScreen extends Screen {
         if (discovered) {
             graphics.textWithWordWrap(this.font, getSpell().getDescription(), left + 17, top + 83, 118, 0xFF000000, false);
         } else {
-            Component glyphComponent = Component.literal(ClientGlyphData.getInstance().getGlyphDescription(getSpell())).withStyle(style ->
+            Component glyphComponent = Component.literal(GlyphGenerator.getGlyphDescription(getSpell())).withStyle(style ->
                     style.withFont(new FontDescription.Resource(Identifier.fromNamespaceAndPath("minecraft", "alt")))
             );
             graphics.textWithWordWrap(this.font, glyphComponent, left + 17, top + 83, 118, 0xFF000000, false);

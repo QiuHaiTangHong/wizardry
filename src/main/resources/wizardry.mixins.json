@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "top.begonia.wizardry.mixin",
+  "package": "",
   "compatibilityLevel": "JAVA_25",
   "mixins": [],
   "injectors": {
@@ -8,5 +8,5 @@
   },
   "overwrites": {
     "requireAnnotations": true
-  }
+  }, "client": []
 }

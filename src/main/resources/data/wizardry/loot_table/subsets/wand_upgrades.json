@@ -1,0 +1,55 @@
+{
+  "pools": [
+    {
+      "name": "upgrades",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:condenser_upgrade",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:siphon_upgrade",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:storage_upgrade",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:range_upgrade",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:duration_upgrade",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:cooldown_upgrade",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:blast_upgrade",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:attunement_upgrade",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:melee_upgrade",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "yyy",
+        "y y"
+    ],
+    "key": {
+        "y": "wizardry:magic_silk"
+    },
+    "result": {
+        "id": "wizardry:armour",
+        "components": {
+            "wizardry:element": "magic",
+            "wizardry:armor_type": "helmet",
+            "wizardry:armor_material_type": "wizard"
+        },
+        "count": 1
+    }
+}

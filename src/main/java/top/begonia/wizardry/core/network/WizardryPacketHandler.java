@@ -6,7 +6,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.client.data.ClientGlyphData;
+import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.core.network.data.GlyphDataPayload;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
@@ -24,7 +24,7 @@ public class WizardryPacketHandler {
 
     private static void handleGlyphData(final GlyphDataPayload payload, final IPayloadContext context) {
         context.enqueueWork(() -> {
-            ClientGlyphData.getInstance().update(payload.names(), payload.descriptions());
+            GlyphGenerator.update(payload.names(), payload.descriptions());
             Wizardry.LOGGER.info("已同步咒语乱码数据至客户端。");
         });
     }

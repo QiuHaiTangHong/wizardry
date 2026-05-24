@@ -10,7 +10,7 @@ import org.jspecify.annotations.NonNull;
 
 public class GildedWoodBlock extends Block {
     public static final MapCodec<GildedWoodBlock> CODEC = simpleCodec(GildedWoodBlock::new);
-    public static final EnumProperty<WoodTypeEnum> GILDED_WOOD_TYPE = EnumProperty.create("gilded_wood_type", WoodTypeEnum.class);
+    public static final EnumProperty<WoodTypeEnum> GILDED_WOOD_TYPE = EnumProperty.create("wood_type", WoodTypeEnum.class);
 
     public GildedWoodBlock(BlockBehaviour.Properties properties) {
         super(properties);

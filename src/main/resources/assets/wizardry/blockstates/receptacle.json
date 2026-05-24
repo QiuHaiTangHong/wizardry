@@ -1,7 +1,22 @@
 {
   "variants": {
-    "": {
+    "facing=up": {
       "model": "wizardry:block/receptacle"
+    },
+    "facing=east": {
+      "model": "wizardry:block/wall_receptacle",
+      "y": -90
+    },
+    "facing=south": {
+      "model": "wizardry:block/wall_receptacle"
+    },
+    "facing=west": {
+      "model": "wizardry:block/wall_receptacle",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "wizardry:block/wall_receptacle",
+      "y": 180
     }
   }
 }

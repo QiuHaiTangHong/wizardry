@@ -36,7 +36,7 @@
 			"texture_height": 48,
 			"border": false
 		},
-		"magic_wand": {
+		"wand_magic": {
 			"location": "wizardry:textures/items/wand_novice.png",
 			"caption": "A Magic Wand",
 			"u": 0,
@@ -133,12 +133,12 @@
 		"arcane_workbench": {
 			"locations": [ "wizardry:arcane_workbench" ]
 		},
-		"magic_wand": {
-			"locations": [ "wizardry:magic_wand" ]
+		"wand_magic": {
+			"locations": [ "wizardry:wand_magic" ]
 		},
 		"novice_wands": {
 			"locations": [
-				"wizardry:magic_wand",
+				"wizardry:wand_magic",
 				"wizardry:wand_fire",
 				"wizardry:wand_ice",
 				"wizardry:wand_lightning",
@@ -221,11 +221,11 @@
 		"magic_silk": {
 			"locations": [ "wizardry:magic_silk" ]
 		},
-		"wizard_hat": {
-			"locations": [ "wizardry:wizard_hat" ]
+		"wizard_helmet": {
+			"locations": [ "wizardry:wizard_helmet" ]
 		},
-		"wizard_robe": {
-			"locations": [ "wizardry:wizard_robe" ]
+		"wizard_chestplate": {
+			"locations": [ "wizardry:wizard_chestplate" ]
 		},
 		"wizard_leggings": {
 			"locations": [ "wizardry:wizard_leggings" ]
@@ -236,8 +236,8 @@
 		"blank_scroll": {
 			"locations": [ "wizardry:blank_scroll" ]
 		},
-		"firebomb": {
-			"locations": [ "wizardry:firebomb" ]
+		"fire_bomb": {
+			"locations": [ "wizardry:fire_bomb" ]
 		},
 		"poison_bomb": {
 			"locations": [ "wizardry:poison_bomb" ]
@@ -329,7 +329,7 @@
 
 				"- A magic wand, crafted as shown:",
 
-				"#recipe magic_wand",
+				"#recipe wand_magic",
 
 				"- An @arcane_workbench arcane workbench@, crafted like so:",
 
@@ -371,7 +371,7 @@
 
 				"The wand is the implement of choice for a wizard. With it, you can cast any @spells spell@ provided the wand can contain its power (see @tiers Tiers@). Wands come in many different varieties but you will almost certainly start with a basic magic wand.",
 
-				"#image magic_wand",
+				"#image wand_magic",
 
 				"Most wands begin their life as a simple arrangement of a magic crystal of some sort attached to a wooden stick, with a gold nugget affixed to the other end. The crystal is, of course, the source of the wand's power, as it provides the focus necessary to channel @spells@. The rest of the wand is important too though, as it provides not only a means with which to hold the wand, but also a path through which @mana@ can be channeled and directed.",
 
@@ -494,8 +494,8 @@
 				"You can obtain wizard armor by crafting it from magical silk:",
 
 				"#recipe magic_silk",
-				"#recipe wizard_hat",
-				"#recipe wizard_robe",
+				"#recipe wizard_helmet",
+				"#recipe wizard_chestplate",
 				"#recipe wizard_leggings",
 				"#recipe wizard_boots",
 
@@ -770,7 +770,7 @@
 
 						"Various @spells@ conjure physical items, some of which can also be crafted directly. Firebombs, poison bombs, spark bombs and smoke bombs can all be crafted:",
 
-						"#recipe firebomb",
+						"#recipe fire_bomb",
 						"#recipe poison_bomb",
 						"#recipe smoke_bomb",
 						"#recipe spark_bomb"
@@ -809,12 +809,12 @@
 				"#recipe runestone_pedestal",
 				"#recipe transportation_stone",
 				"#recipe magic_silk",
-				"#recipe wizard_hat",
-				"#recipe wizard_robe",
+				"#recipe wizard_helmet",
+				"#recipe wizard_chestplate",
 				"#recipe wizard_leggings",
 				"#recipe wizard_boots",
 				"#recipe blank_scroll",
-				"#recipe firebomb",
+				"#recipe fire_bomb",
 				"#recipe poison_bomb",
 				"#recipe smoke_bomb",
 				"#recipe spark_bomb",

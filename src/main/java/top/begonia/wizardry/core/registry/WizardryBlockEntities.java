@@ -8,10 +8,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.entity.block.ArcaneWorkbenchBlockEntity;
-import top.begonia.wizardry.core.entity.block.BookshelfBlockEntity;
-import top.begonia.wizardry.core.entity.block.ImbuementAltarBlockEntity;
-import top.begonia.wizardry.core.entity.block.ReceptacleBlockEntity;
+import top.begonia.wizardry.core.entity.block.*;
 
 import java.util.function.Supplier;
 
@@ -42,6 +39,12 @@ public final class WizardryBlockEntities {
             "receptacle",
             ReceptacleBlockEntity::new,
             WizardryBlocks.RECEPTACLE
+    );
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LecternBlockEntity>> LECTERN = registerBlockEntity(
+            "lectern",
+            LecternBlockEntity::new,
+            WizardryBlocks.LECTERN
     );
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ImbuementAltarBlockEntity>> IMBUEMENT_ALTAR = registerBlockEntity(

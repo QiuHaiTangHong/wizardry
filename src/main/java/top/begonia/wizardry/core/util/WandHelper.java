@@ -5,6 +5,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.UnmodifiableView;
+import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.data.WandUpgrades;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.registry.WizardrySpells;
@@ -12,7 +14,6 @@ import top.begonia.wizardry.core.spell.AbstractSpell;
 
 import java.util.*;
 
-//(/\*([\s\S]*?)\*/)|(//.*)
 public final class WandHelper {
 
     private static final HashMap<Item, String> upgradeMap = new HashMap<>();
@@ -20,7 +21,7 @@ public final class WandHelper {
     public static AbstractSpell[] getSpells(ItemStack wand) {
 
         List<Holder<AbstractSpell>> spellHolders = wand.getOrDefault(
-                WizardryComponents.SPELL_ARRAY_KEY.get(),
+                WizardryComponents.SPELLS.get(),
                 List.of()
         );
         return spellHolders.stream()
@@ -30,7 +31,7 @@ public final class WandHelper {
 
     public static void setSpells(ItemStack wand, AbstractSpell[] spells) {
         if (spells == null || spells.length == 0) {
-            wand.set(WizardryComponents.SPELL_ARRAY_KEY.get(), List.of());
+            wand.set(WizardryComponents.SPELLS.get(), List.of());
             return;
         }
         Registry<AbstractSpell> registry = WizardrySpells.SPELLS.getRegistry().get();
@@ -40,12 +41,12 @@ public final class WandHelper {
                     return registry.wrapAsHolder(target);
                 })
                 .toList();
-        wand.set(WizardryComponents.SPELL_ARRAY_KEY.get(), spellHolders);
+        wand.set(WizardryComponents.SPELLS.get(), spellHolders);
     }
 
     public static AbstractSpell getCurrentSpell(ItemStack wand) {
         AbstractSpell[] spells = getSpells(wand);
-        int selectedSpell = wand.getOrDefault(WizardryComponents.SELECTED_SPELL_KEY.get(), 0);
+        int selectedSpell = wand.getOrDefault(WizardryComponents.CURRENT_SPELL.get(), 0);
         if (selectedSpell >= 0 && selectedSpell < spells.length) {
             return spells[selectedSpell];
         }
@@ -77,52 +78,48 @@ public final class WandHelper {
     }
 
     public static void selectNextSpell(ItemStack wand) {
-        if (!wand.has(WizardryComponents.SPELL_ARRAY_KEY.get())) {
-//            AbstractSpell[] defaultSpells = new AbstractSpell[ItemWand.BASE_SPELL_SLOTS];
-//            Arrays.fill(defaultSpells, WizardrySpells.NONE.get());
-//            setSpells(wand, defaultSpells);
+        if (!wand.has(WizardryComponents.SPELLS.get())) {
+            wand.set(WizardryComponents.SPELLS.get(), new ArrayList<>());
         }
-
         int nextIndex = getNextSpellIndex(wand);
-        wand.set(WizardryComponents.SELECTED_SPELL_KEY.get(), nextIndex);
+        wand.set(WizardryComponents.CURRENT_SPELL.get(), nextIndex);
     }
 
     public static void selectPreviousSpell(ItemStack wand) {
-        if (!wand.has(WizardryComponents.SPELL_ARRAY_KEY.get())) {
-//            AbstractSpell[] defaultSpells = new AbstractSpell[ItemWand.BASE_SPELL_SLOTS];
-//            java.util.Arrays.fill(defaultSpells, WizardrySpells.NONE.get());
-//            setSpells(wand, defaultSpells);
+        if (!wand.has(WizardryComponents.SPELLS.get())) {
+
+
         }
         int prevIndex = getPreviousSpellIndex(wand);
-        wand.set(WizardryComponents.SELECTED_SPELL_KEY.get(), prevIndex);
+        wand.set(WizardryComponents.CURRENT_SPELL.get(), prevIndex);
     }
 
     public static boolean selectSpell(ItemStack wand, int index) {
         AbstractSpell[] spells = getSpells(wand);
-        if (!wand.has(WizardryComponents.SPELL_ARRAY_KEY.get())) {
-//            AbstractSpell[] defaultSpells = new AbstractSpell[ItemWand.BASE_SPELL_SLOTS];
-//            java.util.Arrays.fill(defaultSpells, WizardrySpells.NONE.get());
-//            setSpells(wand, defaultSpells);
-//            spells = getSpells(wand);
+        if (!wand.has(WizardryComponents.SPELLS.get())) {
+
+
         }
         if (index < 0 || index >= spells.length) {
             return false;
         }
-        wand.set(WizardryComponents.SELECTED_SPELL_KEY.get(), index);
+        wand.set(WizardryComponents.CURRENT_SPELL.get(), index);
         return true;
     }
 
     private static int getNextSpellIndex(ItemStack wand) {
         int numberOfSpells = getSpells(wand).length;
-        if (numberOfSpells <= 1) return 0;
-        int currentIndex = wand.getOrDefault(WizardryComponents.SELECTED_SPELL_KEY.get(), 0);
+        if (numberOfSpells <= 1) {
+            return 0;
+        }
+        int currentIndex = wand.getOrDefault(WizardryComponents.CURRENT_SPELL.get(), 0);
         return (currentIndex + 1) % numberOfSpells;
     }
 
     private static int getPreviousSpellIndex(ItemStack wand) {
         int numberOfSpells = getSpells(wand).length;
         if (numberOfSpells <= 1) return 0;
-        int currentIndex = wand.getOrDefault(WizardryComponents.SELECTED_SPELL_KEY.get(), 0);
+        int currentIndex = wand.getOrDefault(WizardryComponents.CURRENT_SPELL.get(), 0);
         return (currentIndex - 1 + numberOfSpells) % numberOfSpells;
     }
 
@@ -158,7 +155,7 @@ public final class WandHelper {
     }
 
     public static int getCurrentCooldown(ItemStack wand) {
-        int selectedSpell = wand.getOrDefault(WizardryComponents.SELECTED_SPELL_KEY.get(), 0);
+        int selectedSpell = wand.getOrDefault(WizardryComponents.CURRENT_SPELL.get(), 0);
         int[] cooldowns = getCooldowns(wand);
         if (selectedSpell < 0 || selectedSpell >= cooldowns.length) {
             return 0;
@@ -169,23 +166,23 @@ public final class WandHelper {
     public static int getNextCooldown(ItemStack wand) {
         int[] cooldowns = getCooldowns(wand);
         int nextSpell = getNextSpellIndex(wand);
-        if (nextSpell < 0 || cooldowns.length <= nextSpell) return 0;
+        if (nextSpell < 0 || cooldowns.length <= nextSpell) {
+            return 0;
+        }
         return cooldowns[nextSpell];
     }
 
     public static int getPreviousCooldown(ItemStack wand) {
-
         int[] cooldowns = getCooldowns(wand);
-
         int previousSpell = getPreviousSpellIndex(wand);
-
-        if (previousSpell < 0 || cooldowns.length <= previousSpell) return 0;
-
+        if (previousSpell < 0 || cooldowns.length <= previousSpell) {
+            return 0;
+        }
         return cooldowns[previousSpell];
     }
 
-    public static void setCurrentCooldown(ItemStack wand, int cooldown) {
-        int selectedSpell = wand.getOrDefault(WizardryComponents.SELECTED_SPELL_KEY.get(), 0);
+    public static void setCurrentCooldown(@NonNull ItemStack wand, int cooldown) {
+        int selectedSpell = wand.getOrDefault(WizardryComponents.CURRENT_SPELL.get(), 0);
         int spellCount = getSpells(wand).length;
         if (selectedSpell < 0 || selectedSpell >= spellCount) return;
         int[] cooldowns = getCooldowns(wand);
@@ -203,7 +200,7 @@ public final class WandHelper {
         setMaxCooldowns(wand, maxCooldowns);
     }
 
-    public static int[] getMaxCooldowns(ItemStack wand) {
+    public static int[] getMaxCooldowns(@NonNull ItemStack wand) {
         List<Integer> list = wand.getOrDefault(WizardryComponents.MAX_COOLDOWN_ARRAY_KEY.get(), List.of());
         return list.stream().mapToInt(Integer::intValue).toArray();
     }
@@ -217,8 +214,8 @@ public final class WandHelper {
         wand.set(WizardryComponents.MAX_COOLDOWN_ARRAY_KEY.get(), list);
     }
 
-    public static int getCurrentMaxCooldown(ItemStack wand) {
-        int selectedSpell = wand.getOrDefault(WizardryComponents.SELECTED_SPELL_KEY.get(), 0);
+    public static int getCurrentMaxCooldown(@NonNull ItemStack wand) {
+        int selectedSpell = wand.getOrDefault(WizardryComponents.CURRENT_SPELL.get(), 0);
         int[] maxCooldowns = getMaxCooldowns(wand);
 
         if (selectedSpell < 0 || selectedSpell >= maxCooldowns.length) return 0;
@@ -263,7 +260,7 @@ public final class WandHelper {
         return upgradeMap.containsKey(upgrade);
     }
 
-    public static Set<Item> getSpecialUpgrades() {
+    public static @NonNull @UnmodifiableView Set<Item> getSpecialUpgrades() {
         return Collections.unmodifiableSet(WandHelper.upgradeMap.keySet());
     }
 
@@ -295,7 +292,7 @@ public final class WandHelper {
         setProgression(wand, getProgression(wand) + progression);
     }
 
-    //TODO
+
     public static boolean rechargeManaOnApplyButtonPressed(Slot centre, Slot crystals) {
         return false;
     }

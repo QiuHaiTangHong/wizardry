@@ -3,7 +3,7 @@ package top.begonia.wizardry.client.layout.util;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.client.data.WizardryClientDataManager;
+import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
 import top.begonia.wizardry.client.data.definition.handbook.part.SectionData;
 import top.begonia.wizardry.client.layout.container.handbook.SectionElement;
@@ -24,8 +24,7 @@ public final class PageTurner {
     private final Map<String, SectionData> allSectionData = new LinkedHashMap<>();
 
     public PageTurner() {
-        Identifier path = Identifier.fromNamespaceAndPath(Wizardry.MODID, "handbook");
-        handbookData = WizardryClientDataManager.getData(path, HandbookData.class).orElse(null);
+        handbookData = WizardryClientDataManager.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "handbook"), HandbookData.class).orElse(null);
         this.sectionCacheEndIndex = 0;
     }
 

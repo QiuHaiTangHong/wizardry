@@ -1,0 +1,49 @@
+{
+  "pools": [
+    {
+      "name": "tomes",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:arcane_tome",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:tier": "apprentice"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:arcane_tome",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:tier": "advanced"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:arcane_tome",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "wizardry:tier": "master"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

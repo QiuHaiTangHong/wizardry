@@ -1,0 +1,220 @@
+{
+  "pools": [
+    {
+      "name": "artefact",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "wizardry:subsets/uncommon_artefacts",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wizardry:subsets/rare_artefacts",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wizardry:subsets/epic_artefacts",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "high_value",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 1.0,
+        "max": 2.0
+      },
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "wizardry:subsets/arcane_tomes",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wizardry:subsets/wand_upgrades",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wizardry:subsets/armour_upgrades",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:spell_book",
+          "weight": 40,
+          "functions": [
+            {
+              "function": "wizardry:random_spell",
+              "undiscovered_bias": 0.3
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:scroll",
+          "weight": 14,
+          "functions": [
+            {
+              "function": "wizardry:random_spell",
+              "undiscovered_bias": 0.3
+            },
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
+                "max": 5.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:identification_scroll",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_ingot",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
+                "max": 6.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
+                "max": 3.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:astral_diamond",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:purifying_elixir",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:grand_crystal",
+          "weight": 2
+        }
+      ]
+    },
+    {
+      "name": "low_value",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 2.0,
+        "max": 4.0
+      },
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "wizardry:subsets/elemental_crystals",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:magic_crystal",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
+                "max": 12.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
+                "max": 2.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:string",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
+                "max": 5.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:paper",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
+                "max": 5.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:crystal_shard",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1.0,
+                "max": 5.0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

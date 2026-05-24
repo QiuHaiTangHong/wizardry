@@ -1,50 +1,64 @@
 {
-    "type": "minecraft:crafting_shaped",
-    "pattern": [
-        " y ",
-        "yxy",
-        " y "
-    ],
-    "key": {
-        "x": {
-            "item": "minecraft:glass_bottle"
-        },
-        "y": [
-            {
-				"item": "ebwizardry:magic_crystal",
-				"data": 0
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 1
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 2
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 3
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 4
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 5
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 6
-			},
-			{
-				"item": "ebwizardry:magic_crystal",
-				"data": 7
-			}
-        ]
-    },
-    "result": {
-        "item": "ebwizardry:medium_mana_flask"
-    }
+	"type": "minecraft:crafting_shaped",
+	"category": "misc",
+	"pattern": [
+		" y ",
+		"yxy",
+		" y "
+	],
+	"key": {
+		"x": "minecraft:glass_bottle",
+		"y": {
+			"neoforge:ingredient_type": "neoforge:compound",
+			"ingredients": [
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "magic" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "fire" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "ice" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "lightning" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "necromancy" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "earth" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "sorcery" }
+				},
+				{
+					"neoforge:ingredient_type": "neoforge:components",
+					"items": ["wizardry:magic_crystal"],
+					"components": { "wizardry:element": "healing" }
+				}
+			]
+		}
+	},
+	"result": {
+		"id": "wizardry:mana_flask",
+		"count": 1,
+		"components": {
+			"wizardry:mana_flask_type": "medium"
+		}
+	}
 }

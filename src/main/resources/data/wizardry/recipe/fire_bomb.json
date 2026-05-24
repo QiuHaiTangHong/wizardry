@@ -1,0 +1,13 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        "minecraft:blaze_powder",
+        "minecraft:blaze_powder",
+        "minecraft:glass_bottle",
+        "minecraft:gunpowder"
+    ],
+    "result": {
+        "id": "wizardry:fire_bomb",
+		"count": 3
+    }
+}

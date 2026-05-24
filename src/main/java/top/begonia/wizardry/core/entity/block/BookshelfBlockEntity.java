@@ -31,7 +31,7 @@ public class BookshelfBlockEntity extends BlockEntity implements MenuProvider {
     private static final String NATURAL_NBT_KEY = "NaturallyGenerated";
     private static final int LOOT_GEN_DISTANCE = 32;
     public static final int SLOT_COUNT = 12;
-    public BookshelfItemHandler inventory = new BookshelfItemHandler(this, SLOT_COUNT);
+    private final BookshelfItemHandler inventory = new BookshelfItemHandler(this, SLOT_COUNT);
 
     public BookshelfBlockEntity(BlockPos worldPosition, BlockState blockState) {
         super(WizardryBlockEntities.BOOKSHELF.get(), worldPosition, blockState);
@@ -42,6 +42,18 @@ public class BookshelfBlockEntity extends BlockEntity implements MenuProvider {
             this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
             this.setChanged();
         }
+    }
+
+    public ItemStack getStackInSlot(int index) {
+        return this.inventory.getStack(index);
+    }
+
+    public int getSlotCount() {
+        return SLOT_COUNT;
+    }
+
+    public BookshelfItemHandler getInventory() {
+        return this.inventory;
     }
 
     @Override

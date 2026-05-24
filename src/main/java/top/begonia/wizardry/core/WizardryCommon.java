@@ -5,8 +5,9 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.client.config.ClientConfig;
+import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.core.config.CommonConfig;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.config.ServerConfig;
@@ -14,7 +15,7 @@ import top.begonia.wizardry.core.config.ServerConfig;
 @Mod(Wizardry.MODID)
 @EventBusSubscriber(modid = Wizardry.MODID)
 public class WizardryCommon {
-    public WizardryCommon(IEventBus modEventBus, ModContainer modContainer) {
+    public WizardryCommon(IEventBus modEventBus, @NonNull ModContainer modContainer) {
         WizardrySounds.register(modEventBus);
         WizardryBlocks.register(modEventBus);
         WizardryItems.register(modEventBus);
@@ -27,6 +28,8 @@ public class WizardryCommon {
         WizardryMobEffects.register(modEventBus);
         WizardryNetworkPackage.register(modEventBus);
         WizardryParticles.register(modEventBus);
+        WizardryEntities.register(modEventBus);
+        WizardryLoots.register(modEventBus);
         modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);

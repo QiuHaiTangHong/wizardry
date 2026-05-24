@@ -1,0 +1,6 @@
+{
+  "parser": "wizardry:particle",
+  "textures": [
+    "wizardry:path"
+  ]
+}

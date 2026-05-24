@@ -1,0 +1,95 @@
+{
+  "pools": [
+    {
+      "name": "epic_artefacts",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_combustion",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_arcane_frost",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_seeking",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_hammer",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_soulbinding",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_mana_return",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ring_interdiction",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:amulet_ice_immunity",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:amulet_wither_immunity",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:amulet_glide",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:amulet_resurrection",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:amulet_absorption",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:charm_experience_tome",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:charm_lava_walking",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:charm_silk_touch",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:charm_stop_time",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:charm_black_hole",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

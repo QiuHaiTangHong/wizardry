@@ -1,5 +1,8 @@
 package top.begonia.wizardry.client.util;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -7,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NonNull;
 
 public final class GeometryUtils {
     private GeometryUtils() {
@@ -56,7 +60,7 @@ public final class GeometryUtils {
         return new Vec3i(x, y, z);
     }
 
-    public static Vec3 horizontalise(Vec3 vec) {
+    public static Vec3 horizontal(Vec3 vec) {
         return replaceComponent(vec, Direction.Axis.Y, 0).normalize();
     }
 
@@ -81,5 +85,4 @@ public final class GeometryUtils {
     public static float getPitch(Direction facing) {
         return facing == Direction.UP ? 90.0F : facing == Direction.DOWN ? -90.0F : 0.0F;
     }
-
 }

@@ -23,7 +23,7 @@ public class SpellBookScreen extends SpellInfoScreen {
         }
 
         this.book = (SpellBookItem) stack.getItem();
-        this.spell = Objects.requireNonNull(stack.get(WizardryComponents.SPELL_BOOK_KEY.get())).value();
+        this.spell = Objects.requireNonNull(stack.get(WizardryComponents.SPELL.get())).value();
     }
 
     @Override

@@ -1,0 +1,69 @@
+{
+  "pools": [
+    {
+      "name": "wizardry",
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.6
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 0.0,
+        "max": 2.0
+      },
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "wizardry:subsets/arcane_tomes",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "wizardry:subsets/wand_upgrades",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:spell_book",
+          "weight": 15,
+          "functions": [
+            {
+              "function": "wizardry:random_spell",
+              "undiscovered_bias": 0.3
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ruined_spell_book",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:scroll",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "wizardry:random_spell",
+              "undiscovered_bias": 0.3
+            },
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:identification_scroll",
+          "weight": 2
+        }
+      ]
+    }
+  ]
+}

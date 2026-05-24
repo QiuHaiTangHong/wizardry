@@ -2,7 +2,7 @@
   "model": {
     "type": "minecraft:select",
     "property": "minecraft:component",
-    "component": "wizardry:crystal_type",
+    "component": "wizardry:element",
     "cases": [
       {
         "when": "magic",

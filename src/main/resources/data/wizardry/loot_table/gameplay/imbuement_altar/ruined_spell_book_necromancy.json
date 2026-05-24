@@ -1,0 +1,40 @@
+{
+  "pools": [
+    {
+      "name": "spell_book",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:spell_book",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "wizardry:random_spell",
+              "elements": [
+                "necromancy"
+              ],
+              "undiscovered_bias": 0.3
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:spell_book",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "wizardry:random_spell",
+              "tiers": [
+                "novice",
+                "apprentice",
+                "advanced"
+              ],
+              "undiscovered_bias": 0.3
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

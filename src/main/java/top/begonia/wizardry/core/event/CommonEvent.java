@@ -9,8 +9,8 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.data.json.WizardryServerDataManager;
-import top.begonia.wizardry.core.data.player.PlayerData;
+import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
+import top.begonia.wizardry.core.data.player.WizardPlayerData;
 import top.begonia.wizardry.core.data.SpellGlyph;
 import top.begonia.wizardry.core.registry.*;
 
@@ -31,7 +31,7 @@ public class CommonEvent {
             if (data != null) {
                 data.sync(player);
             }
-            PlayerData playerData = player.getData(WizardryAttachment.WIZARD_PLAYER_DATA.get());
+            WizardPlayerData playerData = player.getData(WizardryAttachment.WIZARD_PLAYER_DATA.get());
             player.setData(WizardryAttachment.WIZARD_PLAYER_DATA.get(), playerData);
         }
     }
@@ -39,7 +39,7 @@ public class CommonEvent {
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.@NonNull PlayerRespawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            PlayerData playerData = player.getData(WizardryAttachment.WIZARD_PLAYER_DATA.get());
+            WizardPlayerData playerData = player.getData(WizardryAttachment.WIZARD_PLAYER_DATA.get());
             player.setData(WizardryAttachment.WIZARD_PLAYER_DATA.get(), playerData);
         }
     }
@@ -47,7 +47,7 @@ public class CommonEvent {
     @SubscribeEvent
     public static void onPlayerChangedDimension(PlayerEvent.@NonNull PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            PlayerData playerData = player.getData(WizardryAttachment.WIZARD_PLAYER_DATA.get());
+            WizardPlayerData playerData = player.getData(WizardryAttachment.WIZARD_PLAYER_DATA.get());
             player.setData(WizardryAttachment.WIZARD_PLAYER_DATA.get(), playerData);
         }
     }

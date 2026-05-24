@@ -5,11 +5,15 @@
         "y y"
     ],
     "key": {
-        "y": {
-            "item": "ebwizardry:magic_silk"
-        }
+        "y": "wizardry:magic_silk"
     },
     "result": {
-        "item": "ebwizardry:wizard_boots"
+        "id": "wizardry:armour",
+        "components": {
+            "wizardry:element": "magic",
+            "wizardry:armor_type": "boots",
+            "wizardry:armor_material_type": "wizard"
+        },
+        "count": 1
     }
 }

@@ -1,0 +1,25 @@
+{
+  "pools": [
+    {
+      "name": "upgrades",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:resplendent_thread",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:crystal_silver_plating",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:ethereal_crystalweave",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

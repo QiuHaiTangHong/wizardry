@@ -16,18 +16,37 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import top.begonia.wizardry.core.config.CommonConfig;
 import top.begonia.wizardry.core.entity.block.BookshelfBlockEntity;
 import top.begonia.wizardry.core.registry.WizardryBlockEntities;
+
+import java.util.List;
 
 public class BookshelfBlock extends BaseEntityBlock {
     public static final MapCodec<BookshelfBlock> CODEC = simpleCodec(BookshelfBlock::new);
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
-    public static final EnumProperty<WoodTypeEnum> BOOKSHELF_WOOD_TYPE = EnumProperty.create("bookshelf_wood_type", WoodTypeEnum.class);
+    public static final EnumProperty<WoodTypeEnum> BOOKSHELF_WOOD_TYPE = EnumProperty.create("wood_type", WoodTypeEnum.class);
 
     public BookshelfBlock(Properties properties) {
         super(properties);
+    }
+
+    public static @NonNull @Unmodifiable List<BookshelfBlockEntity> findNearbyBookshelves(
+            @NonNull Level level,
+            @NonNull BlockPos centre,
+            BlockEntity... exclude
+    ) {
+        int radius = CommonConfig.bookshelfSearchRadius;
+        List<BlockEntity> excludedList = List.of(exclude);
+        return BlockPos.betweenClosedStream(centre.offset(-radius, -radius, -radius), centre.offset(radius, radius, radius))
+                .map(level::getBlockEntity)
+                .filter(blockEntity -> blockEntity instanceof BookshelfBlockEntity)
+                .map(blockEntity -> (BookshelfBlockEntity) blockEntity)
+                .filter(bookshelfBlockEntity -> !excludedList.contains(bookshelfBlockEntity))
+                .toList();
     }
 
     @Override

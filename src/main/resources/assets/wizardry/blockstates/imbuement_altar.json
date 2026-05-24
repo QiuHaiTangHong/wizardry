@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
+    "active=false": {
       "model": "wizardry:block/imbuement_altar_inactive"
+    },
+    "active=true": {
+      "model": "wizardry:block/imbuement_altar"
     }
   }
 }

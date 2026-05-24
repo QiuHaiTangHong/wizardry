@@ -1,9 +1,10 @@
 package top.begonia.wizardry.core.item;
 
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUseAnimation;
-import top.begonia.wizardry.core.data.json.definition.spell.part.SpellModifiers;
+import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
+import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
 import javax.annotation.Nonnull;
@@ -53,8 +54,8 @@ public interface ISpellCastingItem {
         return true;
     }
 
-    boolean canCast(ItemStack stack, AbstractSpell spell, Player caster, ItemUseAnimation hand, int castingTick, SpellModifiers modifiers);
+    boolean canCast(int castingTick, SpellContextFlow spellContextFlow);
 
-    boolean cast(ItemStack stack, AbstractSpell spell, Player caster, ItemUseAnimation hand, int castingTick, SpellModifiers modifiers);
+    boolean cast(ItemStack stack, AbstractSpell spell, Player caster, InteractionHand hand, int castingTick, SpellContext spellContextFlow);
 
 }

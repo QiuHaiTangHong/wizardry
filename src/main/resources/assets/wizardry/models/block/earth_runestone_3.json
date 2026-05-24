@@ -3,6 +3,6 @@
     "textures": {
         "side": "wizardry:block/runestone_earth_0",
         "rune": "wizardry:block/runestone_earth_3",
-        "overlay": "ebwizardry:block/runestone_earth_3_overlay"
+        "overlay": "wizardry:block/runestone_earth_3_overlay"
     }
 }

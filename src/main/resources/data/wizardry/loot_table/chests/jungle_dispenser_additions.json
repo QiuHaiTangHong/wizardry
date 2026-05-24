@@ -1,0 +1,65 @@
+{
+  "pools": [
+    {
+      "name": "wizardry_dispenser",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.4
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:scroll",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "wizardry:random_spell",
+              "spells": [
+                "wizardry:magic_missile",
+                "wizardry:arc",
+                "wizardry:thunderbolt",
+                "wizardry:summon_zombie",
+                "wizardry:dart",
+                "wizardry:ice_shard",
+                "wizardry:firebolt",
+                "wizardry:poison",
+                "wizardry:flame_ray",
+                "wizardry:frost_ray"
+              ]
+            },
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:fire_bomb",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:poison_bomb",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:smoke_bomb",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wizardry:spark_bomb",
+          "weight": 3
+        }
+      ]
+    }
+  ]
+}
