@@ -1,9 +1,21 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        maven {
+            name = "Jared's maven"
+            url = "https://maven.blamejared.com/"
+        }
+        maven {
+            name = "ModMaven"
+            url = "https://modmaven.dev"
+        }
+        mavenCentral()
     }
 }
 
 plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
 }
+
+rootProject.name = 'wizardry-26.2'
+include('neoforge', 'native-libs')

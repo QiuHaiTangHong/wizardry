@@ -1,0 +1,143 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'net.neoforged.moddev'
+    id 'idea'
+}
+
+evaluationDependsOn(':native-libs')
+layout.buildDirectory.set(rootProject.layout.buildDirectory.dir("neoforge"))
+
+version = mod_version
+group = mod_group_id
+
+sourceSets.main.resources {
+    srcDir("${rootDir}/neoforge/src/generated/resources")
+    exclude("${rootDir}/neoforge/**/*.bbmodel")
+    exclude("${rootDir}/neoforge/src/generated/**/.cache")
+}
+
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+
+neoForge {
+    version = project.neo_version
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        gameTestServer {
+            type = "gameTestServer"
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        data {
+            clientData()
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+            def nativeLibsDir = layout.buildDirectory.dir("resources/main/assets/${project.mod_id}/natives/windows").get().asFile.absolutePath
+            jvmArguments.add("-Djava.library.path=${nativeLibsDir}")
+            jvmArguments.add("--enable-native-access=ALL-UNNAMED")
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+dependencies {
+//    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+//    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+    runtimeOnly project(path: ':native-libs', configuration: 'default')
+}
+
+tasks.register('copyNativeLibs', Copy) {
+    def nativeProject = project(':native-libs')
+    dependsOn nativeProject.tasks.named('assemble')
+
+    from nativeProject.layout.buildDirectory.dir("lib/main/release")
+    into layout.buildDirectory.dir("resources/main/assets/${mod_id}/natives")
+
+    include "**/*.dll", "**/*.so", "**/*.dylib"
+}
+
+tasks.named('processResources') {
+    dependsOn 'copyNativeLibs'
+}
+
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "${rootDir}/neoforge/src/main/templates"
+    into "${rootDir}/build/neoforge/generated/sources/modMetadata"
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+tasks.named('jar', Jar) {
+    manifest {
+        attributes([
+                'Specification-Title'   : 'wizardry',
+                'Specification-Vendor'  : 'begonia',
+                'Specification-Version' : '1',
+                'Implementation-Title'  : project.name,
+                'Implementation-Version': project.version,
+                'Enable-Native-Access'  : 'wizardry'
+        ])
+    }
+}
+
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/repo"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}

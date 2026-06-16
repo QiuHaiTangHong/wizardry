@@ -1,0 +1,33 @@
+plugins {
+    id 'base'
+    id 'idea'
+}
+layout.buildDirectory.set(rootProject.layout.buildDirectory.dir("native-libs"))
+
+def cmakeConfigure = tasks.register('cmakeConfigure', Exec) {
+    inputs.file("${rootDir}/native-libs/CMakeLists.txt")
+    inputs.file("${rootDir}/native-libs/src/main/cpp/main.cpp")
+
+    def outputDir = layout.buildDirectory.dir("cmake-build").get().asFile
+    outputs.dir(outputDir)
+
+    workingDir outputDir
+    doFirst {
+        outputDir.mkdirs()
+    }
+
+    commandLine 'cmake', project.projectDir.absolutePath
+}
+
+def cmakeBuild = tasks.register('cmakeBuild', Exec) {
+    dependsOn cmakeConfigure
+
+    def cmakeBuildDir = layout.buildDirectory.dir("cmake-build").get().asFile
+    workingDir cmakeBuildDir
+
+    commandLine 'cmake', '--build', '.', '--config', 'Release'
+}
+
+tasks.named('assemble') {
+    dependsOn cmakeBuild
+}
