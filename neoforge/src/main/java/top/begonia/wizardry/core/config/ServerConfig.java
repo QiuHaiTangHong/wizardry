@@ -31,6 +31,10 @@ public final class ServerConfig {
     public static final ModConfigSpec.IntValue RECENT_SPELL_EXPIRY_TIME;
     public static final ModConfigSpec.BooleanValue LEGACY_WAND_LEVELLING;
 
+    public static final ModConfigSpec.BooleanValue PREVENT_BINDING_SAME_SPELL_TWICE_TO_WANDS;
+
+    public static final ModConfigSpec.BooleanValue SINGLE_USE_SPELL_BOOKS;
+
     static {
         BUILDER.push("Gameplay");
 
@@ -116,6 +120,16 @@ public final class ServerConfig {
                 .translation("config." + Wizardry.MODID + ".legacy_wand_levelling")
                 .define("legacyWandLevelling", false);
 
+        PREVENT_BINDING_SAME_SPELL_TWICE_TO_WANDS = BUILDER
+                .comment("Whether to prevent binding the same spell to a wand multiple times")
+                .translation("config." + Wizardry.MODID + ".prevent_binding_same_spell_twice_to_wands")
+                .define("preventBindingSameSpellTwiceToWands", false);
+
+        SINGLE_USE_SPELL_BOOKS = BUILDER
+                .comment("Whether spell books are consumed when they are bound to a wand.")
+                .translation("config." + Wizardry.MODID + ".single_use_spell_books")
+                .define("singleUseSpellBooks", false);
+
         SPEC = BUILDER.build();
     }
 
@@ -143,6 +157,8 @@ public final class ServerConfig {
     public static boolean bonemealGrowsCrystalFlowers;
     public static int recentSpellExpiryTime;
     public static boolean legacyWandLevelling;
+    public static boolean preventBindingSameSpellTwiceToWands;
+    public static boolean singleUseSpellBooks;
 
     private static void valueChange() {
         Constants.MANA_PER_SHARD = MANA_PER_SHARD.get();
@@ -165,6 +181,8 @@ public final class ServerConfig {
         bonemealGrowsCrystalFlowers = BONEMEAL_GROWS_CRYSTAL_FLOWERS.get();
         recentSpellExpiryTime = RECENT_SPELL_EXPIRY_TIME.get();
         legacyWandLevelling = LEGACY_WAND_LEVELLING.get();
+        preventBindingSameSpellTwiceToWands = PREVENT_BINDING_SAME_SPELL_TWICE_TO_WANDS.get();
+        singleUseSpellBooks = SINGLE_USE_SPELL_BOOKS.get();
     }
 
     @SubscribeEvent

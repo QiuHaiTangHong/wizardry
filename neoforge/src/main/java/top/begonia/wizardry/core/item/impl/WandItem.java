@@ -16,6 +16,7 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.core.config.CommonConfig;
 import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.constants.EnabledEnum;
 import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.constants.TierEnum;
@@ -25,11 +26,17 @@ import top.begonia.wizardry.core.item.ISpellCastingItem;
 import top.begonia.wizardry.core.item.IWorkbenchItem;
 import top.begonia.wizardry.core.registry.WizardryAttachment;
 import top.begonia.wizardry.core.registry.WizardryComponents;
+import top.begonia.wizardry.core.registry.WizardryItems;
+import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 import top.begonia.wizardry.core.util.TextHelper;
 import top.begonia.wizardry.core.util.WandHelper;
 
+import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.function.Consumer;
+
+import static top.begonia.wizardry.core.config.ServerConfig.BASE_SPELL_SLOTS;
 
 public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem, IManaStoringItem {
 
@@ -165,14 +172,159 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
         return false;
     }
 
+    public static @NonNull ItemStack getWand(TierEnum tier, ElementEnum element) {
+        ItemStack itemStack = new ItemStack(WizardryItems.WAND);
+        itemStack.set(WizardryComponents.TIER, tier);
+        itemStack.set(WizardryComponents.ELEMENT, element);
+        return itemStack;
+    }
+
     @Override
     public int getSpellSlotCount(ItemStack stack) {
         return 5;
     }
 
     @Override
-    public boolean onApplyButtonPressed(Player player, Slot centre, Slot crystals, Slot upgrade, Slot[] spellBooks) {
-        return false;
+    public ItemStack applyUpgrade(@Nullable Player player, ItemStack wand, @NonNull ItemStack upgrade) {
+
+        // Upgrades wand if necessary. Damage is copied, preserving remaining durability,
+        // and also the entire NBT tag compound.
+        if (upgrade.getItem() == WizardryItems.ARCANE_TOME.get()) {
+
+            TierEnum tier = TierEnum.values()[upgrade.getDamageValue()];
+            TierEnum wandTier = getTier(wand);
+            ElementEnum wandElement = getElement(wand);
+
+            // Checks the wand upgrade is for the tier above the wand's tier, and that either the wand has enough
+            // progression or the player is in creative mode.
+            if ((player == null || player.isCreative() || ServerConfig.legacyWandLevelling
+                    || WandHelper.getProgression(wand) >= tier.getProgression())
+                    && tier == wandTier.next() && wandTier != TierEnum.MASTER) {
+
+                if (ServerConfig.legacyWandLevelling) {
+                    // Progression has little meaning with legacy upgrade mechanics so just reset it
+                    // In theory, you can get 'free' progression when upgrading since progression can't be negative,
+                    // so the flipside of that is you lose any excess
+                    WandHelper.setProgression(wand, 0);
+                } else {
+                    // Carry excess progression over to the new stack
+                    WandHelper.setProgression(wand, WandHelper.getProgression(wand) - tier.getProgression());
+                }
+
+                if (player != null) {
+                }
+
+                ItemStack newWand = getWand(tier, wandElement);
+                newWand.applyComponents(wand.getComponents());
+                // This needs to be done after copying the tag compound so the mana capacity for the new wand
+                // takes storage upgrades into account
+                // Note the usage of the new wand item and not 'this' to ensure the correct capacity is used
+                ((IManaStoringItem) newWand.getItem()).setMana(newWand, this.getMana(wand));
+
+                upgrade.shrink(1);
+
+                return newWand;
+            }
+
+        } else if (WandHelper.isWandUpgrade(upgrade.getItem())) {
+
+            // Special upgrades
+            Item specialUpgrade = upgrade.getItem();
+            TierEnum wandTier = getTier(wand);
+            ElementEnum wandElement = getElement(wand);
+
+            int maxUpgrades = wandTier.upgradeLimit;
+            if (wandElement == ElementEnum.DEFAULT) {
+                maxUpgrades += ServerConfig.Constants.NON_ELEMENTAL_UPGRADE_BONUS;
+            }
+
+            if (WandHelper.getTotalUpgrades(wand) < maxUpgrades
+                    && WandHelper.getUpgradeLevel(wand, specialUpgrade) < ServerConfig.Constants.UPGRADE_STACK_LIMIT) {
+
+                // Used to preserve existing mana when upgrading storage rather than creating free mana.
+                int prevMana = this.getMana(wand);
+
+                WandHelper.applyUpgrade(wand, specialUpgrade);
+
+                if (specialUpgrade == WizardryItems.STORAGE_UPGRADE.get()) {
+
+                    this.setMana(wand, prevMana);
+
+                } else if (specialUpgrade == WizardryItems.ATTUNEMENT_UPGRADE.get()) {
+
+                    int newSlotCount = BASE_SPELL_SLOTS.get() + WandHelper.getUpgradeLevel(wand, WizardryItems.ATTUNEMENT_UPGRADE.get());
+
+                    AbstractSpell[] spells = WandHelper.getSpells(wand);
+                    AbstractSpell[] newSpells = new AbstractSpell[newSlotCount];
+
+                    for (int i = 0; i < newSpells.length; i++) {
+                        newSpells[i] = i < spells.length && spells[i] != null ? spells[i] : WizardrySpells.NONE.get();
+                    }
+
+                    WandHelper.setSpells(wand, newSpells);
+
+                    int[] cooldowns = WandHelper.getCooldowns(wand);
+                    int[] newCooldowns = new int[newSlotCount];
+
+                    if (cooldowns.length > 0) {
+                        System.arraycopy(cooldowns, 0, newCooldowns, 0, cooldowns.length);
+                    }
+
+                    WandHelper.setCooldowns(wand, newCooldowns);
+                }
+
+                upgrade.shrink(1);
+
+                if (player != null) {
+                }
+
+            }
+        }
+
+        return wand;
+    }
+
+    @Override
+    public boolean onApplyButtonPressed(Player player, Slot centre, Slot crystals, @NonNull Slot upgrade, Slot[] spellBooks) {
+        boolean changed = false;
+
+        if (upgrade.hasItem()) {
+            ItemStack original = centre.getItem().copy();
+            centre.set(this.applyUpgrade(player, centre.getItem(), upgrade.getItem()));
+            changed = !ItemStack.isSameItem(centre.getItem(), original);
+        }
+
+        AbstractSpell[] spells = WandHelper.getSpells(centre.getItem());
+
+        if (spells.length == 0) {
+            spells = new AbstractSpell[BASE_SPELL_SLOTS.get()];
+        }
+
+        TierEnum tier = getTier(centre.getItem());
+
+        for (int i = 0; i < spells.length; i++) {
+            ItemStack itemStack = spellBooks[i].getItem();
+            if (itemStack != ItemStack.EMPTY && itemStack.getItem() instanceof SpellBookItem spellBookItem) {
+                AbstractSpell spell = spellBookItem.getCurrentSpell(itemStack);
+                if (!(spell.getTier().level > tier.level) && spells[i] != spell && spell.isEnabled(EnabledEnum.WANDS)) {
+                    if (ServerConfig.preventBindingSameSpellTwiceToWands && Arrays.stream(spells).anyMatch(s -> s == spell)) {
+                        continue;
+                    }
+                    spells[i] = spell;
+                    changed = true;
+                    if (ServerConfig.singleUseSpellBooks) {
+                        spellBooks[i].getItem().shrink(1);
+                    }
+                }
+            }
+        }
+
+        WandHelper.setSpells(centre.getItem(), spells);
+        if (WandHelper.rechargeManaOnApplyButtonPressed(centre, crystals)) {
+            changed = true;
+        }
+
+        return changed;
     }
 
     @Override

@@ -99,25 +99,11 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     @Override
     protected void init() {
         super.init();
-        this.addRenderableWidget(this.applyBtn = new SimpleButton(
-                this.leftPos + 152, this.topPos + 94,
-                0,
-                Component.translatable("container." + Wizardry.MODID + ".arcane_workbench.apply"),
-                button -> {
-                    ControlInputPayload payload = new ControlInputPayload(ControlInputPayload.ControlType.APPLY_BUTTON);
-                    ClientPacketDistributor.sendToServer(payload);
-                    Minecraft.getInstance().getSoundManager().play(
-                            SimpleSoundInstance.forUI(WizardrySounds.BLOCK_ARCANE_WORKBENCH_SPELLBIND.get(), 0.8f)
-                    );
-                    this.animationTimer = 20;
-                }
-        ));
-        this.applyBtn.active = false;
         this.addRenderableWidget(this.clearBtn = new SimpleButton(
-                this.leftPos + 152, this.topPos + 113,
+                this.leftPos + 152, this.topPos + 94,
                 16,
-                Component.translatable("container." + Wizardry.MODID + ".arcane_workbench.clear"),
-                button -> {
+                Component.translatable("container." + Wizardry.MODID + ".arcane_workbench.apply"),
+                _ -> {
                     ControlInputPayload payload = new ControlInputPayload(ControlInputPayload.ControlType.CLEAR_BUTTON);
                     ClientPacketDistributor.sendToServer(payload);
                     Minecraft.getInstance().getSoundManager().play(
@@ -126,7 +112,19 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                     this.animationTimer = 20;
                 }
         ));
-        this.clearBtn.active = false;
+        this.addRenderableWidget(this.applyBtn = new SimpleButton(
+                this.leftPos + 152, this.topPos + 113,
+                0,
+                Component.translatable("container." + Wizardry.MODID + ".arcane_workbench.clear"),
+                _ -> {
+                    ControlInputPayload payload = new ControlInputPayload(ControlInputPayload.ControlType.APPLY_BUTTON);
+                    ClientPacketDistributor.sendToServer(payload);
+                    Minecraft.getInstance().getSoundManager().play(
+                            SimpleSoundInstance.forUI(WizardrySounds.BLOCK_ARCANE_WORKBENCH_SPELLBIND.get(), 0.8f)
+                    );
+                    this.animationTimer = 20;
+                }
+        ));
         this.addRenderableWidget(sortButtons[0] = new SpellSortButton(
                 this.leftPos + 78 - BOOKSHELF_UI_WIDTH, this.topPos + 8,
                 ISpellSortable.SortType.TIER,
@@ -279,7 +277,6 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
             int y = this.topPos + RUNE_TOP + RUNE_HEIGHT / 2;
 
             float scale = (animationTimer + partialTicks) / ANIMATION_DURATION;
-            Wizardry.LOGGER.warn(String.valueOf(partialTicks));
             scale = (float) (1 - Math.pow(1 - scale, 1.4f)); // Makes it slower at the start and speed up
             poseStack.scale(scale, scale);
             poseStack.translate(x / scale, y / scale);
@@ -339,7 +336,9 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
     private TooltipElement @NonNull [] generateSpellEntries(int count) {
         TooltipElement[] entries = new TooltipElement[count];
-        for (int i = 0; i < count; i++) entries[i] = new TooltipElementSpellEntry(i);
+        for (int i = 0; i < count; i++) {
+            entries[i] = new TooltipElementSpellEntry(i);
+        }
         return entries;
     }
 
@@ -355,6 +354,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                     DEFAULT_NARRATION
             );
             this.extraOffsetX = extraOffsetX;
+            this.active = false;
         }
 
         @Override
@@ -586,13 +586,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
         @Override
         protected int getHeight(ItemStack stack) {
-            return 0; // Doesn't have any height of its own
-        }
-
-        @Override
-        public int drawBackgroundLayer(GuiGraphicsExtractor guiGraphicsExtractor, int x, int y, ItemStack stack, float partialTicks, int mouseX, int mouseY) {
-            y = super.drawBackgroundLayer(guiGraphicsExtractor, x, y, stack, partialTicks, mouseX, mouseY);
-            return y;
+            return 0;
         }
 
         @Override
@@ -640,8 +634,8 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
         @Override
         protected boolean isVisible(@NonNull ItemStack stack) {
-            return stack.getItem() instanceof ISpellCastingItem
-                    && index < ((ISpellCastingItem) stack.getItem()).getSpells(stack).length;
+            return stack.getItem() instanceof ISpellCastingItem iSpellCastingItem
+                    && index < iSpellCastingItem.getSpells(stack).length;
         }
 
         @Override

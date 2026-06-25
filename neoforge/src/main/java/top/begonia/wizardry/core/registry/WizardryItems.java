@@ -66,10 +66,7 @@ public final class WizardryItems {
             (buildCreativeModeTabContentsEvent, item) -> {
                 for (ElementEnum element : ElementEnum.values()) {
                     for (TierEnum tier : TierEnum.values()) {
-                        ItemStack stack = new ItemStack(item);
-                        stack.set(WizardryComponents.TIER, tier);
-                        stack.set(WizardryComponents.ELEMENT, element);
-                        buildCreativeModeTabContentsEvent.accept(stack);
+                        buildCreativeModeTabContentsEvent.accept(WandItem.getWand(tier, element));
                     }
                 }
             }

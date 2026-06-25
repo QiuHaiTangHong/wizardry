@@ -5,6 +5,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.config.ClientConfig;
@@ -12,6 +13,7 @@ import top.begonia.wizardry.core.config.CommonConfig;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.util.NativeMethodRouter;
+import top.begonia.wizardry.core.util.WandHelper;
 
 @Mod(Wizardry.MODID)
 @EventBusSubscriber(modid = Wizardry.MODID)
@@ -34,6 +36,11 @@ public class WizardryCommon {
         modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+        modEventBus.addListener(this::commonSetup);
         NativeMethodRouter.SAY_HELLO.get();
+    }
+
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(WandHelper::populateUpgradeMap);
     }
 }

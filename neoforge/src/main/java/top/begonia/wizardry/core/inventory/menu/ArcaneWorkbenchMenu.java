@@ -30,7 +30,6 @@ import java.util.*;
 public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpellSortable {
     public static final Identifier EMPTY_SLOT_CRYSTAL = Identifier.fromNamespaceAndPath(Wizardry.MODID, "container/empty_slot_crystal");
     public static final Identifier EMPTY_SLOT_UPGRADE = Identifier.fromNamespaceAndPath(Wizardry.MODID, "container/empty_slot_upgrade");
-    public static final Identifier SPELL_SLOT = Identifier.fromNamespaceAndPath(Wizardry.MODID, "container/spell_slot");
     public static final int CRYSTAL_SLOT = 8;
     public static final int CENTRE_SLOT = 9;
     public static final int UPGRADE_SLOT = 10;

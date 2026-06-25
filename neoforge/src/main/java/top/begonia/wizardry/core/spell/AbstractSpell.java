@@ -248,11 +248,11 @@ public abstract class AbstractSpell implements Comparable<AbstractSpell> {
     }
 
     public final TierEnum getTier() {
-        return this.getProperties().tier();
+        return this.getProperties().tier() != null ? this.getProperties().tier() : TierEnum.DEFAULT;
     }
 
     public final ElementEnum getElement() {
-        return this.getProperties().element();
+        return this.getProperties().element() != null ? this.getProperties().element() : ElementEnum.DEFAULT;
     }
 
     public final SpellTypeEnum getType() {

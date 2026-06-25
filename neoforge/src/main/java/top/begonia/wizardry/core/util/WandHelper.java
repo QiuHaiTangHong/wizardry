@@ -9,6 +9,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.data.WandUpgrades;
 import top.begonia.wizardry.core.registry.WizardryComponents;
+import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
@@ -275,7 +276,15 @@ public final class WandHelper {
     }
 
     public static void populateUpgradeMap() {
-
+        upgradeMap.put(WizardryItems.CONDENSER_UPGRADE.get(), "condenser");
+        upgradeMap.put(WizardryItems.STORAGE_UPGRADE.get(), "storage");
+        upgradeMap.put(WizardryItems.SIPHON_UPGRADE.get(), "siphon");
+        upgradeMap.put(WizardryItems.RANGE_UPGRADE.get(), "range");
+        upgradeMap.put(WizardryItems.DURATION_UPGRADE.get(), "duration");
+        upgradeMap.put(WizardryItems.COOLDOWN_UPGRADE.get(), "cooldown");
+        upgradeMap.put(WizardryItems.BLAST_UPGRADE.get(), "blast");
+        upgradeMap.put(WizardryItems.ATTUNEMENT_UPGRADE.get(), "attunement");
+        upgradeMap.put(WizardryItems.MELEE_UPGRADE.get(), "melee");
     }
 
     public static void setProgression(ItemStack wand, int progression) {

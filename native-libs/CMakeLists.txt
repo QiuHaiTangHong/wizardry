@@ -15,3 +15,8 @@ add_library(native-libs SHARED src/main/cpp/main.cpp)
 target_include_directories(native-libs PRIVATE ${JNI_INCLUDE_DIRS})
 
 target_compile_definitions(native-libs PRIVATE JNI_IMPLEMENTATION)
+install(TARGETS native-libs
+    RUNTIME DESTINATION .
+    LIBRARY DESTINATION .
+    ARCHIVE DESTINATION .
+)
