@@ -11,10 +11,9 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.model.unbaked.block.EmissionUnbakedBlockModel;
 
 public class EmissionModelLoader implements UnbakedModelLoader<EmissionUnbakedBlockModel> {
-    public static final EmissionModelLoader INSTANCE = new EmissionModelLoader();
     public static final Identifier ID = Identifier.fromNamespaceAndPath(Wizardry.MODID, "special_model_loader");
 
-    private EmissionModelLoader() {
+    public EmissionModelLoader() {
     }
 
     @Override

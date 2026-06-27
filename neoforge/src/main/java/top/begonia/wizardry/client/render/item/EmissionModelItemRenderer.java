@@ -20,11 +20,15 @@ import java.util.function.Consumer;
 import static top.begonia.wizardry.client.util.RenderTypes.getBaseRenderType;
 import static top.begonia.wizardry.client.util.RenderTypes.getOverlyRenderType;
 
-public class SpecialItemRenderer implements SpecialModelRenderer<SpecialItemRenderer.State> {
+public class EmissionModelItemRenderer implements SpecialModelRenderer<EmissionModelItemRenderer.State> {
 
-    public static final SpecialItemRenderer INSTANCE = new SpecialItemRenderer();
+    private static final EmissionModelItemRenderer INSTANCE = new EmissionModelItemRenderer();
 
-    private SpecialItemRenderer() {
+    private EmissionModelItemRenderer() {
+    }
+
+    public static EmissionModelItemRenderer getInstance() {
+        return INSTANCE;
     }
 
     public record State(List<BakedQuad> baseQuads, List<BakedQuad> overlayQuads, ItemDisplayContext displayContext) {

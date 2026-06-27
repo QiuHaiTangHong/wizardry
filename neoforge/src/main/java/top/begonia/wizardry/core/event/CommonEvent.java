@@ -9,7 +9,7 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.api.event.data.CommonRegisterDataParserEvent;
+import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.player.WizardPlayerData;
 import top.begonia.wizardry.core.data.SpellGlyph;
@@ -55,7 +55,7 @@ public class CommonEvent {
     }
 
     @SubscribeEvent
-    public static void onCommonRegisterDataParserEvent(@NonNull CommonRegisterDataParserEvent event) {
+    public static void onCommonRegisterDataParserEvent(RegisterDataParserEvent.@NonNull CommonRegisterDataParserEvent event) {
         event.register(new SpellPropertiesParser());
     }
 

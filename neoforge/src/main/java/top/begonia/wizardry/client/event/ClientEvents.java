@@ -43,8 +43,8 @@ import top.begonia.wizardry.client.gui.ArcaneWorkbenchScreen;
 import top.begonia.wizardry.client.model.RobeArmourModel;
 import top.begonia.wizardry.client.model.SageArmourModel;
 import top.begonia.wizardry.client.model.WizardArmourModel;
-import top.begonia.wizardry.core.api.event.data.ClientRegisterDataParserEvent;
 import top.begonia.wizardry.core.api.event.data.DataParserBefore;
+import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.core.api.event.data.RegisterParticleEvent;
 import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.core.item.ISpellCastingItem;
@@ -171,7 +171,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onRegisterModelLoaders(ModelEvent.@NonNull RegisterLoaders event) {
-        event.register(EmissionModelLoader.ID, EmissionModelLoader.INSTANCE);
+        event.register(EmissionModelLoader.ID, new EmissionModelLoader());
     }
 
     @SubscribeEvent
@@ -233,7 +233,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void onClientRegisterDataParserEvent(@NonNull ClientRegisterDataParserEvent event) {
+    public static void onClientRegisterDataParserEvent(RegisterDataParserEvent.@NonNull ClientRegisterDataParserEvent event) {
         event.register(new BookshelfBookSettingsParser());
         event.register(new HandbookDataParser());
         event.register(new BookshelfModelParser());

@@ -8,7 +8,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModLoader;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.api.data.AbstractWizardryDataManager;
-import top.begonia.wizardry.core.api.event.data.ClientRegisterDataParserEvent;
+import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
 
 import java.util.*;
 
@@ -25,7 +25,7 @@ public class WizardryClientDataManager extends AbstractWizardryDataManager {
     }
 
     public void fireRegisterEvents() {
-        ModLoader.postEvent(new ClientRegisterDataParserEvent(this.getParserRegistry()));
+        ModLoader.postEvent(new RegisterDataParserEvent.ClientRegisterDataParserEvent(this.getParserRegistry()));
     }
 
     public static WizardryClientDataManager getInstance() {
