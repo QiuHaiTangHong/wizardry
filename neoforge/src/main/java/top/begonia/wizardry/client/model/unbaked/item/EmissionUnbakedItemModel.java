@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.render.item.unbaked;
+package top.begonia.wizardry.client.model.unbaked.item;
 
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.MapCodec;
@@ -26,12 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public record GlowUnbakedItemModel(Identifier modelId) implements ItemModel.Unbaked {
+public record EmissionUnbakedItemModel(Identifier modelId) implements ItemModel.Unbaked {
 
-    public static final MapCodec<GlowUnbakedItemModel> MAP_CODEC = RecordCodecBuilder.mapCodec(instance ->
+    public static final MapCodec<EmissionUnbakedItemModel> MAP_CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
-                    Identifier.CODEC.fieldOf("model").forGetter(GlowUnbakedItemModel::modelId)
-            ).apply(instance, GlowUnbakedItemModel::new)
+                    Identifier.CODEC.fieldOf("model").forGetter(EmissionUnbakedItemModel::modelId)
+            ).apply(instance, EmissionUnbakedItemModel::new)
     );
 
     @Override

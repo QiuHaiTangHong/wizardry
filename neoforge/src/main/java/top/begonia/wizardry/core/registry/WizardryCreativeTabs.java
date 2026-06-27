@@ -6,6 +6,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -53,11 +54,11 @@ public final class WizardryCreativeTabs {
         }
     }
 
-    public static void addToTabs(TabsEnum tabsEnum, Supplier<? extends ItemLike> item) {
+    public static void addToTab(TabsEnum tabsEnum, Supplier<? extends ItemLike> item) {
         TABS_CONTENTS.get(tabsEnum).add(event -> event.accept(item.get()));
     }
 
-    public static void addSpecialToTabs(TabsEnum tabsEnum, Consumer<BuildCreativeModeTabContentsEvent> populator) {
+    public static void addSpecialToTab(TabsEnum tabsEnum, Consumer<BuildCreativeModeTabContentsEvent> populator) {
         TABS_CONTENTS.get(tabsEnum).add(populator);
     }
 
@@ -89,7 +90,7 @@ public final class WizardryCreativeTabs {
             .build()
     );
 
-    public static void register(net.neoforged.bus.api.IEventBus eventBus) {
+    public static void register(IEventBus eventBus) {
         CREATIVE_TABS.register(eventBus);
     }
 }

@@ -70,22 +70,22 @@ configurations {
 dependencies {
 //    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
 //    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
-    runtimeOnly project(path: ':native-libs', configuration: 'default')
+//    runtimeOnly project(path: ':native-libs', configuration: 'default')
 }
 
-tasks.register('copyNativeLibs', Copy) {
-    def nativeProject = project(':native-libs')
-    dependsOn nativeProject.tasks.named('assemble')
-
-    from rootProject.layout.buildDirectory.dir("native-libs/lib")
-    into layout.buildDirectory.dir("resources/main/assets/${mod_id}/natives")
-
-    include "**/*.dll", "**/*.so", "**/*.dylib"
-}
-
-tasks.named('processResources') {
-    dependsOn 'copyNativeLibs'
-}
+//tasks.register('copyNativeLibs', Copy) {
+//    def nativeProject = project(':native-libs')
+//    dependsOn nativeProject.tasks.named('assemble')
+//
+//    from rootProject.layout.buildDirectory.dir("native-libs/lib")
+//    into layout.buildDirectory.dir("resources/main/assets/${mod_id}/natives")
+//
+//    include "**/*.dll", "**/*.so", "**/*.dylib"
+//}
+//
+//tasks.named('processResources') {
+//    dependsOn 'copyNativeLibs'
+//}
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
     var replaceProperties = [
@@ -105,18 +105,18 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
 sourceSets.main.resources.srcDir generateModMetadata
 neoForge.ideSyncTask generateModMetadata
 
-tasks.named('jar', Jar) {
-    manifest {
-        attributes([
-                'Specification-Title'   : 'wizardry',
-                'Specification-Vendor'  : 'begonia',
-                'Specification-Version' : '1',
-                'Implementation-Title'  : project.name,
-                'Implementation-Version': project.version,
-                'Enable-Native-Access'  : 'wizardry'
-        ])
-    }
-}
+//tasks.named('jar', Jar) {
+//    manifest {
+//        attributes([
+//                'Specification-Title'   : 'wizardry',
+//                'Specification-Vendor'  : 'begonia',
+//                'Specification-Version' : '1',
+//                'Implementation-Title'  : project.name,
+//                'Implementation-Version': project.version,
+//                'Enable-Native-Access'  : 'wizardry'
+//        ])
+//    }
+//}
 
 publishing {
     publications {

@@ -30,21 +30,22 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.data.definition.particle.ParticleParserContextData;
 import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
-import top.begonia.wizardry.client.data.parser.ParticleParser;
+import top.begonia.wizardry.client.data.parser.*;
 import top.begonia.wizardry.client.gui.BookshelfScreen;
 import top.begonia.wizardry.client.gui.SpellHud;
-import top.begonia.wizardry.client.model.loader.SpecialModelLoader;
+import top.begonia.wizardry.client.model.loader.EmissionModelLoader;
 import top.begonia.wizardry.client.network.ClientPayloadHandler;
 import top.begonia.wizardry.client.particle.impl.*;
 import top.begonia.wizardry.client.render.*;
 import top.begonia.wizardry.client.render.entity.*;
-import top.begonia.wizardry.client.render.item.unbaked.GlowUnbakedItemModel;
+import top.begonia.wizardry.client.model.unbaked.item.EmissionUnbakedItemModel;
 import top.begonia.wizardry.client.gui.ArcaneWorkbenchScreen;
 import top.begonia.wizardry.client.model.RobeArmourModel;
 import top.begonia.wizardry.client.model.SageArmourModel;
 import top.begonia.wizardry.client.model.WizardArmourModel;
-import top.begonia.wizardry.core.api.data.event.DataParserBefore;
-import top.begonia.wizardry.core.api.data.event.RegisterParticleEvent;
+import top.begonia.wizardry.core.api.event.data.ClientRegisterDataParserEvent;
+import top.begonia.wizardry.core.api.event.data.DataParserBefore;
+import top.begonia.wizardry.core.api.event.data.RegisterParticleEvent;
 import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.core.item.ISpellCastingItem;
 import top.begonia.wizardry.core.registry.*;
@@ -93,7 +94,7 @@ public class ClientEvents {
     public static void onRegisterItemModels(@NonNull RegisterItemModelsEvent event) {
         event.register(
                 Identifier.fromNamespaceAndPath(Wizardry.MODID, "special_item"),
-                GlowUnbakedItemModel.MAP_CODEC
+                EmissionUnbakedItemModel.MAP_CODEC
         );
     }
 
@@ -170,7 +171,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onRegisterModelLoaders(ModelEvent.@NonNull RegisterLoaders event) {
-        event.register(SpecialModelLoader.ID, SpecialModelLoader.INSTANCE);
+        event.register(EmissionModelLoader.ID, EmissionModelLoader.INSTANCE);
     }
 
     @SubscribeEvent
@@ -229,6 +230,16 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onRegisterReloadListeners(@NonNull AddClientReloadListenersEvent event) {
         event.addListener(Identifier.fromNamespaceAndPath(Wizardry.MODID, "data_manager"), WizardryClientDataManager.getInstance());
+    }
+
+    @SubscribeEvent
+    public static void onClientRegisterDataParserEvent(@NonNull ClientRegisterDataParserEvent event) {
+        event.register(new BookshelfBookSettingsParser());
+        event.register(new HandbookDataParser());
+        event.register(new BookshelfModelParser());
+        event.register(new ParticleParser());
+        event.register(new SpellHubConfigParser());
+        event.register(new SpellHubDescriptionParser());
     }
 
     @SubscribeEvent

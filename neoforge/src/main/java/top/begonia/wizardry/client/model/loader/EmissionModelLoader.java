@@ -8,19 +8,19 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.model.UnbakedModelLoader;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.client.render.block.unbaked.GlowUnbakedBlockModel;
+import top.begonia.wizardry.client.model.unbaked.block.EmissionUnbakedBlockModel;
 
-public class SpecialModelLoader implements UnbakedModelLoader<GlowUnbakedBlockModel> {
-    public static final SpecialModelLoader INSTANCE = new SpecialModelLoader();
+public class EmissionModelLoader implements UnbakedModelLoader<EmissionUnbakedBlockModel> {
+    public static final EmissionModelLoader INSTANCE = new EmissionModelLoader();
     public static final Identifier ID = Identifier.fromNamespaceAndPath(Wizardry.MODID, "special_model_loader");
 
-    private SpecialModelLoader() {
+    private EmissionModelLoader() {
     }
 
     @Override
-    public @NonNull GlowUnbakedBlockModel read(@NonNull JsonObject jsonObject, @NonNull JsonDeserializationContext context) throws JsonParseException {
+    public @NonNull EmissionUnbakedBlockModel read(@NonNull JsonObject jsonObject, @NonNull JsonDeserializationContext context) throws JsonParseException {
         jsonObject.remove("loader");
         UnbakedModel vanillaModel = context.deserialize(jsonObject, UnbakedModel.class);
-        return new GlowUnbakedBlockModel(vanillaModel);
+        return new EmissionUnbakedBlockModel(vanillaModel);
     }
 }

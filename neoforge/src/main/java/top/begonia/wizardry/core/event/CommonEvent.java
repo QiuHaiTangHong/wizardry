@@ -9,9 +9,11 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.core.api.event.data.CommonRegisterDataParserEvent;
 import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.player.WizardPlayerData;
 import top.begonia.wizardry.core.data.SpellGlyph;
+import top.begonia.wizardry.core.data.spell.parser.SpellPropertiesParser;
 import top.begonia.wizardry.core.registry.*;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
@@ -20,7 +22,7 @@ public class CommonEvent {
     public static void onAddReloadListeners(@NonNull AddServerReloadListenersEvent event) {
         event.addListener(
                 Identifier.fromNamespaceAndPath(Wizardry.MODID, "server_data_manager"),
-                WizardryServerDataManager.INSTANCE
+                WizardryServerDataManager.getInstance()
         );
     }
 
@@ -50,6 +52,11 @@ public class CommonEvent {
             WizardPlayerData playerData = player.getData(WizardryAttachment.WIZARD_PLAYER_DATA.get());
             player.setData(WizardryAttachment.WIZARD_PLAYER_DATA.get(), playerData);
         }
+    }
+
+    @SubscribeEvent
+    public static void onCommonRegisterDataParserEvent(@NonNull CommonRegisterDataParserEvent event) {
+        event.register(new SpellPropertiesParser());
     }
 
     @SubscribeEvent

@@ -3,7 +3,7 @@ package top.begonia.wizardry.client.data.definition.particle;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.core.api.data.event.RegisterParticleEvent;
+import top.begonia.wizardry.core.api.event.data.RegisterParticleEvent;
 import top.begonia.wizardry.client.particle.MutableDoubleSpriteSet;
 import top.begonia.wizardry.client.particle.WizardryParticleOptions;
 

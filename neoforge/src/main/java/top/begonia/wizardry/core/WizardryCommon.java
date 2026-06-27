@@ -10,9 +10,9 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.core.config.CommonConfig;
+import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.config.ServerConfig;
-import top.begonia.wizardry.core.util.NativeMethodRouter;
 import top.begonia.wizardry.core.util.WandHelper;
 
 @Mod(Wizardry.MODID)
@@ -37,10 +37,12 @@ public class WizardryCommon {
         modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         modEventBus.addListener(this::commonSetup);
-        NativeMethodRouter.SAY_HELLO.get();
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(WandHelper::populateUpgradeMap);
+    private void commonSetup(final @NonNull FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            WandHelper.populateUpgradeMap();
+            WizardryServerDataManager.getInstance().fireRegisterEvents();
+        });
     }
 }

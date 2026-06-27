@@ -3,6 +3,9 @@
     "facing=up": {
       "model": "wizardry:block/receptacle"
     },
+    "facing=down": {
+      "model": "wizardry:block/receptacle"
+    },
     "facing=east": {
       "model": "wizardry:block/wall_receptacle",
       "y": -90

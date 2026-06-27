@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.api.data.event;
+package top.begonia.wizardry.core.api.event.data;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;

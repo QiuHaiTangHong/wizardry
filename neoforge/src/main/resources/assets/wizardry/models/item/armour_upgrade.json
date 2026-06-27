@@ -1,6 +1,3 @@
 {
-    "parent": "minecraft:item/generated",
-    "textures": {
-        "layer0": "wizardry:item/armour_upgrade"
-    }
+    "parent": "minecraft:item/generated"
 }

@@ -20,7 +20,7 @@ import net.neoforged.neoforge.resource.ContextAwareReloadListener;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.api.data.event.DataParserBefore;
+import top.begonia.wizardry.core.api.event.data.DataParserBefore;
 
 import java.io.Reader;
 import java.util.*;
@@ -38,26 +38,10 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
 
     public AbstractWizardryDataManager(FileToIdConverter path) {
         this.lister = path;
-        this.loadParsersSPI();
     }
 
-    private void loadParsersSPI() {
-        Dist currentDist = this.getSupportedDist();
-        @SuppressWarnings("rawtypes")
-        ServiceLoader<IDataParser> loader = ServiceLoader.load(IDataParser.class, IDataParser.class.getClassLoader());
-        for (IDataParser<?, ?, ?> parser : loader) {
-            Dist targetDist = parser.getSupportedDist();
-            if (targetDist != null && targetDist != currentDist) {
-                continue;
-            }
-
-            Identifier id = parser.getIdentifier();
-            if (id != null) {
-                parserRegistry.put(id, parser);
-                Wizardry.LOGGER.info("已注册 Wizardry 动态解析器 [{}] : {} -> {}",
-                        currentDist.name(), id, parser.getClass().getName());
-            }
-        }
+    public Map<Identifier, IDataParser<?, ? extends IParserContext, ? extends IResultData>> getParserRegistry() {
+        return this.parserRegistry;
     }
 
     protected abstract Dist getSupportedDist();
@@ -135,7 +119,7 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
         Map<Identifier, IParserContext> parserContexts = new HashMap<>();
         ModLoader.postEvent(new DataParserBefore(parserContexts));
         Map<Class<? extends IResultData>, Map<Identifier, IResultData>> workingMap = new HashMap<>();
-        int[] totalLoaded = new int[]{0};
+        int totalLoaded = 0;
         int failedCount = 0;
         for (Map.Entry<Identifier, JsonElement> entry : identifierJsonElementMap.entrySet()) {
             Identifier location = entry.getKey();
@@ -167,8 +151,10 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
                 continue;
             }
             try {
+                JsonObject cleanObject = element.getAsJsonObject().deepCopy();
+                cleanObject.remove("parser");
                 @SuppressWarnings("unchecked")
-                IResultData result = this.safeExecutePipeline(location, parser, element, context, currentReload);
+                IResultData result = this.safeExecutePipeline(location, parser, cleanObject, context, currentReload);
                 if (result == null) {
                     Wizardry.LOGGER.error("wizardry:解析数据 '{}' 失败: 解析器 [{}] 无法反序列化此数据，返回了 null (请检查控制台上的 Codec 具体报错)",
                             parser.getClass().getSimpleName(), location);
@@ -176,7 +162,7 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
                     continue;
                 }
                 workingMap.computeIfAbsent(result.getDataClass(), _ -> new HashMap<>()).put(location, result);
-                totalLoaded[0]++;
+                totalLoaded++;
 
             } catch (Exception e) {
                 Wizardry.LOGGER.error("wizardry:解析数据 '{}' 时发生严重崩溃！正在使用的解析器: [{}]",
@@ -189,10 +175,10 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
         storageSnapshot = Map.copyOf(immutableStorage);
         if (failedCount > 0) {
             Wizardry.LOGGER.warn("{} 数据重载完成: 成功加载 {} 项配置，🌟 发现 {} 项配置解析失败（请查看上方警告日志）",
-                    Wizardry.MODID, totalLoaded[0], failedCount);
+                    Wizardry.MODID, totalLoaded, failedCount);
         } else {
             Wizardry.LOGGER.info("{} 数据重载完成: 共通过类型隔离成功加载了 {} 项新配置",
-                    Wizardry.MODID, totalLoaded[0]);
+                    Wizardry.MODID, totalLoaded);
         }
     }
 

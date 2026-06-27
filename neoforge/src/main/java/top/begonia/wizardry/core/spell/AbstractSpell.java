@@ -180,7 +180,7 @@ public abstract class AbstractSpell implements Comparable<AbstractSpell> {
 
     private SpellProperties getProperties() {
         if (this.properties == null) {
-            Optional<SpellProperties> spellProperties = WizardryServerDataManager.INSTANCE.getData(this.identifier.withPrefix("spells/"), SpellProperties.class);
+            Optional<SpellProperties> spellProperties = WizardryServerDataManager.getInstance().getData(this.identifier.withPrefix("spells/"), SpellProperties.class);
             spellProperties.ifPresentOrElse(
                     value -> this.properties = value,
                     () -> {

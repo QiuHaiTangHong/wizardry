@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.render.block.unbaked;
+package top.begonia.wizardry.client.model.unbaked.block;
 
 import net.minecraft.client.renderer.block.dispatch.ModelState;
 import net.minecraft.client.resources.model.ModelBaker;
@@ -18,8 +18,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-public class GlowUnbakedBlockModel extends DelegateUnbakedModel {
-    public GlowUnbakedBlockModel(UnbakedModel delegate) {
+public class EmissionUnbakedBlockModel extends DelegateUnbakedModel {
+    public EmissionUnbakedBlockModel(UnbakedModel delegate) {
         super(delegate);
     }
 
@@ -32,7 +32,7 @@ public class GlowUnbakedBlockModel extends DelegateUnbakedModel {
             @Deprecated
             @Override
             public @NonNull QuadCollection bake(@NonNull TextureSlots textureSlots, @NonNull ModelBaker modelBaker, @NonNull ModelState modelState, @NonNull ModelDebugName modelDebugName) {
-                return Objects.requireNonNull(GlowUnbakedBlockModel.super.geometry()).bake(textureSlots, modelBaker, modelState, modelDebugName);
+                return Objects.requireNonNull(EmissionUnbakedBlockModel.super.geometry()).bake(textureSlots, modelBaker, modelState, modelDebugName);
             }
 
             @Override

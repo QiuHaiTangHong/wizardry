@@ -44,7 +44,7 @@ public final class WizardryItems {
             Item.Properties properties = new Item.Properties().setId(ResourceKey.create(Registries.ITEM, identifier));
             return itemFactory.apply(properties);
         });
-        WizardryCreativeTabs.addToTabs(tab, item);
+        WizardryCreativeTabs.addToTab(tab, item);
         return item;
     }
 
@@ -53,7 +53,7 @@ public final class WizardryItems {
             Item.Properties properties = new Item.Properties().setId(ResourceKey.create(Registries.ITEM, identifier));
             return itemFactory.apply(properties);
         });
-        WizardryCreativeTabs.addSpecialToTabs(tab, (event) -> tabPopulator.accept(event, item.get()));
+        WizardryCreativeTabs.addSpecialToTab(tab, (event) -> tabPopulator.accept(event, item.get()));
 
         return item;
     }
