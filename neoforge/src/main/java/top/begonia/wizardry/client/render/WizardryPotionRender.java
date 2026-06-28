@@ -14,7 +14,11 @@ import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.Wizardry;
 
 public class WizardryPotionRender implements IClientMobEffectExtensions {
-    public static final WizardryPotionRender INSTANCE = new WizardryPotionRender();
+    private static final WizardryPotionRender INSTANCE = new WizardryPotionRender();
+
+    public static WizardryPotionRender getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public boolean renderInventoryIcon(@NonNull MobEffectInstance instance, @NonNull AbstractContainerScreen<?> screen, @NonNull GuiGraphicsExtractor guiGraphics, int x, int y, int blitOffset) {

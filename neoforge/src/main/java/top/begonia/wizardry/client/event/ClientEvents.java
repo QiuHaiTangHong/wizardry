@@ -223,7 +223,7 @@ public class ClientEvents {
             }
         }, WizardryItems.ARMOUR.get());
         for (DeferredHolder<MobEffect, ? extends MobEffect> effect : WizardryMobEffects.EFFECTS.getEntries()) {
-            event.registerMobEffect(WizardryPotionRender.INSTANCE, effect.get());
+            event.registerMobEffect(WizardryPotionRender.getInstance(), effect.get());
         }
     }
 
