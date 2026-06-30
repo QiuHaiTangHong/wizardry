@@ -1,0 +1,144 @@
+{
+    "parent": "wizardry:apprentice",
+    "display": {
+        "icon": {
+            "id": "wizardry:wand",
+            "components": {
+                "wizardry:element": "magic",
+                "wizardry:tier": "advanced"
+            }
+        },
+        "title": {
+            "translate": "advancement.wizardry.advanced"
+        },
+        "description": {
+            "translate": "advancement.wizardry.advanced.desc"
+        }
+    },
+    "criteria": {
+        "magic": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:wand",
+                        "components": {
+                            "wizardry:element": "magic",
+                            "wizardry:tier": "advanced"
+                        }
+                    }
+                ]
+            }
+        },
+        "fire": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:wand",
+                        "components": {
+                            "wizardry:element": "fire",
+                            "wizardry:tier": "advanced"
+                        }
+                    }
+                ]
+            }
+        },
+        "ice": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:wand",
+                        "components": {
+                            "wizardry:element": "ice",
+                            "wizardry:tier": "advanced"
+                        }
+                    }
+                ]
+            }
+        },
+        "lightning": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:wand",
+                        "components": {
+                            "wizardry:element": "lightning",
+                            "wizardry:tier": "advanced"
+                        }
+                    }
+                ]
+            }
+        },
+        "necromancy": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:wand",
+                        "components": {
+                            "wizardry:element": "necromancy",
+                            "wizardry:tier": "advanced"
+                        }
+                    }
+                ]
+            }
+        },
+        "earth": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:wand",
+                        "components": {
+                            "wizardry:element": "earth",
+                            "wizardry:tier": "advanced"
+                        }
+                    }
+                ]
+            }
+        },
+        "sorcery": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:wand",
+                        "components": {
+                            "wizardry:element": "sorcery",
+                            "wizardry:tier": "advanced"
+                        }
+                    }
+                ]
+            }
+        },
+        "healing": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:wand",
+                        "components": {
+                            "wizardry:element": "healing",
+                            "wizardry:tier": "advanced"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "requirements": [
+        [
+            "magic",
+            "fire",
+            "ice",
+            "lightning",
+            "necromancy",
+            "earth",
+            "sorcery",
+            "healing"
+        ]
+    ]
+}

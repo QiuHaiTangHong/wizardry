@@ -2,7 +2,6 @@ package top.begonia.wizardry.core.item.impl;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
@@ -42,13 +41,11 @@ public class SpellBookItem extends Item {
     }
 
     public AbstractSpell getCurrentSpell(@NonNull ItemStack itemStack) {
-        Holder<AbstractSpell> abstractSpellHolder = itemStack.get(WizardryComponents.SPELL);
-        return abstractSpellHolder != null ? abstractSpellHolder.value() : WizardrySpells.NONE.get();
+        return itemStack.getOrDefault(WizardryComponents.SPELL, WizardrySpells.NONE).value();
     }
 
     public AbstractSpell getCurrentSpell(@NonNull ItemResource itemResource) {
-        Holder<AbstractSpell> abstractSpellHolder = itemResource.get(WizardryComponents.SPELL);
-        return abstractSpellHolder != null ? abstractSpellHolder.value() : WizardrySpells.NONE.get();
+        return itemResource.getOrDefault(WizardryComponents.SPELL.get(), WizardrySpells.NONE).value();
     }
 
     public @NonNull InteractionResult use(@NonNull Level level, @NonNull Player player, @NonNull InteractionHand hand) {
@@ -76,7 +73,7 @@ public class SpellBookItem extends Item {
         builder.accept(spell.getTier().getDisplayNameWithFormatting());
     }
 
-    public Identifier getGuiTexture(AbstractSpell spell) {
+    public Identifier getGuiTexture(@NonNull AbstractSpell spell) {
         return GUI_TEXTURES.get(spell.getTier());
     }
 }

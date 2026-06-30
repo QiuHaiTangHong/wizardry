@@ -1,0 +1,19 @@
+{
+    "parent": "wizardry:wizard_trade",
+    "display": {
+        "icon": {
+            "id": "minecraft:iron_sword"
+        },
+        "title": {
+            "translate": "advancement.wizardry.anger_wizard"
+        },
+        "description": {
+            "translate": "advancement.wizardry.anger_wizard.desc"
+        }
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "wizardry:trigger_anger_wizard"
+        }
+    }
+}

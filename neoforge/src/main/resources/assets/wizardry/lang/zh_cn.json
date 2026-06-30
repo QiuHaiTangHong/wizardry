@@ -1306,7 +1306,7 @@
   "enchantment.wizardry.magic_protection.desc": "减少所有魔法伤害。",
   "enchantment.wizardry.frost_protection.desc": "减少冻伤伤害的效果。",
   "enchantment.wizardry.shock_protection.desc": "减少雷电伤害的效果。",
-  "key.categories.ebwizardry": "巫术学",
+  "key.category.wizardry.main": "巫术学",
   "key.wizardry.next_spell": "下一个法术",
   "key.wizardry.previous_spell": "上一个法术",
   "key.wizardry.spell_1": "法术槽位 1",

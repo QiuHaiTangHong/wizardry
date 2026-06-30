@@ -1,0 +1,32 @@
+{
+    "parent": "wizardry:root",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.crystal"
+        },
+        "description": {
+            "translate": "advancement.wizardry.crystal.desc"
+        },
+        "icon": {
+            "id": "wizardry:magic_crystal",
+            "components": {
+                "wizardry:element": "magic"
+            }
+        }
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:magic_crystal",
+                        "components": {
+                            "wizardry:element": "magic"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

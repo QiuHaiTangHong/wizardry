@@ -1,0 +1,106 @@
+{
+    "criteria": {
+        "fire": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:magic_crystal",
+                        "components": {
+                            "wizardry:element": "fire"
+                        }
+                    }
+                ]
+            }
+        },
+        "ice": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "ebwizardry:magic_crystal",
+                        "components": {
+                            "wizardry:element": "ice"
+                        }
+                    }
+                ]
+            }
+        },
+        "lightning": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:magic_crystal",
+                        "components": {
+                            "wizardry:element": "lightning"
+                        }
+                    }
+                ]
+            }
+        },
+        "necromancy": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:magic_crystal",
+                        "components": {
+                            "wizardry:element": "necromancy"
+                        }
+                    }
+                ]
+            }
+        },
+        "earth": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:magic_crystal",
+                        "components": {
+                            "wizardry:element": "necromancy"
+                        }
+                    }
+                ]
+            }
+        },
+        "sorcery": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:magic_crystal",
+                        "components": {
+                            "wizardry:element": "sorcery"
+                        }
+                    }
+                ]
+            }
+        },
+        "healing": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:magic_crystal",
+                        "components": {
+                            "wizardry:element": "healing"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "requirements": [
+        [
+            "fire",
+            "ice",
+            "lightning",
+            "necromancy",
+            "earth",
+            "sorcery",
+            "healing"
+        ]
+    ]
+}

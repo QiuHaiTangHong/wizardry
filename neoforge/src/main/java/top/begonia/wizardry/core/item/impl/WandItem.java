@@ -2,6 +2,7 @@ package top.begonia.wizardry.core.item.impl;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -36,9 +37,32 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-import static top.begonia.wizardry.core.config.ServerConfig.BASE_SPELL_SLOTS;
-
 public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem, IManaStoringItem {
+    /**
+     * The number of spell slots a wand has with no attunement upgrades applied.
+     */
+    public static int BASE_SPELL_SLOTS = ServerConfig.baseSpellSlots;
+
+    /**
+     * The number of ticks between each time a continuous spell is added to the player's recently-cast spells.
+     */
+    private static final int CONTINUOUS_TRACKING_INTERVAL = 20;
+    /**
+     * The increase in progression for casting spells of the matching element.
+     */
+    private static final float ELEMENTAL_PROGRESSION_MODIFIER = 1.2f;
+    /**
+     * The increase in progression for casting an undiscovered spell (can only happen once per spell for each player).
+     */
+    private static final float DISCOVERY_PROGRESSION_MODIFIER = 5f;
+    /**
+     * The increase in progression for tiers that the player has already reached.
+     */
+    private static final float SECOND_TIME_PROGRESSION_MODIFIER = 1.5f;
+    /**
+     * The fraction of progression lost when all recently-cast spells are the same as the one being cast.
+     */
+    private static final float MAX_PROGRESSION_REDUCTION = 0.75f;
 
     public WandItem(Properties properties) {
         super(properties);
@@ -55,8 +79,16 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
         return stack.getOrDefault(WizardryComponents.TIER, TierEnum.NOVICE);
     }
 
+    public static void setTier(@NonNull ItemStack stack, TierEnum tier) {
+        stack.set(WizardryComponents.TIER, tier);
+    }
+
     public static @NonNull ElementEnum getElement(@NonNull ItemStack stack) {
         return stack.getOrDefault(WizardryComponents.ELEMENT, ElementEnum.MAGIC);
+    }
+
+    public static void setElement(@NonNull ItemStack stack, ElementEnum element) {
+        stack.set(WizardryComponents.ELEMENT, element);
     }
 
     @SuppressWarnings("deprecation")
@@ -69,7 +101,7 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
         ElementEnum element = getElement(itemStack);
         TierEnum tier = getTier(itemStack);
         builder.accept(Component.translatable("item." + Wizardry.MODID + ".wand.buff",
-                (int) ((tier.level + 1) * ServerConfig.Constants.POTENCY_INCREASE_PER_TIER * 100 + 0.5f), element.getDisplayName()).withStyle(ChatFormatting.DARK_GRAY));
+                (int) ((tier.level + 1) * ServerConfig.Constants.potencyIncreasePerTier * 100 + 0.5f), element.getDisplayName()).withStyle(ChatFormatting.DARK_GRAY));
 
         AbstractSpell spell = WandHelper.getCurrentSpell(itemStack);
 
@@ -174,8 +206,9 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
 
     public static @NonNull ItemStack getWand(TierEnum tier, ElementEnum element) {
         ItemStack itemStack = new ItemStack(WizardryItems.WAND);
-        itemStack.set(WizardryComponents.TIER, tier);
-        itemStack.set(WizardryComponents.ELEMENT, element);
+        setTier(itemStack, tier);
+        setElement(itemStack, element);
+        itemStack.set(DataComponents.MAX_DAMAGE, tier.getMaxCharge());
         return itemStack;
     }
 
@@ -233,13 +266,13 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
             TierEnum wandTier = getTier(wand);
             ElementEnum wandElement = getElement(wand);
 
-            int maxUpgrades = wandTier.upgradeLimit;
+            int maxUpgrades = wandTier.getUpgradeLimit();
             if (wandElement == ElementEnum.DEFAULT) {
-                maxUpgrades += ServerConfig.Constants.NON_ELEMENTAL_UPGRADE_BONUS;
+                maxUpgrades += ServerConfig.Constants.nonElementalUpgradeBonus;
             }
 
             if (WandHelper.getTotalUpgrades(wand) < maxUpgrades
-                    && WandHelper.getUpgradeLevel(wand, specialUpgrade) < ServerConfig.Constants.UPGRADE_STACK_LIMIT) {
+                    && WandHelper.getUpgradeLevel(wand, specialUpgrade) < ServerConfig.Constants.upgradeStackLimit) {
 
                 // Used to preserve existing mana when upgrading storage rather than creating free mana.
                 int prevMana = this.getMana(wand);
@@ -252,7 +285,7 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
 
                 } else if (specialUpgrade == WizardryItems.ATTUNEMENT_UPGRADE.get()) {
 
-                    int newSlotCount = BASE_SPELL_SLOTS.get() + WandHelper.getUpgradeLevel(wand, WizardryItems.ATTUNEMENT_UPGRADE.get());
+                    int newSlotCount = BASE_SPELL_SLOTS + WandHelper.getUpgradeLevel(wand, WizardryItems.ATTUNEMENT_UPGRADE.get());
 
                     AbstractSpell[] spells = WandHelper.getSpells(wand);
                     AbstractSpell[] newSpells = new AbstractSpell[newSlotCount];
@@ -287,7 +320,6 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
     @Override
     public boolean onApplyButtonPressed(Player player, Slot centre, Slot crystals, @NonNull Slot upgrade, Slot[] spellBooks) {
         boolean changed = false;
-
         if (upgrade.hasItem()) {
             ItemStack original = centre.getItem().copy();
             centre.set(this.applyUpgrade(player, centre.getItem(), upgrade.getItem()));
@@ -297,7 +329,7 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
         AbstractSpell[] spells = WandHelper.getSpells(centre.getItem());
 
         if (spells.length == 0) {
-            spells = new AbstractSpell[BASE_SPELL_SLOTS.get()];
+            spells = new AbstractSpell[BASE_SPELL_SLOTS];
         }
 
         TierEnum tier = getTier(centre.getItem());
@@ -323,7 +355,9 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
         if (WandHelper.rechargeManaOnApplyButtonPressed(centre, crystals)) {
             changed = true;
         }
-
+        if (changed) {
+            centre.setChanged();
+        }
         return changed;
     }
 

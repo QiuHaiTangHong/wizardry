@@ -1,0 +1,60 @@
+{
+    "parent": "wizardry:arcane_initiate",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.armour_set"
+        },
+        "description": {
+            "translate": "advancement.wizardry.armour_set.desc"
+        },
+        "icon": {
+            "id": "wizardry:armour",
+            "components": {
+                "wizardry:armor_material_type": "wizard",
+                "wizardry:armor_type": "helmet",
+                "wizardry:element": "magic"
+            }
+        }
+    },
+    "criteria": {
+        "wizard_hat": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:armour",
+                        "components": {
+                            "wizardry:armor_material_type": "wizard",
+                            "wizardry:armor_type": "helmet",
+                            "wizardry:element": "magic"
+                        }
+                    },
+                    {
+                        "id": "wizardry:armour",
+                        "components": {
+                            "wizardry:armor_material_type": "wizard",
+                            "wizardry:armor_type": "chestplate",
+                            "wizardry:element": "magic"
+                        }
+                    },
+                    {
+                        "id": "wizardry:armour",
+                        "components": {
+                            "wizardry:armor_material_type": "wizard",
+                            "wizardry:armor_type": "leggings",
+                            "wizardry:element": "magic"
+                        }
+                    },
+                    {
+                        "id": "wizardry:armour",
+                        "components": {
+                            "wizardry:armor_material_type": "wizard",
+                            "wizardry:armor_type": "boots",
+                            "wizardry:element": "magic"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

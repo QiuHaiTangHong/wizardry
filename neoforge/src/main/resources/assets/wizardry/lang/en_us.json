@@ -1306,7 +1306,7 @@
   "enchantment.wizardry.magic_protection.desc": "Reduces damage from all magic.",
   "enchantment.wizardry.frost_protection.desc": "Reduces the effects of frost damage.",
   "enchantment.wizardry.shock_protection.desc": "Reduces the effects of shock damage.",
-  "key.categories.ebwizardry": "Wizardry",
+  "key.category.wizardry.main": "Wizardry",
   "key.wizardry.next_spell": "Next Spell",
   "key.wizardry.previous_spell": "Previous Spell",
   "key.wizardry.spell_1": "Spell Slot 1",

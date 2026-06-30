@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.block;
+package top.begonia.wizardry.core.constants;
 
 import net.minecraft.util.StringRepresentable;
 import org.jspecify.annotations.NonNull;

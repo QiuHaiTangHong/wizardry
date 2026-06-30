@@ -19,8 +19,7 @@ public final class WandHelper {
 
     private static final HashMap<Item, String> upgradeMap = new HashMap<>();
 
-    public static AbstractSpell[] getSpells(ItemStack wand) {
-
+    public static AbstractSpell @NonNull [] getSpells(@NonNull ItemStack wand) {
         List<Holder<AbstractSpell>> spellHolders = wand.getOrDefault(
                 WizardryComponents.SPELLS.get(),
                 List.of()
@@ -78,7 +77,7 @@ public final class WandHelper {
         return WizardrySpells.NONE.get();
     }
 
-    public static void selectNextSpell(ItemStack wand) {
+    public static void selectNextSpell(@NonNull ItemStack wand) {
         if (!wand.has(WizardryComponents.SPELLS.get())) {
             wand.set(WizardryComponents.SPELLS.get(), new ArrayList<>());
         }
@@ -86,7 +85,7 @@ public final class WandHelper {
         wand.set(WizardryComponents.CURRENT_SPELL.get(), nextIndex);
     }
 
-    public static void selectPreviousSpell(ItemStack wand) {
+    public static void selectPreviousSpell(@NonNull ItemStack wand) {
         if (!wand.has(WizardryComponents.SPELLS.get())) {
         }
         int prevIndex = getPreviousSpellIndex(wand);
@@ -122,7 +121,7 @@ public final class WandHelper {
         return (currentIndex - 1 + numberOfSpells) % numberOfSpells;
     }
 
-    public static int[] getCooldowns(ItemStack wand) {
+    public static int @NonNull [] getCooldowns(ItemStack wand) {
         List<Integer> cooldownList = wand.getOrDefault(WizardryComponents.COOLDOWN_ARRAY_KEY.get(), List.of());
         int[] cooldowns = new int[cooldownList.size()];
         for (int i = 0; i < cooldownList.size(); i++) {
@@ -153,7 +152,7 @@ public final class WandHelper {
         setCooldowns(wand, cooldowns);
     }
 
-    public static int getCurrentCooldown(ItemStack wand) {
+    public static int getCurrentCooldown(@NonNull ItemStack wand) {
         int selectedSpell = wand.getOrDefault(WizardryComponents.CURRENT_SPELL.get(), 0);
         int[] cooldowns = getCooldowns(wand);
         if (selectedSpell < 0 || selectedSpell >= cooldowns.length) {
@@ -287,11 +286,11 @@ public final class WandHelper {
         upgradeMap.put(WizardryItems.MELEE_UPGRADE.get(), "melee");
     }
 
-    public static void setProgression(ItemStack wand, int progression) {
+    public static void setProgression(@NonNull ItemStack wand, int progression) {
         wand.set(WizardryComponents.PROGRESSION_KEY.get(), progression);
     }
 
-    public static int getProgression(ItemStack wand) {
+    public static int getProgression(@NonNull ItemStack wand) {
         return wand.getOrDefault(WizardryComponents.PROGRESSION_KEY.get(), 0);
     }
 

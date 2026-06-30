@@ -1,0 +1,19 @@
+{
+    "parent": "wizardry:apprentice",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.special_upgrade"
+        },
+        "description": {
+            "translate": "advancement.wizardry.special_upgrade.desc"
+        },
+        "icon": {
+            "id": "wizardry:condenser_upgrade"
+        }
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "wizardry:trigger_special_upgrade"
+        }
+    }
+}

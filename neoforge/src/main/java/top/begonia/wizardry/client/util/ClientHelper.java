@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import top.begonia.wizardry.core.config.CommonConfig;
-import top.begonia.wizardry.core.data.player.WizardPlayerData;
 import top.begonia.wizardry.core.registry.WizardryAttachment;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 

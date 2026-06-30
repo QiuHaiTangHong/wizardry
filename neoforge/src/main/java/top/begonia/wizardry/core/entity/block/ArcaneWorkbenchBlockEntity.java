@@ -10,6 +10,8 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.Wizardry;
@@ -30,6 +32,18 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvi
             this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
             this.setChanged();
         }
+    }
+
+    @Override
+    protected void loadAdditional(@NonNull ValueInput input) {
+        super.loadAdditional(input);
+        this.arcaneWorkbenchItemHandler.deserialize(input);
+    }
+
+    @Override
+    protected void saveAdditional(@NonNull ValueOutput output) {
+        super.saveAdditional(output);
+        this.arcaneWorkbenchItemHandler.serialize(output);
     }
 
     @Override

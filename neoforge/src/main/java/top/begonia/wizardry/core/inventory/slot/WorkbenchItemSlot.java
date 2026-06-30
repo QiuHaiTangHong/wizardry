@@ -28,7 +28,7 @@ public class WorkbenchItemSlot extends ResourceHandlerSlot {
     @Override
     protected void setStackCopy(@NonNull ItemStack stack) {
         super.setStackCopy(stack);
-        this.menu.onSlotChanged(this.index, stack, null);
+        this.menu.onSlotChanged(this.index, stack, this.menu.player);
     }
 
     @Override

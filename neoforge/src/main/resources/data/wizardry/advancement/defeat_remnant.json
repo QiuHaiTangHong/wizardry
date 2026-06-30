@@ -1,0 +1,121 @@
+{
+	"parent": "wizardry:arcane_initiate",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.defeat_remnant"
+        },
+        "description": {
+            "translate": "advancement.wizardry.defeat_remnant.desc"
+        },
+        "icon": {
+			"id": "wizardry:spectral_dust",
+			"components": {
+				"wizardry:element": "sorcery"
+			}
+        }
+    },
+    "criteria": {
+		"fire": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"id": "wizardry:spectral_dust",
+						"components": {
+							"wizardry:element": "fire"
+						}
+					}
+				]
+			}
+		},
+		"ice": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"id": "wizardry:spectral_dust",
+						"components": {
+							"wizardry:element": "ice"
+						}
+					}
+				]
+			}
+		},
+		"lightning": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"id": "wizardry:spectral_dust",
+						"components": {
+							"wizardry:element": "lightning"
+						}
+					}
+				]
+			}
+		},
+		"necromancy": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"id": "wizardry:spectral_dust",
+						"components": {
+							"wizardry:element": "necromancy"
+						}
+					}
+				]
+			}
+		},
+		"earth": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"id": "wizardry:spectral_dust",
+						"components": {
+							"wizardry:element": "earth"
+						}
+					}
+				]
+			}
+		},
+		"sorcery": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"id": "wizardry:spectral_dust",
+						"components": {
+							"wizardry:element": "sorcery"
+						}
+					}
+				]
+			}
+		},
+		"healing": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"id": "wizardry:spectral_dust",
+						"components": {
+							"wizardry:element": "healing"
+						}
+					}
+				]
+			}
+		}
+	},
+	"requirements": [
+		[
+			"fire",
+			"ice",
+			"lightning",
+			"necromancy",
+			"earth",
+			"sorcery",
+			"healing"
+		]
+	]
+}

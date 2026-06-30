@@ -180,6 +180,14 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         }
     }
 
+    public int rightExtensionWidth() {
+        return this.menu.hasBookshelves() ? BOOKSHELF_UI_WIDTH : 0;
+    }
+
+    public int leftExtensionWidth() {
+        return this.menu.slots.get(ArcaneWorkbenchMenu.CENTRE_SLOT).hasItem() ? TOOLTIP_WIDTH : 0;
+    }
+
     @Override
     public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         this.updateModuleState();
@@ -491,7 +499,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
         @Override
         protected @NonNull MutableComponent getText(@NonNull ItemStack stack) {
-            return stack.getDisplayName().copy();
+            return stack.getItem().getName(stack).copy();
         }
 
     }
@@ -634,6 +642,9 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
         @Override
         protected boolean isVisible(@NonNull ItemStack stack) {
+            if (stack.getItem() instanceof ISpellCastingItem iSpellCastingItem) {
+                int len = iSpellCastingItem.getSpells(stack).length;
+            }
             return stack.getItem() instanceof ISpellCastingItem iSpellCastingItem
                     && index < iSpellCastingItem.getSpells(stack).length;
         }
@@ -670,7 +681,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                     0, 0,
                     8, 8,
                     8, 8,
-                    ARGB.color((int) (this.shouldFlash(stack) ? this.getAlpha(partialTicks) * 255 : 255), 0, 0, 0)
+                    ARGB.color((int) (this.shouldFlash(stack) ? this.getAlpha(partialTicks) * 255 : 255), 255, 255, 255)
             );
         }
 

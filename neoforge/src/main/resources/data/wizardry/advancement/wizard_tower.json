@@ -1,0 +1,22 @@
+{
+    "parent": "wizardry:arcane_initiate",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.wizard_tower"
+        },
+        "description": {
+            "translate": "advancement.wizardry.wizard_tower.desc"
+        },
+        "icon": {
+            "id": "minecraft:bookshelf"
+        }
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "wizardry:visit_structure",
+            "conditions": {
+                "structure_type": "wizard_tower"
+            }
+        }
+    }
+}

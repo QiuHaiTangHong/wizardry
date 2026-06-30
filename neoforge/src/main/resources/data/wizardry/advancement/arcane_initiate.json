@@ -1,0 +1,34 @@
+{
+    "parent": "wizardry:crystal",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.arcane_initiate"
+        },
+        "description": {
+            "translate": "advancement.wizardry.arcane_initiate.desc"
+        },
+        "icon": {
+            "id": "wizardry:wand",
+            "components": {
+                "wizardry:element": "magic",
+                "wizardry:tier": "novice"
+            }
+        }
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:wand",
+                        "components": {
+                            "wizardry:element": "magic",
+                            "wizardry:tier": "novice"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

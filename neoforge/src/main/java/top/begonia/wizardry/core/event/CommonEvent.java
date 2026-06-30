@@ -7,6 +7,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
@@ -14,6 +16,10 @@ import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.player.WizardPlayerData;
 import top.begonia.wizardry.core.data.SpellGlyph;
 import top.begonia.wizardry.core.data.spell.parser.SpellPropertiesParser;
+import top.begonia.wizardry.core.network.ServerPayloadHandler;
+import top.begonia.wizardry.core.network.data.ControlInputPayload;
+import top.begonia.wizardry.core.network.data.GlyphDataPayload;
+import top.begonia.wizardry.core.network.data.SpellQuickAccessPayload;
 import top.begonia.wizardry.core.registry.*;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
@@ -68,5 +74,25 @@ public class CommonEvent {
         } else if (event.getTab() == WizardryCreativeTabs.WIZARDRY.get()) {
             WizardryCreativeTabs.addItemsToEvent(event, WizardryCreativeTabs.TabsEnum.WIZARDRY);
         }
+    }
+
+    @SubscribeEvent
+    public static void register(final @NonNull RegisterPayloadHandlersEvent event) {
+        final PayloadRegistrar registrar = event.registrar(Wizardry.MODID).versioned("1.0.0");
+        registrar.playToClient(
+                GlyphDataPayload.TYPE,
+                GlyphDataPayload.CODEC,
+                ServerPayloadHandler::handleGlyphData
+        );
+        registrar.playToServer(
+                ControlInputPayload.TYPE,
+                ControlInputPayload.CODEC,
+                ServerPayloadHandler::handleControlInput
+        );
+        registrar.playToServer(
+                SpellQuickAccessPayload.TYPE,
+                SpellQuickAccessPayload.CODEC,
+                ServerPayloadHandler::handleSpellQuickAccess
+        );
     }
 }

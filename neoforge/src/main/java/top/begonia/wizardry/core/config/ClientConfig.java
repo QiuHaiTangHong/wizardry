@@ -18,6 +18,8 @@ public final class ClientConfig {
     public static final ModConfigSpec.EnumValue<GuiPosition> SPELL_HUD_POSITION;
     public static final String DEFAULT_HUD_SKIN_KEY = "default";
     public static final ModConfigSpec.ConfigValue<String> SPELL_HUD_SKIN;
+    public static final ModConfigSpec.BooleanValue SHIFT_SCROLLING;
+    public static final ModConfigSpec.BooleanValue REVERSE_SCROLL_DIRECTION;
 
     static {
         BUILDER.push("Client Settings");
@@ -45,6 +47,14 @@ public final class ClientConfig {
                 .comment("The skin used for the spell HUD.")
                 .translation("config." + Wizardry.MODID + ".spell_hud_skin")
                 .define("spellHUDSkin", DEFAULT_HUD_SKIN_KEY);
+        SHIFT_SCROLLING = BUILDER
+                .comment("Whether you can switch between spells on a wand by scrolling with the mouse wheel while sneaking. Note that this will only affect you; other players connected to the same server obey their own settings.")
+                .translation("config." + Wizardry.MODID + ".shift_scrolling")
+                .define("shiftScrolling", true);
+        REVERSE_SCROLL_DIRECTION = BUILDER
+                .comment("The scroll direction used to switch between spells on a wand while sneaking.")
+                .translation("config." + Wizardry.MODID + ".reverse_scroll_direction")
+                .define("reverseScrollDirection", false);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
@@ -55,6 +65,8 @@ public final class ClientConfig {
     public static boolean showChargeMeter;
     public static GuiPosition spellHUDPosition;
     public static String spellHUDSkin = DEFAULT_HUD_SKIN_KEY;
+    public static boolean shiftScrolling;
+    public static boolean reverseScrollDirection;
 
     private static void valueChange() {
         booksPauseGame = BOOKS_PAUSE_GAME.get();

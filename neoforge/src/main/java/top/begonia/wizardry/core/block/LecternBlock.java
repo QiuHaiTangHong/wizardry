@@ -25,6 +25,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.client.gui.LecternScreen;
 import top.begonia.wizardry.client.util.ParticleBuilder;
+import top.begonia.wizardry.core.constants.WoodTypeEnum;
 import top.begonia.wizardry.core.entity.block.LecternBlockEntity;
 import top.begonia.wizardry.core.registry.WizardryBlockEntities;
 import top.begonia.wizardry.core.registry.WizardryParticles;

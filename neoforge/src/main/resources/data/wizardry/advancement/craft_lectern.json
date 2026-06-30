@@ -1,0 +1,121 @@
+{
+    "parent": "wizardry:find_library_ruins",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.craft_lectern"
+        },
+        "description": {
+            "translate": "advancement.wizardry.craft_lectern.desc"
+        },
+        "icon": {
+            "id": "wizardry:lectern",
+            "components": {
+                "minecraft:block_state": {
+                    "wood_type": "spruce"
+                }
+            }
+        }
+    },
+    "criteria": {
+        "oak": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:lectern",
+                        "components": {
+                            "minecraft:block_state": {
+                                "wood_type": "oak"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "spruce": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:lectern",
+                        "components": {
+                            "minecraft:block_state": {
+                                "wood_type": "spruce"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "birch": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:lectern",
+                        "components": {
+                            "minecraft:block_state": {
+                                "wood_type": "birch"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "jungle": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:lectern",
+                        "components": {
+                            "minecraft:block_state": {
+                                "wood_type": "jungle"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "acacia": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:lectern",
+                        "components": {
+                            "minecraft:block_state": {
+                                "wood_type": "acacia"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "dark_oak": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:lectern",
+                        "components": {
+                            "minecraft:block_state": {
+                                "wood_type": "dark_oak"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "requirements": [
+        [
+            "oak",
+            "spruce",
+            "birch",
+            "jungle",
+            "acacia",
+            "dark_oak"
+        ]
+    ]
+}

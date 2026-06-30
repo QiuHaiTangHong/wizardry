@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
@@ -49,7 +48,6 @@ import java.util.stream.Collectors;
  *
  * @author 秋海棠红
  * @version 1.0.0
- * @email 3040469570@qq.com
  * @date 2026.06.15
  * @since 1.0.0
  */
@@ -443,12 +441,8 @@ public class LecternScreen extends SpellInfoScreen implements ISpellSortable {
                 for (int i = 0; i < itemResourceResourceHandler.size(); i++) {
                     ItemResource resource = itemResourceResourceHandler.getResource(i);
                     if (resource.getItem() instanceof SpellBookItem) {
-                        AbstractSpell spell = null;
-                        Holder<AbstractSpell> spellHolder = resource.get(WizardryComponents.SPELL.get());
-                        if (spellHolder != null) {
-                            spell = spellHolder.value();
-                        }
-                        if (spell != null && spell != WizardrySpells.NONE.get() && !availableSpells.contains(spell)) {
+                        AbstractSpell spell = resource.getOrDefault(WizardryComponents.SPELL.get(), WizardrySpells.NONE).value();
+                        if (spell != WizardrySpells.NONE.get() && !availableSpells.contains(spell)) {
                             availableSpells.add(spell);
                         }
                     }

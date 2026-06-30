@@ -22,6 +22,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.core.config.CommonConfig;
+import top.begonia.wizardry.core.constants.WoodTypeEnum;
 import top.begonia.wizardry.core.entity.block.BookshelfBlockEntity;
 import top.begonia.wizardry.core.registry.WizardryBlockEntities;
 

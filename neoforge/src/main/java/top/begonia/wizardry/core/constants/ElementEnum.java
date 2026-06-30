@@ -16,7 +16,7 @@ import top.begonia.wizardry.Wizardry;
 import javax.annotation.Nullable;
 
 public enum ElementEnum implements StringRepresentable {
-    MAGIC(Style.EMPTY.withColor(ChatFormatting.GRAY), "magic"),
+    MAGIC(Style.EMPTY.withColor(ChatFormatting.WHITE), "magic"),
     FIRE(Style.EMPTY.withColor(ChatFormatting.DARK_RED), "fire"),
     ICE(Style.EMPTY.withColor(ChatFormatting.AQUA), "ice"),
     LIGHTNING(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA), "lightning"),

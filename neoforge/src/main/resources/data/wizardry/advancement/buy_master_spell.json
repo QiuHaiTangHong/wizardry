@@ -1,0 +1,20 @@
+{
+    "parent": "wizardry:wizard_trade",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.buy_master_spell"
+        },
+        "description": {
+            "translate": "advancement.wizardry.buy_master_spell.desc"
+        },
+        "icon": {
+            "id": "wizardry:astral_diamond"
+        },
+		"frame": "goal"
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "wizardry:trigger_buy_master_spell"
+        }
+    }
+}

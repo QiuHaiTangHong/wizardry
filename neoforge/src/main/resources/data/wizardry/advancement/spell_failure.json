@@ -1,0 +1,19 @@
+{
+    "parent": "wizardry:discover_spell",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.spell_failure"
+        },
+        "description": {
+            "translate": "advancement.wizardry.spell_failure.desc"
+        },
+        "icon": {
+            "id": "minecraft:pumpkin"
+        }
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "wizardry:trigger_spell_failure"
+        }
+    }
+}

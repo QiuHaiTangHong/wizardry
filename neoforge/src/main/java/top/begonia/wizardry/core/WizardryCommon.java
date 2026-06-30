@@ -18,7 +18,11 @@ import top.begonia.wizardry.core.util.WandHelper;
 @Mod(Wizardry.MODID)
 @EventBusSubscriber(modid = Wizardry.MODID)
 public class WizardryCommon {
-    public WizardryCommon(IEventBus modEventBus, @NonNull ModContainer modContainer) {
+    public WizardryCommon(@NonNull IEventBus modEventBus, @NonNull ModContainer modContainer) {
+        modEventBus.addListener(this::commonSetup);
+        modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         WizardrySounds.register(modEventBus);
         WizardryBlocks.register(modEventBus);
         WizardryItems.register(modEventBus);
@@ -33,10 +37,7 @@ public class WizardryCommon {
         WizardryParticles.register(modEventBus);
         WizardryEntities.register(modEventBus);
         WizardryLoots.register(modEventBus);
-        modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
-        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
-        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
-        modEventBus.addListener(this::commonSetup);
+        WizardryAdvancementTriggers.register(modEventBus);
     }
 
     private void commonSetup(final @NonNull FMLCommonSetupEvent event) {

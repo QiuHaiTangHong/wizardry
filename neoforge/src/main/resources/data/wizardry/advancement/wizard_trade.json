@@ -1,0 +1,19 @@
+{
+    "parent": "wizardry:wizard_tower",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.wizard_trade"
+        },
+        "description": {
+            "translate": "advancement.wizardry.wizard_trade.desc"
+        },
+        "icon": {
+            "id": "minecraft:emerald"
+        }
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "wizardry:trigger_wizard_trade"
+        }
+    }
+}

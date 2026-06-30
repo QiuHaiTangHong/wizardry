@@ -1,7 +1,6 @@
 package top.begonia.wizardry.core.item.impl;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -60,8 +59,7 @@ public class ScrollItem extends Item implements ISpellCastingItem, IWorkbenchIte
 
     @Override
     public @NonNull AbstractSpell getCurrentSpell(@NonNull ItemStack stack) {
-        Holder<AbstractSpell> holder = stack.get(WizardryComponents.SPELL);
-        return (holder != null) ? holder.value() : WizardrySpells.NONE.get();
+        return stack.getOrDefault(WizardryComponents.SPELL, WizardrySpells.NONE).value();
     }
 
     @Override

@@ -1,0 +1,28 @@
+{
+    "parent": "wizardry:spell_failure",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.discover_master_spell"
+        },
+        "description": {
+            "translate": "advancement.wizardry.discover_master_spell.desc"
+        },
+        "icon": {
+            "id": "minecraft:blaze_powder"
+        },
+        "frame": "challenge"
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "wizardry:discover_spell",
+            "conditions": {
+                "spell": {
+                    "tiers": [
+                        "master"
+                    ]
+                },
+                "source": "casting"
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "parent": "wizardry:discover_spell",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.identify_spell"
+        },
+        "description": {
+            "translate": "advancement.wizardry.identify_spell.desc"
+        },
+        "icon": {
+            "id": "wizardry:identification_scroll"
+        }
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "wizardry:discover_spell",
+            "conditions": {
+                "source": "identification_scroll"
+            }
+        }
+    }
+}

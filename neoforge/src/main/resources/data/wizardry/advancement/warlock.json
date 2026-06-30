@@ -1,0 +1,474 @@
+{
+    "parent": "wizardry:armour_set",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.warlock"
+        },
+        "description": {
+            "translate": "advancement.wizardry.warlock.desc"
+        },
+        "icon": {
+            "id": "wizardry:armour",
+            "components": {
+                "wizardry:armor_material_type": "warlock",
+                "wizardry:armor_type": "helmet",
+                "wizardry:element": "magic"
+            }
+        },
+		"frame": "goal"
+    },
+    "criteria": {
+        "head": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "helmet",
+                        "wizardry:element": "magic"
+                    }
+                }
+            }
+        },
+        "chest": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "chestplate",
+                        "wizardry:element": "magic"
+                    }
+                }
+            }
+        },
+        "legs": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "leggings",
+                        "wizardry:element": "magic"
+                    }
+                }
+            }
+        },
+        "feet": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "boots",
+                        "wizardry:element": "magic"
+                    }
+                }
+            }
+        },
+        "head_fire": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "helmet",
+                        "wizardry:element": "fire"
+                    }
+                }
+            }
+        },
+        "chest_fire": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "chestplate",
+                        "wizardry:element": "fire"
+                    }
+                }
+            }
+        },
+        "legs_fire": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "leggings",
+                        "wizardry:element": "fire"
+                    }
+                }
+            }
+        },
+        "feet_fire": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "boots",
+                        "wizardry:element": "fire"
+                    }
+                }
+            }
+        },
+        "head_ice": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "helmet",
+                        "wizardry:element": "ice"
+                    }
+                }
+            }
+        },
+        "chest_ice": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "chestplate",
+                        "wizardry:element": "ice"
+                    }
+                }
+            }
+        },
+        "legs_ice": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "leggings",
+                        "wizardry:element": "ice"
+                    }
+                }
+            }
+        },
+        "feet_ice": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "boots",
+                        "wizardry:element": "ice"
+                    }
+                }
+            }
+        },
+        "head_lightning": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "helmet",
+                        "wizardry:element": "lightning"
+                    }
+                }
+            }
+        },
+        "chest_lightning": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "chestplate",
+                        "wizardry:element": "lightning"
+                    }
+                }
+            }
+        },
+        "legs_lightning": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "leggings",
+                        "wizardry:element": "lightning"
+                    }
+                }
+            }
+        },
+        "feet_lightning": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "boots",
+                        "wizardry:element": "lightning"
+                    }
+                }
+            }
+        },
+        "head_necromancy": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "helmet",
+                        "wizardry:element": "lightning"
+                    }
+                }
+            }
+        },
+        "chest_necromancy": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "chestplate",
+                        "wizardry:element": "necromancy"
+                    }
+                }
+            }
+        },
+        "legs_necromancy": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "leggings",
+                        "wizardry:element": "necromancy"
+                    }
+                }
+            }
+        },
+        "feet_necromancy": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "boots",
+                        "wizardry:element": "necromancy"
+                    }
+                }
+            }
+        },
+        "head_earth": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "helmet",
+                        "wizardry:element": "earth"
+                    }
+                }
+            }
+        },
+        "chest_earth": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "chestplate",
+                        "wizardry:element": "earth"
+                    }
+                }
+            }
+        },
+        "legs_earth": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "leggings",
+                        "wizardry:element": "earth"
+                    }
+                }
+            }
+        },
+        "feet_earth": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "boots",
+                        "wizardry:element": "earth"
+                    }
+                }
+            }
+        },
+        "head_sorcery": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "helmet",
+                        "wizardry:element": "sorcery"
+                    }
+                }
+            }
+        },
+        "chest_sorcery": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "chestplate",
+                        "wizardry:element": "sorcery"
+                    }
+                }
+            }
+        },
+        "legs_sorcery": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "leggings",
+                        "wizardry:element": "sorcery"
+                    }
+                }
+            }
+        },
+        "feet_sorcery": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "boots",
+                        "wizardry:element": "sorcery"
+                    }
+                }
+            }
+        },
+        "head_healing": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "helmet",
+                        "wizardry:element": "healing"
+                    }
+                }
+            }
+        },
+        "chest_healing": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "chestplate",
+                        "wizardry:element": "healing"
+                    }
+                }
+            }
+        },
+        "legs_healing": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "leggings",
+                        "wizardry:element": "healing"
+                    }
+                }
+            }
+        },
+        "feet_healing": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "items": {
+                    "id": "wizardry:armour",
+                    "components": {
+                        "wizardry:armor_material_type": "warlock",
+                        "wizardry:armor_type": "boots",
+                        "wizardry:element": "healing"
+                    }
+                }
+            }
+        }
+    },
+    "requirements": [
+        [
+            "head",
+            "chest",
+            "legs",
+            "feet",
+            "head_fire",
+            "chest_fire",
+            "legs_fire",
+            "feet_fire",
+            "head_ice",
+            "chest_ice",
+            "legs_ice",
+            "feet_ice",
+            "head_lightning",
+            "chest_lightning",
+            "legs_lightning",
+            "feet_lightning",
+            "head_necromancy",
+            "chest_necromancy",
+            "legs_necromancy",
+            "feet_necromancy",
+            "head_earth",
+            "chest_earth",
+            "legs_earth",
+            "feet_earth",
+            "head_sorcery",
+            "chest_sorcery",
+            "legs_sorcery",
+            "feet_sorcery",
+            "head_healing",
+            "chest_healing",
+            "legs_healing",
+            "feet_healing"
+        ]
+    ]
+}

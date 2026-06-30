@@ -21,6 +21,7 @@ import top.begonia.wizardry.client.util.ISpellSortable;
 import top.begonia.wizardry.core.entity.block.ArcaneWorkbenchBlockEntity;
 import top.begonia.wizardry.core.item.IWorkbenchItem;
 import top.begonia.wizardry.core.item.impl.SpellBookItem;
+import top.begonia.wizardry.core.registry.WizardryAdvancementTriggers;
 import top.begonia.wizardry.core.registry.WizardryBlocks;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardryMenus;
@@ -47,6 +48,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpell
     private boolean hasBookshelves;
     private List<VirtualSlot> activeBookshelfSlots = new ArrayList<>();
     private int scroll = 0;
+    public final Player player;
 
     public ArcaneWorkbenchMenu(int containerId, Inventory playerInventory, BlockPos pos) {
         this(
@@ -57,10 +59,11 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpell
         );
     }
 
-    public ArcaneWorkbenchMenu(int containerId, Inventory playerInventory, ArcaneWorkbenchBlockEntity blockEntity, ContainerLevelAccess access) {
+    public ArcaneWorkbenchMenu(int containerId, @NonNull Inventory playerInventory, ArcaneWorkbenchBlockEntity blockEntity, ContainerLevelAccess access) {
         super(WizardryMenus.ARCANE_WORKBENCH.get(), containerId);
         this.blockEntity = blockEntity;
         this.access = access;
+        this.player = playerInventory.player;
         for (int i = 0; i < 8; i++) {
             this.addSlot(new ItemClassListSlot(
                     this.blockEntity.getItemHandler(), i,
@@ -116,7 +119,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpell
 
             if (iWorkbenchItem.onApplyButtonPressed(player, centre, this.getSlot(CRYSTAL_SLOT), this.getSlot(UPGRADE_SLOT), spellBooks)) {
                 if (player instanceof ServerPlayer serverPlayer) {
-//                    WizardryAdvancementTriggers.arcane_workbench.trigger((EntityPlayerMP) player, centre.getStack());
+                    WizardryAdvancementTriggers.ARCANE_WORKBENCH.get().trigger(serverPlayer, centre.getItem());
                 }
             }
         }

@@ -1,0 +1,39 @@
+{
+    "parent": "wizardry:defeat_remnant",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.find_library_ruins"
+        },
+        "description": {
+            "translate": "advancement.wizardry.find_library_ruins.desc"
+        },
+        "icon": {
+            "id": "wizardry:bookshelf",
+            "components": {
+                "minecraft:block_state": {
+                    "wood_type": "spruce"
+                }
+            }
+        }
+    },
+    "criteria": {
+        "surface": {
+            "trigger": "wizardry:visit_structure",
+            "conditions": {
+                "structure_type": "library_ruins"
+            }
+        },
+        "underground": {
+            "trigger": "wizardry:visit_structure",
+            "conditions": {
+                "structure_type": "underground_library_ruins"
+            }
+        }
+    },
+    "requirements": [
+        [
+            "surface",
+            "underground"
+        ]
+    ]
+}

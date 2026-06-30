@@ -1,0 +1,20 @@
+{
+    "parent": "wizardry:master",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.max_out_wand"
+        },
+        "description": {
+            "translate": "advancement.wizardry.max_out_wand.desc"
+        },
+        "icon": {
+            "id": "wizardry:arcane_tome"
+        },
+		"frame": "goal"
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "wizardry:trigger_max_out_wand"
+        }
+    }
+}

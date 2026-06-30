@@ -11,20 +11,22 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.StringRepresentable;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.config.CommonConfig;
 
 import java.util.Random;
+import java.util.function.IntSupplier;
 
 public enum TierEnum implements StringRepresentable {
 
-    NOVICE(CommonConfig.noviceMaxCharge, CommonConfig.noviceUpgradeLimit, 12, Style.EMPTY.withColor(ChatFormatting.WHITE), "novice"),
-    APPRENTICE(CommonConfig.apprenticeMaxCharge, CommonConfig.apprenticeUpgradeLimit, 5, Style.EMPTY.withColor(ChatFormatting.AQUA), "apprentice"),
-    ADVANCED(CommonConfig.advancedMaxCharge, CommonConfig.advancedUpgradeLimit, 2, Style.EMPTY.withColor(ChatFormatting.DARK_BLUE), "advanced"),
-    MASTER(CommonConfig.masterMaxCharge, CommonConfig.masterUpgradeLimit, 1, Style.EMPTY.withColor(ChatFormatting.DARK_PURPLE), "master");
+    NOVICE(() -> CommonConfig.noviceMaxCharge, () -> CommonConfig.noviceUpgradeLimit, 12, Style.EMPTY.withColor(ChatFormatting.WHITE), "novice"),
+    APPRENTICE(() -> CommonConfig.apprenticeMaxCharge, () -> CommonConfig.apprenticeUpgradeLimit, 5, Style.EMPTY.withColor(ChatFormatting.AQUA), "apprentice"),
+    ADVANCED(() -> CommonConfig.advancedMaxCharge, () -> CommonConfig.advancedUpgradeLimit, 2, Style.EMPTY.withColor(ChatFormatting.DARK_BLUE), "advanced"),
+    MASTER(() -> CommonConfig.masterMaxCharge, () -> CommonConfig.masterUpgradeLimit, 1, Style.EMPTY.withColor(ChatFormatting.DARK_PURPLE), "master");
 
-    public final int maxCharge;
+    public final IntSupplier maxChargeSupplier;
+    public final IntSupplier upgradeLimitSupplier;
     public final int level;
-    public final int upgradeLimit;
     public final int weight;
     private final Style colour;
     private final String unlocalisedName;
@@ -36,16 +38,24 @@ public enum TierEnum implements StringRepresentable {
     ).cast();
     public static final TierEnum DEFAULT = TierEnum.NOVICE;
 
-    TierEnum(int maxCharge, int upgradeLimit, int weight, Style colour, String name) {
-        this.maxCharge = maxCharge;
+    TierEnum(IntSupplier maxChargeSupplier, IntSupplier upgradeLimitSupplier, int weight, Style colour, String name) {
+        this.maxChargeSupplier = maxChargeSupplier;
+        this.upgradeLimitSupplier = upgradeLimitSupplier;
         this.level = ordinal();
-        this.upgradeLimit = upgradeLimit;
         this.weight = weight;
         this.colour = colour;
         this.unlocalisedName = name;
     }
 
-    public static TierEnum fromName(String name) {
+    public int getMaxCharge() {
+        return this.maxChargeSupplier.getAsInt();
+    }
+
+    public int getUpgradeLimit() {
+        return this.upgradeLimitSupplier.getAsInt();
+    }
+
+    public static @NonNull TierEnum fromName(String name) {
 
         for (TierEnum tier : values()) {
             if (tier.unlocalisedName.equals(name)) return tier;

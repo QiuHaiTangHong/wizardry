@@ -88,15 +88,15 @@ public final class ServerConfig {
 
         RANGE_INCREASE_PER_LEVEL = BUILDER.comment("The fraction by which spell range is increased for each level of range upgrade. May cause extreme lag with high values!")
                 .translation("config." + Wizardry.MODID + ".range_increase_per_level")
-                .defineInRange("rangeIncreasePerLevel", 0.25, 0.05, (double) Integer.MAX_VALUE);
+                .defineInRange("rangeIncreasePerLevel", 0.25, 0.05, Integer.MAX_VALUE);
 
         BLAST_RADIUS_INCREASE_PER_LEVEL = BUILDER.comment("The fraction by which spell blast is increased for each level of blast upgrade. May cause extreme lag with high values!")
                 .translation("config." + Wizardry.MODID + ".blast_increase_per_level")
-                .defineInRange("blastIncreasePerLevel", 0.25, 0.05, (double) Integer.MAX_VALUE);
+                .defineInRange("blastIncreasePerLevel", 0.25, 0.05, Integer.MAX_VALUE);
 
         FROST_SLOWNESS_PER_LEVEL = BUILDER.comment("The fraction by which movement speed is reduced per level of frost effect.")
                 .translation("config." + Wizardry.MODID + ".frost_slowness_increase_per_level")
-                .defineInRange("frostSlownessIncreasePerLevel", 0.5, 0.05, (double) Integer.MAX_VALUE);
+                .defineInRange("frostSlownessIncreasePerLevel", 0.5, 0.05, Integer.MAX_VALUE);
 
         BUILDER.pop();
 
@@ -134,22 +134,22 @@ public final class ServerConfig {
     }
 
     public static final class Constants {
-        public static int MANA_PER_SHARD;
-        public static int MANA_PER_CRYSTAL;
-        public static int GRAND_CRYSTAL_MANA;
-        public static int UPGRADE_STACK_LIMIT;
-        public static int NON_ELEMENTAL_UPGRADE_BONUS;
-        public static float COOLDOWN_REDUCTION_PER_LEVEL;
-        public static float STORAGE_INCREASE_PER_LEVEL;
-        public static float POTENCY_INCREASE_PER_TIER;
-        public static float DURATION_INCREASE_PER_LEVEL;
-        public static float RANGE_INCREASE_PER_LEVEL;
-        public static float BLAST_RADIUS_INCREASE_PER_LEVEL;
-        public static double FROST_SLOWNESS_PER_LEVEL;
+        public static int manaPerShard;
+        public static int manaPerCrystal;
+        public static int grandCrystalMana;
+        public static int upgradeStackLimit;
+        public static int nonElementalUpgradeBonus;
+        public static float cooldownReductionPerLevel;
+        public static float storageIncreasePerLevel;
+        public static float potencyIncreasePerTier;
+        public static float durationIncreasePerLevel;
+        public static float rangeIncreasePerLevel;
+        public static float blastRadiusIncreasePerLevel;
+        public static double frostSlownessPerLevel;
         public static final double DECAY_SLOWNESS_PER_LEVEL = 0.2;
         public static final float FROST_FATIGUE_PER_LEVEL = 0.45f;
-        public static int CONDENSER_TICK_INTERVAL;
-        public static int SIPHON_MANA_PER_LEVEL;
+        public static int condenserTickInterval;
+        public static int siphonManaPerLevel;
         public static final int DECAY_SPREAD_INTERVAL = 8;
     }
 
@@ -161,21 +161,21 @@ public final class ServerConfig {
     public static boolean singleUseSpellBooks;
 
     private static void valueChange() {
-        Constants.MANA_PER_SHARD = MANA_PER_SHARD.get();
-        Constants.MANA_PER_CRYSTAL = MANA_PER_CRYSTAL.get();
-        Constants.GRAND_CRYSTAL_MANA = GRAND_CRYSTAL_MANA.get();
-        Constants.UPGRADE_STACK_LIMIT = UPGRADE_STACK_LIMIT.get();
-        Constants.NON_ELEMENTAL_UPGRADE_BONUS = NON_ELEMENTAL_UPGRADE_BONUS.get();
-        Constants.SIPHON_MANA_PER_LEVEL = SIPHON_MANA_PER_LEVEL.get();
-        Constants.CONDENSER_TICK_INTERVAL = CONDENSER_TICK_INTERVAL.get();
+        Constants.manaPerShard = MANA_PER_SHARD.get();
+        Constants.manaPerCrystal = MANA_PER_CRYSTAL.get();
+        Constants.grandCrystalMana = GRAND_CRYSTAL_MANA.get();
+        Constants.upgradeStackLimit = UPGRADE_STACK_LIMIT.get();
+        Constants.nonElementalUpgradeBonus = NON_ELEMENTAL_UPGRADE_BONUS.get();
+        Constants.siphonManaPerLevel = SIPHON_MANA_PER_LEVEL.get();
+        Constants.condenserTickInterval = CONDENSER_TICK_INTERVAL.get();
 
-        Constants.COOLDOWN_REDUCTION_PER_LEVEL = COOLDOWN_REDUCTION_PER_LEVEL.get().floatValue();
-        Constants.STORAGE_INCREASE_PER_LEVEL = STORAGE_INCREASE_PER_LEVEL.get().floatValue();
-        Constants.POTENCY_INCREASE_PER_TIER = POTENCY_INCREASE_PER_TIER.get().floatValue();
-        Constants.DURATION_INCREASE_PER_LEVEL = DURATION_INCREASE_PER_LEVEL.get().floatValue();
-        Constants.RANGE_INCREASE_PER_LEVEL = RANGE_INCREASE_PER_LEVEL.get().floatValue();
-        Constants.BLAST_RADIUS_INCREASE_PER_LEVEL = BLAST_RADIUS_INCREASE_PER_LEVEL.get().floatValue();
-        Constants.FROST_SLOWNESS_PER_LEVEL = FROST_SLOWNESS_PER_LEVEL.get();
+        Constants.cooldownReductionPerLevel = COOLDOWN_REDUCTION_PER_LEVEL.get().floatValue();
+        Constants.storageIncreasePerLevel = STORAGE_INCREASE_PER_LEVEL.get().floatValue();
+        Constants.potencyIncreasePerTier = POTENCY_INCREASE_PER_TIER.get().floatValue();
+        Constants.durationIncreasePerLevel = DURATION_INCREASE_PER_LEVEL.get().floatValue();
+        Constants.rangeIncreasePerLevel = RANGE_INCREASE_PER_LEVEL.get().floatValue();
+        Constants.blastRadiusIncreasePerLevel = BLAST_RADIUS_INCREASE_PER_LEVEL.get().floatValue();
+        Constants.frostSlownessPerLevel = FROST_SLOWNESS_PER_LEVEL.get();
 
         baseSpellSlots = BASE_SPELL_SLOTS.get();
         bonemealGrowsCrystalFlowers = BONEMEAL_GROWS_CRYSTAL_FLOWERS.get();
@@ -189,7 +189,7 @@ public final class ServerConfig {
     static void onLoad(final ModConfigEvent.@NonNull Loading event) {
         if (event.getConfig().getSpec() == SPEC) {
             valueChange();
-            Wizardry.LOGGER.info("Server constants synchronized with config.");
+            Wizardry.LOGGER.info("服务器常量与配置同步.");
         }
     }
 

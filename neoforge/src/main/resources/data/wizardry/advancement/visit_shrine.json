@@ -1,0 +1,27 @@
+{
+    "parent": "wizardry:defeat_evil_wizard",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.visit_shrine"
+        },
+        "description": {
+            "translate": "advancement.wizardry.visit_shrine.desc"
+        },
+        "icon": {
+            "id": "wizardry:runestone",
+            "components": {
+                "minecraft:block_state": {
+                    "element": "earth"
+                }
+            }
+        }
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "wizardry:visit_structure",
+            "conditions": {
+                "structure_type": "shrine"
+            }
+        }
+    }
+}

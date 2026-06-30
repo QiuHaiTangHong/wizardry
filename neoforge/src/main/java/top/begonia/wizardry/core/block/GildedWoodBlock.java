@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.core.constants.WoodTypeEnum;
 
 public class GildedWoodBlock extends Block {
     public static final MapCodec<GildedWoodBlock> CODEC = simpleCodec(GildedWoodBlock::new);

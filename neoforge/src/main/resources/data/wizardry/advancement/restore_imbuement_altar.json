@@ -1,0 +1,19 @@
+{
+    "parent": "wizardry:find_library_ruins",
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.restore_imbuement_altar"
+        },
+        "description": {
+            "translate": "advancement.wizardry.restore_imbuement_altar.desc"
+        },
+        "icon": {
+            "id": "wizardry:imbuement_altar"
+        }
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "wizardry:restore_imbuement_altar"
+        }
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "display": {
+        "title": {
+            "translate": "advancement.wizardry.root"
+        },
+        "description": {
+            "translate": "advancement.wizardry.root.desc"
+        },
+        "show_toast": false,
+        "announce_to_chat": false,
+        "background": "wizardry:gui/advancement_background",
+        "icon": {
+            "id": "wizardry:wizard_handbook"
+        }
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "id": "wizardry:magic_crystal",
+                        "components": {
+                            "wizardry:element": "magic"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -4,6 +4,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 
 import java.util.List;
@@ -13,17 +14,17 @@ public final class CommonConfig {
     public static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
     public static final ModConfigSpec SPEC;
 
-    public static final ModConfigSpec.IntValue NOVICE_MAX_CHARGE;
-    public static final ModConfigSpec.IntValue APPRENTICE_MAX_CHARGE;
-    public static final ModConfigSpec.IntValue ADVANCED_MAX_CHARGE;
-    public static final ModConfigSpec.IntValue MASTER_MAX_CHARGE;
+    private static final ModConfigSpec.IntValue NOVICE_MAX_CHARGE;
+    private static final ModConfigSpec.IntValue APPRENTICE_MAX_CHARGE;
+    private static final ModConfigSpec.IntValue ADVANCED_MAX_CHARGE;
+    private static final ModConfigSpec.IntValue MASTER_MAX_CHARGE;
 
-    public static final ModConfigSpec.IntValue NOVICE_UPGRADE_LIMIT;
-    public static final ModConfigSpec.IntValue APPRENTICE_UPGRADE_LIMIT;
-    public static final ModConfigSpec.IntValue ADVANCED_UPGRADE_LIMIT;
-    public static final ModConfigSpec.IntValue MASTER_UPGRADE_LIMIT;
+    private static final ModConfigSpec.IntValue NOVICE_UPGRADE_LIMIT;
+    private static final ModConfigSpec.IntValue APPRENTICE_UPGRADE_LIMIT;
+    private static final ModConfigSpec.IntValue ADVANCED_UPGRADE_LIMIT;
+    private static final ModConfigSpec.IntValue MASTER_UPGRADE_LIMIT;
 
-    public static final ModConfigSpec.BooleanValue DISCOVERY_MODE;
+    private static final ModConfigSpec.BooleanValue DISCOVERY_MODE;
 
     private static final ModConfigSpec.ConfigValue<List<? extends Integer>> PROGRESSION_REQUIREMENTS;
 
@@ -156,7 +157,7 @@ public final class CommonConfig {
     }
 
     @SubscribeEvent
-    static void onLoad(final ModConfigEvent.Loading event) {
+    static void onLoad(final ModConfigEvent.@NonNull Loading event) {
         if (event.getConfig().getSpec() == SPEC) {
             Wizardry.LOGGER.info("Loaded {} config file: {}", Wizardry.MODID, event.getConfig().getFileName());
             CommonConfig.valueChange();
@@ -164,7 +165,7 @@ public final class CommonConfig {
     }
 
     @SubscribeEvent
-    static void onReload(final ModConfigEvent.Reloading event) {
+    static void onReload(final ModConfigEvent.@NonNull Reloading event) {
         if (event.getConfig().getSpec() == SPEC) {
             Wizardry.LOGGER.info("Reloaded {} config file: {}", Wizardry.MODID, event.getConfig().getFileName());
             CommonConfig.valueChange();

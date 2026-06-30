@@ -56,12 +56,12 @@ public final class Format {
     }
 
     private static void initFormatTags() {
-        addFormatTag("example_charging_loss", "" + (ServerConfig.Constants.MANA_PER_CRYSTAL - 30));
-        addFormatTag("mana_per_crystal", "" + ServerConfig.Constants.MANA_PER_CRYSTAL);
-        addFormatTag("novice_max_charge", "" + TierEnum.NOVICE.maxCharge);
-        addFormatTag("apprentice_max_charge", "" + TierEnum.APPRENTICE.maxCharge);
-        addFormatTag("advanced_max_charge", "" + TierEnum.ADVANCED.maxCharge);
-        addFormatTag("master_max_charge", "" + TierEnum.MASTER.maxCharge);
+        addFormatTag("example_charging_loss", "" + (ServerConfig.Constants.manaPerCrystal - 30));
+        addFormatTag("mana_per_crystal", "" + ServerConfig.Constants.manaPerCrystal);
+        addFormatTag("novice_max_charge", "" + TierEnum.NOVICE.getMaxCharge());
+        addFormatTag("apprentice_max_charge", "" + TierEnum.APPRENTICE.getMaxCharge());
+        addFormatTag("advanced_max_charge", "" + TierEnum.ADVANCED.getMaxCharge());
+        addFormatTag("master_max_charge", "" + TierEnum.MASTER.getMaxCharge());
         addFormatTag("version", Wizardry.VERSION);
         addFormatTag("mcversion", Wizardry.MC_VERSION);
     }

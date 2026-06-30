@@ -1,0 +1,24 @@
+{
+    "parent": "wizardry:arcane_initiate",
+    "display": {
+        "icon": {
+            "id": "wizardry:scroll"
+        },
+        "title": {
+            "translate": "advancement.wizardry.enchant_scroll"
+        },
+        "description": {
+            "translate": "advancement.wizardry.enchant_scroll.desc"
+        }
+    },
+    "criteria": {
+        "criteria_0": {
+            "trigger": "wizardry:arcane_workbench",
+            "conditions": {
+                "item": {
+                    "id": "wizardry:scroll"
+                }
+            }
+        }
+    }
+}

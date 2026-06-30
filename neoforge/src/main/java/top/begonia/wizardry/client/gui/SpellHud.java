@@ -12,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.joml.Matrix3x2fStack;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
@@ -50,10 +51,23 @@ public class SpellHud {
     private static final int HALF_HOTBAR_WIDTH = 97;
     private static final int OFFHAND_SLOT_WIDTH = 29;
     private static final Map<String, Skin> skins = new HashMap<>();
-    private static int switchTimer = 0;
+    private static float switchTimer = 0.0f;
+    private static float prevSwitchTimer = 0.0f;
 
     public static void playSpellSwitchAnimation(boolean next) {
         switchTimer = next ? SPELL_SWITCH_TIME : -SPELL_SWITCH_TIME;
+        prevSwitchTimer = switchTimer;
+    }
+
+    public static void onPlayerTickPreEvent(PlayerTickEvent.@NonNull Pre event) {
+        if (event.getEntity() == Minecraft.getInstance().player) {
+            prevSwitchTimer = switchTimer;
+            if (switchTimer > 0) {
+                switchTimer--;
+            } else if (switchTimer < 0) {
+                switchTimer++;
+            }
+        }
     }
 
     public static void renderSpellHUD(GuiGraphicsExtractor guiGraphicsExtractor, Player player, ItemStack wand, boolean mainHand, int width, int height, float partialTicks, boolean textLayer) {
@@ -100,10 +114,7 @@ public class SpellHud {
         int maxCooldown = ((ISpellCastingItem) wand.getItem()).getCurrentMaxCooldown(wand);
 
         if (textLayer) {
-
-            float animationProgress = Math.signum(switchTimer) * ((SPELL_SWITCH_TIME - Math.abs(switchTimer) +
-                    partialTicks) / SPELL_SWITCH_TIME);
-
+            float animationProgress = Math.signum(switchTimer) * ((SPELL_SWITCH_TIME - Math.abs(Mth.lerp(partialTicks, prevSwitchTimer, switchTimer))) / SPELL_SWITCH_TIME);
             Component prevSpellName = getFormattedSpellName(((ISpellCastingItem) wand.getItem()).getPreviousSpell(wand), player, 0);
             Component spellName = getFormattedSpellName(spell, player, cooldown);
             Component nextSpellName = getFormattedSpellName(((ISpellCastingItem) wand.getItem()).getNextSpell(wand), player, 0);

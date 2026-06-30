@@ -24,15 +24,18 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.client.constants.WizardryKeyMappings;
 import top.begonia.wizardry.client.data.definition.particle.ParticleParserContextData;
 import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
 import top.begonia.wizardry.client.data.parser.*;
 import top.begonia.wizardry.client.gui.BookshelfScreen;
 import top.begonia.wizardry.client.gui.SpellHud;
+import top.begonia.wizardry.client.handle.WizardryControlHandler;
 import top.begonia.wizardry.client.model.loader.EmissionModelLoader;
 import top.begonia.wizardry.client.network.ClientPayloadHandler;
 import top.begonia.wizardry.client.particle.impl.*;
@@ -262,5 +265,25 @@ public class ClientEvents {
             Wizardry.LOGGER.info("正在向服务端发送手册配方同步请求...");
             ClientPacketDistributor.sendToServer(new HandbookRecipesRequest(handbookData.recipes()));
         }
+    }
+
+    @SubscribeEvent
+    public static void registerKeys(RegisterKeyMappingsEvent event) {
+        WizardryKeyMappings.register(event);
+    }
+
+    @SubscribeEvent
+    public static void onMouseScrollingEvent(InputEvent.MouseScrollingEvent event) {
+        WizardryControlHandler.onMouseScrollingEvent(event);
+    }
+
+    @SubscribeEvent
+    public static void onClientTick(ClientTickEvent.Pre event) {
+        WizardryControlHandler.onClientTickEvent(event);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTickPreEvent(PlayerTickEvent.@NonNull Pre event) {
+        SpellHud.onPlayerTickPreEvent(event);
     }
 }

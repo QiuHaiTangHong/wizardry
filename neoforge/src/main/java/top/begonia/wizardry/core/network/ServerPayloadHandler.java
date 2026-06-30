@@ -10,12 +10,16 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.core.data.network.handbook.HandbookRecipesRequest;
 import top.begonia.wizardry.core.data.network.handbook.HandbookRecipesResult;
 import top.begonia.wizardry.core.inventory.menu.ArcaneWorkbenchMenu;
 import top.begonia.wizardry.core.item.ISpellCastingItem;
 import top.begonia.wizardry.core.network.data.ControlInputPayload;
+import top.begonia.wizardry.core.network.data.GlyphDataPayload;
+import top.begonia.wizardry.core.network.data.SpellQuickAccessPayload;
 
 import java.util.*;
 
@@ -41,7 +45,27 @@ public class ServerPayloadHandler {
         });
     }
 
-    public static void handleControlInput(final ControlInputPayload payload, final IPayloadContext context) {
+    public static void handleGlyphData(final GlyphDataPayload payload, final @NonNull IPayloadContext context) {
+        context.enqueueWork(() -> {
+            GlyphGenerator.update(payload.names(), payload.descriptions());
+            Wizardry.LOGGER.info("已同步咒语乱码数据至客户端。");
+        });
+    }
+
+    public static void handleSpellQuickAccess(final SpellQuickAccessPayload payload, final @NonNull IPayloadContext context) {
+        if (context.player() instanceof ServerPlayer player) {
+            ItemStack wand = player.getMainHandItem();
+            if (!(wand.getItem() instanceof ISpellCastingItem)) {
+                wand = player.getOffhandItem();
+            }
+            if (wand.getItem() instanceof ISpellCastingItem iSpellCastingItem) {
+                iSpellCastingItem.selectSpell(wand, payload.index());
+                player.stopUsingItem();
+            }
+        }
+    }
+
+    public static void handleControlInput(final ControlInputPayload payload, final @NonNull IPayloadContext context) {
         context.enqueueWork(() -> {
             Player player = context.player();
             ItemStack wand = player.getMainHandItem();
@@ -99,7 +123,6 @@ public class ServerPayloadHandler {
 
                     Wizardry.LOGGER.warn("Received a resurrect button packet, but the player that sent it was not" +
                             " currently able to resurrect. This should not happen!");
-
                     break;
             }
         });
