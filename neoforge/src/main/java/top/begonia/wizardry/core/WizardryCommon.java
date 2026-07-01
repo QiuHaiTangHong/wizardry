@@ -38,6 +38,7 @@ public class WizardryCommon {
         WizardryEntities.register(modEventBus);
         WizardryLoots.register(modEventBus);
         WizardryAdvancementTriggers.register(modEventBus);
+        WizardryWorldgen.register(modEventBus);
     }
 
     private void commonSetup(final @NonNull FMLCommonSetupEvent event) {

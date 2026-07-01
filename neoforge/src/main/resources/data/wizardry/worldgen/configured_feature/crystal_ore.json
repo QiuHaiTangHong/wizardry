@@ -1,0 +1,13 @@
+{
+  "type": "wizardry:crystal_flower",
+  "config": {
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "wizardry:crystal_flower"
+      }
+    },
+    "chances_to_spawn": 2,
+    "group_size": 20
+  }
+}

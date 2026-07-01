@@ -1,11 +1,15 @@
 package top.begonia.wizardry.core.config;
 
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
 public final class ServerConfig {
@@ -16,24 +20,25 @@ public final class ServerConfig {
     private static final ModConfigSpec.IntValue MANA_PER_CRYSTAL;
     private static final ModConfigSpec.IntValue GRAND_CRYSTAL_MANA;
     private static final ModConfigSpec.IntValue UPGRADE_STACK_LIMIT;
-    public static final ModConfigSpec.IntValue NON_ELEMENTAL_UPGRADE_BONUS;
-    public static final ModConfigSpec.DoubleValue COOLDOWN_REDUCTION_PER_LEVEL;
-    public static final ModConfigSpec.DoubleValue STORAGE_INCREASE_PER_LEVEL;
-    public static final ModConfigSpec.DoubleValue POTENCY_INCREASE_PER_TIER;
-    public static final ModConfigSpec.DoubleValue DURATION_INCREASE_PER_LEVEL;
-    public static final ModConfigSpec.DoubleValue RANGE_INCREASE_PER_LEVEL;
-    public static final ModConfigSpec.DoubleValue BLAST_RADIUS_INCREASE_PER_LEVEL;
-    public static final ModConfigSpec.DoubleValue FROST_SLOWNESS_PER_LEVEL;
-    public static final ModConfigSpec.IntValue CONDENSER_TICK_INTERVAL;
-    public static final ModConfigSpec.IntValue SIPHON_MANA_PER_LEVEL;
-    public static final ModConfigSpec.IntValue BASE_SPELL_SLOTS;
-    public static final ModConfigSpec.BooleanValue BONEMEAL_GROWS_CRYSTAL_FLOWERS;
-    public static final ModConfigSpec.IntValue RECENT_SPELL_EXPIRY_TIME;
-    public static final ModConfigSpec.BooleanValue LEGACY_WAND_LEVELLING;
+    private static final ModConfigSpec.IntValue NON_ELEMENTAL_UPGRADE_BONUS;
+    private static final ModConfigSpec.DoubleValue COOLDOWN_REDUCTION_PER_LEVEL;
+    private static final ModConfigSpec.DoubleValue STORAGE_INCREASE_PER_LEVEL;
+    private static final ModConfigSpec.DoubleValue POTENCY_INCREASE_PER_TIER;
+    private static final ModConfigSpec.DoubleValue DURATION_INCREASE_PER_LEVEL;
+    private static final ModConfigSpec.DoubleValue RANGE_INCREASE_PER_LEVEL;
+    private static final ModConfigSpec.DoubleValue BLAST_RADIUS_INCREASE_PER_LEVEL;
+    private static final ModConfigSpec.DoubleValue FROST_SLOWNESS_PER_LEVEL;
+    private static final ModConfigSpec.IntValue CONDENSER_TICK_INTERVAL;
+    private static final ModConfigSpec.IntValue SIPHON_MANA_PER_LEVEL;
+    private static final ModConfigSpec.IntValue BASE_SPELL_SLOTS;
+    private static final ModConfigSpec.BooleanValue BONEMEAL_GROWS_CRYSTAL_FLOWERS;
+    private static final ModConfigSpec.IntValue RECENT_SPELL_EXPIRY_TIME;
+    private static final ModConfigSpec.BooleanValue LEGACY_WAND_LEVELLING;
+    private static final ModConfigSpec.BooleanValue PREVENT_BINDING_SAME_SPELL_TWICE_TO_WANDS;
+    private static final ModConfigSpec.BooleanValue SINGLE_USE_SPELL_BOOKS;
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> FLOWER_DIMENSIONS;
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> ORE_DIMENSIONS;
 
-    public static final ModConfigSpec.BooleanValue PREVENT_BINDING_SAME_SPELL_TWICE_TO_WANDS;
-
-    public static final ModConfigSpec.BooleanValue SINGLE_USE_SPELL_BOOKS;
 
     static {
         BUILDER.push("Gameplay");
@@ -130,6 +135,28 @@ public final class ServerConfig {
                 .translation("config." + Wizardry.MODID + ".single_use_spell_books")
                 .define("singleUseSpellBooks", false);
 
+        FLOWER_DIMENSIONS = BUILDER
+                .comment("List of dimension ids in which crystal flowers will generate.")
+                .translation("config." + Wizardry.MODID + ".flower_dimensions")
+                .worldRestart()
+                .defineListAllowEmpty(
+                        "flowerDimensions",
+                        List.of("minecraft:overworld"),
+                        () -> "minecraft:overworld",
+                        level -> level instanceof String str && Identifier.tryParse(str) != null
+                );
+
+        ORE_DIMENSIONS = BUILDER
+                .comment("List of dimension ids in which crystal ore will generate. Note that removing the overworld (id 0) from this list will make the mod VERY difficult to play!")
+                .translation("config." + Wizardry.MODID + ".ore_dimensions")
+                .worldRestart()
+                .defineListAllowEmpty(
+                        "flowerDimensions",
+                        List.of("minecraft:overworld"),
+                        () -> "minecraft:overworld",
+                        level -> level instanceof String str && Identifier.tryParse(str) != null
+                );
+
         SPEC = BUILDER.build();
     }
 
@@ -159,6 +186,8 @@ public final class ServerConfig {
     public static boolean legacyWandLevelling;
     public static boolean preventBindingSameSpellTwiceToWands;
     public static boolean singleUseSpellBooks;
+    public static List<String> flowerDimensions;
+    public static List<String> oreDimensions;
 
     private static void valueChange() {
         Constants.manaPerShard = MANA_PER_SHARD.get();
@@ -183,6 +212,8 @@ public final class ServerConfig {
         legacyWandLevelling = LEGACY_WAND_LEVELLING.get();
         preventBindingSameSpellTwiceToWands = PREVENT_BINDING_SAME_SPELL_TWICE_TO_WANDS.get();
         singleUseSpellBooks = SINGLE_USE_SPELL_BOOKS.get();
+        flowerDimensions = FLOWER_DIMENSIONS.get().stream().collect(Collectors.toUnmodifiableList());
+        oreDimensions = ORE_DIMENSIONS.get().stream().collect(Collectors.toUnmodifiableList());
     }
 
     @SubscribeEvent
