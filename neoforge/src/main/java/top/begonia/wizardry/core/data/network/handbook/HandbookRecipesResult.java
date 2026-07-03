@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 public record HandbookRecipesResult(Map<Identifier, List<RecipeDisplay>> allDisplays) implements CustomPacketPayload {
-    public static final Type<HandbookRecipesResult> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Wizardry.MODID, "result_recipe"));
+    public static final Type<HandbookRecipesResult> TYPE = new Type<>(
+            Identifier.fromNamespaceAndPath(Wizardry.MODID, "result_recipe")
+    );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, HandbookRecipesResult> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.map(

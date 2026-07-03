@@ -16,7 +16,6 @@ public final class AllyDesignationSystem {
     }
 
     public enum FriendlyFire {
-
         ALL("All", false, false),
         ONLY_PLAYERS("Only players", false, true),
         ONLY_OWNED("Only summoned/tamed creatures", true, false),

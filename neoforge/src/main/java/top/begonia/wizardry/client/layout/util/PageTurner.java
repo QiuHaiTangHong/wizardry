@@ -2,6 +2,7 @@ package top.begonia.wizardry.client.layout.util;
 
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
@@ -39,7 +40,14 @@ public final class PageTurner {
     public void prev() {
         SectionElement currentSectionElement = this.displaySection.getFirst();
         SectionElement.PageState pageState = currentSectionElement.prev();
-        if (pageState == SectionElement.PageState.HAS_TWO_PAGE) {
+        if (this.currentPage == 1) {
+            this.displaySection.clear();
+            this.sectionElementsCache.removeLast();
+            this.sectionElementsCache.addFirst(this.sectionElementsCache.getFirst());
+            this.displaySection.add(this.sectionElementsCache.get(1));
+            this.displaySection.getFirst().fillViewBackward(0, 2);
+            this.sectionCacheEndIndex = 1;
+        } else if (pageState == SectionElement.PageState.HAS_TWO_PAGE) {
             if (this.displaySection.size() == 2) {
                 this.displaySection.removeLast();
                 SectionElement prevSectionInCache = this.sectionElementsCache.getFirst();
@@ -102,6 +110,10 @@ public final class PageTurner {
             }
         } else {
             SectionElement nextSectionElement = this.sectionElementsCache.getLast();
+            if (nextSectionElement == null) {
+                currentSectionElement.fillViewForward(currentSectionElement.getPageCount() - 1, 2);
+                return;
+            }
             this.displaySection.clear();
             if (nextSectionElement.getRemainingPage() >= 2 && currentSectionElement != nextSectionElement) {
                 nextSectionElement.fillViewForward(0, 2);
@@ -110,7 +122,10 @@ public final class PageTurner {
             } else if (nextSectionElement.getRemainingPage() == 1) {
                 nextSectionElement.fillViewForward(0, 2);
                 this.displaySection.add(nextSectionElement);
-                this.displaySection.add(nextSectionElement());
+                SectionElement tempNextSectionElement = this.nextSectionElement();
+                if (tempNextSectionElement != null) {
+                    this.displaySection.add(tempNextSectionElement);
+                }
             }
         }
         this.currentPage++;
@@ -126,9 +141,14 @@ public final class PageTurner {
         return sectionElement;
     }
 
-    private @NonNull SectionElement nextSectionElement() {
+    private @Nullable SectionElement nextSectionElement() {
         this.sectionElementsCache.removeFirst();
         this.sectionCacheEndIndex++;
+        if (this.sectionCacheEndIndex == this.allSectionData.size()) {
+            this.sectionCacheEndIndex = this.allSectionData.size() - 1;
+            this.sectionElementsCache.addLast(null);
+            return null;
+        }
         String sectionElementName = this.sectionList.get(this.sectionCacheEndIndex);
         SectionElement sectionElement = new SectionElement(this.allSectionData.get(sectionElementName));
         sectionElement.format(this.context);

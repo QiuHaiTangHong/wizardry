@@ -5,6 +5,7 @@ import net.minecraft.network.chat.*;
 import net.minecraft.util.FormattedCharSequence;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.client.constants.WizardryKeyMappings;
 import top.begonia.wizardry.client.data.definition.handbook.part.ImageData;
 import top.begonia.wizardry.client.data.definition.handbook.part.RecipeTagData;
 import top.begonia.wizardry.client.layout.atom.CraftingRecipeElement;
@@ -56,6 +57,8 @@ public final class Format {
     }
 
     private static void initFormatTags() {
+        addFormatTag("next_spell_key", WizardryKeyMappings.NEXT_SPELL.getKey().getDisplayName().getString());
+        addFormatTag("previous_spell_key", WizardryKeyMappings.PREVIOUS_SPELL.getKey().getDisplayName().getString());
         addFormatTag("example_charging_loss", "" + (ServerConfig.Constants.manaPerCrystal - 30));
         addFormatTag("mana_per_crystal", "" + ServerConfig.Constants.manaPerCrystal);
         addFormatTag("novice_max_charge", "" + TierEnum.NOVICE.getMaxCharge());
@@ -195,7 +198,7 @@ public final class Format {
         Map<String, RecipeTagData> recipeDataMap = context.getRecipes();
         RecipeTagData recipeData = recipeDataMap.get(text);
         if (recipeData != null) {
-            recipeData.locations().forEach(identifier -> elementQueue.add(new CraftingRecipeElement(identifier)));
+            elementQueue.add(new CraftingRecipeElement(recipeData.locations()));
         }
     }
 

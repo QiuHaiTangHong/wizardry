@@ -23,6 +23,19 @@ import java.util.Map;
  * @date 2026.06.27
  */
 public class RegisterDataParserEvent extends Event implements IModBusEvent {
+    protected final Map<Identifier, IDataParser<?, ?, ?>> registry;
+
+    public RegisterDataParserEvent(Map<Identifier, IDataParser<?, ?, ?>> registry) {
+        this.registry = registry;
+    }
+
+    public void register(@NonNull IDataParser<?, ?, ?> parser) {
+        Identifier id = parser.getIdentifier();
+        if (id != null) {
+            this.registry.put(id, parser);
+        }
+    }
+
     /**
      * 客户端数据解析器注册事件类
      * <p> 继承自 {@code RegisterDataParserEvent}, 负责将客户端数据解析器注册到指定的注册表中
@@ -40,32 +53,14 @@ public class RegisterDataParserEvent extends Event implements IModBusEvent {
      * @since 1.0.0
      */
     public static class ClientRegisterDataParserEvent extends RegisterDataParserEvent {
-        private final Map<Identifier, IDataParser<?, ?, ?>> registry;
-
         public ClientRegisterDataParserEvent(Map<Identifier, IDataParser<?, ?, ?>> registry) {
-            this.registry = registry;
-        }
-
-        public void register(@NonNull IDataParser<?, ?, ?> parser) {
-            Identifier id = parser.getIdentifier();
-            if (id != null) {
-                this.registry.put(id, parser);
-            }
+            super(registry);
         }
     }
 
     public static class CommonRegisterDataParserEvent extends RegisterDataParserEvent {
-        private final Map<Identifier, IDataParser<?, ?, ?>> registry;
-
         public CommonRegisterDataParserEvent(Map<Identifier, IDataParser<?, ?, ?>> registry) {
-            this.registry = registry;
-        }
-
-        public void register(@NonNull IDataParser<?, ?, ?> parser) {
-            Identifier id = parser.getIdentifier();
-            if (id != null) {
-                this.registry.put(id, parser);
-            }
+            super(registry);
         }
     }
 }

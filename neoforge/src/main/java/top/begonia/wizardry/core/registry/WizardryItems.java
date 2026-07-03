@@ -23,6 +23,7 @@ import top.begonia.wizardry.core.constants.*;
 import top.begonia.wizardry.core.item.impl.*;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 import top.begonia.wizardry.core.util.ArmourHelper;
+import top.begonia.wizardry.core.util.ItemStackHelper;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -63,7 +64,7 @@ public final class WizardryItems {
             (buildCreativeModeTabContentsEvent, item) -> {
                 for (ElementEnum element : ElementEnum.values()) {
                     for (TierEnum tier : TierEnum.values()) {
-                        buildCreativeModeTabContentsEvent.accept(WandItem.getWand(tier, element));
+                        buildCreativeModeTabContentsEvent.accept(ItemStackHelper.getWand(tier, element));
                     }
                 }
             }
@@ -124,7 +125,7 @@ public final class WizardryItems {
                             if (armorType == ArmorType.BODY) {
                                 continue;
                             }
-                            buildCreativeModeTabContentsEvent.accept(ArmourHelper.generateArmour(item, element, armourMaterialType, armorType));
+                            buildCreativeModeTabContentsEvent.accept(ItemStackHelper.generateArmour(item, element, armourMaterialType, armorType));
                         }
                     }
                 }

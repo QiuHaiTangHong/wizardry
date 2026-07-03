@@ -6,6 +6,9 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.*;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.core.entity.ICustomHitbox;
 
 import java.util.List;
@@ -17,12 +20,13 @@ public final class RayTracer {
     private RayTracer() {
     }
 
-    public static Predicate<Entity> ignoreEntityFilter(Entity entity) {
+    @Contract(pure = true)
+    public static @NonNull Predicate<Entity> ignoreEntityFilter(Entity entity) {
         return e -> e == entity || (e instanceof LivingEntity livingEntity && livingEntity.deathTime > 0);
     }
 
-    public static EntityHitResult rayTrace(
-            Level level,
+    public static @Nullable EntityHitResult rayTrace(
+            @NonNull Level level,
             Entity owner,
             Vec3 origin,
             Vec3 endpoint,

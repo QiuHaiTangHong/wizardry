@@ -7,7 +7,7 @@
     ],
     "key": {
         "g": "#c:nuggets/gold",
-        "w": "minecraft:acacia_planks"
+        "w": "minecraft:spruce_planks"
     },
     "result": {
         "id": "wizardry:gilded_wood",

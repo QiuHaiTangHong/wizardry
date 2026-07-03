@@ -27,7 +27,6 @@ import java.util.*;
  *
  * @author 秋海棠红
  * @version 1.0.0
- * @email mailto:2981263417@qq.com
  * @date 2026.05.02
  * @since 1.0.0
  */
@@ -64,6 +63,10 @@ public class SectionElement implements IContainerElement {
         this.rawData = sectionData.text().orElse(new ArrayList<>());
         this.centreConfigData = sectionData.centre().orElse(new CentreConfigData(false, false));
         this.contentsConfigData = sectionData.contents().orElse(null);
+    }
+
+    public boolean isEnd() {
+        return this.currentPageIndex == this.pageElements.size() - 1;
     }
 
     public PageState next() {

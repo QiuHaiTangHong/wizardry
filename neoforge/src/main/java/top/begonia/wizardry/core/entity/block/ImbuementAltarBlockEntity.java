@@ -33,6 +33,7 @@ import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.item.impl.WizardArmourItem;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.util.ArmourHelper;
+import top.begonia.wizardry.core.util.ItemStackHelper;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -167,7 +168,7 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
         }
         if (input.getItem() instanceof WizardArmourItem wizardArmourItem && wizardArmourItem.getElement(input) == ElementEnum.DEFAULT) {
             if (Arrays.stream(receptacleElements).distinct().count() == 1 && receptacleElements[0] != null) {
-                ItemStack result = ArmourHelper.generateArmour(wizardArmourItem, receptacleElements[0], wizardArmourItem.getArmourMaterial(input), wizardArmourItem.getArmorType(input));
+                ItemStack result = ItemStackHelper.generateArmour(wizardArmourItem, receptacleElements[0], wizardArmourItem.getArmourMaterial(input), wizardArmourItem.getArmorType(input));
                 wizardArmourItem.setMana(result, wizardArmourItem.getMana(input));
                 return result;
             }

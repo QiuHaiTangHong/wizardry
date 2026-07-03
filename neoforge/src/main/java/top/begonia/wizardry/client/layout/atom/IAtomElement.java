@@ -18,7 +18,6 @@ import top.begonia.wizardry.client.layout.util.Context;
  *
  * @author 秋海棠红
  * @version 1.0.0
- * @email mailto:2981263417@qq.com
  * @date 2026.05.02
  * @since 1.0.0
  */

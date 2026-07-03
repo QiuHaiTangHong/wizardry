@@ -14,10 +14,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.display.*;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.layout.container.handbook.HandbookElement;
 import top.begonia.wizardry.client.layout.util.Context;
 import top.begonia.wizardry.client.network.ClientPayloadHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +30,6 @@ import java.util.stream.Collectors;
  *
  * @author 秋海棠红
  * @version 1.0.0
- * @email mailto:2981263417@qq.com
  * @date 2026.05.03
  * @since 1.0.0
  */
@@ -41,17 +42,17 @@ public class CraftingRecipeElement extends AbstractAtomElement {
     private static final int RESULT_X = 88;
     private static final int RESULT_Y = 20;
 
-    private List<RecipeDisplay> recipeItemData;
-    private final Identifier rawData;
+    private final List<RecipeDisplay> recipeItemData = new ArrayList<>();
+    private final List<Identifier> rawData;
 
-    public CraftingRecipeElement(Identifier recipeIdentifier) {
+    public CraftingRecipeElement(List<Identifier> recipeIdentifier) {
         this.rawData = recipeIdentifier;
     }
 
     @Override
     public void format(@NonNull Context context) {
         this.font = context.getFont();
-        this.recipeItemData = ClientPayloadHandler.getDisplays(this.rawData);
+        this.rawData.forEach(identifier -> this.recipeItemData.addAll(ClientPayloadHandler.getDisplays(identifier)));
         this.setWidth(WIDTH);
         this.setHeight(HEIGHT);
     }
@@ -66,7 +67,9 @@ public class CraftingRecipeElement extends AbstractAtomElement {
                 WIDTH, HEIGHT,
                 Context.TEXTURE_WIDTH, Context.TEXTURE_HEIGHT
         );
-        if (recipeItemData == null || recipeItemData.isEmpty() || Minecraft.getInstance().level == null) return;
+        if (recipeItemData.isEmpty() || Minecraft.getInstance().level == null) {
+            return;
+        }
         long gameMillis = Util.getMillis();
         int displayIndex = (int) ((gameMillis / 2000) % recipeItemData.size());
         RecipeDisplay display = recipeItemData.get(displayIndex);

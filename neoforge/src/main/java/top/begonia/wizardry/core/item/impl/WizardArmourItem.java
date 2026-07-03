@@ -3,6 +3,8 @@ package top.begonia.wizardry.core.item.impl;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
@@ -12,12 +14,17 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.equipment.ArmorType;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.item.IManaStoringItem;
 import top.begonia.wizardry.core.item.IWorkbenchItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;
+import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.util.ArmourHelper;
+import top.begonia.wizardry.core.util.ItemStackHelper;
 
+import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 public class WizardArmourItem extends Item implements IWorkbenchItem, IManaStoringItem {
@@ -141,13 +148,79 @@ public class WizardArmourItem extends Item implements IWorkbenchItem, IManaStori
         return 0;
     }
 
+    public static boolean doAllArmourPiecesHaveMana(LivingEntity entity) {
+        return Arrays.stream(EquipmentSlot.values())
+                .filter(slot -> slot.getType() == EquipmentSlot.Type.ANIMAL_ARMOR)
+                .noneMatch(slot -> {
+                    ItemStack stack = entity.getItemBySlot(slot);
+                    if (stack.has(WizardryComponents.MANA)) {
+                        int mana = stack.getOrDefault(WizardryComponents.MANA, 0);
+                        return mana <= 0;
+                    }
+                    return false;
+                });
+    }
+
     @Override
-    public boolean onApplyButtonPressed(Player player, Slot centre, Slot crystals, Slot upgrade, Slot[] spellBooks) {
-        return false;
+    public ItemStack applyUpgrade(@Nullable Player player, ItemStack stack, ItemStack upgrade) {
+        ArmourHelper.ArmourMaterialType originalType = ItemStackHelper.getArmourMaterialType(stack);
+        ArmorType armorType = ItemStackHelper.getArmorType(stack);
+        ElementEnum element = stack.getOrDefault(WizardryComponents.ELEMENT, ElementEnum.DEFAULT);
+        if (originalType == ArmourHelper.ArmourMaterialType.WIZARD) {
+            for (ArmourHelper.ArmourMaterialType currentType : ArmourHelper.ArmourMaterialType.values()) {
+                if (upgrade.getItem() == currentType.getBuilder().getUpgradeItem()) {
+                    ItemStack newStack = ItemStackHelper.generateArmour(WizardryItems.ARMOUR.get(), element, currentType, armorType);
+                    ((WizardArmourItem) newStack.getItem()).setMana(newStack, this.getMana(stack));
+                    upgrade.shrink(1);
+                    return newStack;
+                }
+            }
+        }
+
+        return stack;
+    }
+
+    @Override
+    public boolean onApplyButtonPressed(Player player, Slot centre, Slot crystals, @NonNull Slot upgrade, Slot[] spellBooks) {
+        boolean changed = false;
+        if (upgrade.hasItem()) {
+            ItemStack original = centre.getItem().copy();
+            centre.set(this.applyUpgrade(player, centre.getItem(), upgrade.getItem()));
+            upgrade.setChanged();
+            changed = !ItemStack.isSameItem(centre.getItem(), original);
+        }
+        if (crystals.getItem() != ItemStack.EMPTY && !this.isManaFull(centre.getItem())) {
+            int chargeDepleted = this.getManaCapacity(centre.getItem()) - this.getMana(centre.getItem());
+            int manaPerItem = crystals.getItem().getItem() instanceof IManaStoringItem ?
+                    ((IManaStoringItem) crystals.getItem().getItem()).getMana(crystals.getItem()) :
+                    crystals.getItem().getItem() instanceof MagicCrystalItem ? ServerConfig.Constants.manaPerCrystal : ServerConfig.Constants.manaPerShard;
+
+            if (crystals.getItem().getItem() == WizardryItems.CRYSTAL_SHARD.get())
+                manaPerItem = ServerConfig.Constants.manaPerShard;
+            if (crystals.getItem().getItem() == WizardryItems.GRAND_CRYSTAL.get())
+                manaPerItem = ServerConfig.Constants.grandCrystalMana;
+
+            if (crystals.getItem().getCount() * manaPerItem < chargeDepleted) {
+                this.rechargeMana(centre.getItem(), crystals.getItem().getCount() * ServerConfig.Constants.manaPerCrystal);
+                crystals.safeTake(crystals.getItem().getCount(), crystals.getItem().getMaxStackSize(), player);
+
+            } else {
+                this.setMana(centre.getItem(), this.getManaCapacity(centre.getItem()));
+                crystals.safeTake((int) Math.ceil(((double) chargeDepleted) / ServerConfig.Constants.manaPerCrystal), crystals.getItem().getMaxStackSize(), player);
+            }
+
+            changed = true;
+        }
+
+        if (changed) {
+            centre.setChanged();
+        }
+
+        return changed;
     }
 
     @Override
     public boolean showTooltip(ItemStack stack) {
-        return false;
+        return true;
     }
 }

@@ -2,12 +2,24 @@ package top.begonia.wizardry.core.util;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantable;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.Equippable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.core.constants.ElementEnum;
+import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.data.WandUpgrades;
+import top.begonia.wizardry.core.item.impl.WizardArmourItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardrySpells;
@@ -15,8 +27,7 @@ import top.begonia.wizardry.core.spell.AbstractSpell;
 
 import java.util.*;
 
-public final class WandHelper {
-
+public final class ItemStackHelper {
     private static final HashMap<Item, String> upgradeMap = new HashMap<>();
 
     public static AbstractSpell @NonNull [] getSpells(@NonNull ItemStack wand) {
@@ -77,6 +88,11 @@ public final class WandHelper {
         return WizardrySpells.NONE.get();
     }
 
+    public static @NonNull MutableComponent getScrollDisplayName(@NonNull ItemStack scroll) {
+        AbstractSpell spell = scroll.getOrDefault(WizardryComponents.SPELL.get(), WizardrySpells.NONE).value();
+        return Component.translatable("item." + Wizardry.MODID + ".scroll", spell.getDisplayName());
+    }
+
     public static void selectNextSpell(@NonNull ItemStack wand) {
         if (!wand.has(WizardryComponents.SPELLS.get())) {
             wand.set(WizardryComponents.SPELLS.get(), new ArrayList<>());
@@ -95,7 +111,6 @@ public final class WandHelper {
     public static boolean selectSpell(ItemStack wand, int index) {
         AbstractSpell[] spells = getSpells(wand);
         if (!wand.has(WizardryComponents.SPELLS.get())) {
-
 
         }
         if (index < 0 || index >= spells.length) {
@@ -121,7 +136,7 @@ public final class WandHelper {
         return (currentIndex - 1 + numberOfSpells) % numberOfSpells;
     }
 
-    public static int @NonNull [] getCooldowns(ItemStack wand) {
+    public static int @NonNull [] getCooldowns(@NonNull ItemStack wand) {
         List<Integer> cooldownList = wand.getOrDefault(WizardryComponents.COOLDOWN_ARRAY_KEY.get(), List.of());
         int[] cooldowns = new int[cooldownList.size()];
         for (int i = 0; i < cooldownList.size(); i++) {
@@ -135,7 +150,7 @@ public final class WandHelper {
             wand.remove(WizardryComponents.COOLDOWN_ARRAY_KEY.get());
             return;
         }
-        List<Integer> list = new java.util.ArrayList<>(cooldowns.length);
+        List<Integer> list = new ArrayList<>(cooldowns.length);
         for (int cooldown : cooldowns) {
             list.add(cooldown);
         }
@@ -225,7 +240,7 @@ public final class WandHelper {
         String key = upgradeMap.get(upgrade);
         if (key == null) return 0;
         WandUpgrades upgrades = wand.getOrDefault(
-                WizardryComponents.UPGRADES_KEY.get(),
+                WizardryComponents.UPGRADES.get(),
                 WandUpgrades.EMPTY
         );
         return upgrades.counts().getOrDefault(key, 0);
@@ -248,7 +263,7 @@ public final class WandHelper {
             return;
         }
         wand.update(
-                WizardryComponents.UPGRADES_KEY.get(),
+                WizardryComponents.UPGRADES.get(),
                 WandUpgrades.EMPTY,
                 current -> current.withUpgrade(key)
         );
@@ -259,7 +274,7 @@ public final class WandHelper {
     }
 
     public static @NonNull @UnmodifiableView Set<Item> getSpecialUpgrades() {
-        return Collections.unmodifiableSet(WandHelper.upgradeMap.keySet());
+        return Collections.unmodifiableSet(ItemStackHelper.upgradeMap.keySet());
     }
 
     static String getIdentifier(Item upgrade) {
@@ -287,19 +302,84 @@ public final class WandHelper {
     }
 
     public static void setProgression(@NonNull ItemStack wand, int progression) {
-        wand.set(WizardryComponents.PROGRESSION_KEY.get(), progression);
+        wand.set(WizardryComponents.PROGRESSION.get(), progression);
     }
 
     public static int getProgression(@NonNull ItemStack wand) {
-        return wand.getOrDefault(WizardryComponents.PROGRESSION_KEY.get(), 0);
+        return wand.getOrDefault(WizardryComponents.PROGRESSION.get(), 0);
     }
 
     public static void addProgression(ItemStack wand, int progression) {
         setProgression(wand, getProgression(wand) + progression);
     }
 
-
     public static boolean rechargeManaOnApplyButtonPressed(Slot centre, Slot crystals) {
         return false;
+    }
+
+    public static @NonNull TierEnum getTier(@NonNull ItemStack stack) {
+        return stack.getOrDefault(WizardryComponents.TIER, TierEnum.NOVICE);
+    }
+
+    public static void setTier(@NonNull ItemStack stack, TierEnum tier) {
+        stack.set(WizardryComponents.TIER, tier);
+    }
+
+    public static @NonNull ElementEnum getElement(@NonNull ItemStack stack) {
+        return stack.getOrDefault(WizardryComponents.ELEMENT, ElementEnum.MAGIC);
+    }
+
+    public static void setElement(@NonNull ItemStack stack, ElementEnum element) {
+        stack.set(WizardryComponents.ELEMENT, element);
+    }
+
+    public static @NonNull ItemStack getWand(TierEnum tier, ElementEnum element) {
+        ItemStack itemStack = new ItemStack(WizardryItems.WAND);
+        ItemStackHelper.setTier(itemStack, tier);
+        ItemStackHelper.setElement(itemStack, element);
+        itemStack.set(DataComponents.MAX_DAMAGE, tier.getMaxCharge());
+        return itemStack;
+    }
+
+    /**
+     * 装备生成工厂。
+     * <p>
+     * 遵循 26.1.1 的现代化全面数据组件化标准。不再依赖硬编码，而是将材质基类、子元素、最大耐久度、
+     * 可附魔状态、属性修饰符以及最重要的 {@link Equippable} 可穿戴组件(包含渲染资产 ID 映射)
+     * 统一作为独立 Component 编译写入生成的 {@link ItemStack} 中.
+     * </p>
+     *
+     * @param armourItem         模组盔甲物品基类实例
+     * @param element            装备绑定的元素核心属性
+     * @param armourMaterialType 装备所属的法袍骨骼材质分类
+     * @param armorType          装备的具体槽位物理形态(HELMET, CHESTPLATE 等)
+     * @return 包含完整数据驱动上下文组件、可直接给予玩家的 {@link ItemStack} 实例
+     */
+    public static @NonNull ItemStack generateArmour(
+            WizardArmourItem armourItem,
+            ElementEnum element,
+            ArmourHelper.@NonNull ArmourMaterialType armourMaterialType,
+            @NonNull ArmorType armorType
+    ) {
+        ItemStack itemStack = new ItemStack(armourItem);
+        ArmorMaterial armorMaterial = armourMaterialType.getBuilder().build(element);
+        itemStack.set(WizardryComponents.ARMOR_MATERIAL_TYPE, armourMaterialType);
+        itemStack.set(WizardryComponents.ARMOR_TYPE, armorType);
+        itemStack.set(WizardryComponents.ELEMENT, element);
+        itemStack.set(DataComponents.MAX_DAMAGE, armorType.getDurability(armorMaterial.durability()));
+        itemStack.set(DataComponents.MAX_STACK_SIZE, 1);
+        itemStack.set(DataComponents.DAMAGE, 0);
+        itemStack.set(DataComponents.ENCHANTABLE, new Enchantable(armorMaterial.enchantmentValue()));
+        itemStack.set(DataComponents.ATTRIBUTE_MODIFIERS, armorMaterial.createAttributes(armorType));
+        itemStack.set(DataComponents.EQUIPPABLE, Equippable.builder(armorType.getSlot()).setEquipSound(armorMaterial.equipSound()).setAsset(armorMaterial.assetId()).setAllowedEntities(EntityTypes.PLAYER).build());
+        return itemStack;
+    }
+
+    public static ArmourHelper.ArmourMaterialType getArmourMaterialType(@NonNull ItemStack stack) {
+        return stack.get(WizardryComponents.ARMOR_MATERIAL_TYPE);
+    }
+
+    public static ArmorType getArmorType(@NonNull ItemStack stack) {
+        return stack.get(WizardryComponents.ARMOR_TYPE);
     }
 }

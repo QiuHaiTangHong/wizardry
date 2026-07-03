@@ -45,7 +45,7 @@ public class WizardPlayerDataOperator {
         this.data = data;
     }
 
-    public static WizardPlayerDataOperator get(Player player) {
+    public static @NonNull WizardPlayerDataOperator get(@NonNull Player player) {
         WizardPlayerData currentData = player.getData(WizardryAttachment.WIZARD_PLAYER_DATA.get());
         return new WizardPlayerDataOperator(player, currentData);
     }
@@ -197,7 +197,7 @@ public class WizardPlayerDataOperator {
         return this.data;
     }
 
-    public void copyFrom(WizardPlayerDataOperator oldData, boolean respawn) {
+    public void copyFrom(@NonNull WizardPlayerDataOperator oldData, boolean respawn) {
         WizardPlayerData source = oldData.data;
         WizardPlayerData target = this.data;
         target.allies().clear();

@@ -13,7 +13,7 @@ import top.begonia.wizardry.core.config.CommonConfig;
 import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.config.ServerConfig;
-import top.begonia.wizardry.core.util.WandHelper;
+import top.begonia.wizardry.core.util.ItemStackHelper;
 
 @Mod(Wizardry.MODID)
 @EventBusSubscriber(modid = Wizardry.MODID)
@@ -43,7 +43,7 @@ public class WizardryCommon {
 
     private void commonSetup(final @NonNull FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            WandHelper.populateUpgradeMap();
+            ItemStackHelper.populateUpgradeMap();
             WizardryServerDataManager.getInstance().fireRegisterEvents();
         });
     }

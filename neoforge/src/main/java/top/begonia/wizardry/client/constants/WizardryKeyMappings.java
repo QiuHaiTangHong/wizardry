@@ -14,7 +14,6 @@ public class WizardryKeyMappings {
     public static final KeyMapping.Category WIZARDRY_CATEGORY = KeyMapping.Category.register(
             Identifier.fromNamespaceAndPath(Wizardry.MODID, "main")
     );
-
     public static final KeyMapping NEXT_SPELL = new KeyMapping(
             "key." + Wizardry.MODID + ".next_spell",
             KeyConflictContext.IN_GAME,

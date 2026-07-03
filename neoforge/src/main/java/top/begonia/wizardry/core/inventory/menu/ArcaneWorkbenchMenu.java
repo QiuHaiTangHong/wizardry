@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
@@ -25,6 +26,7 @@ import top.begonia.wizardry.core.registry.WizardryAdvancementTriggers;
 import top.begonia.wizardry.core.registry.WizardryBlocks;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardryMenus;
+import top.begonia.wizardry.core.util.ItemStackHelper;
 
 import java.util.*;
 
@@ -72,10 +74,11 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpell
             );
         }
         this.packInventoryInfo(EmbeddedSlot.STAFF_SLOT, 0, 7);
-        this.addSlot(new ItemListSlot(blockEntity.getItemHandler(), 8, 13, 101, 64,
-                WizardryItems.MAGIC_CRYSTAL.get(),
-                WizardryItems.CRYSTAL_SHARD.get(),
-                WizardryItems.GRAND_CRYSTAL.get())
+        Set<Item> crystals = new HashSet<>();
+        crystals.add(WizardryItems.MAGIC_CRYSTAL.get());
+        crystals.add(WizardryItems.CRYSTAL_SHARD.get());
+        crystals.add(WizardryItems.GRAND_CRYSTAL.get());
+        this.addSlot(new ItemListSlot(blockEntity.getItemHandler(), 8, 13, 101, 64, crystals)
         ).setBackground(EMPTY_SLOT_CRYSTAL);
         this.packInventoryInfo(EmbeddedSlot.CRYSTAL_SLOT, 8, 8);
         this.addSlot(new WorkbenchItemSlot(
@@ -84,12 +87,12 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpell
                 80, 64, this
         ));
         this.packInventoryInfo(EmbeddedSlot.CENTRE_SLOT, 9, 9);
-        this.addSlot(new ItemListSlot(blockEntity.getItemHandler(), 10, 147, 17, 1,
-                WizardryItems.ARCANE_TOME.get(),
-                WizardryItems.RESPLENDENT_THREAD.get(),
-                WizardryItems.CRYSTAL_SILVER_PLATING.get(),
-                WizardryItems.ETHEREAL_CRYSTALWEAVE.get()
-        )).setBackground(EMPTY_SLOT_UPGRADE);
+        Set<Item> upgrades = new HashSet<>(ItemStackHelper.getSpecialUpgrades());
+        upgrades.add(WizardryItems.ARCANE_TOME.get());
+        upgrades.add(WizardryItems.RESPLENDENT_THREAD.get());
+        upgrades.add(WizardryItems.CRYSTAL_SILVER_PLATING.get());
+        upgrades.add(WizardryItems.ETHEREAL_CRYSTALWEAVE.get());
+        this.addSlot(new ItemListSlot(blockEntity.getItemHandler(), 10, 147, 17, 1, upgrades)).setBackground(EMPTY_SLOT_UPGRADE);
         this.packInventoryInfo(EmbeddedSlot.UPGRADE_SLOT, 10, 10);
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 196));
@@ -121,6 +124,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpell
                 if (player instanceof ServerPlayer serverPlayer) {
                     WizardryAdvancementTriggers.ARCANE_WORKBENCH.get().trigger(serverPlayer, centre.getItem());
                 }
+                this.getSlot(CENTRE_SLOT).setChanged();
             }
         }
     }
@@ -132,6 +136,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpell
         if (centre.getItem().getItem() instanceof IWorkbenchItem iWorkbenchItem) {
             Slot[] spellBooks = this.slots.subList(0, 8).toArray(new Slot[8]);
             iWorkbenchItem.onClearButtonPressed(player, centre, this.getSlot(CRYSTAL_SLOT), this.getSlot(UPGRADE_SLOT), spellBooks);
+            this.getSlot(CENTRE_SLOT).setChanged();
         }
     }
 

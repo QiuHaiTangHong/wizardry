@@ -7,15 +7,16 @@ import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class ItemListSlot extends ResourceHandlerSlot {
-    private final List<Item> allowedItems;
+    private final Collection<Item> allowedItems;
     private final int stackLimit;
 
-    public ItemListSlot(ItemStacksResourceHandler itemStacksResourceHandler, int slotIndex, int x, int y, int stackLimit, Item... allowedItems) {
+    public ItemListSlot(ItemStacksResourceHandler itemStacksResourceHandler, int slotIndex, int x, int y, int stackLimit, Collection<Item> allowedItems) {
         super(itemStacksResourceHandler, itemStacksResourceHandler::set, slotIndex, x, y);
-        this.allowedItems = Arrays.asList(allowedItems);
+        this.allowedItems = allowedItems;
         this.stackLimit = stackLimit;
     }
 

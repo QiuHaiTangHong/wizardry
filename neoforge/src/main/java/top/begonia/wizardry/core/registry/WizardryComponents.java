@@ -24,13 +24,13 @@ public final class WizardryComponents {
     public static final DeferredRegister.DataComponents COMPONENTS =
             DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, Wizardry.MODID);
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<WandUpgrades>> UPGRADES_KEY =
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<WandUpgrades>> UPGRADES =
             COMPONENTS.registerComponentType("upgrades",
                     builder -> builder
                             .persistent(WandUpgrades.CODEC)
                             .networkSynchronized(WandUpgrades.STREAM_CODEC)
             );
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> PROGRESSION_KEY =
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> PROGRESSION =
             COMPONENTS.registerComponentType("progression",
                     builder -> builder
                             .persistent(Codec.INT)

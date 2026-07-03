@@ -43,10 +43,12 @@ import top.begonia.wizardry.core.item.impl.WandItem;
 import top.begonia.wizardry.core.network.data.ControlInputPayload;
 import top.begonia.wizardry.core.registry.WizardrySounds;
 import top.begonia.wizardry.core.spell.AbstractSpell;
-import top.begonia.wizardry.core.util.WandHelper;
+import top.begonia.wizardry.core.util.ItemStackHelper;
+import top.begonia.wizardry.core.util.TextHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkbenchMenu> {
     public static final Identifier texture = Identifier.fromNamespaceAndPath(Wizardry.MODID, "textures/gui/container/arcane_workbench.png");
@@ -60,15 +62,12 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     private static final int RUNE_TOP = 22;
     private static final int RUNE_WIDTH = 100;
     private static final int RUNE_HEIGHT = 100;
-
     private static final int SCROLL_BAR_LEFT = 102;
     private static final int SCROLL_BAR_TOP = 34;
     private static final int SCROLL_BAR_WIDTH = 12;
     private static final int SCROLL_BAR_HEIGHT = 178;
     private static final int SCROLL_HANDLE_HEIGHT = 15;
-
     private static final int HALO_DIAMETER = 156;
-
     private static final int TEXTURE_WIDTH = 512;
     private static final int TEXTURE_HEIGHT = 512;
     private static final int ANIMATION_DURATION = 20;
@@ -78,11 +77,12 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     private final Button[] sortButtons = new Button[3];
     public int bookshelfLabelX;
     public int bookshelfLabelY;
-    @SuppressWarnings("FieldMayBeFinal")
-    private Component bookshelfTitle;
+    private final Component bookshelfTitle;
     private Button applyBtn;
     private Button clearBtn;
     private EditBox searchEditBox;
+    private int searchBarHoverTime;
+    private boolean isSearchBarHover = false;
     private int animationTimer = 0;
     private float scroll = 0;
     private boolean scrolling = false;
@@ -161,7 +161,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         this.searchEditBox.setMaxLength(50);
         this.searchEditBox.setBordered(false);
         this.searchEditBox.setVisible(true);
-        this.searchEditBox.setTextColor(16777215);
+        this.searchEditBox.setTextColor(ARGB.color(255, 255, 255, 255));
         this.searchEditBox.setCanLoseFocus(ClientConfig.unfocusedSearchBars);
         this.searchEditBox.setFocused(!ClientConfig.unfocusedSearchBars);
         this.addRenderableWidget(this.searchEditBox);
@@ -204,30 +204,6 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         this.clearBtn.active = this.applyBtn.active = this.menu.getSlot(ArcaneWorkbenchMenu.CENTRE_SLOT).hasItem();
     }
 
-    @Override
-    public void extractContents(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
-        super.extractContents(graphics, mouseX, mouseY, partialTicks);
-        if (this.menu.slots.get(ArcaneWorkbenchMenu.CENTRE_SLOT).hasItem()) {
-
-            ItemStack stack = this.menu.slots.get(ArcaneWorkbenchMenu.CENTRE_SLOT).getItem();
-
-            if (!(stack.getItem() instanceof IWorkbenchItem)) {
-                Wizardry.LOGGER.warn("奥术工作台中央槽位的无效物品, 怎么会出现在那里?!, Render 阶段: extractContents");
-                return;
-            }
-
-            if (((IWorkbenchItem) stack.getItem()).showTooltip(stack)) {
-
-                int x = leftPos + MAIN_GUI_WIDTH + TOOLTIP_BORDER;
-                int y = TOOLTIP_BORDER + this.topPos;
-
-                for (TooltipElement element : this.tooltipElements) {
-                    y = element.drawForegroundLayer(graphics, x, y, stack, partialTicks, mouseX, mouseY);
-                }
-            }
-        }
-    }
-
     protected void extractSlots(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         this.menu.inventoryInfoIterator(ArcaneWorkbenchMenu.EmbeddedSlot.STAFF_SLOT, (_, slot) -> {
             graphics.blit(
@@ -243,7 +219,6 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                 this.extractSlot(graphics, slot, mouseX, mouseY);
             }
         }
-
     }
 
     @Override
@@ -301,30 +276,62 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                 MAIN_GUI_WIDTH, this.getImageHeight(),
                 TEXTURE_WIDTH, TEXTURE_HEIGHT
         );
+        //绘制工具提示
         if (this.menu.getSlot(ArcaneWorkbenchMenu.CENTRE_SLOT).hasItem()) {
             ItemStack stack = this.menu.getSlot(ArcaneWorkbenchMenu.CENTRE_SLOT).getItem();
             if (!(stack.getItem() instanceof IWorkbenchItem)) {
                 Wizardry.LOGGER.warn("奥术工作台中央槽位的无效物品, 怎么会出现在那里?!, Render 阶段: extractBackground");
                 return;
             }
-
             if (((IWorkbenchItem) stack.getItem()).showTooltip(stack)) {
-
                 int tooltipHeight = tooltipElements.stream().mapToInt(e -> e.getTotalHeight(stack)).sum() - tooltipElements.getLast().spaceAfter;
-
                 // Tooltip box
                 DrawingUtils.drawTexturedRect(graphics, texture, this.leftPos + MAIN_GUI_WIDTH, this.topPos, MAIN_GUI_WIDTH, 0, TOOLTIP_WIDTH,
                         TOOLTIP_BORDER + tooltipHeight, TEXTURE_WIDTH, TEXTURE_HEIGHT);
                 DrawingUtils.drawTexturedRect(graphics, texture,
                         this.leftPos + MAIN_GUI_WIDTH, this.topPos + TOOLTIP_BORDER + tooltipHeight,
                         MAIN_GUI_WIDTH, this.imageHeight - TOOLTIP_BORDER, TOOLTIP_WIDTH, TOOLTIP_BORDER, TEXTURE_WIDTH, TEXTURE_HEIGHT);
-
                 int x = this.leftPos + MAIN_GUI_WIDTH + TOOLTIP_BORDER;
                 int y = this.topPos + TOOLTIP_BORDER;
-
                 for (TooltipElement element : this.tooltipElements) {
                     y = element.drawBackgroundLayer(graphics, x, y, stack, partialTicks, mouseX, mouseY);
                 }
+            }
+        }
+    }
+
+    @Override
+    public void extractContents(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
+        super.extractContents(graphics, mouseX, mouseY, partialTicks);
+        if (this.menu.slots.get(ArcaneWorkbenchMenu.CENTRE_SLOT).hasItem()) {
+            ItemStack stack = this.menu.slots.get(ArcaneWorkbenchMenu.CENTRE_SLOT).getItem();
+            if (!(stack.getItem() instanceof IWorkbenchItem)) {
+                Wizardry.LOGGER.warn("奥术工作台中央槽位的无效物品, 怎么会出现在那里?!, Render 阶段: extractContents");
+                return;
+            }
+            if (((IWorkbenchItem) stack.getItem()).showTooltip(stack)) {
+                int x = leftPos + MAIN_GUI_WIDTH + TOOLTIP_BORDER;
+                int y = TOOLTIP_BORDER + this.topPos;
+                for (TooltipElement element : this.tooltipElements) {
+                    y = element.drawForegroundLayer(graphics, x, y, stack, partialTicks, mouseX, mouseY);
+                }
+            }
+        }
+        //绘制搜索编辑框提示
+        this.isSearchBarHover = searchEditBox.isMouseOver(mouseX, mouseY);
+        if (isSearchBarHover) {
+            if (searchBarHoverTime == SEARCH_TOOLTIP_HOVER_TIME) {
+                graphics.setTooltipForNextFrame(
+                        this.font,
+                        TextHelper.componentWithStyles(
+                                "container." + Wizardry.MODID + ".arcane_workbench.search_tooltip",
+                                TOOLTIP_SYNTAX,
+                                TOOLTIP_BODY
+                        ),
+                        Optional.empty(),
+                        mouseX,
+                        mouseY
+                );
             }
         }
     }
@@ -334,6 +341,13 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         super.containerTick();
         if (this.animationTimer > 0) {
             this.animationTimer--;
+        }
+        if (this.isSearchBarHover) {
+            if (searchBarHoverTime < SEARCH_TOOLTIP_HOVER_TIME) {
+                searchBarHoverTime++;
+            }
+        } else {
+            searchBarHoverTime = 0;
         }
     }
 
@@ -389,7 +403,6 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     }
 
     private abstract class TooltipElement {
-
         private final TooltipElement[] children;
         private final int spaceAfter;
 
@@ -526,7 +539,6 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     }
 
     private class TooltipElementProgressionBar extends TooltipElement {
-
         private static final int PROGRESSION_BAR_WIDTH = 131;
         private static final int PROGRESSION_BAR_HEIGHT = 3;
 
@@ -549,12 +561,12 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
             y += this.getFont(stack).lineHeight + LINE_SPACING_NARROW;
 
-            TierEnum tier = WandItem.getTier(stack);
+            TierEnum tier = ItemStackHelper.getTier(stack);
 
             float progressFraction = 1;
 
             if (tier != TierEnum.MASTER) {
-                progressFraction = (float) WandHelper.getProgression(stack) / TierEnum.values()[tier.level + 1].getProgression();
+                progressFraction = (float) ItemStackHelper.getProgression(stack) / TierEnum.values()[tier.level + 1].getProgression();
             }
 
             DrawingUtils.drawTexturedRect(guiGraphicsExtractor, texture, x, y, MAIN_GUI_WIDTH, ArcaneWorkbenchScreen.this.imageHeight + PROGRESSION_BAR_HEIGHT, PROGRESSION_BAR_WIDTH, PROGRESSION_BAR_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT);
@@ -565,14 +577,14 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         @Override
         protected void drawForeground(GuiGraphicsExtractor guiGraphicsExtractor, int x, int y, ItemStack stack, float partialTicks, int mouseX, int mouseY) {
 
-            TierEnum tier = WandItem.getTier(stack);
+            TierEnum tier = ItemStackHelper.getTier(stack);
 
             guiGraphicsExtractor.text(this.getFont(stack), tier.getDisplayNameWithFormatting(), x, y, ARGB.color(255, 0, 0, 0), false);
 
             if (tier != TierEnum.MASTER) {
                 TierEnum nextTier = TierEnum.values()[tier.level + 1];
                 MutableComponent s = nextTier.getDisplayName().withStyle(ChatFormatting.DARK_GRAY);
-                if (WandHelper.getProgression(stack) >= nextTier.getProgression()) {
+                if (ItemStackHelper.getProgression(stack) >= nextTier.getProgression()) {
                     s = nextTier.getDisplayNameWithFormatting();
                 }
                 guiGraphicsExtractor.text(this.getFont(stack), s, x + TOOLTIP_WIDTH - TOOLTIP_BORDER * 2 - this.getFont(stack).width(s), y, ARGB.color(255, 0, 0, 0));
@@ -694,7 +706,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     private class TooltipElementUpgradeList extends TooltipElementText {
 
         public TooltipElementUpgradeList(int spaceAfter) {
-            super(Component.translatable("container." + Wizardry.MODID + ":arcane_workbench.upgrades"),
+            super(Component.translatable("container." + Wizardry.MODID + ".arcane_workbench.upgrades"),
                     Style.EMPTY.withColor(ChatFormatting.WHITE), spaceAfter, new TooltipElementUpgrades(0));
         }
 
@@ -705,7 +717,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
         @Override
         protected boolean isVisible(ItemStack stack) {
-            return WandHelper.getTotalUpgrades(stack) > 0;
+            return ItemStackHelper.getTotalUpgrades(stack) > 0;
         }
 
     }
@@ -726,7 +738,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
         @Override
         protected int getHeight(ItemStack stack) {
-            int rows = 1 + (WandHelper.getTotalUpgrades(stack) * (ITEM_SIZE + ITEM_SPACING) - ITEM_SPACING)
+            int rows = 1 + (ItemStackHelper.getTotalUpgrades(stack) * (ITEM_SIZE + ITEM_SPACING) - ITEM_SPACING)
                     / (TOOLTIP_WIDTH - TOOLTIP_BORDER * 2);
             return rows * (ITEM_SIZE + ITEM_SPACING) - ITEM_SPACING;
         }
@@ -734,9 +746,9 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         @Override
         protected void drawBackground(GuiGraphicsExtractor guiGraphicsExtractor, int x, int y, ItemStack stack, float partialTicks, int mouseX, int mouseY) {
             int x1 = 0;
-            for (Item item : WandHelper.getSpecialUpgrades()) {
+            for (Item item : ItemStackHelper.getSpecialUpgrades()) {
 
-                int level = WandHelper.getUpgradeLevel(stack, item);
+                int level = ItemStackHelper.getUpgradeLevel(stack, item);
 
                 if (level > 0) {
 
@@ -757,31 +769,26 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
         @Override
         protected void drawForeground(GuiGraphicsExtractor guiGraphicsExtractor, int x, int y, ItemStack stack, float partialTicks, int mouseX, int mouseY) {
-
             int x1 = 0;
-
             // Wand upgrade tooltips
-            for (Item item : WandHelper.getSpecialUpgrades()) {
-
-                int level = WandHelper.getUpgradeLevel(stack, item);
-
+            for (Item item : ItemStackHelper.getSpecialUpgrades()) {
+                int level = ItemStackHelper.getUpgradeLevel(stack, item);
                 if (level > 0) {
-                    if (ArcaneWorkbenchScreen.this.isHovering(x + x1, y, ITEM_SIZE, ITEM_SIZE, mouseX, mouseY)) {
+                    if (this.isHovering(x + x1, y, ITEM_SIZE, ITEM_SIZE, mouseX, mouseY)) {
                         ItemStack upgrade = new ItemStack(item, level);
-//                        renderToolTip(upgrade, mouseX - ArcaneWorkbenchScreen.this.leftPos, mouseY - ArcaneWorkbenchScreen.this.topPos);
+                        guiGraphicsExtractor.setTooltipForNextFrame(this.getFont(stack), upgrade, mouseX, mouseY);
                     }
-
                     x1 += ITEM_SIZE + ITEM_SPACING;
-
                     if (TOOLTIP_BORDER * 2 + x1 + ITEM_SIZE > TOOLTIP_WIDTH) {
                         x1 = 0;
                         y += ITEM_SIZE + ITEM_SPACING;
                     }
-
                 }
             }
-
         }
 
+        protected boolean isHovering(int left, int top, int xSize, int ySize, int mouseX, int mouseY) {
+            return mouseX >= left && mouseX <= left + xSize && mouseY >= top && mouseY <= top + ySize;
+        }
     }
 }

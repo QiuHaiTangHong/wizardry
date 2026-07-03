@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -20,12 +19,10 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantable;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.equipment.*;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Contract;
@@ -37,8 +34,6 @@ import top.begonia.wizardry.client.model.SageArmourModel;
 import top.begonia.wizardry.client.model.WizardArmourModel;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.item.impl.ArmourUpgradeItem;
-import top.begonia.wizardry.core.item.impl.WizardArmourItem;
-import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardrySounds;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
@@ -85,7 +80,6 @@ public final class ArmourHelper {
          * 存储所有合法注册的模型图层, 用于防漏校验.
          */
         private static final Set<ModelLayerLocation> ALL_MODELS = Sets.newHashSet();
-
         public static final ArmorModelSet<ModelLayerLocation> ROBE = registerArmorSet("robe");
         public static final ArmorModelSet<ModelLayerLocation> SAGE = registerArmorSet("sage");
         public static final ArmorModelSet<ModelLayerLocation> WIZARD = registerArmorSet("wizard");
@@ -155,27 +149,27 @@ public final class ArmourHelper {
      */
     public enum ArmourMaterialType implements StringRepresentable {
         WIZARD(new MaterialBuilder<>("wizard", ModelLayers.WIZARD, WizardArmourModel::new)
-                .defense(2, 4, 5, 2)
+                .defense(2, 4, 5, 2, 0)
                 .enchantment(15)
                 .sound(WizardrySounds.ITEM_ARMOUR_EQUIP_SILK)
                 .magicBonus(0.1f, 0.0f)
         ),
         SAGE(new MaterialBuilder<>("sage", ModelLayers.SAGE, SageArmourModel::new)
-                .defense(2, 5, 6, 3)
+                .defense(2, 5, 6, 3, 0)
                 .enchantment(25)
                 .sound(WizardrySounds.ITEM_ARMOUR_EQUIP_SAGE)
                 .magicBonus(0.2f, 0.0f)
                 .upgradeItem(WizardryItems.RESPLENDENT_THREAD)
         ),
         BATTLEMAGE(new MaterialBuilder<>("battlemage", ModelLayers.ROBE, RobeArmourModel::new)
-                .defense(3, 8, 6, 3)
+                .defense(3, 8, 6, 3, 0)
                 .enchantment(15)
                 .sound(WizardrySounds.ITEM_ARMOUR_EQUIP_BATTLEMAGE).toughness(1.0F)
                 .magicBonus(0.05f, 0.05f)
                 .upgradeItem(WizardryItems.CRYSTAL_SILVER_PLATING)
         ),
         WARLOCK(new MaterialBuilder<>("warlock", ModelLayers.ROBE, RobeArmourModel::new)
-                .defense(2, 5, 4, 2)
+                .defense(2, 5, 4, 2, 0)
                 .enchantment(15)
                 .sound(WizardrySounds.ITEM_ARMOUR_EQUIP_WARLOCK)
                 .magicBonus(0.1f, 0.1f)
@@ -210,14 +204,13 @@ public final class ArmourHelper {
         private final String baseName;
         private final ArmorModelSet<ModelLayerLocation> layerLocations;
         private final Function<ModelPart, M> modelConstructor;
-        private Map<ArmorType, Integer> defense = makeDefense(0, 0, 0, 0);
-        DeferredHolder<Item, ArmourUpgradeItem> upgradeItem = null;
+        private Map<ArmorType, Integer> defense = makeDefense(0, 0, 0, 0, 0);
+        private DeferredHolder<Item, ArmourUpgradeItem> upgradeItem = null;
         private int enchantment = 10;
         private Holder<SoundEvent> sound = SoundEvents.ARMOR_EQUIP_LEATHER;
         private float toughness = 0.0F;
         private float knockback = 0.0F;
         private int durabilityMultiplier = 15;
-
         private float elementalCostReduction = 0.0f;
         private float cooldownReduction = 0.0f;
 
@@ -232,8 +225,8 @@ public final class ArmourHelper {
             return this;
         }
 
-        public MaterialBuilder<S, M> defense(int boots, int legs, int chest, int helm) {
-            this.defense = makeDefense(boots, legs, chest, helm);
+        public MaterialBuilder<S, M> defense(int boots, int legs, int chest, int helm, int body) {
+            this.defense = makeDefense(boots, legs, chest, helm, body);
             return this;
         }
 
@@ -287,6 +280,10 @@ public final class ArmourHelper {
             return this.cooldownReduction;
         }
 
+        public Item getUpgradeItem() {
+            return upgradeItem != null ? upgradeItem.get() : Items.AIR;
+        }
+
         /**
          * 融合核心元素属性，在注册表编译期动态构建并返回原版的 {@link ArmorMaterial}。
          * <p>
@@ -321,48 +318,14 @@ public final class ArmourHelper {
             );
         }
     }
-
-    private static @NonNull Map<ArmorType, Integer> makeDefense(int boots, int legs, int chest, int helm) {
+    
+    private static @NonNull Map<ArmorType, Integer> makeDefense(int boots, int legs, int chest, int helm, int body) {
         Map<ArmorType, Integer> map = new EnumMap<>(ArmorType.class);
         map.put(ArmorType.BOOTS, boots);
         map.put(ArmorType.LEGGINGS, legs);
         map.put(ArmorType.CHESTPLATE, chest);
         map.put(ArmorType.HELMET, helm);
-        map.put(ArmorType.BODY, 0);
+        map.put(ArmorType.BODY, body);
         return map;
-    }
-
-    /**
-     * 装备生成工厂。
-     * <p>
-     * 遵循 26.1.1 的现代化全面数据组件化标准。不再依赖硬编码，而是将材质基类、子元素、最大耐久度、
-     * 可附魔状态、属性修饰符以及最重要的 {@link Equippable} 可穿戴组件(包含渲染资产 ID 映射)
-     * 统一作为独立 Component 编译写入生成的 {@link ItemStack} 中.
-     * </p>
-     *
-     * @param armourItem         模组盔甲物品基类实例
-     * @param element            装备绑定的元素核心属性
-     * @param armourMaterialType 装备所属的法袍骨骼材质分类
-     * @param armorType          装备的具体槽位物理形态(HELMET, CHESTPLATE 等)
-     * @return 包含完整数据驱动上下文组件、可直接给予玩家的 {@link ItemStack} 实例
-     */
-    public static @NonNull ItemStack generateArmour(
-            WizardArmourItem armourItem,
-            ElementEnum element,
-            ArmourHelper.@NonNull ArmourMaterialType armourMaterialType,
-            @NonNull ArmorType armorType
-    ) {
-        ItemStack itemStack = new ItemStack(armourItem);
-        ArmorMaterial armorMaterial = armourMaterialType.getBuilder().build(element);
-        itemStack.set(WizardryComponents.ARMOR_MATERIAL_TYPE, armourMaterialType);
-        itemStack.set(WizardryComponents.ARMOR_TYPE, armorType);
-        itemStack.set(WizardryComponents.ELEMENT, element);
-        itemStack.set(DataComponents.MAX_DAMAGE, armorType.getDurability(armorMaterial.durability()));
-        itemStack.set(DataComponents.MAX_STACK_SIZE, 1);
-        itemStack.set(DataComponents.DAMAGE, 0);
-        itemStack.set(DataComponents.ENCHANTABLE, new Enchantable(armorMaterial.enchantmentValue()));
-        itemStack.set(DataComponents.ATTRIBUTE_MODIFIERS, armorMaterial.createAttributes(armorType));
-        itemStack.set(DataComponents.EQUIPPABLE, Equippable.builder(armorType.getSlot()).setEquipSound(armorMaterial.equipSound()).setAsset(armorMaterial.assetId()).setAllowedEntities(EntityTypes.PLAYER).build());
-        return itemStack;
     }
 }

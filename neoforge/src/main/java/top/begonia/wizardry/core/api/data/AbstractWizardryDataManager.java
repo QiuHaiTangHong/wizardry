@@ -44,8 +44,6 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
         return this.parserRegistry;
     }
 
-    protected abstract Dist getSupportedDist();
-
     public <T extends IResultData> Optional<T> getData(Identifier id, Class<T> expectedType) {
         Map<Class<? extends IResultData>, Map<Identifier, ? extends IResultData>> currentStorage = storageSnapshot;
         Map<Identifier, ? extends IResultData> typeMap = currentStorage.get(expectedType);

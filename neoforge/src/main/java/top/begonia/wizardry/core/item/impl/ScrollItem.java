@@ -21,7 +21,7 @@ import top.begonia.wizardry.core.item.IWorkbenchItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
-import top.begonia.wizardry.core.util.CommonHelper;
+import top.begonia.wizardry.core.util.ItemStackHelper;
 
 import java.util.function.Consumer;
 
@@ -69,7 +69,7 @@ public class ScrollItem extends Item implements ISpellCastingItem, IWorkbenchIte
 
     @Override
     public @NonNull Component getName(@NonNull ItemStack stack) {
-        return CommonHelper.getScrollDisplayName(stack);
+        return ItemStackHelper.getScrollDisplayName(stack);
     }
 
     @Override

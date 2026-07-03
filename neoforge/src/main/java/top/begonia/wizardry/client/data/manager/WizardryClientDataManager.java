@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModLoader;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.api.data.AbstractWizardryDataManager;
@@ -42,12 +41,7 @@ public class WizardryClientDataManager extends AbstractWizardryDataManager {
     }
 
     @Override
-    protected Dist getSupportedDist() {
-        return Dist.CLIENT;
-    }
-
-    @Override
-    protected boolean listerFilter(Identifier finalId, Identifier location, Resource resource) {
+    protected boolean listerFilter(Identifier finalId, @NonNull Identifier location, Resource resource) {
         String path = location.getPath();
         if (path.contains("texts/")) {
             return path.contains(this.expectedLanguagePath);
