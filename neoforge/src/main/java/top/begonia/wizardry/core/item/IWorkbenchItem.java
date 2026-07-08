@@ -26,8 +26,7 @@ public interface IWorkbenchItem {
 
     boolean showTooltip(ItemStack stack);
 
-    default ItemStack applyUpgrade(@Nullable Player player, ItemStack stack, ItemStack upgrade) {
-        return stack;
+    default void applyUpgrade(@Nullable Player player, Slot stack, Slot upgrade) {
     }
 
 }

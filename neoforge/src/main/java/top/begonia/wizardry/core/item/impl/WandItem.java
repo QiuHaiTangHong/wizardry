@@ -189,7 +189,7 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
 
     @Override
     public int getSpellSlotCount(ItemStack stack) {
-        return 5;
+        return BASE_SPELL_SLOTS.getAsInt() + ItemStackHelper.getUpgradeLevel(stack, WizardryItems.ATTUNEMENT_UPGRADE.get());
     }
 
     @Override
@@ -208,7 +208,9 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
     }
 
     @Override
-    public ItemStack applyUpgrade(@Nullable Player player, ItemStack wand, @NonNull ItemStack upgrade) {
+    public void applyUpgrade(@Nullable Player player, @NonNull Slot wandSlot, @NonNull Slot upgradeSlot) {
+        ItemStack wand = wandSlot.getItem();
+        ItemStack upgrade = upgradeSlot.getItem();
         if (upgrade.getItem() == WizardryItems.ARCANE_TOME.get()) {
             TierEnum nextTier = ItemStackHelper.getTier(upgrade);
             TierEnum wandTier = ItemStackHelper.getTier(wand);
@@ -229,7 +231,8 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
                 newWand.applyComponents(DataComponentMap.composite(wand.getComponents(), newWand.getComponents()));
                 ((IManaStoringItem) newWand.getItem()).setMana(newWand, this.getMana(wand));
                 upgrade.shrink(1);
-                return newWand;
+                upgradeSlot.set(upgrade);
+                wandSlot.set(newWand);
             }
         } else if (ItemStackHelper.isWandUpgrade(upgrade.getItem())) {
             Item specialUpgrade = upgrade.getItem();
@@ -267,27 +270,26 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
                         WizardryAdvancementTriggers.MAX_OUT_WAND.get().triggerFor(player);
                     }
                 }
+                upgradeSlot.set(upgrade);
+                wandSlot.set(wand);
             }
         }
-        return wand;
     }
 
     @Override
-    public boolean onApplyButtonPressed(Player player, Slot centre, Slot crystals, @NonNull Slot upgrade, Slot[] spellBooks) {
+    public boolean onApplyButtonPressed(Player player, @NonNull Slot centre, Slot crystals, @NonNull Slot upgrade, Slot[] spellBooks) {
         boolean changed = false;
         if (upgrade.hasItem()) {
             ItemStack original = centre.getItem().copy();
-            centre.set(this.applyUpgrade(player, centre.getItem(), upgrade.getItem()));
-            upgrade.setChanged();
+            this.applyUpgrade(player, centre, upgrade);
             changed = !ItemStack.isSameItem(centre.getItem(), original);
         }
-        AbstractSpell[] spells = ItemStackHelper.getSpells(centre.getItem());
+        ItemStack centreStack = centre.getItem();
+        AbstractSpell[] spells = ItemStackHelper.getSpells(centreStack);
         if (spells.length == 0) {
             spells = new AbstractSpell[BASE_SPELL_SLOTS.getAsInt()];
         }
-
-        TierEnum tier = ItemStackHelper.getTier(centre.getItem());
-
+        TierEnum tier = ItemStackHelper.getTier(centreStack);
         for (int i = 0; i < spells.length; i++) {
             ItemStack itemStack = spellBooks[i].getItem();
             if (itemStack != ItemStack.EMPTY && itemStack.getItem() instanceof SpellBookItem spellBookItem) {
@@ -304,13 +306,10 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
                 }
             }
         }
-
-        ItemStackHelper.setSpells(centre.getItem(), spells);
+        ItemStackHelper.setSpells(centreStack, spells);
+        centre.set(centreStack);
         if (ItemStackHelper.rechargeManaOnApplyButtonPressed(centre, crystals)) {
             changed = true;
-        }
-        if (changed) {
-            centre.setChanged();
         }
         return changed;
     }

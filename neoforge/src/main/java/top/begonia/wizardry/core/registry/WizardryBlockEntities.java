@@ -7,18 +7,20 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.entity.block.*;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 public final class WizardryBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Wizardry.MODID);
 
     @SafeVarargs
-    private static <T extends BlockEntity> DeferredHolder<BlockEntityType<?>, BlockEntityType<T>> registerBlockEntity(String name, BlockEntityType.BlockEntitySupplier<? extends T> factory, Supplier<? extends Block>... blocks) {
+    private static <T extends BlockEntity> @NonNull DeferredHolder<BlockEntityType<?>, BlockEntityType<T>> registerBlockEntity(String name, BlockEntityType.BlockEntitySupplier<? extends T> factory, Supplier<? extends Block>... blocks) {
         return BLOCK_ENTITIES.register(name, () -> {
-            Block[] validBlocks = java.util.Arrays.stream(blocks).map(Supplier::get).toArray(Block[]::new);
+            Block[] validBlocks = Arrays.stream(blocks).map(Supplier::get).toArray(Block[]::new);
             return new BlockEntityType<>(factory, validBlocks);
         });
     }

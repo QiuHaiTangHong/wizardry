@@ -7,6 +7,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.jspecify.annotations.NonNull;
@@ -16,6 +17,7 @@ import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.player.WizardPlayerData;
 import top.begonia.wizardry.core.data.SpellGlyph;
 import top.begonia.wizardry.core.data.spell.parser.SpellPropertiesParser;
+import top.begonia.wizardry.core.effect.impl.DecayMobEffect;
 import top.begonia.wizardry.core.network.ServerPayloadHandler;
 import top.begonia.wizardry.core.network.data.ControlInputPayload;
 import top.begonia.wizardry.core.network.data.GlyphDataPayload;
@@ -94,5 +96,10 @@ public class CommonEvent {
                 SpellQuickAccessPayload.CODEC,
                 ServerPayloadHandler::handleSpellQuickAccess
         );
+    }
+
+    @SubscribeEvent
+    public static void onEntityTickEventPre(EntityTickEvent.@NonNull Pre event) {
+        DecayMobEffect.onEntityTickEventPre(event);
     }
 }

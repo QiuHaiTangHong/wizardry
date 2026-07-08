@@ -129,18 +129,22 @@ public class WizardArmourItem extends Item implements IWorkbenchItem, IManaStori
     }
 
     @Override
-    public int getMana(@NonNull ItemStack itemStack) {
-        return itemStack.getOrDefault(WizardryComponents.MANA, 0);
+    public final void setDamage(@NonNull ItemStack stack, int damage) {
     }
 
     @Override
-    public void setMana(@NonNull ItemStack itemStack, int mana) {
-        itemStack.set(WizardryComponents.MANA, mana);
+    public int getMana(@NonNull ItemStack stack) {
+        return getManaCapacity(stack) - getDamage(stack);
+    }
+
+    @Override
+    public void setMana(@NonNull ItemStack stack, int mana) {
+        super.setDamage(stack, getManaCapacity(stack) - mana);
     }
 
     @Override
     public int getManaCapacity(@NonNull ItemStack stack) {
-        return 0;
+        return this.getMaxDamage(stack);
     }
 
     @Override
@@ -162,7 +166,9 @@ public class WizardArmourItem extends Item implements IWorkbenchItem, IManaStori
     }
 
     @Override
-    public ItemStack applyUpgrade(@Nullable Player player, ItemStack stack, ItemStack upgrade) {
+    public void applyUpgrade(@Nullable Player player, @NonNull Slot center, @NonNull Slot upgradeSlot) {
+        ItemStack stack = center.getItem();
+        ItemStack upgrade = upgradeSlot.getItem();
         ArmourHelper.ArmourMaterialType originalType = ItemStackHelper.getArmourMaterialType(stack);
         ArmorType armorType = ItemStackHelper.getArmorType(stack);
         ElementEnum element = stack.getOrDefault(WizardryComponents.ELEMENT, ElementEnum.DEFAULT);
@@ -172,12 +178,11 @@ public class WizardArmourItem extends Item implements IWorkbenchItem, IManaStori
                     ItemStack newStack = ItemStackHelper.generateArmour(WizardryItems.ARMOUR.get(), element, currentType, armorType);
                     ((WizardArmourItem) newStack.getItem()).setMana(newStack, this.getMana(stack));
                     upgrade.shrink(1);
-                    return newStack;
+                    upgradeSlot.set(upgrade);
+                    center.set(newStack);
                 }
             }
         }
-
-        return stack;
     }
 
     @Override
@@ -185,8 +190,7 @@ public class WizardArmourItem extends Item implements IWorkbenchItem, IManaStori
         boolean changed = false;
         if (upgrade.hasItem()) {
             ItemStack original = centre.getItem().copy();
-            centre.set(this.applyUpgrade(player, centre.getItem(), upgrade.getItem()));
-            upgrade.setChanged();
+            this.applyUpgrade(player, centre, upgrade);
             changed = !ItemStack.isSameItem(centre.getItem(), original);
         }
         if (crystals.getItem() != ItemStack.EMPTY && !this.isManaFull(centre.getItem())) {
@@ -195,18 +199,20 @@ public class WizardArmourItem extends Item implements IWorkbenchItem, IManaStori
                     ((IManaStoringItem) crystals.getItem().getItem()).getMana(crystals.getItem()) :
                     crystals.getItem().getItem() instanceof MagicCrystalItem ? ServerConfig.Constants.manaPerCrystal : ServerConfig.Constants.manaPerShard;
 
-            if (crystals.getItem().getItem() == WizardryItems.CRYSTAL_SHARD.get())
+            if (crystals.getItem().getItem() == WizardryItems.CRYSTAL_SHARD.get()) {
                 manaPerItem = ServerConfig.Constants.manaPerShard;
-            if (crystals.getItem().getItem() == WizardryItems.GRAND_CRYSTAL.get())
+            }
+            if (crystals.getItem().getItem() == WizardryItems.GRAND_CRYSTAL.get()) {
                 manaPerItem = ServerConfig.Constants.grandCrystalMana;
+            }
 
             if (crystals.getItem().getCount() * manaPerItem < chargeDepleted) {
                 this.rechargeMana(centre.getItem(), crystals.getItem().getCount() * ServerConfig.Constants.manaPerCrystal);
-                crystals.safeTake(crystals.getItem().getCount(), crystals.getItem().getMaxStackSize(), player);
+                crystals.getItem().shrink(crystals.getItem().getCount());
 
             } else {
                 this.setMana(centre.getItem(), this.getManaCapacity(centre.getItem()));
-                crystals.safeTake((int) Math.ceil(((double) chargeDepleted) / ServerConfig.Constants.manaPerCrystal), crystals.getItem().getMaxStackSize(), player);
+                crystals.getItem().shrink((int) Math.ceil(((double) chargeDepleted) / ServerConfig.Constants.manaPerCrystal));
             }
 
             changed = true;

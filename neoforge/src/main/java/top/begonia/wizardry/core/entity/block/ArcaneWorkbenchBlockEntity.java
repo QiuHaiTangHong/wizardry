@@ -20,7 +20,7 @@ import top.begonia.wizardry.core.inventory.handler.ArcaneWorkbenchItemHandler;
 import top.begonia.wizardry.core.registry.WizardryBlockEntities;
 
 public class ArcaneWorkbenchBlockEntity extends BlockEntity implements MenuProvider {
-    public final ArcaneWorkbenchItemHandler arcaneWorkbenchItemHandler = new ArcaneWorkbenchItemHandler(this, 11);
+    public final ArcaneWorkbenchItemHandler arcaneWorkbenchItemHandler = new ArcaneWorkbenchItemHandler(this, 61);
     public float timer = 0;
 
     public ArcaneWorkbenchBlockEntity(BlockPos pos, BlockState state) {

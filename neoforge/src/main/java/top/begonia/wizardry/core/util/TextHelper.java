@@ -14,6 +14,23 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 文本格式化工具类
+ * <p>提供一系列用于 Minecraft 聊天组件 ({@code Component}) 和格式化文本 ({@code FormattedText}) 处理的静态辅助方法
+ * <p>主要功能包括:
+ * <ul>
+ *     <li>将多行描述文本分割并转换为组件列表, 用于工具提示或聊天消息显示</li>
+ *     <li>将带有占位符的翻译字符串与已有组件拼接, 实现动态文本组合</li>
+ *     <li>根据翻译键和样式数组生成带样式切换的多行组件列表, 支持类似 BBCode 的样式区域标记</li>
+ * </ul>
+ * <p>所有方法均依赖 {@code Minecraft.getInstance().font} 提供的文本拆分器进行宽度适配, 默认工具提示换行宽度为 140 像素
+ * <p>该类为 {@code final} 工具类, 仅包含静态方法, 不应被实例化
+ *
+ * @author 秋海棠红
+ * @version 1.0.0
+ * @date 2026.07.03
+ * @since 1.0.0
+ */
 public final class TextHelper {
     private static final int TOOLTIP_WRAP_WIDTH = 140;
 

@@ -9,10 +9,10 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.entity.block.BookshelfBlockEntity;
-import top.begonia.wizardry.core.inventory.InventoryUtil;
 import top.begonia.wizardry.core.inventory.slot.BookshelfSlot;
 import top.begonia.wizardry.core.registry.WizardryBlocks;
 import top.begonia.wizardry.core.registry.WizardryMenus;
+import top.begonia.wizardry.core.util.ItemStackHelper;
 
 public class BookshelfMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
@@ -30,12 +30,7 @@ public class BookshelfMenu extends AbstractContainerMenu {
                         blockEntity.getInventory(),
                         x + BookshelfBlockEntity.SLOT_COUNT / 2 * y,
                         35 + x * 18,
-                        17 + y * 18,
-                        () -> {
-                            if (blockEntity.getLevel() != null && !blockEntity.getLevel().isClientSide()) {
-                                blockEntity.sync();
-                            }
-                        }
+                        17 + y * 18
                 ));
             }
         }
@@ -63,7 +58,7 @@ public class BookshelfMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (InventoryUtil.isBook(itemstack1)) {
+                if (ItemStackHelper.isBook(itemstack1)) {
                     if (!this.moveItemStackTo(itemstack1, 0, BookshelfBlockEntity.SLOT_COUNT, false)) {
                         return ItemStack.EMPTY;
                     }

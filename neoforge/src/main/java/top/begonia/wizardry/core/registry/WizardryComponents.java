@@ -14,7 +14,7 @@ import top.begonia.wizardry.core.constants.ArtefactTypeEnum;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.constants.ManaFlaskTypeEnum;
 import top.begonia.wizardry.core.constants.TierEnum;
-import top.begonia.wizardry.core.data.WandUpgrades;
+import top.begonia.wizardry.core.data.WandUpgradesData;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 import top.begonia.wizardry.core.util.ArmourHelper;
 
@@ -24,11 +24,11 @@ public final class WizardryComponents {
     public static final DeferredRegister.DataComponents COMPONENTS =
             DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, Wizardry.MODID);
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<WandUpgrades>> UPGRADES =
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<WandUpgradesData>> UPGRADES =
             COMPONENTS.registerComponentType("upgrades",
                     builder -> builder
-                            .persistent(WandUpgrades.CODEC)
-                            .networkSynchronized(WandUpgrades.STREAM_CODEC)
+                            .persistent(WandUpgradesData.CODEC)
+                            .networkSynchronized(WandUpgradesData.STREAM_CODEC)
             );
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> PROGRESSION =
             COMPONENTS.registerComponentType("progression",

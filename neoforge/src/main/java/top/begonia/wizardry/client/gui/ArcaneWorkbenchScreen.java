@@ -9,7 +9,9 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FontDescription;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
@@ -48,6 +50,7 @@ import top.begonia.wizardry.core.util.TextHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkbenchMenu> {
@@ -86,7 +89,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     private int animationTimer = 0;
     private float scroll = 0;
     private boolean scrolling = false;
-    private final List<TooltipElement> tooltipElements = new ArrayList<>();
+    private final List<AbstractTooltipElement> tooltipElements = new ArrayList<>();
 
     public ArcaneWorkbenchScreen(ArcaneWorkbenchMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, MAIN_GUI_WIDTH, 220);
@@ -166,11 +169,11 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         this.searchEditBox.setFocused(!ClientConfig.unfocusedSearchBars);
         this.addRenderableWidget(this.searchEditBox);
         this.tooltipElements.clear();
-        this.tooltipElements.add(new TooltipElementItemName(Style.EMPTY.withColor(ChatFormatting.WHITE), LINE_SPACING_WIDE));
-        this.tooltipElements.add(new TooltipElementManaReadout(LINE_SPACING_WIDE));
-        this.tooltipElements.add(new TooltipElementProgressionBar(LINE_SPACING_WIDE));
-        this.tooltipElements.add(new TooltipElementSpellList(LINE_SPACING_WIDE));
-        this.tooltipElements.add(new TooltipElementUpgradeList(LINE_SPACING_WIDE));
+        this.tooltipElements.add(new TooltipElementItemName(Style.EMPTY.withColor(ChatFormatting.WHITE), this.getFont(), LINE_SPACING_WIDE));
+        this.tooltipElements.add(new TooltipElementManaReadout(this.getFont(), LINE_SPACING_WIDE));
+        this.tooltipElements.add(new TooltipElementProgressionBar(this.getFont(), LINE_SPACING_WIDE));
+        this.tooltipElements.add(new TooltipElementSpellList(this.getFont(), LINE_SPACING_WIDE));
+        this.tooltipElements.add(new TooltipElementUpgradeList(this.getFont(), LINE_SPACING_WIDE));
     }
 
     protected void extractLabels(@NonNull GuiGraphicsExtractor graphics, int xm, int ym) {
@@ -191,7 +194,6 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     @Override
     public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         this.updateModuleState();
-        this.menu.updateSlotPosition();
         this.extractBackground(graphics, mouseX, mouseY, partialTicks);
         super.extractRenderState(graphics, mouseX, mouseY, partialTicks);
     }
@@ -205,15 +207,14 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     }
 
     protected void extractSlots(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        this.menu.inventoryInfoIterator(ArcaneWorkbenchMenu.EmbeddedSlot.STAFF_SLOT, (_, slot) -> {
-            graphics.blit(
-                    RenderPipelines.GUI_TEXTURED, texture,
-                    slot.x - 8, slot.y - 8,
-                    2, 222,
-                    32, 32,
-                    TEXTURE_WIDTH, TEXTURE_HEIGHT
-            );
-        });
+        this.menu.inventoryInfoIterator(ArcaneWorkbenchMenu.EmbeddedSlot.SPELL_SLOT, (_, slot) ->
+                graphics.blit(
+                        RenderPipelines.GUI_TEXTURED, texture,
+                        slot.x - 8, slot.y - 8,
+                        2, 222,
+                        32, 32,
+                        TEXTURE_WIDTH, TEXTURE_HEIGHT
+                ));
         for (Slot slot : this.menu.slots) {
             if (slot.isActive()) {
                 this.extractSlot(graphics, slot, mouseX, mouseY);
@@ -293,7 +294,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                         MAIN_GUI_WIDTH, this.imageHeight - TOOLTIP_BORDER, TOOLTIP_WIDTH, TOOLTIP_BORDER, TEXTURE_WIDTH, TEXTURE_HEIGHT);
                 int x = this.leftPos + MAIN_GUI_WIDTH + TOOLTIP_BORDER;
                 int y = this.topPos + TOOLTIP_BORDER;
-                for (TooltipElement element : this.tooltipElements) {
+                for (AbstractTooltipElement element : this.tooltipElements) {
                     y = element.drawBackgroundLayer(graphics, x, y, stack, partialTicks, mouseX, mouseY);
                 }
             }
@@ -302,6 +303,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
     @Override
     public void extractContents(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
+        searchEditBox.visible = this.menu.hasBookshelves();
         super.extractContents(graphics, mouseX, mouseY, partialTicks);
         if (this.menu.slots.get(ArcaneWorkbenchMenu.CENTRE_SLOT).hasItem()) {
             ItemStack stack = this.menu.slots.get(ArcaneWorkbenchMenu.CENTRE_SLOT).getItem();
@@ -312,7 +314,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
             if (((IWorkbenchItem) stack.getItem()).showTooltip(stack)) {
                 int x = leftPos + MAIN_GUI_WIDTH + TOOLTIP_BORDER;
                 int y = TOOLTIP_BORDER + this.topPos;
-                for (TooltipElement element : this.tooltipElements) {
+                for (AbstractTooltipElement element : this.tooltipElements) {
                     y = element.drawForegroundLayer(graphics, x, y, stack, partialTicks, mouseX, mouseY);
                 }
             }
@@ -356,10 +358,11 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                 / ArcaneWorkbenchMenu.BOOKSHELF_SLOTS_X) - ArcaneWorkbenchMenu.BOOKSHELF_SLOTS_Y);
     }
 
-    private TooltipElement @NonNull [] generateSpellEntries(int count) {
-        TooltipElement[] entries = new TooltipElement[count];
+    @SuppressWarnings("SameParameterValue")
+    private AbstractTooltipElement @NonNull [] generateSpellEntries(int count) {
+        AbstractTooltipElement[] entries = new AbstractTooltipElement[count];
         for (int i = 0; i < count; i++) {
-            entries[i] = new TooltipElementSpellEntry(i);
+            entries[i] = new TooltipElementSpellEntry(this.getFont(), i);
         }
         return entries;
     }
@@ -402,19 +405,21 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         }
     }
 
-    private abstract class TooltipElement {
-        private final TooltipElement[] children;
+    private abstract static class AbstractTooltipElement {
+        private final AbstractTooltipElement[] children;
         private final int spaceAfter;
+        private final Font font;
 
-        public TooltipElement(int spaceAfter, TooltipElement... children) {
+        public AbstractTooltipElement(int spaceAfter, Font font, AbstractTooltipElement... children) {
             this.children = children;
             this.spaceAfter = spaceAfter;
+            this.font = font;
         }
 
         public int getTotalHeight(ItemStack stack) {
             if (!this.isVisible(stack)) return 0;
             int height = this.getHeight(stack);
-            for (TooltipElement child : children) {
+            for (AbstractTooltipElement child : children) {
                 height += child.getTotalHeight(stack);
             }
             return height + spaceAfter;
@@ -426,7 +431,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
             }
             this.drawBackground(guiGraphicsExtractor, x, y, stack, partialTicks, mouseX, mouseY);
             y += this.getHeight(stack);
-            for (TooltipElement child : children) {
+            for (AbstractTooltipElement child : children) {
                 y = child.drawBackgroundLayer(guiGraphicsExtractor, x, y, stack, partialTicks, mouseX, mouseY);
             }
             return y + spaceAfter;
@@ -436,16 +441,21 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
             if (!this.isVisible(stack)) return y;
             this.drawForeground(guiGraphicsExtractor, x, y, stack, partialTicks, mouseX, mouseY);
             y += this.getHeight(stack);
-            for (TooltipElement child : children) {
+            for (AbstractTooltipElement child : children) {
                 y = child.drawForegroundLayer(guiGraphicsExtractor, x, y, stack, partialTicks, mouseX, mouseY);
             }
             return y + spaceAfter;
         }
 
-        protected Font getFont(ItemStack stack) {
-            return ArcaneWorkbenchScreen.this.getFont();
+        protected FontDescription getFontDescription(ItemStack stack) {
+            return FontDescription.DEFAULT;
         }
 
+        public final Font getFont() {
+            return this.font;
+        }
+
+        @SuppressWarnings("BooleanMethodIsAlwaysInverted")
         protected abstract boolean isVisible(ItemStack stack);
 
         protected abstract int getHeight(ItemStack stack);
@@ -453,16 +463,15 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         protected abstract void drawBackground(GuiGraphicsExtractor guiGraphicsExtractor, int x, int y, ItemStack stack, float partialTicks, int mouseX, int mouseY);
 
         protected abstract void drawForeground(GuiGraphicsExtractor guiGraphicsExtractor, int x, int y, ItemStack stack, float partialTicks, int mouseX, int mouseY);
-
     }
 
-    private class TooltipElementText extends TooltipElement {
+    private static class TooltipElementText extends AbstractTooltipElement {
 
         private final MutableComponent text;
         private final Style style;
 
-        public TooltipElementText(MutableComponent text, Style style, int spaceAfter, TooltipElement... children) {
-            super(spaceAfter, children);
+        public TooltipElementText(MutableComponent text, Style style, Font font, int spaceAfter, AbstractTooltipElement... children) {
+            super(spaceAfter, font, children);
             this.text = text;
             this.style = style;
         }
@@ -471,8 +480,12 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
             return text;
         }
 
-        protected Style getColour(ItemStack stack, float partialTicks) {
+        protected Style getColour(ItemStack stack) {
             return this.style;
+        }
+
+        protected int getAlpha(ItemStack stack, float partialTicks) {
+            return 255;
         }
 
         @Override
@@ -482,8 +495,8 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
         @Override
         protected int getHeight(ItemStack stack) {
-            return getFont(stack).split(getText(stack), TOOLTIP_WIDTH - 2 * TOOLTIP_BORDER)
-                    .size() * getFont(stack).lineHeight;
+            return this.getFont().split(getText(stack), TOOLTIP_WIDTH - 2 * TOOLTIP_BORDER)
+                    .size() * this.getFont().lineHeight;
         }
 
         @Override
@@ -493,21 +506,21 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
         @Override
         protected void drawForeground(GuiGraphicsExtractor guiGraphicsExtractor, int x, int y, ItemStack stack, float partialTicks, int mouseX, int mouseY) {
-            for (FormattedCharSequence line : getFont(stack).split(getText(stack), TOOLTIP_WIDTH - 2 * TOOLTIP_BORDER)) {
+            for (FormattedCharSequence line : this.getFont().split(getText(stack), TOOLTIP_WIDTH - 2 * TOOLTIP_BORDER)) {
                 FormattedCharSequence styledLine = (sink) -> line.accept((index, oldStyle, codepoint) -> {
-                    Style finalStyle = oldStyle.applyTo(this.getColour(stack, partialTicks));
+                    Style finalStyle = oldStyle.applyTo(this.getColour(stack).withFont(this.getFontDescription(stack)));
                     return sink.accept(index, finalStyle, codepoint);
                 });
-                guiGraphicsExtractor.text(this.getFont(stack), styledLine, x, y, ARGB.color(255, 255, 255, 255), false);
-                y += getFont(stack).lineHeight;
+                guiGraphicsExtractor.text(this.getFont(), styledLine, x, y, ARGB.color(this.getAlpha(stack, partialTicks), 255, 255, 255), false);
+                y += this.getFont().lineHeight;
             }
         }
     }
 
-    private class TooltipElementItemName extends TooltipElementText {
+    private static class TooltipElementItemName extends TooltipElementText {
 
-        public TooltipElementItemName(Style style, int spaceAfter) {
-            super(null, style, spaceAfter);
+        public TooltipElementItemName(Style style, Font font, int spaceAfter) {
+            super(null, style, font, spaceAfter);
         }
 
         @Override
@@ -517,10 +530,10 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
     }
 
-    private class TooltipElementManaReadout extends TooltipElementText {
+    private static class TooltipElementManaReadout extends TooltipElementText {
 
-        public TooltipElementManaReadout(int spaceAfter) {
-            super(null, Style.EMPTY.withColor(ChatFormatting.BLUE), spaceAfter);
+        public TooltipElementManaReadout(Font font, int spaceAfter) {
+            super(null, Style.EMPTY.withColor(ChatFormatting.BLUE), font, spaceAfter);
         }
 
         @Contract("_ -> new")
@@ -535,15 +548,14 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         protected boolean isVisible(@NonNull ItemStack stack) {
             return stack.getItem() instanceof IManaStoringItem && ((IManaStoringItem) stack.getItem()).showManaInWorkbench(Minecraft.getInstance().player, stack);
         }
-
     }
 
-    private class TooltipElementProgressionBar extends TooltipElement {
+    private class TooltipElementProgressionBar extends AbstractTooltipElement {
         private static final int PROGRESSION_BAR_WIDTH = 131;
         private static final int PROGRESSION_BAR_HEIGHT = 3;
 
-        public TooltipElementProgressionBar(int spaceAfter) {
-            super(spaceAfter);
+        public TooltipElementProgressionBar(Font font, int spaceAfter) {
+            super(spaceAfter, font);
         }
 
         @Override
@@ -553,13 +565,13 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
         @Override
         protected int getHeight(ItemStack stack) {
-            return this.getFont(stack).lineHeight + LINE_SPACING_NARROW + PROGRESSION_BAR_HEIGHT;
+            return this.getFont().lineHeight + LINE_SPACING_NARROW + PROGRESSION_BAR_HEIGHT;
         }
 
         @Override
         protected void drawBackground(GuiGraphicsExtractor guiGraphicsExtractor, int x, int y, ItemStack stack, float partialTicks, int mouseX, int mouseY) {
 
-            y += this.getFont(stack).lineHeight + LINE_SPACING_NARROW;
+            y += this.getFont().lineHeight + LINE_SPACING_NARROW;
 
             TierEnum tier = ItemStackHelper.getTier(stack);
 
@@ -575,11 +587,11 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         }
 
         @Override
-        protected void drawForeground(GuiGraphicsExtractor guiGraphicsExtractor, int x, int y, ItemStack stack, float partialTicks, int mouseX, int mouseY) {
+        protected void drawForeground(@NonNull GuiGraphicsExtractor guiGraphicsExtractor, int x, int y, ItemStack stack, float partialTicks, int mouseX, int mouseY) {
 
             TierEnum tier = ItemStackHelper.getTier(stack);
 
-            guiGraphicsExtractor.text(this.getFont(stack), tier.getDisplayNameWithFormatting(), x, y, ARGB.color(255, 0, 0, 0), false);
+            guiGraphicsExtractor.text(this.getFont(), tier.getDisplayNameWithFormatting(), x, y, ARGB.color(255, 0, 0, 0), false);
 
             if (tier != TierEnum.MASTER) {
                 TierEnum nextTier = TierEnum.values()[tier.level + 1];
@@ -587,16 +599,16 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                 if (ItemStackHelper.getProgression(stack) >= nextTier.getProgression()) {
                     s = nextTier.getDisplayNameWithFormatting();
                 }
-                guiGraphicsExtractor.text(this.getFont(stack), s, x + TOOLTIP_WIDTH - TOOLTIP_BORDER * 2 - this.getFont(stack).width(s), y, ARGB.color(255, 0, 0, 0));
+                guiGraphicsExtractor.text(this.getFont(), s, x + TOOLTIP_WIDTH - TOOLTIP_BORDER * 2 - this.getFont().width(s), y, ARGB.color(255, 0, 0, 0));
             }
         }
 
     }
 
-    private class TooltipElementSpellList extends TooltipElement {
+    private class TooltipElementSpellList extends AbstractTooltipElement {
 
-        public TooltipElementSpellList(int spaceAfter) {
-            super(spaceAfter, generateSpellEntries(8));
+        public TooltipElementSpellList(Font font, int spaceAfter) {
+            super(spaceAfter, font, generateSpellEntries(8));
         }
 
         @Override
@@ -623,9 +635,10 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     private class TooltipElementSpellEntry extends TooltipElementText {
 
         private final int index;
+        private static final FontDescription sgfDescription = new FontDescription.Resource(Identifier.withDefaultNamespace("alt"));
 
-        public TooltipElementSpellEntry(int index) {
-            super(null, Style.EMPTY.withColor(ChatFormatting.BLUE), LINE_SPACING_NARROW);
+        public TooltipElementSpellEntry(Font font, int index) {
+            super(null, Style.EMPTY.withColor(ChatFormatting.BLUE), font, LINE_SPACING_NARROW);
             this.index = index;
         }
 
@@ -634,7 +647,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
             ItemStack spellBook = ArcaneWorkbenchScreen.this.menu.slots.get(index).getItem();
 
             if (!spellBook.isEmpty() && spellBook.getItem() instanceof SpellBookItem spellBookItem) {
-                return spellBookItem.getCurrentSpell(stack);
+                return spellBookItem.getCurrentSpell(spellBook);
             } else {
                 return ((ISpellCastingItem) stack.getItem()).getSpells(stack)[index];
             }
@@ -642,33 +655,26 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
         private boolean shouldFlash(ItemStack stack) {
             ItemStack spellBook = ArcaneWorkbenchScreen.this.menu.getItemStack(index);
-            return !spellBook.isEmpty() && spellBook.getItem() instanceof SpellBookItem spellBookItem && spellBookItem.getCurrentSpell(stack) != ((ISpellCastingItem) stack.getItem()).getSpells(stack)[index];
+            return !spellBook.isEmpty() && spellBook.getItem() instanceof SpellBookItem spellBookItem && spellBookItem.getCurrentSpell(spellBook) != ((ISpellCastingItem) stack.getItem()).getSpells(stack)[index];
         }
 
-        private float getAlpha(float partialTicks) {
-            if (Minecraft.getInstance().player != null) {
-                return (Mth.sin(0.2f * (Minecraft.getInstance().player.tickCount + partialTicks)) + 1) / 4 + 0.5f;
+        @Override
+        protected int getAlpha(ItemStack stack, float partialTicks) {
+            if (Minecraft.getInstance().player != null && this.shouldFlash(stack)) {
+                return (int) (((Mth.sin(0.2f * (Minecraft.getInstance().player.tickCount + partialTicks)) + 1) / 4 + 0.5f) * 255);
             }
-            return 1.0f;
+            return 255;
         }
 
         @Override
         protected boolean isVisible(@NonNull ItemStack stack) {
-            if (stack.getItem() instanceof ISpellCastingItem iSpellCastingItem) {
-                int len = iSpellCastingItem.getSpells(stack).length;
-            }
             return stack.getItem() instanceof ISpellCastingItem iSpellCastingItem
                     && index < iSpellCastingItem.getSpells(stack).length;
         }
 
         @Override
-        protected Font getFont(ItemStack stack) {
-            return ClientHelper.shouldDisplayDiscovered(getSpell(stack), null) ? super.getFont(stack) : super.getFont(stack);
-        }
-
-        @Override
-        protected Style getColour(ItemStack stack, float partialTicks) {
-            return shouldFlash(stack) ? Style.EMPTY.withColor(DrawingUtils.makeTranslucent(0x000000, getAlpha(partialTicks))) : super.getColour(stack, partialTicks);
+        protected FontDescription getFontDescription(ItemStack stack) {
+            return ClientHelper.shouldDisplayDiscovered(this.getSpell(stack), null) ? super.getFontDescription(stack) : sgfDescription;
         }
 
         @Override
@@ -693,7 +699,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                     0, 0,
                     8, 8,
                     8, 8,
-                    ARGB.color((int) (this.shouldFlash(stack) ? this.getAlpha(partialTicks) * 255 : 255), 255, 255, 255)
+                    ARGB.color(this.shouldFlash(stack) ? this.getAlpha(stack, partialTicks) : 255, 255, 255, 255)
             );
         }
 
@@ -703,11 +709,11 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         }
     }
 
-    private class TooltipElementUpgradeList extends TooltipElementText {
+    private static class TooltipElementUpgradeList extends TooltipElementText {
 
-        public TooltipElementUpgradeList(int spaceAfter) {
+        public TooltipElementUpgradeList(Font font, int spaceAfter) {
             super(Component.translatable("container." + Wizardry.MODID + ".arcane_workbench.upgrades"),
-                    Style.EMPTY.withColor(ChatFormatting.WHITE), spaceAfter, new TooltipElementUpgrades(0));
+                    Style.EMPTY.withColor(ChatFormatting.WHITE), font, spaceAfter, new TooltipElementUpgrades(font, 0));
         }
 
         @Override
@@ -722,13 +728,13 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
     }
 
-    private class TooltipElementUpgrades extends TooltipElement {
+    private static class TooltipElementUpgrades extends AbstractTooltipElement {
 
         private static final int ITEM_SIZE = 16;
         private static final int ITEM_SPACING = 2;
 
-        public TooltipElementUpgrades(int spaceAfter) {
-            super(spaceAfter);
+        public TooltipElementUpgrades(Font font, int spaceAfter) {
+            super(spaceAfter, font);
         }
 
         @Override
@@ -746,19 +752,14 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         @Override
         protected void drawBackground(GuiGraphicsExtractor guiGraphicsExtractor, int x, int y, ItemStack stack, float partialTicks, int mouseX, int mouseY) {
             int x1 = 0;
-            for (Item item : ItemStackHelper.getSpecialUpgrades()) {
-
-                int level = ItemStackHelper.getUpgradeLevel(stack, item);
-
+            for (Map.Entry<Holder<Item>, Integer> entry : ItemStackHelper.getSpecialUpgrades(stack).counts().entrySet()) {
+                Holder<Item> itemHolder = entry.getKey();
+                int level = entry.getValue();
                 if (level > 0) {
-
-                    ItemStack upgrade = new ItemStack(item, level);
-
+                    ItemStack upgrade = new ItemStack(itemHolder, level);
                     guiGraphicsExtractor.item(upgrade, x + x1, y);
-                    guiGraphicsExtractor.itemDecorations(this.getFont(stack), upgrade, x + x1, y, null);
-
+                    guiGraphicsExtractor.itemDecorations(this.getFont(), upgrade, x + x1, y, null);
                     x1 += ITEM_SIZE + ITEM_SPACING;
-
                     if (x1 + ITEM_SIZE > TOOLTIP_WIDTH - TOOLTIP_BORDER * 2) {
                         x1 = 0;
                         y += ITEM_SIZE + ITEM_SPACING;
@@ -771,12 +772,13 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         protected void drawForeground(GuiGraphicsExtractor guiGraphicsExtractor, int x, int y, ItemStack stack, float partialTicks, int mouseX, int mouseY) {
             int x1 = 0;
             // Wand upgrade tooltips
-            for (Item item : ItemStackHelper.getSpecialUpgrades()) {
-                int level = ItemStackHelper.getUpgradeLevel(stack, item);
+            for (Map.Entry<Holder<Item>, Integer> entry : ItemStackHelper.getSpecialUpgrades(stack).counts().entrySet()) {
+                Holder<Item> itemHolder = entry.getKey();
+                int level = entry.getValue();
                 if (level > 0) {
                     if (this.isHovering(x + x1, y, ITEM_SIZE, ITEM_SIZE, mouseX, mouseY)) {
-                        ItemStack upgrade = new ItemStack(item, level);
-                        guiGraphicsExtractor.setTooltipForNextFrame(this.getFont(stack), upgrade, mouseX, mouseY);
+                        ItemStack upgrade = new ItemStack(itemHolder, level);
+                        guiGraphicsExtractor.setTooltipForNextFrame(this.getFont(), upgrade, mouseX, mouseY);
                     }
                     x1 += ITEM_SIZE + ITEM_SPACING;
                     if (TOOLTIP_BORDER * 2 + x1 + ITEM_SIZE > TOOLTIP_WIDTH) {
@@ -787,6 +789,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
             }
         }
 
+        @SuppressWarnings("SameParameterValue")
         protected boolean isHovering(int left, int top, int xSize, int ySize, int mouseX, int mouseY) {
             return mouseX >= left && mouseX <= left + xSize && mouseY >= top && mouseY <= top + ySize;
         }

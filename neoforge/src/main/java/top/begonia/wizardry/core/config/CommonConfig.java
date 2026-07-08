@@ -13,25 +13,24 @@ import java.util.List;
 public final class CommonConfig {
     public static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
     public static final ModConfigSpec SPEC;
-
     private static final ModConfigSpec.IntValue NOVICE_MAX_CHARGE;
     private static final ModConfigSpec.IntValue APPRENTICE_MAX_CHARGE;
     private static final ModConfigSpec.IntValue ADVANCED_MAX_CHARGE;
     private static final ModConfigSpec.IntValue MASTER_MAX_CHARGE;
-
     private static final ModConfigSpec.IntValue NOVICE_UPGRADE_LIMIT;
     private static final ModConfigSpec.IntValue APPRENTICE_UPGRADE_LIMIT;
     private static final ModConfigSpec.IntValue ADVANCED_UPGRADE_LIMIT;
     private static final ModConfigSpec.IntValue MASTER_UPGRADE_LIMIT;
-
     private static final ModConfigSpec.BooleanValue DISCOVERY_MODE;
-
     private static final ModConfigSpec.ConfigValue<List<? extends Integer>> PROGRESSION_REQUIREMENTS;
-
-    private static final ModConfigSpec.BooleanValue FLESH_SPELLS_CAUSE_SLOWNESS;
-    private static final ModConfigSpec.DoubleValue IRON_FLESH_ARMOR_BONUS;
     private static final ModConfigSpec.IntValue BOOKSHELF_SEARCH_RADIUS;
     private static final ModConfigSpec.ConfigValue<List<? extends String>> BOOKSHELF_BLOCKS;
+    private static final ModConfigSpec.BooleanValue FLESH_SPELLS_CAUSE_SLOWNESS;
+    private static final ModConfigSpec.DoubleValue DIAMOND_FLESH_ARMOR_BONUS;
+    private static final ModConfigSpec.DoubleValue DIAMOND_FLESH_ARMOR_TOUGHNESS_BONUS;
+    private static final ModConfigSpec.DoubleValue IRON_FLESH_ARMOR_BONUS;
+    private static final ModConfigSpec.DoubleValue OAK_FLESH_ARMOR_BONUS;
+    private static final ModConfigSpec.DoubleValue OAK_FLESH_HEALTH_BONUS;
 
     static {
         BUILDER.push("General Settings");
@@ -94,7 +93,6 @@ public final class CommonConfig {
                 .translation("config." + Wizardry.MODID + ".flesh_spells_cause_slowness")
                 .worldRestart()
                 .define("fleshSpellsCauseSlowness", true);
-
         IRON_FLESH_ARMOR_BONUS = BUILDER
                 .comment("Armor bonus provided by the IronFlesh spell.")
                 .translation("config." + Wizardry.MODID + ".iron_flesh_armor_bonus")
@@ -110,6 +108,26 @@ public final class CommonConfig {
                 .comment("List of registry names of blocks that count as bookshelves for the arcane workbench and lectern. Block names are not case sensitive. For mod blocks, prefix with the mod ID (e.g. " + Wizardry.MODID + ":oak_bookshelf).")
                 .worldRestart()
                 .defineList("bookshelfBlocks", List.of("oak", "spruce", "birch", "jungle", "acacia", "dark_oak"), o -> o instanceof String);
+        DIAMOND_FLESH_ARMOR_BONUS = BUILDER
+                .translation("config." + Wizardry.MODID + ".diamond_flesh_armor_bonus")
+                .comment("Armor bonus provided by the DiamondFlesh spell.")
+                .worldRestart()
+                .defineInRange("diamondFleshArmorBonus", 4.0, 0.0, 100.0);
+        DIAMOND_FLESH_ARMOR_TOUGHNESS_BONUS = BUILDER
+                .translation("config." + Wizardry.MODID + ".diamond_flesh_armor_toughness_bonus")
+                .comment("Armor toughness bonus provided by the DiamondFlesh spell.")
+                .worldRestart()
+                .defineInRange("diamondFleshArmorToughnessBonus", 3.0, 0.0, 100.0);
+        OAK_FLESH_ARMOR_BONUS = BUILDER
+                .translation("config." + Wizardry.MODID + ".oak_flesh_armor_bonus")
+                .comment("Armor bonus provided by the OakFlesh spell.")
+                .worldRestart()
+                .defineInRange("oakFleshArmorBonus", 3.0, 0.0, 100.0);
+        OAK_FLESH_HEALTH_BONUS = BUILDER
+                .translation("config." + Wizardry.MODID + ".oak_flesh_health_bonus")
+                .comment("Health bonus provided by the OakFlesh spell (as a multiplier, e.g., 0.2 = 20% increase).")
+                .worldRestart()
+                .defineInRange("oakFleshHealthBonus", 0.2, 0.0, 100.0);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
@@ -118,42 +136,40 @@ public final class CommonConfig {
     public static int apprenticeMaxCharge;
     public static int advancedMaxCharge;
     public static int masterMaxCharge;
-
     public static int noviceUpgradeLimit;
     public static int apprenticeUpgradeLimit;
     public static int advancedUpgradeLimit;
     public static int masterUpgradeLimit;
-
     public static int[] progressionRequirements;
     public static boolean discoveryMode;
-
-    public static boolean fleshSpellsCauseSlowness;
-
-    public static double ironFleshArmorBonus;
-
     public static int bookshelfSearchRadius;
-
     public static List<? extends String> bookshelfBlocks;
+    public static boolean fleshSpellsCauseSlowness;
+    public static double diamondFleshArmorBonus;
+    public static double diamondFleshArmorToughnessBonus;
+    public static double ironFleshArmorBonus;
+    public static double oakFleshArmorBonus;
+    public static double oakFleshHealthBonus;
 
     private static void valueChange() {
         noviceMaxCharge = NOVICE_MAX_CHARGE.get();
         apprenticeMaxCharge = APPRENTICE_MAX_CHARGE.get();
         advancedMaxCharge = ADVANCED_MAX_CHARGE.get();
         masterMaxCharge = MASTER_MAX_CHARGE.get();
-
         noviceUpgradeLimit = NOVICE_UPGRADE_LIMIT.get();
         apprenticeUpgradeLimit = APPRENTICE_UPGRADE_LIMIT.get();
         advancedUpgradeLimit = ADVANCED_UPGRADE_LIMIT.get();
         masterUpgradeLimit = MASTER_UPGRADE_LIMIT.get();
-
         progressionRequirements = PROGRESSION_REQUIREMENTS.get().stream().mapToInt(Integer::intValue).toArray();
         discoveryMode = DISCOVERY_MODE.get();
-
         fleshSpellsCauseSlowness = FLESH_SPELLS_CAUSE_SLOWNESS.get();
         ironFleshArmorBonus = IRON_FLESH_ARMOR_BONUS.get();
-
         bookshelfSearchRadius = BOOKSHELF_SEARCH_RADIUS.get();
         bookshelfBlocks = BOOKSHELF_BLOCKS.get();
+        diamondFleshArmorBonus = DIAMOND_FLESH_ARMOR_BONUS.get();
+        diamondFleshArmorToughnessBonus = DIAMOND_FLESH_ARMOR_TOUGHNESS_BONUS.get();
+        oakFleshArmorBonus = OAK_FLESH_ARMOR_BONUS.get();
+        oakFleshHealthBonus = OAK_FLESH_HEALTH_BONUS.get();
     }
 
     @SubscribeEvent

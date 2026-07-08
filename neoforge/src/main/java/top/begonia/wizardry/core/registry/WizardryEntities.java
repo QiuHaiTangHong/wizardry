@@ -11,6 +11,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.entity.*;
+import top.begonia.wizardry.core.entity.construct.ArrowRainEntity;
+import top.begonia.wizardry.core.entity.construct.DecayEntity;
 import top.begonia.wizardry.core.entity.projectile.arrow.MagicMissileEntity;
 import top.begonia.wizardry.core.entity.projectile.bomb.FireBombEntity;
 import top.begonia.wizardry.core.entity.projectile.bomb.PoisonBombEntity;
@@ -554,7 +556,7 @@ public final class WizardryEntities {
             "decay",
             EntityType.Builder
                     .<DecayEntity>of(DecayEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .sized(2.0F, 0.2F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
     );

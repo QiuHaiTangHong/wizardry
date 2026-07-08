@@ -6,17 +6,19 @@ import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.function.Predicate;
 
 public class ItemListSlot extends ResourceHandlerSlot {
-    private final Collection<Item> allowedItems;
     private final int stackLimit;
+    private final Predicate<Item> validator;
 
-    public ItemListSlot(ItemStacksResourceHandler itemStacksResourceHandler, int slotIndex, int x, int y, int stackLimit, Collection<Item> allowedItems) {
+    public ItemListSlot(
+            ItemStacksResourceHandler itemStacksResourceHandler, int slotIndex,
+            int x, int y,
+            int stackLimit, Predicate<Item> validator
+    ) {
         super(itemStacksResourceHandler, itemStacksResourceHandler::set, slotIndex, x, y);
-        this.allowedItems = allowedItems;
+        this.validator = validator;
         this.stackLimit = stackLimit;
     }
 
@@ -27,10 +29,8 @@ public class ItemListSlot extends ResourceHandlerSlot {
 
     @Override
     public boolean mayPlace(@NotNull ItemStack stack) {
-        for (Item item : allowedItems) {
-            if (stack.is(item)) {
-                return true;
-            }
+        if (validator.test(stack.getItem())) {
+            return super.mayPlace(stack);
         }
         return false;
     }

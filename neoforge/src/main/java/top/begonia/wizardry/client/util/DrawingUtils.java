@@ -102,4 +102,11 @@ public final class DrawingUtils {
                 textureWidth, textureHeight
         );
     }
+
+    public static float smoothScaleFactor(int lifetime, int ticksExisted, float partialTicks, int startLength, int endLength) {
+        float age = ticksExisted + partialTicks;
+        float smooths = Mth.clamp(age < startLength || lifetime < 0 ? age / startLength : (lifetime - age) / endLength, 0, 1);
+        smooths = (float) Math.pow(smooths, 0.4); // Smooths the animation
+        return smooths;
+    }
 }

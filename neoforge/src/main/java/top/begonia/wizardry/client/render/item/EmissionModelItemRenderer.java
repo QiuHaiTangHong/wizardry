@@ -17,8 +17,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static top.begonia.wizardry.client.util.RenderTypes.getBaseRenderType;
-import static top.begonia.wizardry.client.util.RenderTypes.getOverlyRenderType;
+import static top.begonia.wizardry.client.util.WizardryRenderTypes.getBaseRenderType;
+import static top.begonia.wizardry.client.util.WizardryRenderTypes.getOverlyRenderType;
 
 public class EmissionModelItemRenderer implements SpecialModelRenderer<EmissionModelItemRenderer.State> {
 

@@ -27,7 +27,7 @@ public abstract class AbstractItemHandler<T extends BlockEntity> extends ItemSta
         return this.stacks.get(index);
     }
 
-    public void loadFromValueInput(List<ItemStackWithSlot> items) {
+    public void loadFromValueInput(@NonNull List<ItemStackWithSlot> items) {
         Collections.fill(this.stacks, ItemStack.EMPTY);
         for (ItemStackWithSlot entry : items) {
             int slot = entry.slot();

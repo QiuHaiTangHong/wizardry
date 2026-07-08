@@ -46,6 +46,10 @@ import top.begonia.wizardry.client.gui.ArcaneWorkbenchScreen;
 import top.begonia.wizardry.client.model.RobeArmourModel;
 import top.begonia.wizardry.client.model.SageArmourModel;
 import top.begonia.wizardry.client.model.WizardArmourModel;
+import top.begonia.wizardry.client.render.entity.block.ArcaneWorkbenchRender;
+import top.begonia.wizardry.client.render.entity.block.BookshelfRender;
+import top.begonia.wizardry.client.render.entity.block.ImbuementAltarRender;
+import top.begonia.wizardry.client.render.entity.block.LecternRender;
 import top.begonia.wizardry.core.api.event.data.DataParserBefore;
 import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.core.api.event.data.RegisterParticleEvent;
@@ -150,6 +154,7 @@ public class ClientEvents {
                 9,
                 false
         ));
+        event.registerEntityRenderer(WizardryEntities.DECAY.get(), DecayRender::new);
     }
 
     @SubscribeEvent

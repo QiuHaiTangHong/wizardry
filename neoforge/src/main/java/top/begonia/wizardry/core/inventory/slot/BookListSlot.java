@@ -17,7 +17,7 @@ public class BookListSlot extends ItemClassListSlot {
         this.listIndex = listIndex;
     }
 
-    public VirtualSlot getDelegate() {
+    public DelegateSlot getDelegate() {
         return hasDelegate() ? container.getVisibleBookshelfSlots().get(listIndex) : null;
     }
 
@@ -27,7 +27,6 @@ public class BookListSlot extends ItemClassListSlot {
 
     @Override
     public void onTake(@NonNull Player player, @NonNull ItemStack stack) {
-
     }
 
 }

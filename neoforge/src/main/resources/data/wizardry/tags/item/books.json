@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:book",
+    "minecraft:writable_book",
+    "minecraft:written_book",
+    "minecraft:enchanted_book",
+    "wizardry:spell_book",
+    "wizardry:arcane_tome",
+    "wizardry:wizard_handbook",
+    "wizardry:ruined_spell_book",
+    "wizardry:scroll",
+    "wizardry:blank_scroll",
+    "wizardry:identification_scroll",
+    "wizardry:storage_upgrade",
+    "wizardry:siphon_upgrade",
+    "wizardry:condenser_upgrade",
+    "wizardry:range_upgrade",
+    "wizardry:duration_upgrade",
+    "wizardry:cooldown_upgrade",
+    "wizardry:blast_upgrade",
+    "wizardry:attunement_upgrade",
+    "wizardry:melee_upgrade"
+  ]
+}

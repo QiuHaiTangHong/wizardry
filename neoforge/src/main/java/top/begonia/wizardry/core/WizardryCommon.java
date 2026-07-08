@@ -39,11 +39,11 @@ public class WizardryCommon {
         WizardryLoots.register(modEventBus);
         WizardryAdvancementTriggers.register(modEventBus);
         WizardryWorldgen.register(modEventBus);
+        WizardryEntityDataSerializers.register(modEventBus);
     }
 
     private void commonSetup(final @NonNull FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            ItemStackHelper.populateUpgradeMap();
             WizardryServerDataManager.getInstance().fireRegisterEvents();
         });
     }

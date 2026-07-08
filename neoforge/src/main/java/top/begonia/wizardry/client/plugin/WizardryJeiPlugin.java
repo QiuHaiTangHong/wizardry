@@ -8,6 +8,7 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.gui.ArcaneWorkbenchScreen;
 
@@ -24,7 +25,7 @@ public class WizardryJeiPlugin implements IModPlugin {
     public void registerGuiHandlers(@NonNull IGuiHandlerRegistration registration) {
         registration.addGuiScreenHandler(ArcaneWorkbenchScreen.class, new IScreenHandler<>() {
             @Override
-            public @NonNull IGuiProperties apply(@NonNull ArcaneWorkbenchScreen screen) {
+            public @Nullable IGuiProperties apply(@NonNull ArcaneWorkbenchScreen screen) {
                 return new IGuiProperties() {
                     @Override
                     public @NonNull Class<? extends Screen> screenClass() {
@@ -33,8 +34,7 @@ public class WizardryJeiPlugin implements IModPlugin {
 
                     @Override
                     public int guiLeft() {
-//                        return (screen.width - screen.getImageWidth() - screen.rightExtensionWidth() - screen.leftExtensionWidth()) / 2;
-                        return screen.getLeftPos();
+                        return screen.getLeftPos() - screen.leftExtensionWidth();
                     }
 
                     @Override

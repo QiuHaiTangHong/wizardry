@@ -99,6 +99,6 @@ public class SpellGlyph extends SavedData {
                 new HashMap<>(this.randomDescriptions)
         );
         PacketDistributor.sendToPlayer(player, payload);
-        Wizardry.LOGGER.info("Synchronising spell glyph data for {}", player.getScoreboardName());
+        Wizardry.LOGGER.info("同步法术符文数据 {}", player.getScoreboardName());
     }
 }
