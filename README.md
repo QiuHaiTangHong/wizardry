@@ -38,7 +38,7 @@
 该模组提供了一套灵活且强大的数据驱动 API，用于定义和管理游戏内的各种数据。这套系统基于 `AbstractWizardryDataManager`
 核心类构建，实现了数据的加载、解析、缓存和访问。
 
-#### 核心概念
+##### 核心概念
 
 该 API 的设计围绕以下几个核心接口展开，它们共同构成了一个完整的数据处理流程：
 
@@ -51,14 +51,17 @@
 
 #### 数据加载流程
 
-1. **注册解析器**: 模组在初始化时，会将实现了 `IDataParser` 接口的解析器实例注册到 `AbstractWizardryDataManager` 的内部注册表中。
-2. **资源发现**: 当游戏资源重载时，`AbstractWizardryDataManager` 会根据预设的路径（通过 `FileToIdConverter`
-   定义）扫描所有数据包（Data Packs）中的 JSON 文件。
-3. **解析与转换**: 对于每个找到的 JSON 文件：
+1. **注册解析器**: 模组在初始化时，会触发 `RegisterDataParserEvent` 事件。监听该事件的代码会将自己的 `IDataParser`
+   实例注册到事件提供的注册表中。
+2. **资源重载准备**: 当游戏资源重载时，`AbstractWizardryDataManager` 会首先触发 `DataParserBefore`
+   事件。需要共享状态的解析器可以监听此事件，创建并注册自己的 `IParserContext` 实例。
+3. **资源发现**: `AbstractWizardryDataManager` 会根据预设的路径扫描所有数据包（Data Packs）中的 JSON 文件。
+4. **解析与转换**: 对于每个找到的 JSON 文件：
     - 读取其根节点的 `"parser"` 字段，该字段的值是一个标识符（如 `wizardry:spell`），用于确定使用哪个 `IDataParser`。
     - 调用对应解析器的 `parserItem(JsonElement json)` 方法，将 JSON 内容解析为中间数据对象 `P`。
-    - 接着调用 `transformItemToResult(...)` 方法，将中间数据 `P` 和上下文 `C` 转换为最终的游戏数据对象 `R`。
-4. **缓存**: 所有成功解析的数据结果 `R` 会按照其类型 `R.getClass()` 进行分组，并存储在一个不可变的快照（`storageSnapshot`
+    - 接着调用 `transformItemToResult(...)` 方法，将中间数据 `P` 和从 `DataParserBefore` 事件中获取的上下文 `C`
+      转换为最终的游戏数据对象 `R`。
+5. **缓存**: 所有成功解析的数据结果 `R` 会按照其类型 `R.getClass()` 进行分组，并存储在一个不可变的快照（`storageSnapshot`
    ）中，以供游戏运行时快速查询。
 
 #### 数据访问
@@ -82,3 +85,23 @@
   "// ...": "其他由具体解析器定义的字段"
 }
 ```
+
+* **`parser`**: **必填字段**。一个字符串，指定了处理该文件所需的 `IDataParser` 的唯一标识符。
+* **条件加载**: 该 API 原生支持 NeoForge 的条件加载系统。你可以在 JSON 文件的根节点使用 `"conditions"`
+  数组，只有当所有条件都满足时，文件才会被加载。
+
+**示例：一个法术数据文件 (`data/wizardry/spells/magic_missile.json`)**
+
+```json
+{
+  "parser": "wizardry:spell",
+  "element": "magic",
+  "tier": "apprentice",
+  "type": "projectile",
+  "cost": 50,
+  "cooldown": 20
+}
+```
+
+在这个例子中，`"parser": "wizardry:spell"` 告诉系统使用 ID 为 `wizardry:spell` 的解析器来处理这个文件。解析器会读取
+`element`, `tier` 等字段，并最终生成一个 `Spell` 对象（该类实现了 `IResultData`）。
