@@ -10,13 +10,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.client.util.ParticleBuilder;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
-import top.begonia.wizardry.core.damage.WizardryDamageType;
-import top.begonia.wizardry.core.registry.*;
+import top.begonia.wizardry.core.damage.WizardryDamageTypes;
+import top.begonia.wizardry.core.registry.WizardryItems;
+import top.begonia.wizardry.core.registry.WizardryParticles;
+import top.begonia.wizardry.core.registry.WizardrySounds;
+import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 import top.begonia.wizardry.core.util.EntityUtils;
 
@@ -43,7 +45,12 @@ public class FireBombEntity extends BombEntity {
             float damage = WizardrySpells.FIRE_BOMB.get().getBaseProperty(AbstractSpell.DIRECT_DAMAGE) * damageMultiplier;
             hitEntity.hurtServer(
                     (ServerLevel) this.level(),
-                    WizardryDamageSource.causeIndirectMagicDamage(this, this.getOwner(), WizardryDamageType.FIRE, false),
+                    WizardryDamageSource.causeIndirectMagicDamage(
+                            WizardryDamageTypes.FIRE.apply(registryAccess()),
+                            this,
+                            this.getOwner(),
+                            false
+                    ),
                     damage
             );
             if (!hitEntity.fireImmune()) {
@@ -65,7 +72,12 @@ public class FireBombEntity extends BombEntity {
                     // Splash damage does not count as projectile damage
                     target.hurtServer(
                             (ServerLevel) this.level(),
-                            WizardryDamageSource.causeIndirectMagicDamage(this, this.getOwner(), WizardryDamageType.FIRE, false),
+                            WizardryDamageSource.causeIndirectMagicDamage(
+                                    WizardryDamageTypes.FIRE.apply(registryAccess()),
+                                    this,
+                                    this.getOwner(),
+                                    false
+                            ),
                             WizardrySpells.FIRE_BOMB.get().getBaseProperty(AbstractSpell.SPLASH_DAMAGE) * damageMultiplier
                     );
                     target.setRemainingFireTicks((int) WizardrySpells.FIRE_BOMB.get().getBaseProperty(AbstractSpell.BURN_DURATION));

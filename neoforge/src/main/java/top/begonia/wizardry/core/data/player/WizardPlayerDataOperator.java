@@ -15,30 +15,32 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.core.api.event.SpellCastEvent;
 import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.data.packet.CastContinuousSpellPacket;
-import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
 import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.enchantment.Imbuement;
-import top.begonia.wizardry.core.api.event.SpellCastEvent;
+import top.begonia.wizardry.core.entity.living.ISummonedCreature;
 import top.begonia.wizardry.core.registry.WizardryAttachment;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 import top.begonia.wizardry.core.spell.impl.None;
 
-import java.util.*;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
 public class WizardPlayerDataOperator {
+    private static final int IMBUEMENT_UPDATE_INTERVAL = 20;
     private final Player player;
     private final WizardPlayerData data;
+    public double prevMotionY;
     private AbstractSpell castCommandSpell;
     private int castCommandTick;
     private SpellContext castCommandContext;
     private int castCommandDuration;
-    public double prevMotionY;
-    private static final int IMBUEMENT_UPDATE_INTERVAL = 20;
 
     private WizardPlayerDataOperator(Player player, WizardPlayerData data) {
         this.player = player;
@@ -50,6 +52,15 @@ public class WizardPlayerDataOperator {
         return new WizardPlayerDataOperator(player, currentData);
     }
 
+    @SubscribeEvent
+    public static void onPlayerCloneEvent(PlayerEvent.@NonNull Clone event) {
+        Player oldPlayer = event.getOriginal();
+        Player newPlayer = event.getEntity();
+        WizardPlayerDataOperator oldWizardData = WizardPlayerDataOperator.get(oldPlayer);
+        WizardPlayerDataOperator newWizardData = WizardPlayerDataOperator.get(newPlayer);
+        newWizardData.copyFrom(oldWizardData, event.isWasDeath());
+    }
+
     public boolean hasSpellBeenDiscovered(AbstractSpell spell) {
         return this.data.spellsDiscovered().contains(spell) || spell instanceof None;
     }
@@ -59,6 +70,14 @@ public class WizardPlayerDataOperator {
             return false;
         }
         return this.data.spellsDiscovered().add(spell);
+    }
+
+    public Optional<ISummonedCreature> getSelectedMinion() {
+        return Optional.ofNullable((ISummonedCreature) this.player.level().getEntity(this.data.selectedMinionUUID()));
+    }
+
+    public void setSelectedMinion(ISummonedCreature iSummonedCreature) {
+        this.data.setSelectedMinionUUID(iSummonedCreature);
     }
 
     public void setTierReached(TierEnum tier) {
@@ -216,14 +235,5 @@ public class WizardPlayerDataOperator {
             }
         });
         this.player.setData(WizardryAttachment.WIZARD_PLAYER_DATA.get(), target);
-    }
-
-    @SubscribeEvent
-    public static void onPlayerCloneEvent(PlayerEvent.@NonNull Clone event) {
-        Player oldPlayer = event.getOriginal();
-        Player newPlayer = event.getEntity();
-        WizardPlayerDataOperator oldWizardData = WizardPlayerDataOperator.get(oldPlayer);
-        WizardPlayerDataOperator newWizardData = WizardPlayerDataOperator.get(newPlayer);
-        newWizardData.copyFrom(oldWizardData, event.isWasDeath());
     }
 }

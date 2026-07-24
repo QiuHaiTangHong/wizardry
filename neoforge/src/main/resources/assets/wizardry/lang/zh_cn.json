@@ -601,7 +601,7 @@
   "item.banner.wizardry_healing.magenta": "品红色治愈徽记",
   "item.banner.wizardry_healing.orange": "橙色治愈徽记",
   "item.banner.wizardry_healing.white": "白色治愈徽记",
-  "entity.wizardry.summonedcreatureplate": "%1$s 的 %2$s",
+  "entity.wizardry.summonedcreature.nameplate": "%1$s 的 %2$s",
   "entity.wizardry.summonedcreatureplate_fallback": "某人的 %1$s",
   "entity.wizardry.wizard.greeting_0": "早上好，流浪者。",
   "entity.wizardry.wizard.greeting_1": "你好，旅行者。什么风把你吹来的？",

@@ -6,6 +6,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -13,16 +16,22 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
-import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
-import top.begonia.wizardry.core.data.player.WizardPlayerData;
 import top.begonia.wizardry.core.data.SpellGlyph;
+import top.begonia.wizardry.core.data.player.WizardPlayerData;
+import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.spell.parser.SpellPropertiesParser;
 import top.begonia.wizardry.core.effect.impl.DecayMobEffect;
+import top.begonia.wizardry.core.entity.construct.BubbleEntity;
+import top.begonia.wizardry.core.entity.living.minion.WitherSkeletonMinionEntity;
+import top.begonia.wizardry.core.entity.living.minion.ZombieMinionEntity;
 import top.begonia.wizardry.core.network.ServerPayloadHandler;
 import top.begonia.wizardry.core.network.data.ControlInputPayload;
 import top.begonia.wizardry.core.network.data.GlyphDataPayload;
 import top.begonia.wizardry.core.network.data.SpellQuickAccessPayload;
-import top.begonia.wizardry.core.registry.*;
+import top.begonia.wizardry.core.registry.WizardryAttachment;
+import top.begonia.wizardry.core.registry.WizardryCreativeTabs;
+import top.begonia.wizardry.core.registry.WizardryEntities;
+import top.begonia.wizardry.core.util.DamageSafetyChecker;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
 public class CommonEvent {
@@ -68,7 +77,7 @@ public class CommonEvent {
     }
 
     @SubscribeEvent
-    public static void buildSpellBookItem(@NonNull BuildCreativeModeTabContentsEvent event) {
+    public static void onBuildCreativeModeTabContents(@NonNull BuildCreativeModeTabContentsEvent event) {
         if (event.getTab() == WizardryCreativeTabs.GEAR.get()) {
             WizardryCreativeTabs.addItemsToEvent(event, WizardryCreativeTabs.TabsEnum.GEAR);
         } else if (event.getTab() == WizardryCreativeTabs.SPELLS.get()) {
@@ -99,7 +108,23 @@ public class CommonEvent {
     }
 
     @SubscribeEvent
+    public static void onLivingIncomingDamageEvent(@NonNull LivingIncomingDamageEvent event) {
+        BubbleEntity.onLivingIncomingDamageEvent(event);
+    }
+
+    @SubscribeEvent
     public static void onEntityTickEventPre(EntityTickEvent.@NonNull Pre event) {
         DecayMobEffect.onEntityTickEventPre(event);
+    }
+
+    @SubscribeEvent
+    public static void onTagsUpdated(@NonNull TagsUpdatedEvent event) {
+        DamageSafetyChecker.updateVanillaDamages(event.getRegistries());
+    }
+
+    @SubscribeEvent
+    public static void onEntityAttributeCreation(@NonNull EntityAttributeCreationEvent event) {
+        event.put(WizardryEntities.ZOMBIE_MINION.get(), ZombieMinionEntity.createAttributes().build());
+        event.put(WizardryEntities.WITHER_SKELETON_MINION.get(), WitherSkeletonMinionEntity.createAttributes().build());
     }
 }

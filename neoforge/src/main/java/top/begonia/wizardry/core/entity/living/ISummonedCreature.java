@@ -1,0 +1,156 @@
+package top.begonia.wizardry.core.entity.living;
+
+import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TraceableEntity;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.client.util.ParticleBuilder;
+import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.damage.WizardryDamageSource;
+import top.begonia.wizardry.core.damage.WizardryDamageTypes;
+import top.begonia.wizardry.core.data.player.WizardPlayerDataOperator;
+import top.begonia.wizardry.core.entity.WizardEntity;
+import top.begonia.wizardry.core.item.ISpellCastingItem;
+import top.begonia.wizardry.core.registry.WizardryParticles;
+import top.begonia.wizardry.core.util.AllyDesignationSystem;
+
+import javax.annotation.Nullable;
+
+public interface ISummonedCreature extends TraceableEntity {
+    String NAMEPLATE_TRANSLATION_KEY = "entity." + Wizardry.MODID + ".summonedcreature.nameplate";
+
+    static void onEntityTickEventPre(@NonNull LivingIncomingDamageEvent event) {
+        if (event.getSource().getEntity() instanceof ISummonedCreature summoner) {
+            event.setCanceled(true);
+            DamageSource source = event.getSource();
+            Entity directEntity = source.getDirectEntity();
+            RegistryAccess registryAccess = event.getEntity().level().registryAccess();
+            Holder<DamageType> type = source instanceof WizardryDamageSource
+                    ? source.typeHolder()
+                    : WizardryDamageTypes.MAGIC.apply(registryAccess);
+            boolean isRetaliatory = source instanceof WizardryDamageSource wizardryDamageSource
+                    && wizardryDamageSource.isRetaliatory();
+            if (source.getDirectEntity() == source.getEntity()) {
+                source = WizardryDamageSource.causeDirectMinionDamage(type, summoner.selfThisLivingEntity(), summoner.getOwner(), isRetaliatory);
+            } else if (source.getEntity() != source.getDirectEntity()) {
+                source = WizardryDamageSource.causeIndirectMinionDamage(type, directEntity, summoner.selfThisLivingEntity(), summoner.getOwner(), isRetaliatory);
+            }
+        }
+    }
+
+    default Entity selfThisLivingEntity() {
+        if (this instanceof LivingEntity livingEntity) {
+            return livingEntity;
+        } else {
+            throw new ClassCastException("ISummonedCreature 必须继承自 Entity，但当前是: " + this.getClass().getName());
+        }
+    }
+
+    int getLifetime();
+
+    void setLifetime(int ticks);
+
+    @Nullable
+    @Override
+    Entity getOwner();
+
+    void setOwner(@Nullable Entity entity);
+
+    default boolean isValidTarget(Entity target) {
+        if (AllyDesignationSystem.isValidTarget(this.getOwner(), target)) {
+            if (target instanceof Player player) {
+                if (this.getOwner() instanceof WizardEntity wizardEntity) {
+                    return wizardEntity.getLastHurtByMob() != player;
+                }
+                return true;
+            }
+            return (target instanceof Mob
+                    || target instanceof ISummonedCreature
+                    || (target instanceof WizardEntity && !(this.getOwner() instanceof WizardEntity))
+                    || (target instanceof LivingEntity livingEntity && livingEntity.getLastHurtByMob() == this.getOwner())
+                    || ServerConfig.summonedCreatureTargetsWhitelist.contains(BuiltInRegistries.ENTITY_TYPE.getKey(target.getType())))
+                    && !ServerConfig.summonedCreatureTargetsBlacklist.contains(BuiltInRegistries.ENTITY_TYPE.getKey(target.getType()));
+        }
+        return false;
+    }
+
+    default TargetingConditions.Selector getTargetSelector() {
+        return (entity, _) -> !entity.isInvisible()
+                && (this.getOwner() == null
+                ? entity instanceof Player player && !player.isCreative() : isValidTarget(entity));
+    }
+
+    void onSpawn();
+
+    void onDespawn();
+
+    boolean hasParticleEffect();
+
+    default boolean hasAnimation() {
+        return true;
+    }
+
+    default int getAnimationColour(float animationProgress) {
+        return ARGB.color(255, 0, 0, 0);
+    }
+
+    default void onSuccessfulAttack(LivingEntity target) {
+    }
+
+    default boolean shouldRevengeTarget(LivingEntity entity) {
+        return ServerConfig.minionRevengeTargeting || isValidTarget(entity);
+    }
+
+    default void updateDelegate() {
+
+        if (!(this instanceof Entity thisEntity)) {
+            throw new ClassCastException("Implementations of ISummonedCreature must extend SoundLoopSpellEntity!");
+        }
+
+        if (thisEntity.tickCount == 1) {
+            this.onSpawn();
+        }
+
+        if (thisEntity.tickCount > this.getLifetime() && this.getLifetime() > 0) {
+            this.onDespawn();
+            thisEntity.discard();
+        }
+
+        if (this.hasParticleEffect() && thisEntity.level().isClientSide() && thisEntity.getRandom().nextInt(8) == 0) {
+            ParticleBuilder.create(WizardryParticles.DARK_MAGIC.get())
+                    .pos(thisEntity.getX(), thisEntity.getY() + thisEntity.getRandom().nextDouble() * 1.5, thisEntity.getZ())
+                    .clr(0.1f, 0.0f, 0.0f)
+                    .spawn(thisEntity.level());
+        }
+
+    }
+
+    default boolean interactDelegate(@NonNull Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        WizardPlayerDataOperator dataOperator = WizardPlayerDataOperator.get(player);
+        if (player.isShiftKeyDown() && stack.getItem() instanceof ISpellCastingItem) {
+            if (!player.level().isClientSide() && this.getOwner() == player) {
+                dataOperator.getSelectedMinion().ifPresentOrElse(
+                        (iSummonedCreature) -> dataOperator.setSelectedMinion(null),
+                        () -> dataOperator.setSelectedMinion(this)
+                );
+            }
+            return true;
+        }
+        return false;
+    }
+
+}

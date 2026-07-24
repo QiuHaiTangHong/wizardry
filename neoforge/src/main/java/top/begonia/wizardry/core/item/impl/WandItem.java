@@ -5,7 +5,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
@@ -95,6 +99,23 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
         if (Minecraft.getInstance().options.advancedItemTooltips) {
             builder.accept(Component.translatable("item." + Wizardry.MODID + ".wand.mana", this.getMana(itemStack), this.getManaCapacity(itemStack)).withStyle(ChatFormatting.BLUE));
             builder.accept(Component.translatable("item." + Wizardry.MODID + ".wand.progression", ItemStackHelper.getProgression(itemStack), tier.level < TierEnum.MASTER.level ? tier.next().getProgression() : 0).withStyle(ChatFormatting.GRAY));
+        }
+    }
+
+    @Override
+    public void inventoryTick(@NonNull ItemStack itemStack, @NonNull ServerLevel level, @NonNull Entity owner, @Nullable EquipmentSlot slot) {
+        boolean isHeld = false;
+        if (owner instanceof LivingEntity livingEntity) {
+            isHeld = ItemStack.matches(livingEntity.getItemInHand(InteractionHand.MAIN_HAND), itemStack) ||
+                    ItemStack.matches(livingEntity.getItemInHand(InteractionHand.OFF_HAND), itemStack);
+        }
+        if (!ServerConfig.wandsMustBeHeldToDecrementCooldown || isHeld) {
+            ItemStackHelper.decrementCooldowns(itemStack);
+        }
+        if (!this.isManaFull(itemStack) && level.getGameTime() % ServerConfig.Constants.condenserTickInterval == 0) {
+            int baseAmount = ItemStackHelper.getUpgradeLevel(itemStack, WizardryItems.CONDENSER_UPGRADE.get());
+            int amount = (int) (baseAmount * CommonConfig.condenserAmountMultiplier);
+            this.rechargeMana(itemStack, amount);
         }
     }
 

@@ -1,27 +1,22 @@
 {
   "model": {
-    "type": "minecraft:select",
-    "property": "minecraft:component",
-    "component": "wizardry:spell_state",
-    "cases": [
-      {
-        "when": "discovered",
-        "model": {
-          "type": "minecraft:model",
-          "model": "wizardry:item/spell_book_discovered"
-        }
+    "type": "minecraft:condition",
+    "property": "wizardry:festive",
+    "on_true": {
+      "type": "wizardry:spell_book_item_model",
+      "model": "wizardry:item/spell_book_festive"
+    },
+    "on_false": {
+      "type": "minecraft:condition",
+      "property": "wizardry:discovered",
+      "on_true": {
+        "type": "wizardry:spell_book_item_model",
+        "model": "wizardry:item/spell_book_discovered"
       },
-      {
-        "when": "festive",
-        "model": {
-          "type": "minecraft:model",
-          "model": "wizardry:item/festive_spell_book"
-        }
+      "on_false": {
+        "type": "wizardry:spell_book_item_model",
+        "model": "wizardry:item/spell_book_undiscovered"
       }
-    ],
-    "fallback": {
-      "type": "minecraft:model",
-      "model": "wizardry:item/spell_book_undiscovered"
     }
   }
 }

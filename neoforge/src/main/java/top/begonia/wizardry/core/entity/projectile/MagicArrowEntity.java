@@ -1,7 +1,7 @@
 package top.begonia.wizardry.core.entity.projectile;
 
+import net.minecraft.core.Holder;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -18,21 +18,21 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.damage.WizardryDamageType;
+import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.item.impl.ArtefactItem;
 import top.begonia.wizardry.core.registry.WizardryItems;
-import top.begonia.wizardry.core.util.AllyDesignationSystem;
 import top.begonia.wizardry.core.util.RayTracer;
 
 public abstract class MagicArrowEntity extends Arrow {
 
     public static final double LAUNCH_Y_OFFSET = 0.1;
     public static final int SEEKING_TIME = 15;
-
-    private int knockbackStrength;
     public float damageMultiplier = 1.0f;
+    private int knockbackStrength;
 
     public MagicArrowEntity(EntityType<? extends Arrow> type, Level level) {
         super(type, level);
@@ -70,8 +70,8 @@ public abstract class MagicArrowEntity extends Arrow {
 
     public abstract int getLifetime();
 
-    public ResourceKey<DamageType> getDamageType() {
-        return WizardryDamageType.MAGIC;
+    public Holder<DamageType> getDamageType() {
+        return WizardryDamageTypes.MAGIC.apply(registryAccess());
     }
 
     public boolean doGravity() {
@@ -166,6 +166,26 @@ public abstract class MagicArrowEntity extends Arrow {
     }
 
     @Override
+    protected boolean canHitEntity(@NonNull Entity entity) {
+        if (entity.isPickable() && (entity != this.getOwner() || this.tickCount >= 5)) {
+            return true;
+        }
+        return super.canHitEntity(entity);
+    }
+
+    @Override
+    protected void addAdditionalSaveData(@NonNull ValueOutput valueOutput) {
+        super.addAdditionalSaveData(valueOutput);
+        valueOutput.putFloat("damageMultiplier", this.damageMultiplier);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(@NonNull ValueInput valueInput) {
+        super.readAdditionalSaveData(valueInput);
+        this.damageMultiplier = valueInput.getFloatOr("damageMultiplier", 0.0F);
+    }
+
+    @Override
     public void tick() {
         if (this.isRemoved()) {
             return;
@@ -185,19 +205,19 @@ public abstract class MagicArrowEntity extends Arrow {
                     LivingEntity.class,
                     RayTracer.ignoreEntityFilter(null)
             );
-            if (hit != null && AllyDesignationSystem.isValidTarget(this.getOwner(), hit.getEntity())) {
-                Entity targetEntity = hit.getEntity();
-                Vec3 direction = new Vec3(
-                        targetEntity.getX(),
-                        targetEntity.getY() + (targetEntity.getBbHeight() / 2.0F),
-                        targetEntity.getZ()
-                ).subtract(this.position())
-                        .normalize()
-                        .scale(velocity.length());
-
-                Vec3 moveDelta = this.getDeltaMovement();
-                this.setDeltaMovement(moveDelta.add(direction.subtract(moveDelta).scale(2.0D / SEEKING_TIME)));
-            }
+//            if (hit != null && AllyDesignationSystem.isValidTarget(this.getOwner(), hit.getEntity())) {
+//                Entity targetEntity = hit.getEntity();
+//                Vec3 direction = new Vec3(
+//                        targetEntity.getX(),
+//                        targetEntity.getY() + (targetEntity.getBbHeight() / 2.0F),
+//                        targetEntity.getZ()
+//                ).subtract(this.position())
+//                        .normalize()
+//                        .scale(velocity.length());
+//
+//                Vec3 moveDelta = this.getDeltaMovement();
+//                this.setDeltaMovement(moveDelta.add(direction.subtract(moveDelta).scale(2.0D / SEEKING_TIME)));
+//            }
         }
         super.tick();
         if (this.getLifetime() >= 0 && this.tickCount > this.getLifetime()) {
@@ -209,25 +229,5 @@ public abstract class MagicArrowEntity extends Arrow {
         } else {
             this.tickInAir();
         }
-    }
-
-    @Override
-    protected boolean canHitEntity(@NonNull Entity entity) {
-        if (entity.isPickable() && (entity != this.getOwner() || this.tickCount >= 5)) {
-            return true;
-        }
-        return super.canHitEntity(entity);
-    }
-
-    @Override
-    protected void readAdditionalSaveData(@NonNull ValueInput valueInput) {
-        super.readAdditionalSaveData(valueInput);
-        this.damageMultiplier = valueInput.getFloatOr("damageMultiplier", 0.0F);
-    }
-
-    @Override
-    protected void addAdditionalSaveData(@NonNull ValueOutput valueOutput) {
-        super.addAdditionalSaveData(valueOutput);
-        valueOutput.putFloat("damageMultiplier", this.damageMultiplier);
     }
 }

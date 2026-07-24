@@ -29,7 +29,7 @@ public final class WizardryRenderTypes {
             .build()
     );
 
-    private static final RenderPipeline ALWAYS_PASS_ITEM_PIPELINE = Util.make(() -> RenderPipeline
+    private static final RenderPipeline OVERLY_ITEM_PIPELINE = Util.make(() -> RenderPipeline
             .builder(RenderPipelines.MATRICES_FOG_LIGHT_DIR_SNIPPET)
             .withLocation(Identifier.fromNamespaceAndPath("wizardry", "pipeline/bright_overlay"))
             .withBindGroupLayout(BindGroupLayouts.SAMPLER0_SAMPLER1_SAMPLER2)
@@ -43,8 +43,23 @@ public final class WizardryRenderTypes {
             .build()
     );
 
+    private static final RenderPipeline CUSTOM_OVERLY_COLOR_ITEM_PIPELINE = Util.make(() -> RenderPipeline
+            .builder(RenderPipelines.MATRICES_FOG_LIGHT_DIR_SNIPPET)
+            .withLocation(Identifier.fromNamespaceAndPath("wizardry", "pipeline/bright_overlay_custom"))
+            .withBindGroupLayout(BindGroupLayouts.SAMPLER0_SAMPLER1_SAMPLER2)
+            .withVertexShader(Identifier.fromNamespaceAndPath(Wizardry.MODID, "core/item"))
+            .withFragmentShader(Identifier.fromNamespaceAndPath(Wizardry.MODID, "core/item"))
+            .withShaderDefine("ALPHA_CUTOUT", 0.1F)
+            .withShaderDefine("EMISSION")
+            .withShaderDefine("USE_CUSTOM_COLOR")
+            .withDepthStencilState(new DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, true))
+            .withVertexBinding(0, DefaultVertexFormat.ENTITY)
+            .withPrimitiveTopology(PrimitiveTopology.QUADS)
+            .build()
+    );
+
     public static final Function<Identifier, RenderType> OVERLY = Util.memoize((atlasLocation) -> {
-        RenderSetup setup = RenderSetup.builder(ALWAYS_PASS_ITEM_PIPELINE)
+        RenderSetup setup = RenderSetup.builder(OVERLY_ITEM_PIPELINE)
                 .withTexture("Sampler0", atlasLocation)
                 .useOverlay()
                 .useLightmap()
@@ -63,6 +78,15 @@ public final class WizardryRenderTypes {
 
     public static RenderType getOverlyRenderType(Identifier atlasLocation) {
         return OVERLY.apply(atlasLocation);
+    }
+
+    public static RenderType getOverlyRenderTypeWithColor(Identifier atlasLocation) {
+        RenderSetup setup = RenderSetup.builder(CUSTOM_OVERLY_COLOR_ITEM_PIPELINE)
+                .withTexture("Sampler0", atlasLocation)
+                .useOverlay()
+                .useLightmap()
+                .createRenderSetup();
+        return RenderType.create("overly_custom_color", setup);
     }
 
     public static RenderType getBaseRenderType(Identifier atlasLocation) {

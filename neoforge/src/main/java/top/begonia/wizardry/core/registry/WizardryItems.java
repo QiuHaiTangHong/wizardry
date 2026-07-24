@@ -18,7 +18,10 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.block.*;
+import top.begonia.wizardry.core.block.BookshelfBlock;
+import top.begonia.wizardry.core.block.CrystalBlock;
+import top.begonia.wizardry.core.block.GildedWoodBlock;
+import top.begonia.wizardry.core.block.LecternBlock;
 import top.begonia.wizardry.core.constants.*;
 import top.begonia.wizardry.core.item.impl.*;
 import top.begonia.wizardry.core.spell.AbstractSpell;
@@ -46,7 +49,11 @@ public final class WizardryItems {
         return item;
     }
 
-    public static <T extends Item> @NonNull DeferredItem<T> registerItemWithSubItems(String name, Function<Item.Properties, T> itemFactory, WizardryCreativeTabs.TabsEnum tab, BiConsumer<BuildCreativeModeTabContentsEvent, T> tabPopulator) {
+    public static <T extends Item> @NonNull DeferredItem<T> registerItemWithSubItems(
+            String name, Function<Item.Properties, T> itemFactory,
+            WizardryCreativeTabs.TabsEnum tab,
+            BiConsumer<BuildCreativeModeTabContentsEvent, T> tabPopulator
+    ) {
         DeferredItem<T> item = ITEMS.register(name, (identifier) -> {
             Item.Properties properties = new Item.Properties().setId(ResourceKey.create(Registries.ITEM, identifier));
             return itemFactory.apply(properties);

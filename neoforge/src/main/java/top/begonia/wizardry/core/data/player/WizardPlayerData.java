@@ -7,9 +7,10 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import org.jetbrains.annotations.Contract;
+import net.minecraft.world.entity.Entity;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.constants.TierEnum;
+import top.begonia.wizardry.core.entity.living.ISummonedCreature;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 import top.begonia.wizardry.core.spell.impl.None;
@@ -17,50 +18,6 @@ import top.begonia.wizardry.core.spell.impl.None;
 import java.util.*;
 
 public class WizardPlayerData {
-    private final Set<AbstractSpell> spellsDiscovered;
-    private TierEnum maxTierReached;
-    private final Set<UUID> allies;
-    private final Set<String> allyNames;
-    private final Map<String, Integer> imbuementDurations;
-    private final List<RecentSpellEntry> recentSpells;
-
-    public WizardPlayerData() {
-        this.spellsDiscovered = new HashSet<>(List.of(WizardrySpells.MAGIC_MISSILE.get()));
-        this.maxTierReached = TierEnum.NOVICE;
-        this.allies = new HashSet<>();
-        this.allyNames = new HashSet<>();
-        this.imbuementDurations = new HashMap<>();
-        this.recentSpells = new ArrayList<>();
-    }
-
-    public WizardPlayerData(
-            Set<AbstractSpell> spellsDiscovered,
-            TierEnum maxTierReached,
-            Set<UUID> allies,
-            Set<String> allyNames,
-            Map<String, Integer> imbuementDurations,
-            List<RecentSpellEntry> recentSpells
-    ) {
-        this.spellsDiscovered = new HashSet<>(spellsDiscovered);
-        this.maxTierReached = maxTierReached;
-        this.allies = new HashSet<>(allies);
-        this.allyNames = new HashSet<>(allyNames);
-        this.imbuementDurations = new HashMap<>(imbuementDurations);
-        this.recentSpells = new ArrayList<>(recentSpells);
-    }
-
-    public boolean discoverSpell(AbstractSpell spell) {
-        if (spell instanceof None) {
-            return false;
-        }
-        return spellsDiscovered.add(spell);
-    }
-
-    @Contract(" -> new")
-    public static @NonNull WizardPlayerData getDefault() {
-        return new WizardPlayerData();
-    }
-
     public static final MapCodec<WizardPlayerData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             WizardrySpells.SPELLS.getRegistry().get().byNameCodec().listOf()
                     .<Set<AbstractSpell>>xmap(HashSet::new, ArrayList::new)
@@ -73,27 +30,72 @@ public class WizardPlayerData {
             Codec.unboundedMap(Codec.STRING, Codec.INT)
                     .fieldOf("imbuements").forGetter(WizardPlayerData::imbuementDurations),
             RecentSpellEntry.CODEC.listOf()
-                    .fieldOf("recentSpells").forGetter(WizardPlayerData::recentSpells)
+                    .fieldOf("recentSpells").forGetter(WizardPlayerData::recentSpells),
+            UUIDUtil.CODEC
+                    .fieldOf("selectedMinionUUID").forGetter(WizardPlayerData::selectedMinionUUID)
     ).apply(instance, WizardPlayerData::new));
-
     public static final StreamCodec<RegistryFriendlyByteBuf, WizardPlayerData> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.collection(HashSet::new, ByteBufCodecs.registry(WizardrySpells.SPELLS_KEY)),
-            WizardPlayerData::spellsDiscovered,
-            TierEnum.STREAM_CODEC,
-            WizardPlayerData::maxTierReached,
-            ByteBufCodecs.collection(HashSet::new, UUIDUtil.STREAM_CODEC),
-            WizardPlayerData::allies,
-            ByteBufCodecs.collection(HashSet::new, ByteBufCodecs.stringUtf8(32767)),
-            WizardPlayerData::allyNames,
-            ByteBufCodecs.map(HashMap::new, ByteBufCodecs.stringUtf8(32767), ByteBufCodecs.VAR_INT),
-            WizardPlayerData::imbuementDurations,
-            RecentSpellEntry.STREAM_CODEC.apply(ByteBufCodecs.list()),
-            WizardPlayerData::recentSpells,
+            ByteBufCodecs.collection(HashSet::new, ByteBufCodecs.registry(WizardrySpells.SPELLS_KEY)), WizardPlayerData::spellsDiscovered,
+            TierEnum.STREAM_CODEC, WizardPlayerData::maxTierReached,
+            ByteBufCodecs.collection(HashSet::new, UUIDUtil.STREAM_CODEC), WizardPlayerData::allies,
+            ByteBufCodecs.collection(HashSet::new, ByteBufCodecs.stringUtf8(32767)), WizardPlayerData::allyNames,
+            ByteBufCodecs.map(HashMap::new, ByteBufCodecs.stringUtf8(32767), ByteBufCodecs.VAR_INT), WizardPlayerData::imbuementDurations,
+            RecentSpellEntry.STREAM_CODEC.apply(ByteBufCodecs.list()), WizardPlayerData::recentSpells,
+            UUIDUtil.STREAM_CODEC, WizardPlayerData::selectedMinionUUID,
             WizardPlayerData::new
     );
+    private static final WizardPlayerData DEFAULT = new WizardPlayerData();
+    private final Set<AbstractSpell> spellsDiscovered;
+    private final Set<UUID> allies;
+    private final Set<String> allyNames;
+    private final Map<String, Integer> imbuementDurations;
+    private final List<RecentSpellEntry> recentSpells;
+    private UUID selectedMinionUUID;
+    private TierEnum maxTierReached;
+
+    public WizardPlayerData() {
+        this.spellsDiscovered = new HashSet<>();
+        this.maxTierReached = TierEnum.NOVICE;
+        this.allies = new HashSet<>();
+        this.allyNames = new HashSet<>();
+        this.imbuementDurations = new HashMap<>();
+        this.recentSpells = new ArrayList<>();
+        this.selectedMinionUUID = UUID.randomUUID();
+    }
+
+    public WizardPlayerData(
+            Set<AbstractSpell> spellsDiscovered,
+            TierEnum maxTierReached,
+            Set<UUID> allies,
+            Set<String> allyNames,
+            Map<String, Integer> imbuementDurations,
+            List<RecentSpellEntry> recentSpells,
+            UUID selectedMinionUUID
+    ) {
+        this.spellsDiscovered = new HashSet<>(spellsDiscovered);
+        this.spellsDiscovered.add(WizardrySpells.MAGIC_MISSILE.get());
+        this.maxTierReached = maxTierReached;
+        this.allies = new HashSet<>(allies);
+        this.allyNames = new HashSet<>(allyNames);
+        this.imbuementDurations = new HashMap<>(imbuementDurations);
+        this.recentSpells = new ArrayList<>(recentSpells);
+        this.selectedMinionUUID = selectedMinionUUID;
+    }
+
+    public static @NonNull WizardPlayerData getDefault() {
+        return DEFAULT;
+    }
+
+    @SuppressWarnings("UnusedReturnValue") // 闭嘴 IDEA
+    public boolean discoverSpell(AbstractSpell spell) {
+        if (spell instanceof None) {
+            return false;
+        }
+        return spellsDiscovered.add(spell);
+    }
 
     public boolean hasSpellBeenDiscovered(AbstractSpell spell) {
-        return this.spellsDiscovered.contains(spell) || spell instanceof None;
+        return this.spellsDiscovered.contains(spell) || spell == WizardrySpells.NONE.get();
     }
 
     public Set<AbstractSpell> spellsDiscovered() {
@@ -108,6 +110,12 @@ public class WizardPlayerData {
         this.maxTierReached = tier;
     }
 
+    public void setSelectedMinionUUID(ISummonedCreature iSummonedCreature) {
+        if (iSummonedCreature instanceof Entity entity) {
+            this.selectedMinionUUID = entity.getUUID();
+        }
+    }
+
     public Set<UUID> allies() {
         return this.allies;
     }
@@ -118,6 +126,10 @@ public class WizardPlayerData {
 
     public Map<String, Integer> imbuementDurations() {
         return this.imbuementDurations;
+    }
+
+    public UUID selectedMinionUUID() {
+        return this.selectedMinionUUID;
     }
 
     public List<RecentSpellEntry> recentSpells() {

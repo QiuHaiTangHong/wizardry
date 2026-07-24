@@ -9,5 +9,7 @@ import top.begonia.wizardry.client.particle.WizardryParticleOptions;
 public class BeamParticle extends AbstractParticle {
     public BeamParticle(WizardryParticleOptions options, ClientLevel level, double x, double y, double z, double xd, double yd, double zd, @NonNull MutableDoubleSpriteSet sprites) {
         super(options, level, x, y, z, xd, yd, zd, sprites);
+        this.setInitialColor(1.0f, 1.0f, 1.0f);
+        this.setLifetime(0);
     }
 }

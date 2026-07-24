@@ -6,31 +6,31 @@
     "cases": [
       {
         "when": "fire",
-        "model": { "type": "wizardry:special_item", "model": "wizardry:block/fire_runestone_pedestal" }
+        "model": { "type": "wizardry:runestone_item_model", "model": "wizardry:block/fire_runestone_pedestal" }
       },
       {
         "when": "ice",
-        "model": { "type": "wizardry:special_item", "model": "wizardry:block/ice_runestone_pedestal" }
+        "model": { "type": "wizardry:runestone_item_model", "model": "wizardry:block/ice_runestone_pedestal" }
       },
       {
         "when": "lightning",
-        "model": { "type": "wizardry:special_item", "model": "wizardry:block/lightning_runestone_pedestal" }
+        "model": { "type": "wizardry:runestone_item_model", "model": "wizardry:block/lightning_runestone_pedestal" }
       },
       {
         "when": "necromancy",
-        "model": { "type": "wizardry:special_item", "model": "wizardry:block/necromancy_runestone_pedestal" }
+        "model": { "type": "wizardry:runestone_item_model", "model": "wizardry:block/necromancy_runestone_pedestal" }
       },
       {
         "when": "earth",
-        "model": { "type": "wizardry:special_item", "model": "wizardry:block/earth_runestone_pedestal" }
+        "model": { "type": "wizardry:runestone_item_model", "model": "wizardry:block/earth_runestone_pedestal" }
       },
       {
         "when": "sorcery",
-        "model": { "type": "wizardry:special_item", "model": "wizardry:block/sorcery_runestone_pedestal" }
+        "model": { "type": "wizardry:runestone_item_model", "model": "wizardry:block/sorcery_runestone_pedestal" }
       },
       {
         "when": "healing",
-        "model": { "type": "wizardry:special_item", "model": "wizardry:block/healing_runestone_pedestal" }
+        "model": { "type": "wizardry:runestone_item_model", "model": "wizardry:block/healing_runestone_pedestal" }
       }
     ]
   }

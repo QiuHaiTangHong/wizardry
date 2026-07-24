@@ -601,7 +601,7 @@
   "item.banner.wizardry_healing.magenta": "Magenta Healing Emblem",
   "item.banner.wizardry_healing.orange": "Orange Healing Emblem",
   "item.banner.wizardry_healing.white": "White Healing Emblem",
-  "entity.wizardry.summonedcreatureplate": "%1$s's %2$s",
+  "entity.wizardry.summonedcreature.nameplate": "%1$s's %2$s",
   "entity.wizardry.summonedcreatureplate_fallback": "Someone's %1$s",
   "entity.wizardry.wizard.greeting_0": "Good day, fellow wanderer.",
   "entity.wizardry.wizard.greeting_1": "Greetings, traveller. What brings you here?",

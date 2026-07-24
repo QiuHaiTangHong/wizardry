@@ -31,6 +31,9 @@ public final class CommonConfig {
     private static final ModConfigSpec.DoubleValue IRON_FLESH_ARMOR_BONUS;
     private static final ModConfigSpec.DoubleValue OAK_FLESH_ARMOR_BONUS;
     private static final ModConfigSpec.DoubleValue OAK_FLESH_HEALTH_BONUS;
+    private static final ModConfigSpec.DoubleValue CONDENSER_AMOUNT_MULTIPLIER;
+    public static final ModConfigSpec.BooleanValue SPELL_BOOK_COLORS_REQUIRE_ARCHIVISTS_EYEGLASS;
+    public static boolean spellBookColorsRequireArchivistsEyeglass;
 
     static {
         BUILDER.push("General Settings");
@@ -128,6 +131,16 @@ public final class CommonConfig {
                 .comment("Health bonus provided by the OakFlesh spell (as a multiplier, e.g., 0.2 = 20% increase).")
                 .worldRestart()
                 .defineInRange("oakFleshHealthBonus", 0.2, 0.0, 100.0);
+        CONDENSER_AMOUNT_MULTIPLIER = BUILDER
+                .translation("config." + Wizardry.MODID + ".condenser_amount_multiplier")
+                .comment("Multiplier for condenser upgrade mana regeneration amount. Higher values make condensers more effective.")
+                .worldRestart()
+                .defineInRange("condenserAmountMultiplier", 1.0, 0.0, 100.0);
+        SPELL_BOOK_COLORS_REQUIRE_ARCHIVISTS_EYEGLASS = BUILDER
+                .comment("If true, spell book colors are only shown when the player has the charm of spell discovery equipped.")
+                .translation("config." + Wizardry.MODID + ".spell_book_colors_require_charm")
+                .worldRestart()
+                .define("spellBookColorsRequireArchivistsEyeglass", false);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
@@ -150,6 +163,7 @@ public final class CommonConfig {
     public static double ironFleshArmorBonus;
     public static double oakFleshArmorBonus;
     public static double oakFleshHealthBonus;
+    public static double condenserAmountMultiplier;
 
     private static void valueChange() {
         noviceMaxCharge = NOVICE_MAX_CHARGE.get();
@@ -170,6 +184,8 @@ public final class CommonConfig {
         diamondFleshArmorToughnessBonus = DIAMOND_FLESH_ARMOR_TOUGHNESS_BONUS.get();
         oakFleshArmorBonus = OAK_FLESH_ARMOR_BONUS.get();
         oakFleshHealthBonus = OAK_FLESH_HEALTH_BONUS.get();
+        condenserAmountMultiplier = CONDENSER_AMOUNT_MULTIPLIER.get();
+        spellBookColorsRequireArchivistsEyeglass = SPELL_BOOK_COLORS_REQUIRE_ARCHIVISTS_EYEGLASS.get();
     }
 
     @SubscribeEvent

@@ -31,7 +31,9 @@ import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.registry.WizardryTags;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 物品堆辅助工具类

@@ -81,6 +81,7 @@ public final class WizardryCreativeTabs {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> SPELLS = CREATIVE_TABS.register(TabsEnum.SPELLS.toString(), () -> CreativeModeTab.builder()
             .title(TabsEnum.SPELLS.getDisplayName())
             .icon(() -> new ItemStack(WizardryItems.SPELL_BOOK.get()))
+            .withSearchBar()
             .build()
     );
 

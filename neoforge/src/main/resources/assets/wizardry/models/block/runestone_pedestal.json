@@ -1,5 +1,6 @@
 {
-    "loader": "wizardry:special_model_loader",
+    "loader": "wizardry:wizardry_model_loader",
+    "type": "wizardry:runestone_model",
 	"parent": "minecraft:block/block",
     "textures": {
         "particle": "#side"

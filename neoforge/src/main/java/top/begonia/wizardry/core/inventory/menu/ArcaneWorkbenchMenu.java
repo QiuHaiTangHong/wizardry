@@ -47,11 +47,9 @@ import java.util.stream.Collectors;
  *   <li> 支持法术绑定和应用按钮触发绑定事件 </li>
  *   <li> 提供书架内容滚动浏览和槽位委托绑定机制 </li>
  * </ul>
- * <p> 设计上不直接处理请求, 而是通过委托槽位和物品处理器抽象物品存储访问, 避免对底层基础设施的直接关注.
  *
  * @author 秋海棠红
  * @version 1.0.0
- * @date 2026.07.08
  * @since 1.0.0
  */
 public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpellSortable {
@@ -443,7 +441,6 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpell
      *
      * @author 秋海棠红
      * @version 1.0.0
-     * @date 2026.07.08
      */
     public enum EmbeddedSlot {
         /**
@@ -482,7 +479,6 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpell
      *
      * @author 秋海棠红
      * @version 1.0.0
-     * @date 2026.07.08
      */
     @FunctionalInterface
     public interface InventoryInfoConsumer {

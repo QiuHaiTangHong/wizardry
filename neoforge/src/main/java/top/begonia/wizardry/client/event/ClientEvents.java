@@ -8,6 +8,8 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.entity.WitherSkeletonRenderer;
+import net.minecraft.client.renderer.entity.ZombieRenderer;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
@@ -29,35 +31,43 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.constants.WizardryKeyMappings;
+import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
 import top.begonia.wizardry.client.data.definition.particle.ParticleParserContextData;
 import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
-import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
 import top.begonia.wizardry.client.data.parser.*;
+import top.begonia.wizardry.client.gui.ArcaneWorkbenchScreen;
 import top.begonia.wizardry.client.gui.BookshelfScreen;
 import top.begonia.wizardry.client.gui.SpellHud;
 import top.begonia.wizardry.client.handle.WizardryControlHandler;
-import top.begonia.wizardry.client.model.loader.EmissionModelLoader;
-import top.begonia.wizardry.client.network.ClientPayloadHandler;
-import top.begonia.wizardry.client.particle.impl.*;
-import top.begonia.wizardry.client.render.*;
-import top.begonia.wizardry.client.render.entity.*;
-import top.begonia.wizardry.client.model.unbaked.item.EmissionUnbakedItemModel;
-import top.begonia.wizardry.client.gui.ArcaneWorkbenchScreen;
 import top.begonia.wizardry.client.model.RobeArmourModel;
 import top.begonia.wizardry.client.model.SageArmourModel;
 import top.begonia.wizardry.client.model.WizardArmourModel;
-import top.begonia.wizardry.client.render.entity.block.ArcaneWorkbenchRender;
-import top.begonia.wizardry.client.render.entity.block.BookshelfRender;
-import top.begonia.wizardry.client.render.entity.block.ImbuementAltarRender;
-import top.begonia.wizardry.client.render.entity.block.LecternRender;
+import top.begonia.wizardry.client.model.block.RunestoneUnbakedBlockModel;
+import top.begonia.wizardry.client.model.conditional.DiscoveredConditional;
+import top.begonia.wizardry.client.model.conditional.FestivalConditional;
+import top.begonia.wizardry.client.model.item.RunestoneUnbakedItemModel;
+import top.begonia.wizardry.client.model.item.SpellBookUnbakedItemModel;
+import top.begonia.wizardry.client.model.loader.WizardryModelLoader;
+import top.begonia.wizardry.client.network.ClientPayloadHandler;
+import top.begonia.wizardry.client.particle.impl.*;
+import top.begonia.wizardry.client.renderer.WizardryPotionRender;
+import top.begonia.wizardry.client.renderer.entity.BlackHoleRender;
+import top.begonia.wizardry.client.renderer.entity.BubbleRender;
+import top.begonia.wizardry.client.renderer.entity.DecayRender;
+import top.begonia.wizardry.client.renderer.entity.MagicArrowRenderer;
+import top.begonia.wizardry.client.renderer.entity.block.ArcaneWorkbenchRender;
+import top.begonia.wizardry.client.renderer.entity.block.BookshelfRender;
+import top.begonia.wizardry.client.renderer.entity.block.ImbuementAltarRender;
+import top.begonia.wizardry.client.renderer.entity.block.LecternRender;
 import top.begonia.wizardry.core.api.event.data.DataParserBefore;
 import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
+import top.begonia.wizardry.core.api.event.data.RegisterDelegateUnbakedModelEvent;
 import top.begonia.wizardry.core.api.event.data.RegisterParticleEvent;
 import top.begonia.wizardry.core.config.ClientConfig;
+import top.begonia.wizardry.core.data.network.handbook.HandbookRecipesRequest;
 import top.begonia.wizardry.core.item.ISpellCastingItem;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.util.ArmourHelper;
-import top.begonia.wizardry.core.data.network.handbook.HandbookRecipesRequest;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
 public class ClientEvents {
@@ -98,14 +108,6 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void onRegisterItemModels(@NonNull RegisterItemModelsEvent event) {
-        event.register(
-                Identifier.fromNamespaceAndPath(Wizardry.MODID, "special_item"),
-                EmissionUnbakedItemModel.MAP_CODEC
-        );
-    }
-
-    @SubscribeEvent
     public static void onRenderGuiLayer(RenderGuiLayerEvent.Post event) {
         if (!ClientConfig.showSpellHUD && !ClientConfig.showChargeMeter) {
             return;
@@ -140,25 +142,43 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void registerEntityRenderers(EntityRenderersEvent.@NonNull RegisterRenderers event) {
-        event.registerEntityRenderer(WizardryEntities.FIRE_BOMB.get(), ThrownItemRenderer::new);
-        event.registerEntityRenderer(WizardryEntities.POISON_BOMB.get(), ThrownItemRenderer::new);
-        event.registerEntityRenderer(WizardryEntities.SMOKE_BOMB.get(), ThrownItemRenderer::new);
-        event.registerEntityRenderer(WizardryEntities.SPARK_BOMB.get(), ThrownItemRenderer::new);
-        event.registerEntityRenderer(WizardryEntities.MAGIC_MISSILE.get(), (context) -> new MagicArrowRenderer(
-                context,
-                Identifier.fromNamespaceAndPath(Wizardry.MODID, "textures/entity/magic_missile.png"),
-                false,
-                8.0,
-                4.0,
-                16,
-                9,
-                false
-        ));
-        event.registerEntityRenderer(WizardryEntities.DECAY.get(), DecayRender::new);
-    }
-
-    @SubscribeEvent
-    public static void onRegisterRenderers(EntityRenderersEvent.@NonNull RegisterRenderers event) {
+        event.registerEntityRenderer(
+                WizardryEntities.FIRE_BOMB.get(),
+                ThrownItemRenderer::new
+        );
+        event.registerEntityRenderer(
+                WizardryEntities.POISON_BOMB.get(),
+                ThrownItemRenderer::new
+        );
+        event.registerEntityRenderer(
+                WizardryEntities.SMOKE_BOMB.get(),
+                ThrownItemRenderer::new
+        );
+        event.registerEntityRenderer(
+                WizardryEntities.SPARK_BOMB.get(),
+                ThrownItemRenderer::new
+        );
+        event.registerEntityRenderer(
+                WizardryEntities.MAGIC_MISSILE.get(),
+                (context) -> new MagicArrowRenderer(
+                        context,
+                        Identifier.fromNamespaceAndPath(Wizardry.MODID, "textures/entity/magic_missile.png"),
+                        false,
+                        8.0,
+                        4.0,
+                        16,
+                        9,
+                        false
+                )
+        );
+        event.registerEntityRenderer(
+                WizardryEntities.DECAY.get(),
+                DecayRender::new
+        );
+        event.registerEntityRenderer(
+                WizardryEntities.BUBBLE.get(),
+                BubbleRender::new
+        );
         event.registerBlockEntityRenderer(
                 WizardryBlockEntities.ARCANE_WORKBENCH.get(),
                 ArcaneWorkbenchRender::new
@@ -175,11 +195,52 @@ public class ClientEvents {
                 WizardryBlockEntities.LECTERN.get(),
                 LecternRender::new
         );
+        event.registerEntityRenderer(
+                WizardryEntities.BLACK_HOLE.get(),
+                BlackHoleRender::new
+        );
+        event.registerEntityRenderer(
+                WizardryEntities.ZOMBIE_MINION.get(),
+                ZombieRenderer::new
+        );
+        event.registerEntityRenderer(
+                WizardryEntities.WITHER_SKELETON_MINION.get(),
+                WitherSkeletonRenderer::new
+        );
+    }
+
+    @SubscribeEvent
+    public static void onRegisterConditionalItemModelProperty(@NonNull RegisterConditionalItemModelPropertyEvent event) {
+        event.register(
+                Identifier.fromNamespaceAndPath(Wizardry.MODID, "festive"),
+                FestivalConditional.CODEC
+        );
+        event.register(
+                Identifier.fromNamespaceAndPath(Wizardry.MODID, "discovered"),
+                DiscoveredConditional.CODEC
+        );
     }
 
     @SubscribeEvent
     public static void onRegisterModelLoaders(ModelEvent.@NonNull RegisterLoaders event) {
-        event.register(EmissionModelLoader.ID, new EmissionModelLoader());
+        event.register(WizardryModelLoader.ID, new WizardryModelLoader());
+    }
+
+    @SubscribeEvent
+    public static void onRegisterItemModels(@NonNull RegisterItemModelsEvent event) {
+        event.register(
+                RunestoneUnbakedItemModel.ID,
+                RunestoneUnbakedItemModel.MAP_CODEC
+        );
+        event.register(
+                SpellBookUnbakedItemModel.ID,
+                SpellBookUnbakedItemModel.MAP_CODEC
+        );
+    }
+
+    @SubscribeEvent
+    public static void onRegisterDelegateUnbakedModel(@NonNull RegisterDelegateUnbakedModelEvent event) {
+        event.register(Identifier.fromNamespaceAndPath(Wizardry.MODID, "runestone_model"), RunestoneUnbakedBlockModel::new);
     }
 
     @SubscribeEvent

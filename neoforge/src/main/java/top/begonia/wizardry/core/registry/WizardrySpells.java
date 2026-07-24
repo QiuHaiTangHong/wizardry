@@ -7,15 +7,31 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.core.entity.construct.BlackHoleEntity;
+import top.begonia.wizardry.core.entity.living.minion.SkeletonMinionEntity;
+import top.begonia.wizardry.core.entity.living.minion.WitherSkeletonMinionEntity;
+import top.begonia.wizardry.core.entity.living.minion.ZombieMinionEntity;
 import top.begonia.wizardry.core.entity.projectile.arrow.MagicMissileEntity;
 import top.begonia.wizardry.core.entity.projectile.bomb.FireBombEntity;
 import top.begonia.wizardry.core.entity.projectile.bomb.PoisonBombEntity;
 import top.begonia.wizardry.core.entity.projectile.bomb.SmokeBombEntity;
 import top.begonia.wizardry.core.entity.projectile.bomb.SparkBombEntity;
 import top.begonia.wizardry.core.spell.AbstractSpell;
-import top.begonia.wizardry.core.spell.impl.*;
+import top.begonia.wizardry.core.spell.impl.ArrowSpell;
+import top.begonia.wizardry.core.spell.impl.None;
+import top.begonia.wizardry.core.spell.impl.construct.ConstructRangedSpell;
 import top.begonia.wizardry.core.spell.impl.projectile.ProjectileSpell;
+import top.begonia.wizardry.core.spell.impl.ray.impl.BubbleRaySpell;
+import top.begonia.wizardry.core.spell.impl.ray.impl.CelestialSmiteRaySpell;
+import top.begonia.wizardry.core.spell.impl.ray.impl.EntrapmentRaySpell;
+import top.begonia.wizardry.core.spell.impl.summon.SkeletonLegionSummonSpell;
+import top.begonia.wizardry.core.spell.impl.summon.SkeletonSummonSpell;
+import top.begonia.wizardry.core.spell.impl.summon.WitherSkeletonSummonSpell;
+import top.begonia.wizardry.core.spell.impl.summon.ZombieSummonSpell;
+
+import java.util.function.Function;
 
 public final class WizardrySpells {
     public static final ResourceKey<Registry<AbstractSpell>> SPELLS_KEY = ResourceKey.createRegistryKey(
@@ -41,7 +57,12 @@ public final class WizardrySpells {
     public static final DeferredHolder<AbstractSpell, None> SNOWBALL = SPELLS.register("snowball", None::new);
     public static final DeferredHolder<AbstractSpell, None> ARC = SPELLS.register("arc", None::new);
     public static final DeferredHolder<AbstractSpell, None> THUNDERBOLT = SPELLS.register("thunderbolt", None::new);
-    public static final DeferredHolder<AbstractSpell, None> SUMMON_ZOMBIE = SPELLS.register("summon_zombie", None::new);
+    public static final DeferredHolder<AbstractSpell, ZombieSummonSpell> SUMMON_ZOMBIE = register("summon_zombie",
+            (identifier) -> new ZombieSummonSpell(
+                    identifier,
+                    ZombieMinionEntity::new
+            )
+    );
     public static final DeferredHolder<AbstractSpell, None> SNARE = SPELLS.register("snare", None::new);
     public static final DeferredHolder<AbstractSpell, None> DART = SPELLS.register("dart", None::new);
     public static final DeferredHolder<AbstractSpell, None> LIGHT = SPELLS.register("light", None::new);
@@ -49,11 +70,11 @@ public final class WizardrySpells {
     public static final DeferredHolder<AbstractSpell, None> HEAL = SPELLS.register("heal", None::new);
     public static final DeferredHolder<AbstractSpell, None> FIREBALL = SPELLS.register("fireball", None::new);
     public static final DeferredHolder<AbstractSpell, None> FLAME_RAY = SPELLS.register("flame_ray", None::new);
-    public static final DeferredHolder<AbstractSpell, ProjectileSpell<FireBombEntity>> FIRE_BOMB = SPELLS.register(
+    public static final DeferredHolder<AbstractSpell, ProjectileSpell<FireBombEntity>> FIRE_BOMB = register(
             "fire_bomb",
-            () -> {
+            (identifier) -> {
                 ProjectileSpell<FireBombEntity> spell = new ProjectileSpell<>(
-                        Identifier.fromNamespaceAndPath(Wizardry.MODID, "fire_bomb"),
+                        identifier,
                         WizardryEntities.FIRE_BOMB,
                         () -> new ItemStack(WizardryItems.FIRE_BOMB.get()),
                         FireBombEntity::new
@@ -70,11 +91,11 @@ public final class WizardrySpells {
     public static final DeferredHolder<AbstractSpell, None> ICE_STATUE = SPELLS.register("ice_statue", None::new);
     public static final DeferredHolder<AbstractSpell, None> FROST_SIGIL = SPELLS.register("frost_sigil", None::new);
     public static final DeferredHolder<AbstractSpell, None> LIGHTNING_RAY = SPELLS.register("lightning_ray", None::new);
-    public static final DeferredHolder<AbstractSpell, ProjectileSpell<SparkBombEntity>> SPARK_BOMB = SPELLS.register(
+    public static final DeferredHolder<AbstractSpell, ProjectileSpell<SparkBombEntity>> SPARK_BOMB = register(
             "spark_bomb",
-            () -> {
+            (identifier) -> {
                 ProjectileSpell<SparkBombEntity> spell = new ProjectileSpell<>(
-                        Identifier.fromNamespaceAndPath(Wizardry.MODID, "spark_bomb"),
+                        identifier,
                         WizardryEntities.SPARK_BOMB,
                         () -> new ItemStack(WizardryItems.SPARK_BOMB.get()),
                         SparkBombEntity::new
@@ -87,18 +108,24 @@ public final class WizardrySpells {
     public static final DeferredHolder<AbstractSpell, None> LIGHTNING_SIGIL = SPELLS.register("lightning_sigil", None::new);
     public static final DeferredHolder<AbstractSpell, None> LIGHTNING_ARROW = SPELLS.register("lightning_arrow", None::new);
     public static final DeferredHolder<AbstractSpell, None> LIFE_DRAIN = SPELLS.register("life_drain", None::new);
-    public static final DeferredHolder<AbstractSpell, None> SUMMON_SKELETON = SPELLS.register("summon_skeleton", None::new);
+    public static final DeferredHolder<AbstractSpell, SkeletonSummonSpell> SUMMON_SKELETON = register(
+            "summon_skeleton",
+            identifier -> new SkeletonSummonSpell(
+                    identifier,
+                    SkeletonMinionEntity::new
+            )
+    );
     public static final DeferredHolder<AbstractSpell, None> METAMORPHOSIS = SPELLS.register("metamorphosis", None::new);
     public static final DeferredHolder<AbstractSpell, None> WITHER = SPELLS.register("wither", None::new);
     public static final DeferredHolder<AbstractSpell, None> POISON = SPELLS.register("poison", None::new);
     public static final DeferredHolder<AbstractSpell, None> GROWTH_AURA = SPELLS.register("growth_aura", None::new);
-    public static final DeferredHolder<AbstractSpell, None> BUBBLE = SPELLS.register("bubble", None::new);
+    public static final DeferredHolder<AbstractSpell, BubbleRaySpell> BUBBLE = SPELLS.register("bubble", BubbleRaySpell::new);
     public static final DeferredHolder<AbstractSpell, None> WHIRLWIND = SPELLS.register("whirlwind", None::new);
-    public static final DeferredHolder<AbstractSpell, ProjectileSpell<PoisonBombEntity>> POISON_BOMB = SPELLS.register(
+    public static final DeferredHolder<AbstractSpell, ProjectileSpell<PoisonBombEntity>> POISON_BOMB = register(
             "poison_bomb",
-            () -> {
+            (identifier) -> {
                 ProjectileSpell<PoisonBombEntity> spell = new ProjectileSpell<>(
-                        Identifier.fromNamespaceAndPath(Wizardry.MODID, "poison_bomb"),
+                        identifier,
                         WizardryEntities.POISON_BOMB,
                         () -> new ItemStack(WizardryItems.POISON_BOMB.get()),
                         PoisonBombEntity::new
@@ -136,8 +163,14 @@ public final class WizardrySpells {
     public static final DeferredHolder<AbstractSpell, None> STATIC_AURA = SPELLS.register("static_aura", None::new);
     public static final DeferredHolder<AbstractSpell, None> LIGHTNING_DISC = SPELLS.register("lightning_disc", None::new);
     public static final DeferredHolder<AbstractSpell, None> MIND_CONTROL = SPELLS.register("mind_control", None::new);
-    public static final DeferredHolder<AbstractSpell, None> SUMMON_WITHER_SKELETON = SPELLS.register("summon_wither_skeleton", None::new);
-    public static final DeferredHolder<AbstractSpell, None> ENTRAPMENT = SPELLS.register("entrapment", None::new);
+    public static final DeferredHolder<AbstractSpell, WitherSkeletonSummonSpell> SUMMON_WITHER_SKELETON = register(
+            "summon_wither_skeleton",
+            identifier -> new WitherSkeletonSummonSpell(
+                    identifier,
+                    WitherSkeletonMinionEntity::new
+            )
+    );
+    public static final DeferredHolder<AbstractSpell, EntrapmentRaySpell> ENTRAPMENT = SPELLS.register("entrapment", EntrapmentRaySpell::new);
     public static final DeferredHolder<AbstractSpell, None> WITHER_SKULL = SPELLS.register("wither_skull", None::new);
     public static final DeferredHolder<AbstractSpell, None> DARKNESS_ORB = SPELLS.register("darkness_orb", None::new);
     public static final DeferredHolder<AbstractSpell, None> SHADOW_WARD = SPELLS.register("shadow_ward", None::new);
@@ -170,22 +203,39 @@ public final class WizardrySpells {
     public static final DeferredHolder<AbstractSpell, None> THUNDERSTORM = SPELLS.register("thunderstorm", None::new);
     public static final DeferredHolder<AbstractSpell, None> LIGHTNING_HAMMER = SPELLS.register("lightning_hammer", None::new);
     public static final DeferredHolder<AbstractSpell, None> PLAGUE_OF_DARKNESS = SPELLS.register("plague_of_darkness", None::new);
-    public static final DeferredHolder<AbstractSpell, None> SUMMON_SKELETON_LEGION = SPELLS.register("summon_skeleton_legion", None::new);
+    public static final DeferredHolder<AbstractSpell, SkeletonLegionSummonSpell> SUMMON_SKELETON_LEGION = register(
+            "summon_skeleton_legion",
+            identifier -> new SkeletonLegionSummonSpell(
+                    identifier,
+                    SkeletonMinionEntity::new
+            )
+    );
     public static final DeferredHolder<AbstractSpell, None> SUMMON_SHADOW_WRAITH = SPELLS.register("summon_shadow_wraith", None::new);
     public static final DeferredHolder<AbstractSpell, None> FORESTS_CURSE = SPELLS.register("forests_curse", None::new);
     public static final DeferredHolder<AbstractSpell, None> FLIGHT = SPELLS.register("flight", None::new);
     public static final DeferredHolder<AbstractSpell, None> SILVERFISH_SWARM = SPELLS.register("silverfish_swarm", None::new);
-    public static final DeferredHolder<AbstractSpell, None> BLACK_HOLE = SPELLS.register("black_hole", None::new);
+    public static final DeferredHolder<AbstractSpell, ConstructRangedSpell<BlackHoleEntity>> BLACK_HOLE = register(
+            "black_hole",
+            (identifier) -> {
+                ConstructRangedSpell<BlackHoleEntity> spell = new ConstructRangedSpell<>(
+                        identifier,
+                        BlackHoleEntity::new,
+                        false
+                );
+                spell.soundValues(2, 0.7f, 0);
+                return spell;
+            }
+    );
     public static final DeferredHolder<AbstractSpell, None> SHOCKWAVE = SPELLS.register("shockwave", None::new);
     public static final DeferredHolder<AbstractSpell, None> SUMMON_IRON_GOLEM = SPELLS.register("summon_iron_golem", None::new);
     public static final DeferredHolder<AbstractSpell, None> ARROW_RAIN = SPELLS.register("arrow_rain", None::new);
     public static final DeferredHolder<AbstractSpell, None> DIAMONDFLESH = SPELLS.register("diamondflesh", None::new);
     public static final DeferredHolder<AbstractSpell, None> FONT_OF_VITALITY = SPELLS.register("font_of_vitality", None::new);
-    public static final DeferredHolder<AbstractSpell, ProjectileSpell<SmokeBombEntity>> SMOKE_BOMB = SPELLS.register(
+    public static final DeferredHolder<AbstractSpell, ProjectileSpell<SmokeBombEntity>> SMOKE_BOMB = register(
             "smoke_bomb",
-            () -> {
+            (identifier) -> {
                 ProjectileSpell<SmokeBombEntity> spell = new ProjectileSpell<>(
-                        Identifier.fromNamespaceAndPath(Wizardry.MODID, "smoke_bomb"),
+                        identifier,
                         WizardryEntities.SMOKE_BOMB,
                         () -> new ItemStack(WizardryItems.SMOKE_BOMB.get()),
                         SmokeBombEntity::new
@@ -270,7 +320,15 @@ public final class WizardrySpells {
     public static final DeferredHolder<AbstractSpell, None> FLAMECATCHER = SPELLS.register("flamecatcher", None::new);
     public static final DeferredHolder<AbstractSpell, None> ZOMBIE_APOCALYPSE = SPELLS.register("zombie_apocalypse", None::new);
     public static final DeferredHolder<AbstractSpell, None> BOULDER = SPELLS.register("boulder", None::new);
-    public static final DeferredHolder<AbstractSpell, None> CELESTIAL_SMITE = SPELLS.register("celestial_smite", None::new);
+    public static final DeferredHolder<AbstractSpell, CelestialSmiteRaySpell> CELESTIAL_SMITE = register("celestial_smite", CelestialSmiteRaySpell::new);
+
+    public static <T extends AbstractSpell> @NonNull DeferredHolder<AbstractSpell, T> register(
+            String name,
+            Function<Identifier, T> spellFactory
+    ) {
+        Identifier identifier = Identifier.fromNamespaceAndPath(Wizardry.MODID, name);
+        return SPELLS.register(name, () -> spellFactory.apply(identifier));
+    }
 
     public static void register(IEventBus modBus) {
         SPELLS.makeRegistry(builder -> builder

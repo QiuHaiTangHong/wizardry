@@ -10,10 +10,9 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.core.config.CommonConfig;
+import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
 import top.begonia.wizardry.core.registry.*;
-import top.begonia.wizardry.core.config.ServerConfig;
-import top.begonia.wizardry.core.util.ItemStackHelper;
 
 @Mod(Wizardry.MODID)
 @EventBusSubscriber(modid = Wizardry.MODID)
@@ -43,8 +42,6 @@ public class WizardryCommon {
     }
 
     private void commonSetup(final @NonNull FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            WizardryServerDataManager.getInstance().fireRegisterEvents();
-        });
+        event.enqueueWork(() -> WizardryServerDataManager.getInstance().fireRegisterEvents());
     }
 }

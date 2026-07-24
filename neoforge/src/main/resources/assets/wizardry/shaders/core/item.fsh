@@ -26,6 +26,10 @@ void main() {
     color.rgb = mix(overlayColor.rgb, color.rgb, overlayColor.a);
     fragColor = apply_fog(color, sphericalVertexDistance, cylindricalVertexDistance, FogEnvironmentalStart, FogEnvironmentalEnd, FogRenderDistanceStart, FogRenderDistanceEnd, FogColor);
     #else
-    fragColor = color;
+    #ifdef USE_CUSTOM_COLOR
+       fragColor = color * vertexColor * ColorModulator;
+    #else
+       fragColor = color;
+    #endif
     #endif
 }

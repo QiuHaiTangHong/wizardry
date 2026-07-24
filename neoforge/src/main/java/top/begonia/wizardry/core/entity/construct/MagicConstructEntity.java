@@ -46,10 +46,6 @@ public abstract class MagicConstructEntity extends Entity implements TraceableEn
         }
     }
 
-    public int getLifetime() {
-        return this.getEntityData().get(DATA_LIFETIME);
-    }
-
     @Override
     public boolean hurtServer(@NonNull ServerLevel serverLevel, @NonNull DamageSource damageSource, float v) {
         return false;
@@ -69,16 +65,34 @@ public abstract class MagicConstructEntity extends Entity implements TraceableEn
         valueOutput.putFloat("damageMultiplier", this.getEntityData().get(DATA_DAMAGE_MULTIPLIER));
     }
 
+    public int getLifetime() {
+        return this.getEntityData().get(DATA_LIFETIME);
+    }
+
+    public void setLifetime(int lifetime) {
+        this.getEntityData().set(DATA_LIFETIME, lifetime);
+    }
+
+    public float getDamageMultiplier() {
+        return this.getEntityData().get(DATA_DAMAGE_MULTIPLIER);
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.getEntityData().set(DATA_DAMAGE_MULTIPLIER, damageMultiplier);
+    }
+
     public boolean isValidTarget(Entity target) {
         return AllyDesignationSystem.isValidTarget(this.getOwner(), target);
     }
 
     @Override
     public @Nullable Entity getOwner() {
-        return this.getEntityData().get(DATA_CASTER_UUID).map(value -> this.level().getEntity(value)).orElse(null);
+        return this.getEntityData().get(DATA_CASTER_UUID).map(uuid -> this.level().getEntity(uuid)).orElse(null);
     }
 
-    public void setOwner(@NonNull Entity entity) {
-        this.getEntityData().set(DATA_CASTER_UUID, Optional.of(entity.getUUID()));
+    public void setOwner(Entity entity) {
+        if (entity != null) {
+            this.getEntityData().set(DATA_CASTER_UUID, Optional.of(entity.getUUID()));
+        }
     }
 }

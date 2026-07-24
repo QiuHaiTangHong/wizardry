@@ -50,11 +50,6 @@ public final class WizardryComponents {
                             .networkSynchronized(AbstractSpell.STREAM_CODEC)
                             .cacheEncoding()
             );
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> SPELL_STATE =
-            COMPONENTS.registerComponentType("spell_state",
-                    builder -> builder.persistent(Codec.STRING)
-                            .networkSynchronized(ByteBufCodecs.STRING_UTF8)
-            );
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> CURRENT_SPELL =
             COMPONENTS.registerComponentType("current_spell",
                     builder -> builder
