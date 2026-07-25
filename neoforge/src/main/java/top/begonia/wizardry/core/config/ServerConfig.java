@@ -7,6 +7,7 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.core.constants.ConfigCategory;
 
 import java.util.List;
 import java.util.Objects;
@@ -62,7 +63,10 @@ public final class ServerConfig {
     public static boolean minionRevengeTargeting;
 
     static {
-        BUILDER.push("Gameplay");
+        BUILDER
+                .comment("Global settings that affect game mechanics. In multiplayer, the server/LAN host settings will apply. Please note that changing some of these settings may make the mod very difficult to play.")
+                .translation("config." + Wizardry.MODID + ".category." + ConfigCategory.GAMEPLAY_CATEGORY)
+                .push("Gameplay");
 
         MANA_PER_SHARD = BUILDER.comment("The amount of mana a crystal shard is worth.")
                 .translation("config." + Wizardry.MODID + ".mana_per_shard")
@@ -94,7 +98,10 @@ public final class ServerConfig {
 
         BUILDER.pop();
 
-        BUILDER.push("Tweaks");
+        BUILDER
+                .comment("Assorted settings for tweaking the mod's behaviour. In multiplayer, the server/LAN host settings will apply.")
+                .translation("config." + Wizardry.MODID + ".category." + ConfigCategory.TWEAKS_CATEGORY)
+                .push("Tweaks");
 
         COOLDOWN_REDUCTION_PER_LEVEL = BUILDER.comment("The fraction by which cooldowns are reduced for each level of cooldown upgrade.")
                 .translation("config." + Wizardry.MODID + ".cooldown_reduction_per_level")

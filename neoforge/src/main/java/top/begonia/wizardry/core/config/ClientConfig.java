@@ -6,6 +6,7 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.core.constants.ConfigCategory;
 import top.begonia.wizardry.core.constants.GuiPosition;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
@@ -35,7 +36,10 @@ public final class ClientConfig {
     public static boolean reverseScrollDirection;
 
     static {
-        BUILDER.push("Client Settings");
+        BUILDER
+                .translation("config." + Wizardry.MODID + ".category." + ConfigCategory.CLIENT_CATEGORY)
+                .comment("Client-side settings that only affect the local minecraft game. If this file is on a dedicated server, these settings will have no effect; in multiplayer, each player obeys their own settings.")
+                .push(ConfigCategory.CLIENT_CATEGORY);
         BOOKS_PAUSE_GAME = BUILDER
                 .comment("Whether opening any of wizardry's books pauses the game in singleplayer. Has no effect on servers or LAN worlds.")
                 .translation("config." + Wizardry.MODID + ".books_pause_game")

@@ -85,47 +85,47 @@ public abstract class SpellCastEvent extends Event {
     }
 
     public static class Pre extends SpellCastEvent implements ICancellableEvent {
-        private final SpellContextFlow contextFlow;
+        private final SpellContextFlow spellContextFlow;
 
-        public Pre(Source source, SpellContextFlow contextFlow) {
-            super(source, contextFlow.currentSpell(), contextFlow.caster());
-            this.contextFlow = contextFlow;
+        public Pre(Source source, AbstractSpell spell, LivingEntity caster, SpellContextFlow spellContextFlow) {
+            super(source, spell, caster);
+            this.spellContextFlow = spellContextFlow;
         }
 
-        public Pre(Source source, AbstractSpell spell, Level level, double x, double y, double z, Direction direction, SpellContextFlow contextFlow) {
+        public Pre(Source source, AbstractSpell spell, Level level, double x, double y, double z, Direction direction, SpellContextFlow spellContextFlow) {
             super(source, spell, level, x, y, z, direction);
-            this.contextFlow = contextFlow;
+            this.spellContextFlow = spellContextFlow;
         }
 
-        public SpellContextFlow getContextFlow() {
-            return this.contextFlow;
+        public SpellContextFlow getSpellContextFlow() {
+            return this.spellContextFlow;
         }
     }
 
     public static class Post extends SpellCastEvent {
-        private final SpellContext context;
+        private final SpellContext spellContext;
 
-        public Post(Source source, AbstractSpell spell, LivingEntity caster, SpellContext context) {
+        public Post(Source source, AbstractSpell spell, LivingEntity caster, SpellContext spellContext) {
             super(source, spell, caster);
-            this.context = context;
+            this.spellContext = spellContext;
         }
 
-        public Post(Source source, AbstractSpell spell, Level level, double x, double y, double z, Direction direction, SpellContext context) {
+        public Post(Source source, AbstractSpell spell, Level level, double x, double y, double z, Direction direction, SpellContext spellContext) {
             super(source, spell, level, x, y, z, direction);
-            this.context = context;
+            this.spellContext = spellContext;
         }
 
-        public SpellContext getContext() {
-            return this.context;
+        public SpellContext getSpellContext() {
+            return this.spellContext;
         }
     }
 
     public static class Tick extends SpellCastEvent implements ICancellableEvent {
-        private final SpellContextFlow spellContextFlow;
         private final int count;
+        private final SpellContextFlow spellContextFlow;
 
-        public Tick(Source source, SpellContextFlow spellContextFlow, int count) {
-            super(source, spellContextFlow.currentSpell(), spellContextFlow.caster());
+        public Tick(Source source, AbstractSpell spell, LivingEntity caster, SpellContextFlow spellContextFlow, int count) {
+            super(source, spell, caster);
             this.count = count;
             this.spellContextFlow = spellContextFlow;
         }
@@ -140,30 +140,33 @@ public abstract class SpellCastEvent extends Event {
             return count;
         }
 
-        public SpellContextFlow getContext() {
+        public SpellContextFlow getSpellContextFlow() {
             return this.spellContextFlow;
         }
-
     }
 
     public static class Finish extends SpellCastEvent {
-        private final SpellContext context;
         private final int count;
+        private final SpellContext spellContext;
 
-        public Finish(Source source, AbstractSpell spell, LivingEntity caster, SpellContext context, int count) {
+        public Finish(Source source, AbstractSpell spell, LivingEntity caster, SpellContext spellContext, int count) {
             super(source, spell, caster);
             this.count = count;
-            this.context = context;
+            this.spellContext = spellContext;
         }
 
-        public Finish(Source source, AbstractSpell spell, Level level, double x, double y, double z, Direction direction, SpellContext context, int count) {
+        public Finish(Source source, AbstractSpell spell, Level level, double x, double y, double z, Direction direction, SpellContext spellContext, int count) {
             super(source, spell, level, x, y, z, direction);
             this.count = count;
-            this.context = context;
+            this.spellContext = spellContext;
         }
 
         public int getCount() {
             return count;
+        }
+
+        public SpellContext getSpellContext() {
+            return this.spellContext;
         }
     }
 }

@@ -54,8 +54,8 @@ public interface ISpellCastingItem {
         return true;
     }
 
-    boolean canCast(int castingTick, SpellContextFlow spellContextFlow);
+    boolean canCast(ItemStack stack, AbstractSpell spell, Player caster, InteractionHand hand, int castingTick, SpellContextFlow spellContextFlow);
 
-    boolean cast(ItemStack stack, AbstractSpell spell, Player caster, InteractionHand hand, int castingTick, SpellContext spellContextFlow);
+    boolean cast(ItemStack stack, AbstractSpell spell, Player caster, InteractionHand hand, int castingTick, SpellContext spellContext);
 
 }

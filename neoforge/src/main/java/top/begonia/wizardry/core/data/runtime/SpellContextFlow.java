@@ -1,14 +1,10 @@
 package top.begonia.wizardry.core.data.runtime;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
-import top.begonia.wizardry.core.spell.AbstractSpell;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,8 +22,6 @@ import java.util.Map;
  *
  * @author 秋海棠红
  * @version 1.0.0
- * @email 2981263417@qq.com
- * @date 2026.05.28
  * @since 1.0.0
  */
 public final class SpellContextFlow {
@@ -36,21 +30,13 @@ public final class SpellContextFlow {
     private float chargeUp = 1.0f;
     private float progression = 1.0f;
 
-    private final AbstractSpell currentSpell;
-    private final LivingEntity caster;
-    private final InteractionHand hand;
-    private final ItemStack staffStack;
     private final Map<String, Float> multiplyProperties = new HashMap<>();
 
-    private SpellContextFlow(@NonNull LivingEntity caster, InteractionHand hand, ItemStack staffStack, AbstractSpell currentSpell) {
-        this.caster = caster;
-        this.hand = hand;
-        this.staffStack = staffStack;
-        this.currentSpell = currentSpell;
+    private SpellContextFlow() {
     }
 
-    public static @NonNull SpellContextFlow create(@NonNull LivingEntity caster, InteractionHand hand, ItemStack staffStack, AbstractSpell currentSpell) {
-        return new SpellContextFlow(caster, hand, staffStack, currentSpell);
+    public static @NonNull SpellContextFlow create() {
+        return new SpellContextFlow();
     }
 
     public @NonNull SpellContextFlow accept(@NonNull SpellContextOperation spellContextBuilder) {
@@ -133,22 +119,6 @@ public final class SpellContextFlow {
 
     public float progression() {
         return this.progression;
-    }
-
-    public AbstractSpell currentSpell() {
-        return this.currentSpell;
-    }
-
-    public LivingEntity caster() {
-        return this.caster;
-    }
-
-    public ItemStack staffStack() {
-        return this.staffStack;
-    }
-
-    public InteractionHand hand() {
-        return this.hand;
     }
 
     public float multiplyProperties(String key) {

@@ -6,6 +6,7 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.core.constants.ConfigCategory;
 
 import java.util.List;
 
@@ -36,7 +37,10 @@ public final class CommonConfig {
     public static boolean spellBookColorsRequireArchivistsEyeglass;
 
     static {
-        BUILDER.push("General Settings");
+        BUILDER
+                .comment("Settings that affect the mod's difficulty. In multiplayer, the server/LAN host settings will apply.")
+                .translation("config." + Wizardry.MODID + ".category." + ConfigCategory.DIFFICULTY_CATEGORY)
+                .push(ConfigCategory.DIFFICULTY_CATEGORY);
         NOVICE_MAX_CHARGE = BUILDER
                 .translation("config." + Wizardry.MODID + ".novice_max_charge")
                 .comment("Maximum mana a novice wand can store.")

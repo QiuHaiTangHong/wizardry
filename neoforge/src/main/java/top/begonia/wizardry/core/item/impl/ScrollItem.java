@@ -46,8 +46,8 @@ public class ScrollItem extends Item implements ISpellCastingItem, IWorkbenchIte
     public @NonNull InteractionResult use(@NonNull Level level, @NonNull Player player, @NonNull InteractionHand hand) {
         ItemStack handItem = player.getItemInHand(hand);
         AbstractSpell spell = this.getCurrentSpell(handItem);
-        SpellContextFlow spellContextFlow = SpellContextFlow.create(player, hand, handItem, spell);
-        if (this.canCast(0, spellContextFlow)) {
+        SpellContextFlow spellContextFlow = SpellContextFlow.create();
+        if (this.canCast(handItem, spell, player, hand, 0, spellContextFlow)) {
             if (spell.isContinuous) {
 
             } else if (this.cast(handItem, spell, player, hand, 0, spellContextFlow.packing())) {
@@ -78,11 +78,11 @@ public class ScrollItem extends Item implements ISpellCastingItem, IWorkbenchIte
     }
 
     @Override
-    public boolean canCast(int castingTick, SpellContextFlow spellContextFlow) {
+    public boolean canCast(ItemStack stack, AbstractSpell spell, Player caster, InteractionHand hand, int castingTick, SpellContextFlow spellContextFlow) {
         if (castingTick == 0) {
-            return !NeoForge.EVENT_BUS.post(new SpellCastEvent.Pre(SpellCastEvent.Source.SCROLL, spellContextFlow)).isCanceled();
+            return !NeoForge.EVENT_BUS.post(new SpellCastEvent.Pre(SpellCastEvent.Source.SCROLL, spell, caster, spellContextFlow)).isCanceled();
         } else {
-            return !NeoForge.EVENT_BUS.post(new SpellCastEvent.Tick(SpellCastEvent.Source.SCROLL, spellContextFlow, castingTick)).isCanceled();
+            return !NeoForge.EVENT_BUS.post(new SpellCastEvent.Tick(SpellCastEvent.Source.SCROLL, spell, caster, spellContextFlow, castingTick)).isCanceled();
         }
     }
 
@@ -93,7 +93,6 @@ public class ScrollItem extends Item implements ISpellCastingItem, IWorkbenchIte
         if (level.isClientSide() && !spell.isContinuous && spell.requiresPacket()) {
             return false;
         }
-
         if (spell.cast(level, caster, hand, castingTick, spellContext)) {
 
             if (castingTick == 0) {

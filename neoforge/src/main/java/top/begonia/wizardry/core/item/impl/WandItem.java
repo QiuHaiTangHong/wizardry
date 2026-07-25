@@ -22,22 +22,25 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.core.config.CommonConfig;
 import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.constants.EnabledEnum;
+import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.data.player.WizardPlayerDataOperator;
 import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
-import top.begonia.wizardry.core.constants.ElementEnum;
-import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.item.IManaStoringItem;
 import top.begonia.wizardry.core.item.ISpellCastingItem;
 import top.begonia.wizardry.core.item.IWorkbenchItem;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.spell.AbstractSpell;
-import top.begonia.wizardry.core.util.TextHelper;
 import top.begonia.wizardry.core.util.ItemStackHelper;
+import top.begonia.wizardry.core.util.TextHelper;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 
@@ -199,12 +202,12 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
     }
 
     @Override
-    public boolean canCast(int castingTick, SpellContextFlow spellContextFlow) {
+    public boolean canCast(ItemStack stack, AbstractSpell spell, Player caster, InteractionHand hand, int castingTick, SpellContextFlow spellContextFlow) {
         return false;
     }
 
     @Override
-    public boolean cast(ItemStack stack, AbstractSpell spell, Player caster, InteractionHand hand, int castingTick, SpellContext spellContextFlow) {
+    public boolean cast(ItemStack stack, AbstractSpell spell, Player caster, InteractionHand hand, int castingTick, SpellContext spellContext) {
         return false;
     }
 

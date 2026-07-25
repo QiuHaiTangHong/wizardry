@@ -317,7 +317,7 @@
   "item.wizardry.warlock_boots_healing": "治愈巫术士靴子",
   "item.wizardry.spawn_wizard": "生成巫师",
   "item.wizardry.spawn_evil_wizard": "生成邪恶巫师",
-  "item.wizardry.spectral_helmet": "幽冥头盔",
+  "item.wizardry.spectral_helmet_magic": "Spectral Helmet",
   "item.wizardry.spectral_chestplate": "幽冥胸甲",
   "item.wizardry.spectral_leggings": "幽冥护腿",
   "item.wizardry.spectral_boots": "幽冥靴子",
@@ -1730,11 +1730,5 @@
   "spell.wizardry.invigorating_presence_festive": "鼓舞之心",
   "spell.wizardry.empowering_presence_festive": "魔力增强",
   "wizard.debug": "%1$s， %2$s， %3$s",
-  "wizardry.shrine_already_looted": "You have already looted this shrine!",
-  "item.wizardry.advanced_wand": "Advanced Wand",
-  "item.wizardry.apprentice_wand": "Apprentice Wand",
-  "item.wizardry.magic_wand": "Magic Wand",
-  "item.wizardry.master_wand": "Master Wand",
-  "spell.wizardry.firebomb": "Firebomb",
-  "spell.wizardry.firebomb.desc": "Lanches a firebomb in the direction you are pointing which explodes on impact, setting targets on fire."
+  "wizardry.shrine_already_looted": "You have already looted this shrine!"
 }
