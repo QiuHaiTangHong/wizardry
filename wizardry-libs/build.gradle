@@ -1,0 +1,35 @@
+plugins {
+    id 'base'
+    id 'idea'
+}
+def finalOutputDir = rootProject.layout.buildDirectory.dir("${project.name}/lib").get().asFile
+def cmakeBuildDir = rootProject.layout.buildDirectory.dir("${project.name}/cmake-build").get().asFile
+
+def cmakeConfigure = tasks.register('cmakeConfigure', Exec) {
+    inputs.file("${projectDir}/CMakeLists.txt")
+    inputs.file("${projectDir}/src/main/cpp/main.cpp")
+    outputs.dir(cmakeBuildDir)
+
+    workingDir cmakeBuildDir
+    doFirst {
+        cmakeBuildDir.mkdirs()
+    }
+    commandLine 'cmake', project.projectDir.absolutePath, "-DCMAKE_INSTALL_PREFIX=${finalOutputDir.absolutePath}"
+}
+
+def cmakeBuild = tasks.register('cmakeBuild', Exec) {
+    dependsOn cmakeConfigure
+    workingDir cmakeBuildDir
+
+    commandLine 'cmake', '--build', '.', '--config', 'Release'
+}
+
+def install = tasks.register('install', Exec) {
+    dependsOn cmakeBuild
+    workingDir cmakeBuildDir
+    commandLine 'cmake', '--install', '.', '--config', 'Release'
+}
+
+tasks.named('assemble') {
+    dependsOn install
+}

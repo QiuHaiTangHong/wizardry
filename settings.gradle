@@ -18,4 +18,4 @@ plugins {
 }
 
 rootProject.name = 'wizardry'
-include('neoforge', 'native-libs')
+include('wizardry-main', 'wizardry-libs')
