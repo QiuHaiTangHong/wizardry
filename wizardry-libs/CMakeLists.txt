@@ -1,22 +1,39 @@
 cmake_minimum_required(VERSION 3.22)
 
+project(wizardry-native-libs
+        VERSION 1.0.0
+        LANGUAGES C CXX
+)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 
-project(wizardry-native-libs CXX)
+add_library(wizardry-native-libs SHARED
+        src/main/cpp/MathUtils.cpp
+)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+target_compile_definitions(wizardry-native-libs
+    PRIVATE WIZARDRY_NATIVE_LIBS_EXPORTS
+)
 
-find_package(JNI REQUIRED)
+target_include_directories(wizardry-native-libs
+        PUBLIC  src/main/include
+)
 
-add_library(wizardry-native-libs SHARED src/main/cpp/main.cpp)
+set_target_properties(wizardry-native-libs PROPERTIES
+        OUTPUT_NAME wizardry-native-libs
+        VERSION     ${PROJECT_VERSION}
+        SOVERSION   1
+)
 
-target_include_directories(wizardry-native-libs PRIVATE ${JNI_INCLUDE_DIRS})
-
-target_compile_definitions(wizardry-native-libs PRIVATE JNI_IMPLEMENTATION)
 install(TARGETS wizardry-native-libs
-    RUNTIME DESTINATION .
-    LIBRARY DESTINATION .
-    ARCHIVE DESTINATION .
+        RUNTIME DESTINATION lib
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+)
+
+install(FILES src/main/include/MathUtils.h
+        DESTINATION include
 )

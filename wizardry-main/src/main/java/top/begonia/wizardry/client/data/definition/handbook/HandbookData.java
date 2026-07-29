@@ -3,10 +3,10 @@ package top.begonia.wizardry.client.data.definition.handbook;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.ExtraCodecs;
-import top.begonia.wizardry.core.api.data.IResultData;
 import top.begonia.wizardry.client.data.definition.handbook.part.ImageData;
 import top.begonia.wizardry.client.data.definition.handbook.part.RecipeTagData;
 import top.begonia.wizardry.client.data.definition.handbook.part.SectionData;
+import top.begonia.wizardry.core.api.data.IResultData;
 
 import java.util.Map;
 
@@ -25,6 +25,14 @@ public record HandbookData(
                     Codec.unboundedMap(Codec.STRING, RecipeTagData.CODEC).fieldOf("recipes").forGetter(HandbookData::recipes),
                     Codec.unboundedMap(Codec.STRING, SectionData.CODEC).fieldOf("sections").forGetter(HandbookData::sections)
             ).apply(instance, HandbookData::new)
+    );
+
+    public static final HandbookData DEFAULT = new HandbookData(
+            "",
+            Map.of(),
+            Map.of(),
+            Map.of(),
+            Map.of()
     );
 
     @Override

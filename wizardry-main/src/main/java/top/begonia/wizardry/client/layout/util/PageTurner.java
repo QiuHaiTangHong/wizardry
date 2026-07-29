@@ -1,12 +1,12 @@
 package top.begonia.wizardry.client.layout.util;
 
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
 import top.begonia.wizardry.client.data.definition.handbook.part.SectionData;
+import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.client.layout.container.handbook.SectionElement;
 
 import java.util.ArrayList;
@@ -17,16 +17,13 @@ import java.util.Map;
 public final class PageTurner {
     private Context context;
     private int currentPage;
-    private int sectionCacheEndIndex;
+    @NotNull
     private final HandbookData handbookData;
     private final List<SectionElement> displaySection = new ArrayList<>();
-    private final List<SectionElement> sectionElementsCache = new ArrayList<>();
-    private final List<String> sectionList = new ArrayList<>();
-    private final Map<String, SectionData> allSectionData = new LinkedHashMap<>();
+    private final Map<String, SectionElement> sectionElementMap = new LinkedHashMap<>();
 
     public PageTurner() {
-        handbookData = WizardryClientDataManager.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "handbook"), HandbookData.class).orElse(null);
-        this.sectionCacheEndIndex = 0;
+        this.handbookData = WizardryClientDataManager.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "handbook"), HandbookData.class).orElse(HandbookData.DEFAULT);
     }
 
     public List<SectionElement> getDisplaySection() {
@@ -38,129 +35,17 @@ public final class PageTurner {
     }
 
     public void prev() {
-        SectionElement currentSectionElement = this.displaySection.getFirst();
-        SectionElement.PageState pageState = currentSectionElement.prev();
-        if (this.currentPage == 1) {
-            this.displaySection.clear();
-            this.sectionElementsCache.removeLast();
-            this.sectionElementsCache.addFirst(this.sectionElementsCache.getFirst());
-            this.displaySection.add(this.sectionElementsCache.get(1));
-            this.displaySection.getFirst().fillViewBackward(0, 2);
-            this.sectionCacheEndIndex = 1;
-        } else if (pageState == SectionElement.PageState.HAS_TWO_PAGE) {
-            if (this.displaySection.size() == 2) {
-                this.displaySection.removeLast();
-                SectionElement prevSectionInCache = this.sectionElementsCache.getFirst();
-                if (currentSectionElement == prevSectionInCache) {
-                    prevSectionElement();
-                }
-            }
-        } else if (pageState == SectionElement.PageState.ONLY_LEFT_PAGE) {
-            currentSectionElement.fillViewBackward(currentSectionElement.getCurrentPageIndex(), 2);
-            SectionElement prevSectionInCache = this.sectionElementsCache.getFirst();
-            if (this.displaySection.size() == 2) {
-                this.displaySection.removeLast();
-                prevSectionInCache.fillViewForward(prevSectionInCache.getPageCount() - 1, 2);
-                this.displaySection.addFirst(prevSectionInCache);
-                prevSectionElement();
-            } else {
-                SectionElement prevSectionElement = this.sectionElementsCache.getFirst();
-                prevSectionInCache.fillViewForward(prevSectionInCache.getPageCount() - 1, 2);
-                this.displaySection.addFirst(prevSectionElement);
-                prevSectionElement();
-            }
-        } else {
-            SectionElement prevSectionInCache = this.sectionElementsCache.getFirst();
-            this.displaySection.clear();
-            if (prevSectionInCache.getPageCount() >= 2 && currentSectionElement != prevSectionInCache) {
-                prevSectionInCache.fillViewBackward(prevSectionInCache.getPageCount() - 1, 2);
-                this.displaySection.add(prevSectionInCache);
-                prevSectionElement();
-            } else if (prevSectionInCache.getPageCount() == 1) {
-                prevSectionInCache.fillViewBackward(prevSectionInCache.getPageCount() - 1, 2);
-                this.displaySection.add(prevSectionInCache);
-                SectionElement temp = prevSectionElement();
-                temp.fillViewBackward(temp.getPageCount() - 1, 1);
-                this.displaySection.addFirst(temp);
-            }
-        }
-        this.currentPage = Math.max(0, this.currentPage - 1);
+
     }
 
     public void next() {
-        SectionElement currentSectionElement = this.displaySection.getLast();
-        SectionElement.PageState pageState = currentSectionElement.next();
-        if (pageState == SectionElement.PageState.HAS_TWO_PAGE) {
-            if (this.displaySection.size() == 2) {
-                this.displaySection.removeFirst();
-                SectionElement nextSectionElement = this.sectionElementsCache.getLast();
-                if (currentSectionElement == nextSectionElement) {
-                    nextSectionElement();
-                }
-            }
-        } else if (pageState == SectionElement.PageState.ONLY_RIGHT_PAGE) {
-            currentSectionElement.fillViewForward(currentSectionElement.getCurrentPageIndex(), 2);
-            if (this.displaySection.size() == 2) {
-                this.displaySection.removeFirst();
-                nextSectionElement();
-                this.displaySection.add(this.sectionElementsCache.getLast());
-            } else {
-                this.displaySection.add(this.sectionElementsCache.getLast());
-                nextSectionElement();
-            }
-        } else {
-            SectionElement nextSectionElement = this.sectionElementsCache.getLast();
-            if (nextSectionElement == null) {
-                currentSectionElement.fillViewForward(currentSectionElement.getPageCount() - 1, 2);
-                return;
-            }
-            this.displaySection.clear();
-            if (nextSectionElement.getRemainingPage() >= 2 && currentSectionElement != nextSectionElement) {
-                nextSectionElement.fillViewForward(0, 2);
-                this.displaySection.add(nextSectionElement);
-                nextSectionElement();
-            } else if (nextSectionElement.getRemainingPage() == 1) {
-                nextSectionElement.fillViewForward(0, 2);
-                this.displaySection.add(nextSectionElement);
-                SectionElement tempNextSectionElement = this.nextSectionElement();
-                if (tempNextSectionElement != null) {
-                    this.displaySection.add(tempNextSectionElement);
-                }
-            }
-        }
-        this.currentPage++;
-    }
 
-    private @NonNull SectionElement prevSectionElement() {
-        this.sectionElementsCache.removeLast();
-        this.sectionCacheEndIndex--;
-        String sectionElementName = this.sectionList.get(this.sectionCacheEndIndex - 2);
-        SectionElement sectionElement = new SectionElement(this.allSectionData.get(sectionElementName));
-        sectionElement.format(this.context);
-        this.sectionElementsCache.addFirst(sectionElement);
-        return sectionElement;
-    }
-
-    private @Nullable SectionElement nextSectionElement() {
-        this.sectionElementsCache.removeFirst();
-        this.sectionCacheEndIndex++;
-        if (this.sectionCacheEndIndex == this.allSectionData.size()) {
-            this.sectionCacheEndIndex = this.allSectionData.size() - 1;
-            this.sectionElementsCache.addLast(null);
-            return null;
-        }
-        String sectionElementName = this.sectionList.get(this.sectionCacheEndIndex);
-        SectionElement sectionElement = new SectionElement(this.allSectionData.get(sectionElementName));
-        sectionElement.format(this.context);
-        this.sectionElementsCache.addLast(sectionElement);
-        return sectionElement;
     }
 
     private @NonNull Map<String, SectionData> getStringSectionDataMap() {
-        Map<String, SectionData> sectionDataList = this.handbookData.sections();
         Map<String, SectionData> noEmptySectionDataList = new LinkedHashMap<>();
         Map<String, Map<String, String>> catalogueEntry = new LinkedHashMap<>();
-        sectionDataList.forEach((sectionName, sectionData) -> {
+        this.handbookData.sections().forEach((sectionName, sectionData) -> {
             if (sectionData.text().isPresent()) {
                 noEmptySectionDataList.put(sectionName, sectionData);
             }
@@ -190,27 +75,17 @@ public final class PageTurner {
 
     public void format(Context context) {
         this.context = context;
-        if (handbookData != null) {
-            this.context.setColours(handbookData.colours());
-            this.context.setImages(handbookData.images());
-            this.context.setRecipes(handbookData.recipes());
+        this.context.setColours(handbookData.colours());
+        this.context.setImages(handbookData.images());
+        this.context.setRecipes(handbookData.recipes());
+        Map<String, SectionData> noEmptySectionDataList = getStringSectionDataMap();
+        for (Map.Entry<String, SectionData> entry : noEmptySectionDataList.entrySet()) {
+            String key = entry.getKey();
+            SectionData sectionData = entry.getValue();
+            SectionElement sectionElement = new SectionElement(sectionData);
+            sectionElement.format(this.context);
+            this.sectionElementMap.put(key, sectionElement);
         }
-        if (this.handbookData != null) {
-            Map<String, SectionData> noEmptySectionDataList = getStringSectionDataMap();
-            this.sectionList.addAll(noEmptySectionDataList.keySet());
-            this.allSectionData.putAll(noEmptySectionDataList);
-            int cacheCount = Math.clamp(noEmptySectionDataList.size(), 0, 2);
-            for (int i = 0; i < cacheCount; i++) {
-                String sectionName = this.sectionList.get(i);
-                SectionElement sectionElement = new SectionElement(noEmptySectionDataList.get(sectionName));
-                sectionElement.format(this.context);
-                sectionElementsCache.add(sectionElement);
-            }
-            if (!this.sectionElementsCache.isEmpty()) {
-                this.sectionElementsCache.addFirst(this.sectionElementsCache.getFirst());
-                this.displaySection.add(this.sectionElementsCache.get(1));
-                this.sectionCacheEndIndex = 1;
-            }
-        }
+        Wizardry.LOGGER.info("aaaa");
     }
 }

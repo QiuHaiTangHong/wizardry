@@ -11,26 +11,14 @@ import top.begonia.wizardry.client.layout.util.PageTurner;
 public class HandbookElement implements IContainerElement {
     private int xOffset, yOffset;
     private final @NotNull PageTurner pageTurner;
-    private static Runnable tooltipTask = null;
 
     public HandbookElement(Context context) {
         this.pageTurner = new PageTurner();
         this.format(context);
     }
 
-    public static void pushTooltip(Runnable task) {
-        tooltipTask = task;
-    }
-
     public @NonNull PageTurner getPageTurner() {
         return this.pageTurner;
-    }
-
-    public static void renderDeferredTooltip() {
-        if (tooltipTask != null) {
-            tooltipTask.run();
-            tooltipTask = null;
-        }
     }
 
     @Override
@@ -89,7 +77,6 @@ public class HandbookElement implements IContainerElement {
     public void extractRenderState(@NonNull GuiGraphicsExtractor guiGraphicsExtractor, int mouseX, int mouseY, float partialTick) {
         if (!this.pageTurner.getDisplaySection().isEmpty()) {
             this.pageTurner.getDisplaySection().forEach(displayPage -> displayPage.extractRenderState(guiGraphicsExtractor, mouseX, mouseY, partialTick));
-            renderDeferredTooltip();
         }
     }
 }

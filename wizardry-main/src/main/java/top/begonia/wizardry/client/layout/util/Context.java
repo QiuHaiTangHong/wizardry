@@ -16,6 +16,7 @@ public final class Context {
     private final int maxHeight;
     private final Font font;
     private int currentPageIndex = 0;
+    private int totalPage = 0;
     private int currentY = 0;
     private Map<String, Integer> colours;
     private Map<String, ImageData> images;
@@ -45,23 +46,23 @@ public final class Context {
             if (element == IAtomElement.EMPTY_ELEMENT) {
                 return;
             }
-            currentPageIndex++;
-            currentY = 0;
+            this.currentPageIndex++;
+            this.currentY = 0;
         }
-        setElement(element, leftPadding, topPadding, xCenter);
-        currentY += height;
+        this.setElement(element, leftPadding, topPadding, xCenter);
+        this.currentY += height;
     }
 
     public void reserveSpace(@NonNull IAtomElement element, int leftPadding, int topPadding, boolean xCenter) {
         element.format(this);
-        if (currentY + element.getHeight() > maxHeight && currentY > 0) {
+        if (this.currentY + element.getHeight() > maxHeight && currentY > 0) {
             if (element == IAtomElement.EMPTY_ELEMENT) {
                 return;
             }
             currentPageIndex++;
             currentY = 0;
         }
-        setElement(element, leftPadding, topPadding, xCenter);
+        this.setElement(element, leftPadding, topPadding, xCenter);
         currentY += element.getHeight();
     }
 
@@ -72,11 +73,15 @@ public final class Context {
         }
         element.setXOffset(xOnPage + leftPadding);
         element.setYOffset(currentY + topPadding);
-        pages.computeIfAbsent(currentPageIndex, _ -> new ArrayList<>()).add(element);
+        this.pages.computeIfAbsent(currentPageIndex, _ -> new ArrayList<>()).add(element);
     }
 
     public Font getFont() {
         return this.font;
+    }
+
+    public int getTotal() {
+        return this.totalPage;
     }
 
     public int getMaxWidth() {
@@ -104,6 +109,7 @@ public final class Context {
                 pageElements.add(new PageElement(trimmed));
             }
         }
+        this.totalPage += pageElements.size();
         return pageElements;
     }
 

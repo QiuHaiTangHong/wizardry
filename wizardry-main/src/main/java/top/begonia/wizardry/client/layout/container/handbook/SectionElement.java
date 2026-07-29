@@ -3,13 +3,14 @@ package top.begonia.wizardry.client.layout.container.handbook;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.data.definition.handbook.part.ContentsConfigData;
-import top.begonia.wizardry.client.layout.container.IContainerElement;
 import top.begonia.wizardry.client.data.definition.handbook.part.CentreConfigData;
+import top.begonia.wizardry.client.data.definition.handbook.part.ContentsConfigData;
 import top.begonia.wizardry.client.data.definition.handbook.part.SectionData;
 import top.begonia.wizardry.client.layout.atom.IAtomElement;
+import top.begonia.wizardry.client.layout.container.IContainerElement;
 import top.begonia.wizardry.client.layout.hybrid.CatalogueElement;
 import top.begonia.wizardry.client.layout.hybrid.LineElement;
 import top.begonia.wizardry.client.layout.hybrid.PageElement;
@@ -17,7 +18,10 @@ import top.begonia.wizardry.client.layout.hybrid.TitleElement;
 import top.begonia.wizardry.client.layout.util.Context;
 import top.begonia.wizardry.client.layout.util.Format;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 章节 (部分) 元素类
@@ -27,7 +31,6 @@ import java.util.*;
  *
  * @author 秋海棠红
  * @version 1.0.0
- * @date 2026.05.02
  * @since 1.0.0
  */
 public class SectionElement implements IContainerElement {
@@ -39,24 +42,7 @@ public class SectionElement implements IContainerElement {
     private List<PageElement> pageElements = new ArrayList<>();
     private final List<IAtomElement> displayPage = new ArrayList<>();
     private final ContentsConfigData contentsConfigData;
-    private int currentPageIndex = 0;
-
-    public enum PageState {
-        HAS_TWO_PAGE(0),
-        ONLY_LEFT_PAGE(-1),
-        NOT_TWO_PAGE(1),
-        ONLY_RIGHT_PAGE(2);
-        private final int state;
-
-        PageState(int state) {
-            this.state = state;
-        }
-
-        @SuppressWarnings("unused")
-        public int getState() {
-            return state;
-        }
-    }
+    private int startPageIndex = 0;
 
     public SectionElement(@NonNull SectionData sectionData) {
         this.title = sectionData.title().orElse("");
@@ -65,106 +51,9 @@ public class SectionElement implements IContainerElement {
         this.contentsConfigData = sectionData.contents().orElse(null);
     }
 
-    public boolean isEnd() {
-        return this.currentPageIndex == this.pageElements.size() - 1;
-    }
-
-    public PageState next() {
-        if (this.pageElements.isEmpty() || this.currentPageIndex >= this.pageCount - 1) {
-            this.displayPage.clear();
-            return PageState.NOT_TWO_PAGE;
-        }
-        int remaining = this.pageCount - 1 - this.currentPageIndex;
-        this.displayPage.clear();
-        if (remaining >= 2) {
-            this.displayPage.add(this.pageElements.get(this.currentPageIndex + 1));
-            this.displayPage.add(this.pageElements.get(this.currentPageIndex + 2));
-            this.currentPageIndex += 2;
-            return PageState.HAS_TWO_PAGE;
-        } else if (remaining == 1) {
-            this.displayPage.add(IAtomElement.EMPTY_ELEMENT);
-            this.displayPage.add(this.pageElements.get(this.currentPageIndex + 1));
-            this.currentPageIndex += 1;
-            return PageState.ONLY_RIGHT_PAGE;
-        }
-        return PageState.NOT_TWO_PAGE;
-    }
-
-    public PageState prev() {
-        if (this.pageElements.isEmpty() || this.currentPageIndex == 0) {
-            this.displayPage.clear();
-            return PageState.NOT_TWO_PAGE;
-        }
-        int remaining;
-        if (this.displayPage.getLast() != IAtomElement.EMPTY_ELEMENT) {
-            remaining = this.currentPageIndex - 1;
-            this.currentPageIndex -= 1;
-        } else {
-            remaining = this.currentPageIndex;
-        }
-        this.displayPage.clear();
-        if (remaining >= 2) {
-            this.displayPage.add(this.pageElements.get(this.currentPageIndex - 2));
-            this.displayPage.add(this.pageElements.get(this.currentPageIndex - 1));
-            this.currentPageIndex -= 1;
-            return PageState.HAS_TWO_PAGE;
-        } else if (remaining == 1) {
-            this.displayPage.add(this.pageElements.getFirst());
-            this.displayPage.add(IAtomElement.EMPTY_ELEMENT);
-            this.currentPageIndex = 0;
-            return PageState.ONLY_LEFT_PAGE;
-        }
-        return PageState.NOT_TWO_PAGE;
-    }
-
-    public void fillViewForward(int startIndex, int pageSize) {
-        this.displayPage.clear();
-        this.currentPageIndex = Math.clamp(startIndex, 0, this.pageCount - 1);
-        for (int i = 0; i < pageSize; i++) {
-            int target = startIndex + i;
-            if (target < this.pageCount) {
-                this.displayPage.add(this.pageElements.get(target));
-                this.currentPageIndex = target;
-            } else {
-                this.displayPage.add(IAtomElement.EMPTY_ELEMENT);
-            }
-        }
-        for (int i = 0; i < 2 - this.displayPage.size(); i++) {
-            this.displayPage.add(IAtomElement.EMPTY_ELEMENT);
-        }
-    }
-
-    public void fillViewBackward(int endIndex, int pageSize) {
-        this.displayPage.clear();
-        this.currentPageIndex = Math.clamp(endIndex, 0, this.pageCount - 1);
-        int leftMostIndex = endIndex - pageSize + 1;
-        for (int i = 0; i < pageSize; i++) {
-            int target = leftMostIndex + i;
-            if (target >= 0 && target < this.pageCount) {
-                this.displayPage.add(this.pageElements.get(target));
-            } else {
-                this.displayPage.add(IAtomElement.EMPTY_ELEMENT);
-            }
-        }
-        for (int i = 0; i < 2 - this.displayPage.size(); i++) {
-            this.displayPage.add(IAtomElement.EMPTY_ELEMENT);
-        }
-    }
-
-    public int getCurrentPageIndex() {
-        return this.currentPageIndex;
-    }
-
-    public int getRemainingPage() {
-        return this.pageCount - this.currentPageIndex;
-    }
-
-    public int getPageCount() {
-        return this.pageCount;
-    }
-
     @Override
     public void format(@NonNull Context context) {
+        this.startPageIndex = context.getTotal();
         this.pageElements.clear();
         context.clear();
         Font font = context.getFont();
@@ -209,7 +98,6 @@ public class SectionElement implements IContainerElement {
         this.pageElements.forEach(pageElement -> pageElement.format(context, this.centreConfigData));
         this.pageCount = this.pageElements.size();
         if (!this.pageElements.isEmpty()) {
-            this.displayPage.add(IAtomElement.EMPTY_ELEMENT);
             this.displayPage.add(this.pageElements.getFirst());
         }
     }

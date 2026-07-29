@@ -3,6 +3,7 @@ plugins {
     id 'maven-publish'
     id 'net.neoforged.moddev'
     id 'idea'
+    id 'de.infolektuell.jextract' version '1.4.0'
 }
 
 layout.buildDirectory.set(rootProject.layout.buildDirectory.dir(project.name))
@@ -16,23 +17,38 @@ base {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
+jextract {
+    libraries {
+        wizardry {
+            output = file("src/main/java")
+            header = file("../wizardry-libs/src/main/include/MathUtils.h")
+            targetPackage = "top.begonia.wizardry.natives"
+            libraries.add("wizardry-native-libs")
+            headerClassName = "MathUtils"
+        }
+    }
+}
+
 neoForge {
     version = project.neo_version
     runs {
         client {
             client()
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            jvmArguments.add("--enable-native-access=${mod_id}")
         }
 
         server {
             server()
             programArgument '--nogui'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            jvmArguments.add("--enable-native-access=${mod_id}")
         }
 
         gameTestServer {
             type = "gameTestServer"
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            jvmArguments.add("--enable-native-access=${mod_id}")
         }
 
         data {
@@ -43,7 +59,6 @@ neoForge {
         configureEach {
             systemProperty 'forge.logging.markers', 'REGISTRIES'
             logLevel = org.slf4j.event.Level.DEBUG
-            jvmArguments.add("--enable-native-access=ALL-UNNAMED")
         }
     }
 
@@ -82,8 +97,8 @@ dependencies {
 tasks.register('copyWizardryLibs', Copy) {
     def nativeProject = project(':wizardry-libs')
     dependsOn nativeProject.tasks.named('assemble')
-    from rootProject.layout.buildDirectory.dir("wizardry-libs/lib")
-    into layout.buildDirectory.dir("resources/main/assets/${mod_id}/natives")
+    from rootProject.layout.buildDirectory.dir("wizardry-libs/lib/lib")
+    into layout.buildDirectory.dir("resources/main/natives")
     include "**/*.dll", "**/*.so", "**/*.dylib"
 }
 

@@ -2,7 +2,6 @@ package top.begonia.wizardry.core;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -14,9 +13,9 @@ import top.begonia.wizardry.core.config.CommonConfig;
 import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
 import top.begonia.wizardry.core.registry.*;
+import top.begonia.wizardry.natives.MathUtils;
 
 @Mod(Wizardry.MODID)
-@EventBusSubscriber(modid = Wizardry.MODID)
 public class WizardryCore {
     public WizardryCore(@NonNull IEventBus modEventBus, @NonNull ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
@@ -55,6 +54,7 @@ public class WizardryCore {
                     return defaultArtifactVersion.getLowerBound() + "-" + defaultArtifactVersion.getUpperBound();
                 })
                 .orElse("unknown");
+        Wizardry.LOGGER.info("Fib(10)={}", MathUtils.fibonacci(10));
     }
 
     private void commonSetup(final @NonNull FMLCommonSetupEvent event) {

@@ -2,34 +2,56 @@ plugins {
     id 'base'
     id 'idea'
 }
+
 def finalOutputDir = rootProject.layout.buildDirectory.dir("${project.name}/lib").get().asFile
 def cmakeBuildDir = rootProject.layout.buildDirectory.dir("${project.name}/cmake-build").get().asFile
 
 def cmakeConfigure = tasks.register('cmakeConfigure', Exec) {
+    description = 'Runs CMake configure step'
+    group = 'build'
     inputs.file("${projectDir}/CMakeLists.txt")
-    inputs.file("${projectDir}/src/main/cpp/main.cpp")
+    inputs.dir("${projectDir}/src")
     outputs.dir(cmakeBuildDir)
-
-    workingDir cmakeBuildDir
     doFirst {
         cmakeBuildDir.mkdirs()
     }
-    commandLine 'cmake', project.projectDir.absolutePath, "-DCMAKE_INSTALL_PREFIX=${finalOutputDir.absolutePath}"
+    workingDir = cmakeBuildDir
+    commandLine 'cmake',
+            projectDir.absolutePath,
+            '-DCMAKE_BUILD_TYPE=Release',
+            "-DCMAKE_INSTALL_PREFIX=${finalOutputDir.absolutePath}"
 }
 
 def cmakeBuild = tasks.register('cmakeBuild', Exec) {
+    description = 'Runs CMake build step'
+    group = 'build'
     dependsOn cmakeConfigure
-    workingDir cmakeBuildDir
-
+    inputs.dir("${projectDir}/src")
+    outputs.dir(cmakeBuildDir)
+    workingDir = cmakeBuildDir
     commandLine 'cmake', '--build', '.', '--config', 'Release'
 }
 
-def install = tasks.register('install', Exec) {
+def cmakeInstall = tasks.register('cmakeInstall', Exec) {
+    description = 'Installs native library to build/lib'
+    group = 'build'
     dependsOn cmakeBuild
-    workingDir cmakeBuildDir
+
+    inputs.dir(cmakeBuildDir)
+    outputs.dir(finalOutputDir)
+
+    doFirst {
+        finalOutputDir.mkdirs()
+    }
+    workingDir = cmakeBuildDir
+
     commandLine 'cmake', '--install', '.', '--config', 'Release'
 }
 
 tasks.named('assemble') {
-    dependsOn install
+    dependsOn cmakeInstall
+}
+
+tasks.named('clean', Delete) {
+    delete rootProject.layout.buildDirectory
 }

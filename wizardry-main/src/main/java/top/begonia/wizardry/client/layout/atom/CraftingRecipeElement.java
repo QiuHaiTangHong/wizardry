@@ -2,26 +2,23 @@ package top.begonia.wizardry.client.layout.atom;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.context.ContextMap;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.display.*;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.client.layout.container.handbook.HandbookElement;
 import top.begonia.wizardry.client.layout.util.Context;
 import top.begonia.wizardry.client.network.ClientPayloadHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 /**
  * <p> crafting 配方元素类, 用于处理和渲染物品合成配方的显示界面.
@@ -30,7 +27,6 @@ import java.util.stream.Collectors;
  *
  * @author 秋海棠红
  * @version 1.0.0
- * @date 2026.05.03
  * @since 1.0.0
  */
 public class CraftingRecipeElement extends AbstractAtomElement {
@@ -88,7 +84,7 @@ public class CraftingRecipeElement extends AbstractAtomElement {
             guiGraphicsExtractor.item(resultStack, rx, ry);
             guiGraphicsExtractor.itemDecorations(this.font, resultStack, rx, ry);
             if (isMouseOverItem(mouseX, mouseY, rx, ry)) {
-                HandbookElement.pushTooltip(() -> this.renderItemStackTooltip(guiGraphicsExtractor, resultStack, mouseX, mouseY));
+                this.renderItemStackTooltip(guiGraphicsExtractor, resultStack, mouseX, mouseY);
             }
         }
     }
@@ -100,21 +96,14 @@ public class CraftingRecipeElement extends AbstractAtomElement {
                 mc.player,
                 mc.options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL
         );
-
-        List<ClientTooltipComponent> visualLines = lines.stream()
-                .map(Component::getVisualOrderText)
-                .map(ClientTooltipComponent::create)
-                .collect(Collectors.toList());
-
-        stack.getTooltipImage().ifPresent(data -> visualLines.add(1, ClientTooltipComponent.create(data)));
-        guiGraphicsExtractor.tooltip(
+        Optional<TooltipComponent> tooltipImageComponent = stack.getTooltipImage();
+        guiGraphicsExtractor.setTooltipForNextFrame(
                 this.font,
-                visualLines,
+                lines,
+                tooltipImageComponent,
+                stack,
                 mouseX,
-                mouseY,
-                DefaultTooltipPositioner.INSTANCE,
-                null,
-                stack
+                mouseY
         );
     }
 
@@ -141,7 +130,7 @@ public class CraftingRecipeElement extends AbstractAtomElement {
                     guiGraphicsExtractor.itemDecorations(this.font, currentStack, ix, iy);
                     if (mouseX >= ix && mouseX < ix + 16 && mouseY >= iy && mouseY < iy + 16) {
                         ItemStack finalStack = currentStack.copy();
-                        HandbookElement.pushTooltip(() -> this.renderItemStackTooltip(guiGraphicsExtractor, finalStack, mouseX, mouseY));
+                        this.renderItemStackTooltip(guiGraphicsExtractor, finalStack, mouseX, mouseY);
                     }
                 }
             }
