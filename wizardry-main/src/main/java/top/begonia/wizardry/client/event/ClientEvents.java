@@ -1,8 +1,12 @@
 package top.begonia.wizardry.client.event;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.blaze3d.framegraph.FrameGraphBuilder;
+import com.mojang.blaze3d.framegraph.FramePass;
+import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.resource.RenderTargetDescriptor;
+import com.mojang.blaze3d.resource.ResourceHandle;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -15,7 +19,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.Equippable;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -24,7 +27,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -63,14 +65,16 @@ import top.begonia.wizardry.core.api.event.data.DataParserBefore;
 import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.core.api.event.data.RegisterDelegateUnbakedModelEvent;
 import top.begonia.wizardry.core.api.event.data.RegisterParticleEvent;
-import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.core.data.network.handbook.HandbookRecipesRequest;
-import top.begonia.wizardry.core.item.ISpellCastingItem;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.util.ArmourHelper;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 @EventBusSubscriber(modid = Wizardry.MODID)
 public class ClientEvents {
+    public static Collection<ItemStack> GLOWING_ITEMS = new ArrayList<>();
 
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.@NonNull RegisterLayerDefinitions event) {
@@ -109,35 +113,19 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onRenderGuiLayer(RenderGuiLayerEvent.Post event) {
-        if (!ClientConfig.showSpellHUD && !ClientConfig.showChargeMeter) {
-            return;
-        }
-        Player player = Minecraft.getInstance().player;
+        SpellHud.onRenderGuiLayer(event);
+    }
 
-        if (player == null || player.isSpectator()) return;
-        ItemStack wand = player.getMainHandItem();
-        boolean mainHand = true;
-
-        if (!(wand.getItem() instanceof ISpellCastingItem && ((ISpellCastingItem) wand.getItem()).showSpellHUD(player, wand))) {
-            wand = player.getOffhandItem();
-            mainHand = false;
-            if (!(wand.getItem() instanceof ISpellCastingItem && ((ISpellCastingItem) wand.getItem()).showSpellHUD(player, wand))) {
-                return;
-            }
-        }
-
-        GuiGraphicsExtractor guiGraphics = event.getGuiGraphics();
-        int width = guiGraphics.guiWidth();
-        int height = guiGraphics.guiHeight();
-        float partialTicks = event.getPartialTick().getGameTimeDeltaTicks();
-
-        if (event.getName().equals(VanillaGuiLayers.CROSSHAIR)) {
-            SpellHud.renderChargeMeter(guiGraphics, player, wand, width, height, partialTicks);
-        } else if (event.getName().equals(VanillaGuiLayers.HOTBAR)) {
-            SpellHud.renderSpellHUD(guiGraphics, player, wand, mainHand, width, height, partialTicks, false);
-        } else if (event.getName().equals(VanillaGuiLayers.OVERLAY_MESSAGE)) {
-            SpellHud.renderSpellHUD(guiGraphics, player, wand, mainHand, width, height, partialTicks, true);
-        }
+    @SubscribeEvent
+    public static void onFrameGraphSetupEvent(@NonNull FrameGraphSetupEvent event) {
+        FrameGraphBuilder frame = event.getFrameGrapBuilder();
+        RenderTargetDescriptor screenSize = event.getRenderTargetDescriptor();
+        ResourceHandle<RenderTarget> bloomTarget = frame.createInternal("bloom", screenSize);
+        FramePass bloomPass = frame.addPass("render_glowing_items");
+        bloomPass.readsAndWrites(bloomTarget);
+        bloomPass.executes(() -> {
+            Minecraft minecraft = Minecraft.getInstance();
+        });
     }
 
     @SubscribeEvent

@@ -12,6 +12,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.joml.Matrix3x2fStack;
 import org.jspecify.annotations.NonNull;
@@ -29,7 +31,8 @@ import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SpellHud {
     /**
@@ -212,6 +215,38 @@ public class SpellHud {
                 32, 32
         );
 
+    }
+
+    public static void onRenderGuiLayer(RenderGuiLayerEvent.Post event) {
+        if (!ClientConfig.showSpellHUD && !ClientConfig.showChargeMeter) {
+            return;
+        }
+        Player player = Minecraft.getInstance().player;
+
+        if (player == null || player.isSpectator()) return;
+        ItemStack wand = player.getMainHandItem();
+        boolean mainHand = true;
+
+        if (!(wand.getItem() instanceof ISpellCastingItem && ((ISpellCastingItem) wand.getItem()).showSpellHUD(player, wand))) {
+            wand = player.getOffhandItem();
+            mainHand = false;
+            if (!(wand.getItem() instanceof ISpellCastingItem && ((ISpellCastingItem) wand.getItem()).showSpellHUD(player, wand))) {
+                return;
+            }
+        }
+
+        GuiGraphicsExtractor guiGraphics = event.getGuiGraphics();
+        int width = guiGraphics.guiWidth();
+        int height = guiGraphics.guiHeight();
+        float partialTicks = event.getPartialTick().getGameTimeDeltaTicks();
+
+        if (event.getName().equals(VanillaGuiLayers.CROSSHAIR)) {
+            SpellHud.renderChargeMeter(guiGraphics, player, wand, width, height, partialTicks);
+        } else if (event.getName().equals(VanillaGuiLayers.HOTBAR)) {
+            SpellHud.renderSpellHUD(guiGraphics, player, wand, mainHand, width, height, partialTicks, false);
+        } else if (event.getName().equals(VanillaGuiLayers.OVERLAY_MESSAGE)) {
+            SpellHud.renderSpellHUD(guiGraphics, player, wand, mainHand, width, height, partialTicks, true);
+        }
     }
 
     @Nullable

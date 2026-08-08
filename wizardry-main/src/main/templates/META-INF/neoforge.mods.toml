@@ -4,11 +4,13 @@ modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 enumExtensions="META-INF/enum_extensions.json"
-description='''
-Example mod description.
-'''
+credits='''${mod_credits}'''
+description="${mod_description}"
+logoFile="assets/wizardry/textures/gui/logo.png"
 [[mixins]]
-config="${mod_id}.mixins.json"
+config="${mod_id}.client.mixins.json"
+[[mixins]]
+config="${mod_id}.core.mixins.json"
 
 [[accessTransformers]]
 file="META-INF/accesstransformer.cfg"

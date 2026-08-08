@@ -104,6 +104,7 @@ tasks.register('copyWizardryLibs', Copy) {
 
 tasks.named('processResources') {
     dependsOn 'copyWizardryLibs'
+    filteringCharset = 'UTF-8'
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
@@ -115,6 +116,8 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             mod_name               : mod_name,
             mod_license            : mod_license,
             mod_version            : mod_version,
+            mod_description        : mod_description,
+            mod_credits            : mod_credits
     ]
     inputs.properties replaceProperties
     expand replaceProperties
@@ -151,7 +154,7 @@ tasks.named('jar', Jar) {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.encoding = 'UTF-8'
 }
 
 idea {

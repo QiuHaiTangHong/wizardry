@@ -1,11 +1,11 @@
 {
-    "targets": [
-        "swap",
-        "previous",
-		"a",
-		"b",
-		"c"
-    ],
+    "targets": {
+        "swap": {},
+        "previous": {},
+        "a": {},
+        "b": {},
+        "c": {}
+    },
     "passes": [
 		{
             "name": "color_convolve",
