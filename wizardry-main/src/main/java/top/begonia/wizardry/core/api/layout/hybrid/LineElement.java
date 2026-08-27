@@ -1,8 +1,8 @@
-package top.begonia.wizardry.client.layout.hybrid;
+package top.begonia.wizardry.core.api.layout.hybrid;
 
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.layout.atom.IAtomElement;
-import top.begonia.wizardry.client.layout.util.Context;
+import top.begonia.wizardry.core.api.layout.atom.IAtomElement;
+import top.begonia.wizardry.core.api.layout.util.Context;
 
 import java.util.List;
 

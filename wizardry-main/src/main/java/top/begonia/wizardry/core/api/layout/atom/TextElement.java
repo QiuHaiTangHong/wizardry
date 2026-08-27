@@ -1,10 +1,10 @@
-package top.begonia.wizardry.client.layout.atom;
+package top.begonia.wizardry.core.api.layout.atom;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.util.FormattedCharSequence;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.layout.util.Context;
+import top.begonia.wizardry.core.api.layout.util.Context;
 
 
 /**

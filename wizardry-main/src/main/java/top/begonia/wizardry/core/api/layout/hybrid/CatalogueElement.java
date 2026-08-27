@@ -1,10 +1,10 @@
-package top.begonia.wizardry.client.layout.hybrid;
+package top.begonia.wizardry.core.api.layout.hybrid;
 
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.layout.atom.LinkElement;
-import top.begonia.wizardry.client.layout.util.Context;
+import top.begonia.wizardry.core.api.layout.atom.LinkElement;
+import top.begonia.wizardry.core.api.layout.util.Context;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

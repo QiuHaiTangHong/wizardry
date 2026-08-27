@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Holder;
@@ -90,6 +91,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
     private float scroll = 0;
     private boolean scrolling = false;
     private final List<AbstractTooltipElement> tooltipElements = new ArrayList<>();
+    private int tooltipHeight = 0;
 
     public ArcaneWorkbenchScreen(ArcaneWorkbenchMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, MAIN_GUI_WIDTH, 220);
@@ -97,6 +99,27 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         this.bookshelfLabelY = 6;
         this.bookshelfTitle = Component.translatable("container." + Wizardry.MODID + ".bookshelf");
 
+    }
+
+    public List<Rect2i> getGuiExtraAreas() {
+        List<Rect2i> result = new ArrayList<>();
+        if (this.menu.hasBookshelves()) {
+            result.add(new Rect2i(
+                    this.leftPos - BOOKSHELF_UI_WIDTH,
+                    this.topPos,
+                    BOOKSHELF_UI_WIDTH,
+                    this.getImageHeight()
+            ));
+        }
+        if (this.menu.slots.get(ArcaneWorkbenchMenu.CENTRE_SLOT).hasItem()) {
+            result.add(new Rect2i(
+                    this.leftPos + TOOLTIP_WIDTH,
+                    this.topPos,
+                    TOOLTIP_WIDTH,
+                    this.tooltipHeight
+            ));
+        }
+        return result;
     }
 
     @Override
@@ -176,8 +199,8 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         this.tooltipElements.add(new TooltipElementUpgradeList(this.getFont(), LINE_SPACING_WIDE));
     }
 
-    protected void extractLabels(@NonNull GuiGraphicsExtractor graphics, int xm, int ym) {
-        super.extractLabels(graphics, xm, ym);
+    protected void extractLabels(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        super.extractLabels(graphics, mouseX, mouseY);
         if (this.menu.hasBookshelves()) {
             graphics.text(this.font, this.bookshelfTitle, this.bookshelfLabelX, this.bookshelfLabelY, -12566464, false);
         }
@@ -285,12 +308,12 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                 return;
             }
             if (((IWorkbenchItem) stack.getItem()).showTooltip(stack)) {
-                int tooltipHeight = tooltipElements.stream().mapToInt(e -> e.getTotalHeight(stack)).sum() - tooltipElements.getLast().spaceAfter;
+                this.tooltipHeight = this.tooltipElements.stream().mapToInt(e -> e.getTotalHeight(stack)).sum() - tooltipElements.getLast().spaceAfter;
                 // Tooltip box
                 DrawingUtils.drawTexturedRect(graphics, texture, this.leftPos + MAIN_GUI_WIDTH, this.topPos, MAIN_GUI_WIDTH, 0, TOOLTIP_WIDTH,
-                        TOOLTIP_BORDER + tooltipHeight, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+                        TOOLTIP_BORDER + this.tooltipHeight, TEXTURE_WIDTH, TEXTURE_HEIGHT);
                 DrawingUtils.drawTexturedRect(graphics, texture,
-                        this.leftPos + MAIN_GUI_WIDTH, this.topPos + TOOLTIP_BORDER + tooltipHeight,
+                        this.leftPos + MAIN_GUI_WIDTH, this.topPos + TOOLTIP_BORDER + this.tooltipHeight,
                         MAIN_GUI_WIDTH, this.imageHeight - TOOLTIP_BORDER, TOOLTIP_WIDTH, TOOLTIP_BORDER, TEXTURE_WIDTH, TEXTURE_HEIGHT);
                 int x = this.leftPos + MAIN_GUI_WIDTH + TOOLTIP_BORDER;
                 int y = this.topPos + TOOLTIP_BORDER;

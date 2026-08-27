@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.layout.atom;
+package top.begonia.wizardry.core.api.layout.atom;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -6,7 +6,7 @@ import net.minecraft.util.ARGB;
 import net.minecraft.util.FormattedCharSequence;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.client.layout.util.Context;
+import top.begonia.wizardry.core.api.layout.util.Context;
 
 /**
  * 链接元素类, 负责处理文本链接的渲染和交互逻辑喵.

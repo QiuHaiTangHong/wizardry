@@ -1,11 +1,13 @@
-package top.begonia.wizardry.client.layout;
+package top.begonia.wizardry.core.api.layout;
 
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.layout.util.Context;
+import top.begonia.wizardry.core.api.layout.atom.IAtomElement;
+import top.begonia.wizardry.core.api.layout.util.Context;
 
 /**
  * IElement 接口
@@ -22,7 +24,6 @@ import top.begonia.wizardry.client.layout.util.Context;
  *
  * @author 秋海棠红
  * @version 1.0.0
- * @date 2026.07.03
  * @since 1.0.0
  */
 public interface IElement extends GuiEventListener, NarratableEntry, Renderable {
@@ -37,6 +38,63 @@ public interface IElement extends GuiEventListener, NarratableEntry, Renderable 
     int getXOffset();
 
     int getYOffset();
+
+    IElement EMPTY_ELEMENT = new IAtomElement() {
+
+        @Override
+        public void extractRenderState(@NonNull GuiGraphicsExtractor guiGraphicsExtractor, int mouseX, int mouseY, float partialTick) {
+
+        }
+
+        @Override
+        public void format(Context context) {
+        }
+
+        @Override
+        public boolean isVisible() {
+            return true;
+        }
+
+        @Override
+        public int getHeight() {
+            return 9;
+        }
+
+        @Override
+        public int getWidth() {
+            return 0;
+        }
+
+        @Override
+        public void setHeight(int height) {
+
+        }
+
+        @Override
+        public void setWidth(int width) {
+
+        }
+
+        @Override
+        public void setXOffset(int x) {
+
+        }
+
+        @Override
+        public void setYOffset(int y) {
+
+        }
+
+        @Override
+        public int getXOffset() {
+            return 0;
+        }
+
+        @Override
+        public int getYOffset() {
+            return 0;
+        }
+    };
 
     @Override
     default void setFocused(boolean b) {

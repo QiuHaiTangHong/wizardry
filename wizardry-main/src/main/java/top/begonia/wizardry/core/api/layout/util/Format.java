@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.layout.util;
+package top.begonia.wizardry.core.api.layout.util;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.*;
@@ -8,12 +8,12 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.constants.WizardryKeyMappings;
 import top.begonia.wizardry.client.data.definition.handbook.part.ImageData;
 import top.begonia.wizardry.client.data.definition.handbook.part.RecipeTagData;
-import top.begonia.wizardry.client.layout.atom.CraftingRecipeElement;
-import top.begonia.wizardry.client.layout.atom.IAtomElement;
-import top.begonia.wizardry.client.layout.atom.LinkElement;
-import top.begonia.wizardry.client.layout.atom.TextElement;
-import top.begonia.wizardry.client.layout.hybrid.CaptionImageElement;
-import top.begonia.wizardry.client.layout.hybrid.LineElement;
+import top.begonia.wizardry.core.api.layout.atom.CraftingRecipeElement;
+import top.begonia.wizardry.core.api.layout.atom.IAtomElement;
+import top.begonia.wizardry.core.api.layout.atom.LinkElement;
+import top.begonia.wizardry.core.api.layout.atom.TextElement;
+import top.begonia.wizardry.core.api.layout.hybrid.CaptionImageElement;
+import top.begonia.wizardry.core.api.layout.hybrid.LineElement;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.config.ServerConfig;

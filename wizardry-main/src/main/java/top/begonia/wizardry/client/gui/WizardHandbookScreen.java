@@ -12,14 +12,16 @@ import net.minecraft.util.ARGB;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.client.gui.widget.InvisibleButton;
 import top.begonia.wizardry.client.gui.widget.TurnPageButton;
-import top.begonia.wizardry.client.layout.container.handbook.HandbookElement;
-import top.begonia.wizardry.client.layout.util.Context;
+import top.begonia.wizardry.core.api.layout.container.handbook.HandbookElement;
+import top.begonia.wizardry.core.api.layout.util.Context;
 import top.begonia.wizardry.core.registry.WizardrySounds;
 
 public class WizardHandbookScreen extends Screen {
     private Button bookmark;
     private Button previous;
+    private Button next;
     private Button previousSection;
+    private Button nextSection;
     private Button menu;
 
     private HandbookElement handbookElement;
@@ -35,8 +37,8 @@ public class WizardHandbookScreen extends Screen {
         final int top = this.height / 2 - Context.GUI_HEIGHT / 2;
         this.clearWidgets();
         Context context = new Context(Context.PAGE_WIDTH, Context.PAGE_HEIGHT, this.font);
-        this.addRenderableWidget(handbookElement = new HandbookElement(context));
-        this.addRenderableWidget(new TurnPageButton(
+        this.addRenderableWidget(this.handbookElement = new HandbookElement(context));
+        this.addRenderableWidget(this.next = new TurnPageButton(
                 left + Context.GUI_WIDTH - Context.BUTTON_INSET_X - TurnPageButton.WIDTH,
                 top + Context.GUI_HEIGHT - Context.BUTTON_INSET_Y - TurnPageButton.HEIGHT,
                 TurnPageButton.Type.NEXT_PAGE,
@@ -44,7 +46,7 @@ public class WizardHandbookScreen extends Screen {
                 Context.TEXTURE_WIDTH, Context.TEXTURE_HEIGHT,
                 _ -> this.handbookElement.getPageTurner().next()
         ));
-        this.addRenderableWidget(previous = new TurnPageButton(
+        this.addRenderableWidget(this.previous = new TurnPageButton(
                 left + Context.BUTTON_INSET_X,
                 top + Context.GUI_HEIGHT - Context.BUTTON_INSET_Y - TurnPageButton.HEIGHT,
                 TurnPageButton.Type.PREVIOUS_PAGE,
@@ -52,7 +54,7 @@ public class WizardHandbookScreen extends Screen {
                 Context.TEXTURE_WIDTH, Context.TEXTURE_HEIGHT,
                 _ -> this.handbookElement.getPageTurner().prev()
         ));
-        this.addRenderableWidget(new TurnPageButton(
+        this.addRenderableWidget(this.nextSection = new TurnPageButton(
                 left + Context.GUI_WIDTH - Context.BUTTON_INSET_X - TurnPageButton.WIDTH - Context.BUTTON_SPACING,
                 top + Context.GUI_HEIGHT - Context.BUTTON_INSET_Y - TurnPageButton.HEIGHT,
                 TurnPageButton.Type.NEXT_SECTION,
@@ -61,7 +63,7 @@ public class WizardHandbookScreen extends Screen {
                 _ -> {
                 }
         ));
-        this.addRenderableWidget(previousSection = new TurnPageButton(
+        this.addRenderableWidget(this.previousSection = new TurnPageButton(
                 left + Context.BUTTON_INSET_X + Context.BUTTON_SPACING,
                 top + Context.GUI_HEIGHT - Context.BUTTON_INSET_Y - TurnPageButton.HEIGHT,
                 TurnPageButton.Type.PREVIOUS_SECTION,
@@ -71,7 +73,7 @@ public class WizardHandbookScreen extends Screen {
 
                 }
         ));
-        this.addRenderableWidget(menu = new TurnPageButton(
+        this.addRenderableWidget(this.menu = new TurnPageButton(
                 left + Context.GUI_WIDTH / 2 - 28,
                 top + Context.GUI_HEIGHT - Context.BUTTON_INSET_Y - TurnPageButton.HEIGHT,
                 TurnPageButton.Type.CONTENTS,
@@ -81,7 +83,7 @@ public class WizardHandbookScreen extends Screen {
 
                 }
         ));
-        this.addRenderableWidget(bookmark = new InvisibleButton(
+        this.addRenderableWidget(this.bookmark = new InvisibleButton(
                 left + 130,
                 top + 172,
                 11, 19,
@@ -102,12 +104,20 @@ public class WizardHandbookScreen extends Screen {
         int top = (this.height - Context.GUI_HEIGHT) / 2;
 
         //绘制背景
-        guiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, Context.TEXTURE, left, top, 0, 0, Context.GUI_WIDTH, Context.GUI_HEIGHT, Context.TEXTURE_WIDTH, Context.TEXTURE_HEIGHT);
+        guiGraphicsExtractor.blit(
+                RenderPipelines.GUI_TEXTURED,
+                Context.TEXTURE,
+                left, top,
+                0, 0,
+                Context.GUI_WIDTH, Context.GUI_HEIGHT,
+                Context.TEXTURE_WIDTH, Context.TEXTURE_HEIGHT
+        );
 
         int currentPage = this.handbookElement.getPageTurner().getCurrentPage();
+        boolean isEnd = this.handbookElement.getPageTurner().isEnd();
 
         //特殊的背景
-        if (currentPage == 0) {
+        if (currentPage == 1) {
             guiGraphicsExtractor.blit(
                     RenderPipelines.GUI_TEXTURED,
                     Context.TEXTURE,
@@ -119,6 +129,17 @@ public class WizardHandbookScreen extends Screen {
             previous.visible = false;
             previousSection.visible = false;
             menu.visible = false;
+        } else if (isEnd) {
+            guiGraphicsExtractor.blit(
+                    RenderPipelines.GUI_TEXTURED,
+                    Context.TEXTURE,
+                    left + 144, top,
+                    368.0F, 0.0F,
+                    Context.GUI_WIDTH / 2, Context.GUI_HEIGHT,
+                    Context.TEXTURE_WIDTH, Context.TEXTURE_HEIGHT
+            );
+            next.visible = false;
+            nextSection.visible = false;
         } else {
             previous.visible = true;
             previousSection.visible = true;
@@ -128,7 +149,8 @@ public class WizardHandbookScreen extends Screen {
         int color = ARGB.color(255, 0, 0, 0);
 
         //绘制页码
-        if (currentPage > 0) {
+        //左页
+        if (currentPage > 1) {
             String pageNumber = String.valueOf(doubleToSinglePage(currentPage, false));
             guiGraphicsExtractor.text(
                     this.font,
@@ -139,25 +161,27 @@ public class WizardHandbookScreen extends Screen {
                     false
             );
         }
-        String pageNumber = String.valueOf(doubleToSinglePage(currentPage, true));
-        guiGraphicsExtractor.text(
-                this.font,
-                pageNumber,
-                left + Context.GUI_WIDTH - Context.TEXT_INSET_X - Context.PAGE_WIDTH / 2 - this.font.width(pageNumber) / 2,
-                top + Context.GUI_HEIGHT - Context.PAGE_NUMBER_INSET,
-                color,
-                false
-        );
+        //右页
+        if (!isEnd) {
+            String pageNumber = String.valueOf(doubleToSinglePage(currentPage, true));
+            guiGraphicsExtractor.text(
+                    this.font,
+                    pageNumber,
+                    left + Context.GUI_WIDTH - Context.TEXT_INSET_X - Context.PAGE_WIDTH / 2 - this.font.width(pageNumber) / 2,
+                    top + Context.GUI_HEIGHT - Context.PAGE_NUMBER_INSET,
+                    color,
+                    false
+            );
+        }
 
         //绘制书签
         bookmark.visible = false;
         guiGraphicsExtractor.blit(
                 RenderPipelines.GUI_TEXTURED,
                 Context.TEXTURE,
-                left + 138,
-                top, 299,
-                0, 11,
-                191,
+                left + 138, top,
+                299, 0,
+                11, 191,
                 Context.TEXTURE_WIDTH, Context.TEXTURE_HEIGHT
         );
 
@@ -169,7 +193,7 @@ public class WizardHandbookScreen extends Screen {
     }
 
     public static int doubleToSinglePage(int doublePageIndex, boolean rightHandPage) {
-        return rightHandPage ? doublePageIndex * 2 + 1 : doublePageIndex * 2;
+        return rightHandPage ? doublePageIndex : doublePageIndex - 1;
     }
 
     @Override

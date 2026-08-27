@@ -5,7 +5,6 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import org.apache.maven.artifact.versioning.Restriction;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.config.ClientConfig;
@@ -39,21 +38,7 @@ public class WizardryCore {
         WizardryAdvancementTriggers.register(modEventBus);
         WizardryWorldgen.register(modEventBus);
         WizardryEntityDataSerializers.register(modEventBus);
-        Wizardry.VERSION = modContainer
-                .getModInfo()
-                .getVersion()
-                .toString();
-        Wizardry.MC_VERSION = modContainer
-                .getModInfo()
-                .getDependencies()
-                .stream()
-                .filter(modVersion -> modVersion.getModId().equals("minecraft"))
-                .findFirst()
-                .map(modVersion -> {
-                    Restriction defaultArtifactVersion = modVersion.getVersionRange().getRestrictions().getFirst();
-                    return defaultArtifactVersion.getLowerBound() + "-" + defaultArtifactVersion.getUpperBound();
-                })
-                .orElse("unknown");
+        Wizardry.onInit(modContainer);
         Wizardry.LOGGER.info("Fib(10)={}", MathUtils.fibonacci(10));
     }
 

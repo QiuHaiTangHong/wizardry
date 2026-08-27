@@ -1,11 +1,11 @@
-package top.begonia.wizardry.client.layout.hybrid;
+package top.begonia.wizardry.core.api.layout.hybrid;
 
 import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.client.data.definition.handbook.part.ImageData;
-import top.begonia.wizardry.client.layout.atom.ImageElement;
-import top.begonia.wizardry.client.layout.atom.TextElement;
-import top.begonia.wizardry.client.layout.util.Context;
+import top.begonia.wizardry.core.api.layout.atom.ImageElement;
+import top.begonia.wizardry.core.api.layout.atom.TextElement;
+import top.begonia.wizardry.core.api.layout.util.Context;
 
 import java.util.Optional;
 

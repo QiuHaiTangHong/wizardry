@@ -1,11 +1,11 @@
-package top.begonia.wizardry.client.layout.atom;
+package top.begonia.wizardry.core.api.layout.atom;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.client.data.definition.handbook.part.ImageData;
-import top.begonia.wizardry.client.layout.util.Context;
+import top.begonia.wizardry.core.api.layout.util.Context;
 
 /**
  * 图像元素类, 用于渲染具有纹理的原子元素, 支持边框绘制和纹理映射

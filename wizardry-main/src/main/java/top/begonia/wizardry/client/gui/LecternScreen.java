@@ -48,7 +48,6 @@ import java.util.stream.Collectors;
  *
  * @author 秋海棠红
  * @version 1.0.0
- * @date 2026.06.15
  * @since 1.0.0
  */
 public class LecternScreen extends SpellInfoScreen implements ISpellSortable {

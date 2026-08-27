@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.layout.util;
+package top.begonia.wizardry.core.api.layout.util;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.resources.Identifier;
@@ -6,8 +6,8 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.data.definition.handbook.part.ImageData;
 import top.begonia.wizardry.client.data.definition.handbook.part.RecipeTagData;
-import top.begonia.wizardry.client.layout.atom.IAtomElement;
-import top.begonia.wizardry.client.layout.hybrid.PageElement;
+import top.begonia.wizardry.core.api.layout.atom.IAtomElement;
+import top.begonia.wizardry.core.api.layout.hybrid.PageElement;
 
 import java.util.*;
 

@@ -1,12 +1,12 @@
-package top.begonia.wizardry.client.layout.container.handbook;
+package top.begonia.wizardry.core.api.layout.container.handbook;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.layout.container.IContainerElement;
-import top.begonia.wizardry.client.layout.util.Context;
-import top.begonia.wizardry.client.layout.util.PageTurner;
+import top.begonia.wizardry.core.api.layout.container.IContainerElement;
+import top.begonia.wizardry.core.api.layout.util.Context;
+import top.begonia.wizardry.core.api.layout.util.PageTurner;
 
 public class HandbookElement implements IContainerElement {
     private int xOffset, yOffset;
@@ -29,13 +29,15 @@ public class HandbookElement implements IContainerElement {
     @Override
     public void setXOffset(int xOffset) {
         this.xOffset = xOffset;
-        this.pageTurner.getDisplaySection().forEach(sectionElement -> sectionElement.setXOffset(xOffset));
+        for (int i = 0; i < this.pageTurner.getDisplayPageElements().size(); i++) {
+            this.pageTurner.getDisplayPageElements().get(i).setXOffset(xOffset + ((i + 1) % 2 == 0 ? 150 : 16));
+        }
     }
 
     @Override
     public void setYOffset(int yOffset) {
         this.yOffset = yOffset;
-        this.pageTurner.getDisplaySection().forEach(sectionElement -> sectionElement.setYOffset(yOffset));
+        this.pageTurner.getDisplayPageElements().forEach(sectionElement -> sectionElement.setYOffset(yOffset + 16));
     }
 
     @Override
@@ -50,7 +52,7 @@ public class HandbookElement implements IContainerElement {
 
     @Override
     public boolean mouseClicked(@NonNull MouseButtonEvent event, boolean doubleClick) {
-        for (IContainerElement iContainerElement : this.pageTurner.getDisplaySection()) {
+        for (IContainerElement iContainerElement : this.pageTurner.getDisplayPageElements()) {
             if (iContainerElement.mouseClicked(event, doubleClick)) {
                 return true;
             }
@@ -60,7 +62,7 @@ public class HandbookElement implements IContainerElement {
 
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
-        for (IContainerElement iContainerElement : this.pageTurner.getDisplaySection()) {
+        for (IContainerElement iContainerElement : this.pageTurner.getDisplayPageElements()) {
             if (iContainerElement.isMouseOver(mouseX, mouseY)) {
                 return true;
             }
@@ -75,8 +77,8 @@ public class HandbookElement implements IContainerElement {
 
     @Override
     public void extractRenderState(@NonNull GuiGraphicsExtractor guiGraphicsExtractor, int mouseX, int mouseY, float partialTick) {
-        if (!this.pageTurner.getDisplaySection().isEmpty()) {
-            this.pageTurner.getDisplaySection().forEach(displayPage -> displayPage.extractRenderState(guiGraphicsExtractor, mouseX, mouseY, partialTick));
+        if (!this.pageTurner.getDisplayPageElements().isEmpty()) {
+            this.pageTurner.getDisplayPageElements().forEach(displayPage -> displayPage.extractRenderState(guiGraphicsExtractor, mouseX, mouseY, partialTick));
         }
     }
 }

@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.layout.util;
+package top.begonia.wizardry.core.api.layout.util;
 
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -7,7 +7,7 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
 import top.begonia.wizardry.client.data.definition.handbook.part.SectionData;
 import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
-import top.begonia.wizardry.client.layout.container.handbook.SectionElement;
+import top.begonia.wizardry.core.api.layout.container.IContainerElement;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -16,18 +16,19 @@ import java.util.Map;
 
 public final class PageTurner {
     private Context context;
-    private int currentPage;
+    private int currentPage = -1;
     @NotNull
     private final HandbookData handbookData;
-    private final List<SectionElement> displaySection = new ArrayList<>();
-    private final Map<String, SectionElement> sectionElementMap = new LinkedHashMap<>();
+    private final List<IContainerElement> displayPageElements = new ArrayList<>();
+    private final Map<String, SectionFormatConverter> sectionMap = new LinkedHashMap<>();
+    private final List<IContainerElement> pageElements = new ArrayList<>();
 
     public PageTurner() {
         this.handbookData = WizardryClientDataManager.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "handbook"), HandbookData.class).orElse(HandbookData.DEFAULT);
     }
 
-    public List<SectionElement> getDisplaySection() {
-        return this.displaySection;
+    public List<IContainerElement> getDisplayPageElements() {
+        return this.displayPageElements;
     }
 
     public int getCurrentPage() {
@@ -35,11 +36,29 @@ public final class PageTurner {
     }
 
     public void prev() {
-
+        this.currentPage -= this.safeCapture(this.currentPage, -2, this.pageElements, this.displayPageElements);
     }
 
     public void next() {
+        this.currentPage += this.safeCapture(this.currentPage, 2, this.pageElements, this.displayPageElements);
+    }
 
+    public boolean isEnd() {
+        return this.currentPage == this.pageElements.size() - 1;
+    }
+
+    private int safeCapture(int currentPage, int captureSize, @NonNull List<IContainerElement> pageElements, @NonNull List<IContainerElement> displayPageElements) {
+        displayPageElements.clear();
+        if (pageElements.isEmpty() || captureSize == 0) {
+            return 0;
+        }
+        int size = pageElements.size();
+        int absSize = Math.abs(captureSize);
+        int startIndex = captureSize >= 0 ? currentPage + 1 : currentPage + captureSize - 1;
+        startIndex = Math.clamp(startIndex, 0, size);
+        int endIndex = Math.min(startIndex + absSize, size);
+        displayPageElements.addAll(pageElements.subList(startIndex, endIndex));
+        return displayPageElements.size();
     }
 
     private @NonNull Map<String, SectionData> getStringSectionDataMap() {
@@ -82,10 +101,20 @@ public final class PageTurner {
         for (Map.Entry<String, SectionData> entry : noEmptySectionDataList.entrySet()) {
             String key = entry.getKey();
             SectionData sectionData = entry.getValue();
-            SectionElement sectionElement = new SectionElement(sectionData);
+            SectionFormatConverter sectionElement = new SectionFormatConverter(sectionData);
             sectionElement.format(this.context);
-            this.sectionElementMap.put(key, sectionElement);
+            this.sectionMap.put(key, sectionElement);
         }
-        Wizardry.LOGGER.info("aaaa");
+        this.pageElements.add(IContainerElement.EMPTY_ELEMENT);
+        for (Map.Entry<String, SectionFormatConverter> entry : this.sectionMap.entrySet()) {
+            this.pageElements.addAll(entry.getValue().getPageElements());
+        }
+        if (this.pageElements.size() % 2 == 0) {
+            this.pageElements.add(IContainerElement.EMPTY_ELEMENT);
+        } else {
+            this.pageElements.add(IContainerElement.EMPTY_ELEMENT);
+            this.pageElements.add(IContainerElement.EMPTY_ELEMENT);
+        }
+        this.currentPage += this.safeCapture(this.currentPage, 2, this.pageElements, this.displayPageElements);
     }
 }

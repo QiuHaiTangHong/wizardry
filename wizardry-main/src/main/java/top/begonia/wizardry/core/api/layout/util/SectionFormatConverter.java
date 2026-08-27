@@ -1,22 +1,17 @@
-package top.begonia.wizardry.client.layout.container.handbook;
+package top.begonia.wizardry.core.api.layout.util;
 
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.client.data.definition.handbook.part.CentreConfigData;
 import top.begonia.wizardry.client.data.definition.handbook.part.ContentsConfigData;
 import top.begonia.wizardry.client.data.definition.handbook.part.SectionData;
-import top.begonia.wizardry.client.layout.atom.IAtomElement;
-import top.begonia.wizardry.client.layout.container.IContainerElement;
-import top.begonia.wizardry.client.layout.hybrid.CatalogueElement;
-import top.begonia.wizardry.client.layout.hybrid.LineElement;
-import top.begonia.wizardry.client.layout.hybrid.PageElement;
-import top.begonia.wizardry.client.layout.hybrid.TitleElement;
-import top.begonia.wizardry.client.layout.util.Context;
-import top.begonia.wizardry.client.layout.util.Format;
+import top.begonia.wizardry.core.api.layout.atom.IAtomElement;
+import top.begonia.wizardry.core.api.layout.hybrid.CatalogueElement;
+import top.begonia.wizardry.core.api.layout.hybrid.LineElement;
+import top.begonia.wizardry.core.api.layout.hybrid.PageElement;
+import top.begonia.wizardry.core.api.layout.hybrid.TitleElement;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -24,34 +19,38 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 章节 (部分) 元素类
- * <p>该类负责处理手册中的一个章节内容, 包括章节的布局计算, 页面渲染, 文本格式化, 链接处理以及鼠标交互等功能.
- * 它实现了 IContainerElement 接口, 用于管理原子元素列表, 并根据上下文信息动态生成章节的显示页面.
- * 支持的富文本特性包括颜色标签, 超链接, 图片, 配方说明以及特定的格式标记替换.
+ * 章节格式化转换器
+ * <p>负责将原始章节数据 ({@link SectionData}) 转换为一组格式化后的页面元素({@link PageElement}).
+ * 支持对标题, 目录, 文本段落, 图像标记, 食谱标记等内容的解析与处理, 并根据中心对齐配置({@link CentreConfigData})
+ * 进行最终的页面布局调整. 该类为内部工具类, 专注于数据转换与排版逻辑, 不涉及请求处理等基础设施关注点.
  *
  * @author 秋海棠红
  * @version 1.0.0
  * @since 1.0.0
  */
-public class SectionElement implements IContainerElement {
+public final class SectionFormatConverter {
     private final String title;
-    private int xOffset, yOffset;
     private final List<String> rawData;
-    private int pageCount;
     private final CentreConfigData centreConfigData;
     private List<PageElement> pageElements = new ArrayList<>();
-    private final List<IAtomElement> displayPage = new ArrayList<>();
     private final ContentsConfigData contentsConfigData;
     private int startPageIndex = 0;
 
-    public SectionElement(@NonNull SectionData sectionData) {
+    public SectionFormatConverter(@NonNull SectionData sectionData) {
         this.title = sectionData.title().orElse("");
         this.rawData = sectionData.text().orElse(new ArrayList<>());
         this.centreConfigData = sectionData.centre().orElse(new CentreConfigData(false, false));
         this.contentsConfigData = sectionData.contents().orElse(null);
     }
 
-    @Override
+    public List<PageElement> getPageElements() {
+        return this.pageElements;
+    }
+
+    public int getStartPageIndex() {
+        return this.startPageIndex;
+    }
+
     public void format(@NonNull Context context) {
         this.startPageIndex = context.getTotal();
         this.pageElements.clear();
@@ -96,74 +95,5 @@ public class SectionElement implements IContainerElement {
         }
         this.pageElements = context.getPages();
         this.pageElements.forEach(pageElement -> pageElement.format(context, this.centreConfigData));
-        this.pageCount = this.pageElements.size();
-        if (!this.pageElements.isEmpty()) {
-            this.displayPage.add(this.pageElements.getFirst());
-        }
-    }
-
-    @Override
-    public void extractRenderState(@NonNull GuiGraphicsExtractor guiGraphicsExtractor, int mouseX, int mouseY, float partialTick) {
-        if (this.displayPage.size() == 2) {
-            this.displayPage.getFirst().extractRenderState(
-                    guiGraphicsExtractor,
-                    mouseX, mouseY,
-                    partialTick
-            );
-            this.displayPage.getLast().extractRenderState(
-                    guiGraphicsExtractor,
-                    mouseX, mouseY,
-                    partialTick
-            );
-        }
-    }
-
-    @Override
-    public boolean mouseClicked(@NonNull MouseButtonEvent event, boolean doubleClick) {
-        for (IAtomElement iHandbookElement : this.displayPage) {
-            if (iHandbookElement.mouseClicked(event, doubleClick)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isMouseOver(double mouseX, double mouseY) {
-        for (IAtomElement iHandbookElement : this.displayPage) {
-            if (iHandbookElement.isMouseOver(mouseX, mouseY)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isVisible() {
-        return true;
-    }
-
-    @Override
-    public void setXOffset(int xOffset) {
-        this.xOffset = xOffset;
-        for (int i = 0; i < this.displayPage.size(); i++) {
-            this.displayPage.get(i).setXOffset(xOffset + ((i + 1) % 2 == 0 ? 150 : 16));
-        }
-    }
-
-    @Override
-    public void setYOffset(int yOffset) {
-        this.yOffset = yOffset;
-        this.displayPage.forEach(iAtomElement -> iAtomElement.setYOffset(yOffset + 16));
-    }
-
-    @Override
-    public int getXOffset() {
-        return this.xOffset;
-    }
-
-    @Override
-    public int getYOffset() {
-        return this.yOffset;
     }
 }

@@ -1,9 +1,9 @@
-package top.begonia.wizardry.client.layout.atom;
+package top.begonia.wizardry.core.api.layout.atom;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.layout.IElement;
-import top.begonia.wizardry.client.layout.util.Context;
+import top.begonia.wizardry.core.api.layout.IElement;
+import top.begonia.wizardry.core.api.layout.util.Context;
 
 /**
  * 原子元素接口
@@ -18,7 +18,6 @@ import top.begonia.wizardry.client.layout.util.Context;
  *
  * @author 秋海棠红
  * @version 1.0.0
- * @date 2026.05.02
  * @since 1.0.0
  */
 public interface IAtomElement extends IElement {
@@ -49,7 +48,6 @@ public interface IAtomElement extends IElement {
     }
 
     IAtomElement EMPTY_ELEMENT = new IAtomElement() {
-
         @Override
         public void extractRenderState(@NonNull GuiGraphicsExtractor guiGraphicsExtractor, int mouseX, int mouseY, float partialTick) {
 
