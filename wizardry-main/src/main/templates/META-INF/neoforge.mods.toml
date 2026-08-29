@@ -6,7 +6,7 @@ displayName="${mod_name}"
 enumExtensions="META-INF/enum_extensions.json"
 credits='''${mod_credits}'''
 description="${mod_description}"
-logoFile="assets/wizardry/textures/gui/logo.png"
+iconFile="assets/wizardry/textures/gui/logo.png"
 [[mixins]]
 config="${mod_id}.client.mixins.json"
 [[mixins]]

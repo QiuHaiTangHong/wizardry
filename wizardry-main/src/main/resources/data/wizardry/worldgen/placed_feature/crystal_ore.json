@@ -1,8 +1,0 @@
-{
-  "feature": "wizardry:crystal_ore",
-  "placement": [
-    {
-      "type": "minecraft:biome"
-    }
-  ]
-}

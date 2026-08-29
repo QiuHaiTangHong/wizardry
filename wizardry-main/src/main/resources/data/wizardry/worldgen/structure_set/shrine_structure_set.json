@@ -1,0 +1,14 @@
+{
+    "structures": [
+        {
+            "weight": 1,
+            "structure": "wizardry:shrine_structure"
+        }
+    ],
+    "placement": {
+        "type": "minecraft:random_spread",
+        "salt": 17502749,
+        "spacing": 24,
+        "separation": 6
+    }
+}

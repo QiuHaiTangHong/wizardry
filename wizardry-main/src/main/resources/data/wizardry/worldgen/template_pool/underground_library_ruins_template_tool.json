@@ -1,0 +1,42 @@
+{
+    "name": "wizardry:underground_library_ruins_template_tool",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:underground_library_ruins_0",
+                "processors": "wizardry:underground_library_ruins_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:underground_library_ruins_1",
+                "processors": "wizardry:underground_library_ruins_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:underground_library_ruins_2",
+                "processors": "wizardry:underground_library_ruins_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:underground_library_ruins_3",
+                "processors": "wizardry:underground_library_ruins_processor",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

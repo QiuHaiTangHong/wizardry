@@ -1,0 +1,93 @@
+{
+    "processors": [
+        {
+            "processor_type": "minecraft:rule",
+            "rules": [
+                {
+                    "position_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "input_predicate": {
+                        "predicate_type": "minecraft:block_match",
+                        "block": "minecraft:cobblestone"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:stone_bricks"
+                    }
+                },
+                {
+                    "position_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "input_predicate": {
+                        "predicate_type": "minecraft:random_block_match",
+                        "block": "minecraft:stone_bricks",
+                        "probability": 0.1
+                    },
+                    "output_state": {
+                        "Name": "minecraft:cracked_stone_bricks"
+                    }
+                },
+                {
+                    "position_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "input_predicate": {
+                        "predicate_type": "minecraft:random_block_match",
+                        "block": "minecraft:stone_bricks",
+                        "probability": 0.4
+                    },
+                    "output_state": {
+                        "Name": "minecraft:mossy_stone_bricks"
+                    }
+                },
+                {
+                    "position_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "input_predicate": {
+                        "predicate_type": "minecraft:block_match",
+                        "block": "minecraft:chest"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:chest",
+                        "Properties": {
+                            "facing": "north"
+                        }
+                    },
+                    "block_entity_modifier": {
+                        "type": "minecraft:append_loot",
+                        "loot_table": "wizardry:chests/library_ruins_bookshelf"
+                    }
+                },
+                {
+                    "position_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "input_predicate": {
+                        "predicate_type": "minecraft:block_match",
+                        "block": "minecraft:chiseled_bookshelf"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:chiseled_bookshelf"
+                    }
+                }
+            ]
+        }
+    ]
+}

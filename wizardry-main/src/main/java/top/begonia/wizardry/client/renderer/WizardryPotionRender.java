@@ -6,7 +6,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import org.jspecify.annotations.NonNull;
@@ -21,10 +20,17 @@ public class WizardryPotionRender implements IClientMobEffectExtensions {
     }
 
     @Override
-    public boolean renderInventoryIcon(@NonNull MobEffectInstance instance, @NonNull AbstractContainerScreen<?> screen, @NonNull GuiGraphicsExtractor guiGraphics, int x, int y, int blitOffset) {
+    public boolean extractInventoryIcon(
+            @NonNull MobEffectInstance instance,
+            @NonNull AbstractContainerScreen<?> screen,
+            @NonNull GuiGraphicsExtractor graphics,
+            int x, int y,
+            int width, int height,
+            int color
+    ) {
         Identifier texture = getTexture(instance);
         if (texture != null) {
-            guiGraphics.blit(
+            graphics.blit(
                     RenderPipelines.GUI_TEXTURED,
                     texture,
                     x, y + 7,
@@ -38,16 +44,17 @@ public class WizardryPotionRender implements IClientMobEffectExtensions {
     }
 
     @Override
-    public boolean renderInventoryText(@NonNull MobEffectInstance instance, @NonNull AbstractContainerScreen<?> screen, @NonNull GuiGraphicsExtractor guiGraphics, int x, int y, int blitOffset) {
-        return false;
-    }
-
-    @Override
-    public boolean renderGuiIcon(@NonNull MobEffectInstance instance, @NonNull Hud hud, @NonNull GuiGraphicsExtractor guiGraphics, int x, int y, float z, float alpha) {
+    public boolean extractHudIcon(
+            @NonNull MobEffectInstance instance,
+            @NonNull Hud hud,
+            @NonNull GuiGraphicsExtractor graphics,
+            int x, int y,
+            int width, int height,
+            int color
+    ) {
         Identifier texture = getTexture(instance);
         if (texture != null) {
-            int color = ARGB.white(alpha);
-            guiGraphics.blit(
+            graphics.blit(
                     RenderPipelines.GUI_TEXTURED,
                     texture,
                     x + 3, y + 3,

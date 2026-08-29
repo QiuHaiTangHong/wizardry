@@ -1,0 +1,15 @@
+{
+    "name": "wizardry:shrine_template_pool",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:shrine_0",
+                "processors": "wizardry:shrine_processor",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

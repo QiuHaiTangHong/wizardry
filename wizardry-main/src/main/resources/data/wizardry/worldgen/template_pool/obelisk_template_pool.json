@@ -1,0 +1,51 @@
+{
+    "name": "wizardry:obelisk_template_pool",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:obelisk_0",
+                "processors": "wizardry:obelisk_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:obelisk_1",
+                "processors": "wizardry:obelisk_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:obelisk_2",
+                "processors": "wizardry:obelisk_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:obelisk_3",
+                "processors": "wizardry:obelisk_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:obelisk_4",
+                "processors": "wizardry:obelisk_processor",
+                "projection": "rigid"
+            }
+        }
+    ]
+}
