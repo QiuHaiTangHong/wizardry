@@ -4,6 +4,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
@@ -151,7 +152,7 @@ public abstract class AbstractParticle extends SingleQuadParticle {
         if (this.shaded) {
             return super.getLightCoords(partialTick);
         } else {
-            return 15728880;
+            return LightCoordsUtil.FULL_BRIGHT;
         }
     }
 

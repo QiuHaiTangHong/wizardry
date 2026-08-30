@@ -2,6 +2,7 @@ package top.begonia.wizardry.client.particle;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Mth;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,17 +28,17 @@ public class MutableDoubleSpriteSet {
         return row.get(Mth.clamp(frameIndex, 0, row.size() - 1));
     }
 
-    private List<TextureAtlasSprite> getRow(int rowIndex) {
+    private @NonNull List<TextureAtlasSprite> getRow(int rowIndex) {
         List<List<TextureAtlasSprite>> currentSprites = this.doubleSprites;
         if (currentSprites.isEmpty()) {
-            throw new IllegalStateException("❌ 尝试获取未绑定的粒子精灵集合！请检查重载流程。");
+            throw new IllegalStateException("尝试获取未绑定的粒子精灵集合！请检查重载流程。");
         }
 
         int safeRowIndex = Mth.clamp(rowIndex, 0, currentSprites.size() - 1);
         List<TextureAtlasSprite> row = currentSprites.get(safeRowIndex);
 
         if (row.isEmpty()) {
-            throw new IllegalStateException("❌ 粒子精灵集合中存在空行配置！Row: " + safeRowIndex);
+            throw new IllegalStateException("粒子精灵集合中存在空行配置！Row: " + safeRowIndex);
         }
         return row;
     }

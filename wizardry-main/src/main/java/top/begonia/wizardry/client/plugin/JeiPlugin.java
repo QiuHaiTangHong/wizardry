@@ -1,7 +1,6 @@
 package top.begonia.wizardry.client.plugin;
 
 import mezz.jei.api.IModPlugin;
-import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import net.minecraft.client.renderer.Rect2i;
@@ -12,8 +11,8 @@ import top.begonia.wizardry.client.gui.ArcaneWorkbenchScreen;
 
 import java.util.List;
 
-@JeiPlugin
-public class WizardryJeiPlugin implements IModPlugin {
+@mezz.jei.api.JeiPlugin
+public class JeiPlugin implements IModPlugin {
     private static final Identifier PLUGIN_ID = Identifier.fromNamespaceAndPath(Wizardry.MODID, "jei_plugin");
 
     @Override
