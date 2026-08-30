@@ -7,67 +7,232 @@
         "c": {}
     },
     "passes": [
-		{
-            "name": "color_convolve",
-            "intarget": "minecraft:main",
-            "outtarget": "a",
-            "uniforms": [
-                {
-                    "name": "Saturation",
-                    "values": [ 0.2 ]
-                }
-            ]
-        },
-		{
-            "name": "color_convolve",
-            "intarget": "a",
-            "outtarget": "b",
-            "uniforms": [
-                {
-                    "name": "RedMatrix",
-                    "values": [ 0.2, 0.2, 0.1 ]
-                },
-                {
-                    "name": "GreenMatrix",
-                    "values": [ 0.1, 0.1, 0.1 ]
-                },
-                {
-                    "name": "BlueMatrix",
-                    "values": [ 0.2, 0.2, 0.3 ]
-                }
-            ]
-        },
-		{
-            "name": "deconverge",
-            "intarget": "a",
-            "outtarget": "c"
-        },
         {
-            "name": "phosphor",
-            "intarget": "c",
-            "outtarget": "swap",
-            "auxtargets": [
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "wizardry:post/color_convolve",
+            "inputs": [
                 {
-                    "name": "PrevSampler",
-                    "id": "previous"
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
                 }
             ],
-            "uniforms": [
+            "output": "a",
+            "uniforms": {
+                "ColorConfig": [
+                    {
+                        "name": "RedMatrix",
+                        "type": "vec3",
+                        "value": [
+                            1.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "GreenMatrix",
+                        "type": "vec3",
+                        "value": [
+                            0.0,
+                            1.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "BlueMatrix",
+                        "type": "vec3",
+                        "value": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    }
+                ],
+                "SaturationConfig": [
+                    {
+                        "name": "Saturation",
+                        "type": "float",
+                        "value": 0.2
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "wizardry:post/color_convolve",
+            "inputs": [
                 {
-                    "name": "Phosphor",
-                    "values": [ 0.8, 0.8, 0.8 ]
+                    "sampler_name": "In",
+                    "target": "a"
                 }
-            ]
+            ],
+            "output": "b",
+            "uniforms": {
+                "ColorConfig": [
+                    {
+                        "name": "RedMatrix",
+                        "type": "vec3",
+                        "value": [
+                            0.2,
+                            0.2,
+                            0.1
+                        ]
+                    },
+                    {
+                        "name": "GreenMatrix",
+                        "type": "vec3",
+                        "value": [
+                            0.1,
+                            0.1,
+                            0.1
+                        ]
+                    },
+                    {
+                        "name": "BlueMatrix",
+                        "type": "vec3",
+                        "value": [
+                            0.2,
+                            0.2,
+                            0.3
+                        ]
+                    }
+                ],
+                "SaturationConfig": [
+                    {
+                        "name": "Saturation",
+                        "type": "float",
+                        "value": 1.8
+                    }
+                ]
+            }
         },
         {
-            "name": "blit",
-            "intarget": "swap",
-            "outtarget": "previous"
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "wizardry:post/deconverge",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "a"
+                }
+            ],
+            "output": "c",
+            "uniforms": {
+                "DeconvergeConfig": [
+                    {
+                        "name": "ConvergeX",
+                        "type": "vec3",
+                        "value": [
+                            -1.0,
+                            0.0,
+                            0.5
+                        ]
+                    },
+                    {
+                        "name": "ConvergeY",
+                        "type": "vec3",
+                        "value": [
+                            0.0,
+                            -1.0,
+                            0.5
+                        ]
+                    },
+                    {
+                        "name": "RadialConvergeX",
+                        "type": "vec3",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    {
+                        "name": "RadialConvergeY",
+                        "type": "vec3",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
         },
         {
-            "name": "blit",
-            "intarget": "swap",
-            "outtarget": "minecraft:main"
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "wizardry:post/phosphor",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "c"
+                },
+                {
+                    "sampler_name": "Prev",
+                    "target": "previous"
+                }
+            ],
+            "output": "swap",
+            "uniforms": {
+                "PhosphorConfig": [
+                    {
+                        "name": "Phosphor",
+                        "type": "vec3",
+                        "value": [
+                            0.8,
+                            0.8,
+                            0.8
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "output": "previous",
+            "uniforms": {
+                "BlitConfig": [
+                    {
+                        "name": "ColorModulate",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "output": "minecraft:main",
+            "uniforms": {
+                "BlitConfig": [
+                    {
+                        "name": "ColorModulate",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

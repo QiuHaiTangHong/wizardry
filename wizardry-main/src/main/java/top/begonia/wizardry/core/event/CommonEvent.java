@@ -6,6 +6,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
@@ -16,6 +17,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
+import top.begonia.wizardry.core.commond.DebugCommond;
 import top.begonia.wizardry.core.data.SpellGlyph;
 import top.begonia.wizardry.core.data.player.WizardPlayerData;
 import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
@@ -53,6 +55,11 @@ public class CommonEvent {
             WizardPlayerData playerData = player.getData(WizardryAttachment.WIZARD_PLAYER_DATA.get());
             player.setData(WizardryAttachment.WIZARD_PLAYER_DATA.get(), playerData);
         }
+    }
+
+    @SubscribeEvent
+    public static void onRegisterCommands(@NonNull RegisterCommandsEvent event) {
+        DebugCommond.register(event.getDispatcher());
     }
 
     @SubscribeEvent

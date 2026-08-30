@@ -1,7 +1,10 @@
 package top.begonia.wizardry.core.item.impl;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -13,6 +16,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.api.event.SpellCastEvent;
 import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
 import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
@@ -46,6 +50,9 @@ public class ScrollItem extends Item implements ISpellCastingItem, IWorkbenchIte
     public @NonNull InteractionResult use(@NonNull Level level, @NonNull Player player, @NonNull InteractionHand hand) {
         ItemStack handItem = player.getItemInHand(hand);
         AbstractSpell spell = this.getCurrentSpell(handItem);
+        if (level instanceof ClientLevel clientLevel) {
+            Minecraft.getInstance().gameRenderer.setPostEffect(Identifier.fromNamespaceAndPath(Wizardry.MODID, "slow_time"));
+        }
         SpellContextFlow spellContextFlow = SpellContextFlow.create();
         if (this.canCast(handItem, spell, player, hand, 0, spellContextFlow)) {
             if (spell.isContinuous) {

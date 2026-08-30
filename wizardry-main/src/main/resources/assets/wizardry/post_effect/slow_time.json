@@ -1,37 +1,105 @@
 {
-    "targets": [
-		"a"
-    ],
+    "targets": {
+        "a": {}
+    },
     "passes": [
-		{
-            "name": "color_convolve",
-            "intarget": "minecraft:main",
-            "outtarget": "a",
-            "uniforms": [
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "wizardry:post/color_convolve",
+            "inputs": [
                 {
-                    "name": "Saturation",
-                    "values": [ 0.2 ]
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
                 }
-            ]
+            ],
+            "output": "a",
+            "uniforms": {
+                "ColorConfig": [
+                    {
+                        "name": "RedMatrix",
+                        "type": "vec3",
+                        "value": [
+                            1.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "GreenMatrix",
+                        "type": "vec3",
+                        "value": [
+                            0.0,
+                            1.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "BlueMatrix",
+                        "type": "vec3",
+                        "value": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    }
+                ],
+                "SaturationConfig": [
+                    {
+                        "name": "Saturation",
+                        "type": "float",
+                        "value": 0.2
+                    }
+                ]
+            }
         },
-		{
-            "name": "color_convolve",
-            "intarget": "a",
-            "outtarget": "minecraft:main",
-            "uniforms": [
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "wizardry:post/color_convolve",
+            "inputs": [
                 {
-                    "name": "RedMatrix",
-                    "values": [ 0.6, 0, 0 ]
-                },
-                {
-                    "name": "GreenMatrix",
-                    "values": [ 0, 0.7, 0 ]
-                },
-                {
-                    "name": "BlueMatrix",
-                    "values": [ 0.1, 0.1, 1 ]
+                    "sampler_name": "In",
+                    "target": "a"
                 }
-            ]
+            ],
+            "output": "minecraft:main",
+            "uniforms": {
+                "ColorConfig": [
+                    {
+                        "name": "RedMatrix",
+                        "type": "vec3",
+                        "value": [
+                            0.6,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "GreenMatrix",
+                        "type": "vec3",
+                        "value": [
+                            0.0,
+                            0.7,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "BlueMatrix",
+                        "type": "vec3",
+                        "value": [
+                            0.1,
+                            0.1,
+                            1.0
+                        ]
+                    }
+                ],
+                "SaturationConfig": [
+                    {
+                        "name": "Saturation",
+                        "type": "float",
+                        "value": 1.8
+                    }
+                ]
+            }
         }
     ]
 }

@@ -24,6 +24,7 @@ public final class ClientConfig {
     private static final ModConfigSpec.BooleanValue REVERSE_SCROLL_DIRECTION;
     private static final ModConfigSpec.BooleanValue SUMMONED_CREATURE_NAMES;
     public static final ModConfigSpec.BooleanValue SPELL_BOOK_COLORS;
+    public static final ModConfigSpec.BooleanValue BLINK_EFFECT;
     public static boolean spellBookColors;
     public static boolean booksPauseGame;
     public static boolean unfocusedSearchBars;
@@ -34,6 +35,7 @@ public final class ClientConfig {
     public static boolean summonedCreatureNames;
     public static boolean shiftScrolling;
     public static boolean reverseScrollDirection;
+    public static boolean blinkEffect;
 
     static {
         BUILDER
@@ -80,6 +82,10 @@ public final class ClientConfig {
                 .comment("Whether to show elemental colors on spell books for discovered spells.")
                 .translation("config." + Wizardry.MODID + ".spell_book_colors")
                 .define("spellBookColors", true);
+        BLINK_EFFECT = BUILDER
+                .comment("Whether to use the screen blink effect for teleportation spells.")
+                .translation("config." + Wizardry.MODID + ".blink_effect")
+                .define("blinkEffect", true);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
@@ -93,6 +99,7 @@ public final class ClientConfig {
         spellHUDSkin = SPELL_HUD_SKIN.get();
         summonedCreatureNames = SUMMONED_CREATURE_NAMES.get();
         spellBookColors = SPELL_BOOK_COLORS.get();
+        blinkEffect = BLINK_EFFECT.get();
     }
 
     @SubscribeEvent

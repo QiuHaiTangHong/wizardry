@@ -8,7 +8,7 @@
                 "element_type": "minecraft:single_pool_element",
                 "location": "wizardry:shrine_0",
                 "processors": "wizardry:shrine_processor",
-                "projection": "rigid"
+                "projection": "terrain_matching"
             }
         }
     ]

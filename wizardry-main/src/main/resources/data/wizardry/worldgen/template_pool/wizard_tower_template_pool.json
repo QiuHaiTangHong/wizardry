@@ -8,7 +8,7 @@
                 "element_type": "minecraft:single_pool_element",
                 "location": "wizardry:wizard_tower_0",
                 "processors": "wizardry:wizard_tower_processor",
-                "projection": "rigid"
+                "projection": "terrain_matching"
             }
         },
         {
@@ -17,7 +17,7 @@
                 "element_type": "minecraft:single_pool_element",
                 "location": "wizardry:wizard_tower_1",
                 "processors": "wizardry:wizard_tower_processor",
-                "projection": "rigid"
+                "projection": "terrain_matching"
             }
         },
         {
@@ -26,7 +26,7 @@
                 "element_type": "minecraft:single_pool_element",
                 "location": "wizardry:wizard_tower_2",
                 "processors": "wizardry:wizard_tower_processor",
-                "projection": "rigid"
+                "projection": "terrain_matching"
             }
         },
         {
@@ -35,7 +35,7 @@
                 "element_type": "minecraft:single_pool_element",
                 "location": "wizardry:wizard_tower_3",
                 "processors": "wizardry:wizard_tower_processor",
-                "projection": "rigid"
+                "projection": "terrain_matching"
             }
         },
         {
@@ -44,7 +44,7 @@
                 "element_type": "minecraft:single_pool_element",
                 "location": "wizardry:wizard_tower_chest_0",
                 "processors": "wizardry:wizard_tower_processor",
-                "projection": "rigid"
+                "projection": "terrain_matching"
             }
         },
         {
@@ -53,7 +53,7 @@
                 "element_type": "minecraft:single_pool_element",
                 "location": "wizardry:wizard_tower_chest_1",
                 "processors": "wizardry:wizard_tower_processor",
-                "projection": "rigid"
+                "projection": "terrain_matching"
             }
         },
         {
@@ -62,7 +62,7 @@
                 "element_type": "minecraft:single_pool_element",
                 "location": "wizardry:wizard_tower_chest_2",
                 "processors": "wizardry:wizard_tower_processor",
-                "projection": "rigid"
+                "projection": "terrain_matching"
             }
         },
         {
@@ -71,7 +71,7 @@
                 "element_type": "minecraft:single_pool_element",
                 "location": "wizardry:wizard_tower_chest_3",
                 "processors": "wizardry:wizard_tower_processor",
-                "projection": "rigid"
+                "projection": "terrain_matching"
             }
         }
     ]

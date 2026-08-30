@@ -8,7 +8,7 @@
                 "element_type": "minecraft:single_pool_element",
                 "location": "wizardry:library_ruins_0",
                 "processors": "wizardry:library_ruins_processor",
-                "projection": "rigid"
+                "projection": "terrain_matching"
             }
         },
         {
@@ -17,7 +17,7 @@
                 "element_type": "minecraft:single_pool_element",
                 "location": "wizardry:library_ruins_1",
                 "processors": "wizardry:library_ruins_processor",
-                "projection": "rigid"
+                "projection": "terrain_matching"
             }
         },
         {
@@ -26,7 +26,7 @@
                 "element_type": "minecraft:single_pool_element",
                 "location": "wizardry:library_ruins_2",
                 "processors": "wizardry:library_ruins_processor",
-                "projection": "rigid"
+                "projection": "terrain_matching"
             }
         },
         {
@@ -35,7 +35,7 @@
                 "element_type": "minecraft:single_pool_element",
                 "location": "wizardry:library_ruins_3",
                 "processors": "wizardry:library_ruins_processor",
-                "projection": "rigid"
+                "projection": "terrain_matching"
             }
         }
     ]

@@ -8,7 +8,7 @@
     },
     "use_expansion_hack": false,
     "step": "surface_structures",
-    "terrain_adaptation": "beard_box",
+    "terrain_adaptation": "beard_thin",
     "project_start_to_heightmap": "WORLD_SURFACE_WG",
     "start_pool": "wizardry:obelisk_template_pool",
     "spawn_overrides": {}
