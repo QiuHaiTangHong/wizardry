@@ -89,7 +89,7 @@ repositories {
 }
 
 dependencies {
-    implementation "maven.modrinth:u6dRKJwZ:nUDmwyrp"
+    implementation "maven.modrinth:u6dRKJwZ:DoIPjtii" // JEI
     implementation project(':wizardry-libs')
     runtimeOnly project(path: ':wizardry-libs', configuration: 'default')
 }

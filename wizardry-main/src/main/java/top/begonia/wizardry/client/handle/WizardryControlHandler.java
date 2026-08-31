@@ -12,6 +12,7 @@ import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.client.constants.WizardryKeyMappings;
 import top.begonia.wizardry.client.gui.SpellHud;
 import top.begonia.wizardry.core.config.ClientConfig;
+import top.begonia.wizardry.core.constants.ControlType;
 import top.begonia.wizardry.core.item.ISpellCastingItem;
 import top.begonia.wizardry.core.network.data.ControlInputPayload;
 import top.begonia.wizardry.core.network.data.SpellQuickAccessPayload;
@@ -107,7 +108,7 @@ public class WizardryControlHandler {
 
     private static void selectNextSpell(@NonNull ItemStack wand) {
         // Packet building
-        ClientPacketDistributor.sendToServer(new ControlInputPayload(ControlInputPayload.ControlType.NEXT_SPELL_KEY));
+        ClientPacketDistributor.sendToServer(new ControlInputPayload(ControlType.NEXT_SPELL_KEY));
         // GUI switch animation
         ((ISpellCastingItem) wand.getItem()).selectNextSpell(wand); // Makes sure the spell is set immediately for the client
         SpellHud.playSpellSwitchAnimation(true);
@@ -118,7 +119,7 @@ public class WizardryControlHandler {
 
     private static void selectPreviousSpell(@NonNull ItemStack wand) {
         // Packet building
-        ClientPacketDistributor.sendToServer(new ControlInputPayload(ControlInputPayload.ControlType.PREVIOUS_SPELL_KEY));
+        ClientPacketDistributor.sendToServer(new ControlInputPayload(ControlType.PREVIOUS_SPELL_KEY));
         // GUI switch animation
         ((ISpellCastingItem) wand.getItem()).selectPreviousSpell(wand); // Makes sure the spell is set immediately for the client
         SpellHud.playSpellSwitchAnimation(false);

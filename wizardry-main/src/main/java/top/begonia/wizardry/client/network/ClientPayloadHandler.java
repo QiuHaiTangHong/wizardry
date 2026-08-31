@@ -11,7 +11,9 @@ import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.data.network.handbook.HandbookRecipesResult;
+import top.begonia.wizardry.client.util.GlyphGenerator;
+import top.begonia.wizardry.core.network.data.GlyphDataPayload;
+import top.begonia.wizardry.core.network.data.HandbookRecipesResultPayload;
 import top.begonia.wizardry.core.entity.block.BookshelfBlockEntity;
 import top.begonia.wizardry.core.network.data.SyncSlotPayload;
 
@@ -31,7 +33,7 @@ public class ClientPayloadHandler {
      * @param payload 手稿配方结果对象
      * @param context 实体载荷上下文
      */
-    public static void handleHandbookRecipesResult(final HandbookRecipesResult payload, final @NonNull IPayloadContext context) {
+    public static void handleHandbookRecipesResultPayload(final HandbookRecipesResultPayload payload, final @NonNull IPayloadContext context) {
         context.enqueueWork(() -> {
             DISPLAY_CACHE.putAll(payload.allDisplays());
             Wizardry.LOGGER.info("已成功同步 {} 个配方的显示数据至客户端。", payload.allDisplays().size());
@@ -39,7 +41,7 @@ public class ClientPayloadHandler {
     }
 
     @Contract(pure = true)
-    public static void handleItemResourceHandlerPayload(final @NonNull SyncSlotPayload payload, final @NonNull IPayloadContext context) {
+    public static void handleSyncSlotPayload(final @NonNull SyncSlotPayload payload, final @NonNull IPayloadContext context) {
         BlockPos blockPos = payload.blockPos();
         BlockEntity blockEntity = context.player().level().getBlockEntity(blockPos);
         ItemStack itemStack = payload.stack();
@@ -49,6 +51,13 @@ public class ClientPayloadHandler {
             ItemStacksResourceHandler itemStacksResourceHandler = bookshelfBlockEntity.getInventory();
             itemStacksResourceHandler.set(index, ItemResource.of(itemStack), itemStack.getCount());
         }
+    }
+
+    public static void handleGlyphDataPayload(final GlyphDataPayload payload, final @NonNull IPayloadContext context) {
+        context.enqueueWork(() -> {
+            GlyphGenerator.update(payload.names(), payload.descriptions());
+            Wizardry.LOGGER.info("已同步咒语乱码数据至客户端。");
+        });
     }
 
     public static List<RecipeDisplay> getDisplays(Identifier id) {

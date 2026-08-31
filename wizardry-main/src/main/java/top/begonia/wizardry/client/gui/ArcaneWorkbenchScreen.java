@@ -34,6 +34,7 @@ import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.client.gui.widget.SpellSortButton;
 import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.constants.ControlType;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.inventory.menu.ArcaneWorkbenchMenu;
@@ -130,7 +131,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                 16,
                 Component.translatable("container." + Wizardry.MODID + ".arcane_workbench.apply"),
                 _ -> {
-                    ControlInputPayload payload = new ControlInputPayload(ControlInputPayload.ControlType.CLEAR_BUTTON);
+                    ControlInputPayload payload = new ControlInputPayload(ControlType.CLEAR_BUTTON);
                     ClientPacketDistributor.sendToServer(payload);
                     Minecraft.getInstance().getSoundManager().play(
                             SimpleSoundInstance.forUI(WizardrySounds.BLOCK_ARCANE_WORKBENCH_SPELLBIND.get(), 0.8f)
@@ -143,7 +144,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                 0,
                 Component.translatable("container." + Wizardry.MODID + ".arcane_workbench.clear"),
                 _ -> {
-                    ControlInputPayload payload = new ControlInputPayload(ControlInputPayload.ControlType.APPLY_BUTTON);
+                    ControlInputPayload payload = new ControlInputPayload(ControlType.APPLY_BUTTON);
                     ClientPacketDistributor.sendToServer(payload);
                     Minecraft.getInstance().getSoundManager().play(
                             SimpleSoundInstance.forUI(WizardrySounds.BLOCK_ARCANE_WORKBENCH_SPELLBIND.get(), 0.8f)

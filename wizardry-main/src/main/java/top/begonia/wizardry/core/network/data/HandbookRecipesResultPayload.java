@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.data.network.handbook;
+package top.begonia.wizardry.core.network.data;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -13,23 +13,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public record HandbookRecipesResult(Map<Identifier, List<RecipeDisplay>> allDisplays) implements CustomPacketPayload {
-    public static final Type<HandbookRecipesResult> TYPE = new Type<>(
-            Identifier.fromNamespaceAndPath(Wizardry.MODID, "result_recipe")
+public record HandbookRecipesResultPayload(
+        Map<Identifier, List<RecipeDisplay>> allDisplays
+) implements CustomPacketPayload {
+    public static final Type<HandbookRecipesResultPayload> TYPE = new Type<>(
+            Identifier.fromNamespaceAndPath(Wizardry.MODID, "handbook_recipes_result")
     );
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, HandbookRecipesResult> STREAM_CODEC = StreamCodec.composite(
+    public static final StreamCodec<RegistryFriendlyByteBuf, HandbookRecipesResultPayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.map(
                     HashMap::new,
                     Identifier.STREAM_CODEC,
                     RecipeDisplay.STREAM_CODEC.apply(ByteBufCodecs.list())
             ),
-            HandbookRecipesResult::allDisplays,
-            HandbookRecipesResult::new
+            HandbookRecipesResultPayload::allDisplays,
+            HandbookRecipesResultPayload::new
     );
+    public static final String VERSION = "1.0.0";
 
     @Override
-    public @NonNull Type<? extends CustomPacketPayload> type() {
+    public @NonNull Type<HandbookRecipesResultPayload> type() {
         return TYPE;
     }
 }

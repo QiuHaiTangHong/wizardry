@@ -13,8 +13,8 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.util.GlyphGenerator;
-import top.begonia.wizardry.core.data.network.handbook.HandbookRecipesRequest;
-import top.begonia.wizardry.core.data.network.handbook.HandbookRecipesResult;
+import top.begonia.wizardry.core.network.data.HandbookRecipesRequestPayload;
+import top.begonia.wizardry.core.network.data.HandbookRecipesResultPayload;
 import top.begonia.wizardry.core.inventory.menu.ArcaneWorkbenchMenu;
 import top.begonia.wizardry.core.item.ISpellCastingItem;
 import top.begonia.wizardry.core.network.data.ControlInputPayload;
@@ -24,7 +24,7 @@ import top.begonia.wizardry.core.network.data.SpellQuickAccessPayload;
 import java.util.*;
 
 public class ServerPayloadHandler {
-    public static void handleRequest(final HandbookRecipesRequest data, final IPayloadContext context) {
+    public static void handleRequest(final HandbookRecipesRequestPayload data, final IPayloadContext context) {
         context.enqueueWork(() -> {
             if (context.player() instanceof ServerPlayer player) {
                 RecipeManager recipeManager = player.level().getServer().getRecipeManager();
@@ -38,21 +38,14 @@ public class ServerPayloadHandler {
                 }));
 
                 if (!allDisplays.isEmpty()) {
-                    context.reply(new HandbookRecipesResult(allDisplays));
+                    context.reply(new HandbookRecipesResultPayload(allDisplays));
                     Wizardry.LOGGER.info("已完成手册配方数据收集，统一同步至客户端。共计 {} 个配方。", allDisplays.size());
                 }
             }
         });
     }
 
-    public static void handleGlyphData(final GlyphDataPayload payload, final @NonNull IPayloadContext context) {
-        context.enqueueWork(() -> {
-            GlyphGenerator.update(payload.names(), payload.descriptions());
-            Wizardry.LOGGER.info("已同步咒语乱码数据至客户端。");
-        });
-    }
-
-    public static void handleSpellQuickAccess(final SpellQuickAccessPayload payload, final @NonNull IPayloadContext context) {
+    public static void handleSpellQuickAccessPayload(final SpellQuickAccessPayload payload, final @NonNull IPayloadContext context) {
         if (context.player() instanceof ServerPlayer player) {
             ItemStack wand = player.getMainHandItem();
             if (!(wand.getItem() instanceof ISpellCastingItem)) {
@@ -78,7 +71,7 @@ public class ServerPayloadHandler {
                 case APPLY_BUTTON:
 
                     if (!(player.containerMenu instanceof ArcaneWorkbenchMenu arcaneWorkbenchMenu)) {
-                        Wizardry.LOGGER.warn("Received a PacketControlInput, but the player that sent it was not " +
+                        Wizardry.LOGGER.warn("[APPLY_BUTTON] Received a PacketControlInput, but the player that sent it was not " +
                                 "currently using an arcane workbench. This should not happen!");
                     } else {
                         arcaneWorkbenchMenu.onApplyButtonPressed(player);
@@ -89,7 +82,7 @@ public class ServerPayloadHandler {
                 case CLEAR_BUTTON:
 
                     if (!(player.containerMenu instanceof ArcaneWorkbenchMenu arcaneWorkbenchMenu)) {
-                        Wizardry.LOGGER.warn("Received a PacketControlInput, but the player that sent it was not " +
+                        Wizardry.LOGGER.warn("[CLEAR_BUTTON] Received a PacketControlInput, but the player that sent it was not " +
                                 "currently using an arcane workbench. This should not happen!");
                     } else {
                         arcaneWorkbenchMenu.onClearButtonPressed(player);
@@ -121,7 +114,7 @@ public class ServerPayloadHandler {
 
                 case RESURRECT_BUTTON:
 
-                    Wizardry.LOGGER.warn("Received a resurrect button packet, but the player that sent it was not" +
+                    Wizardry.LOGGER.warn("[RESURRECT_BUTTON] Received a resurrect button packet, but the player that sent it was not" +
                             " currently able to resurrect. This should not happen!");
                     break;
             }

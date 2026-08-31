@@ -8,18 +8,19 @@ import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 
-public record SpellQuickAccessPayload(int index) implements CustomPacketPayload {
-
+public record SpellQuickAccessPayload(
+        int index
+) implements CustomPacketPayload {
     public static final Type<SpellQuickAccessPayload> TYPE =
             new Type<>(Identifier.fromNamespaceAndPath(Wizardry.MODID, "spell_quick_access"));
-
-    @Override
-    public @NonNull Type<? extends CustomPacketPayload> type() {
-        return TYPE;
-    }
-    
-    public static final StreamCodec<ByteBuf, SpellQuickAccessPayload> CODEC = StreamCodec.composite(
+    public static final StreamCodec<ByteBuf, SpellQuickAccessPayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT, SpellQuickAccessPayload::index,
             SpellQuickAccessPayload::new
     );
+    public static final String VERSION = "1.0.0";
+
+    @Override
+    public @NonNull Type<SpellQuickAccessPayload> type() {
+        return TYPE;
+    }
 }

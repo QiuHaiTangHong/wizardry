@@ -12,8 +12,6 @@ import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
@@ -26,17 +24,13 @@ import top.begonia.wizardry.core.effect.impl.DecayMobEffect;
 import top.begonia.wizardry.core.entity.construct.BubbleEntity;
 import top.begonia.wizardry.core.entity.living.minion.WitherSkeletonMinionEntity;
 import top.begonia.wizardry.core.entity.living.minion.ZombieMinionEntity;
-import top.begonia.wizardry.core.network.ServerPayloadHandler;
-import top.begonia.wizardry.core.network.data.ControlInputPayload;
-import top.begonia.wizardry.core.network.data.GlyphDataPayload;
-import top.begonia.wizardry.core.network.data.SpellQuickAccessPayload;
 import top.begonia.wizardry.core.registry.WizardryAttachment;
 import top.begonia.wizardry.core.registry.WizardryCreativeTabs;
 import top.begonia.wizardry.core.registry.WizardryEntities;
 import top.begonia.wizardry.core.util.DamageSafetyChecker;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
-public class CommonEvent {
+public class CoreEvent {
     @SubscribeEvent
     public static void onAddReloadListeners(@NonNull AddServerReloadListenersEvent event) {
         event.addListener(
@@ -92,26 +86,6 @@ public class CommonEvent {
         } else if (event.getTab() == WizardryCreativeTabs.WIZARDRY.get()) {
             WizardryCreativeTabs.addItemsToEvent(event, WizardryCreativeTabs.TabsEnum.WIZARDRY);
         }
-    }
-
-    @SubscribeEvent
-    public static void register(final @NonNull RegisterPayloadHandlersEvent event) {
-        final PayloadRegistrar registrar = event.registrar(Wizardry.MODID).versioned("1.0.0");
-        registrar.playToClient(
-                GlyphDataPayload.TYPE,
-                GlyphDataPayload.CODEC,
-                ServerPayloadHandler::handleGlyphData
-        );
-        registrar.playToServer(
-                ControlInputPayload.TYPE,
-                ControlInputPayload.CODEC,
-                ServerPayloadHandler::handleControlInput
-        );
-        registrar.playToServer(
-                SpellQuickAccessPayload.TYPE,
-                SpellQuickAccessPayload.CODEC,
-                ServerPayloadHandler::handleSpellQuickAccess
-        );
     }
 
     @SubscribeEvent

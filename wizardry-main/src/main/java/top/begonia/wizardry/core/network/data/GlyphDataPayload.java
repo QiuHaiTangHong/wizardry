@@ -10,17 +10,30 @@ import org.jspecify.annotations.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public record GlyphDataPayload(Map<Identifier, String> names,
-                               Map<Identifier, String> descriptions) implements CustomPacketPayload {
+public record GlyphDataPayload(
+        Map<Identifier, String> names,
+        Map<Identifier, String> descriptions
+) implements CustomPacketPayload {
     public static final Type<GlyphDataPayload> TYPE = new Type<>(Identifier.fromNamespaceAndPath("wizardry", "glyph_data"));
-    public static final StreamCodec<ByteBuf, GlyphDataPayload> CODEC = StreamCodec.composite(
-            ByteBufCodecs.map(HashMap::new, Identifier.STREAM_CODEC, ByteBufCodecs.STRING_UTF8), GlyphDataPayload::names,
-            ByteBufCodecs.map(HashMap::new, Identifier.STREAM_CODEC, ByteBufCodecs.STRING_UTF8), GlyphDataPayload::descriptions,
+    public static final StreamCodec<ByteBuf, GlyphDataPayload> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.map(
+                    HashMap::new,
+                    Identifier.STREAM_CODEC,
+                    ByteBufCodecs.STRING_UTF8
+            ),
+            GlyphDataPayload::names,
+            ByteBufCodecs.map(
+                    HashMap::new,
+                    Identifier.STREAM_CODEC,
+                    ByteBufCodecs.STRING_UTF8
+            ),
+            GlyphDataPayload::descriptions,
             GlyphDataPayload::new
     );
+    public static final String VERSION = "1.0.0";
 
     @Override
-    public @NonNull Type<? extends CustomPacketPayload> type() {
+    public @NonNull Type<GlyphDataPayload> type() {
         return TYPE;
     }
 }

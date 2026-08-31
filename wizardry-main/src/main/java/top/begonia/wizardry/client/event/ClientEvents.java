@@ -51,6 +51,7 @@ import top.begonia.wizardry.client.model.item.RunestoneUnbakedItemModel;
 import top.begonia.wizardry.client.model.item.SpellBookUnbakedItemModel;
 import top.begonia.wizardry.client.model.loader.WizardryModelLoader;
 import top.begonia.wizardry.client.network.ClientPayloadHandler;
+import top.begonia.wizardry.client.particle.CustomParticle;
 import top.begonia.wizardry.client.particle.impl.*;
 import top.begonia.wizardry.client.renderer.WizardryPotionRender;
 import top.begonia.wizardry.client.renderer.entity.BlackHoleRender;
@@ -61,21 +62,17 @@ import top.begonia.wizardry.client.renderer.entity.block.ArcaneWorkbenchRender;
 import top.begonia.wizardry.client.renderer.entity.block.BookshelfRender;
 import top.begonia.wizardry.client.renderer.entity.block.ImbuementAltarRender;
 import top.begonia.wizardry.client.renderer.entity.block.LecternRender;
+import top.begonia.wizardry.client.renderer.particle.CustomParticleGroup;
 import top.begonia.wizardry.core.api.event.data.DataParserBefore;
 import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.core.api.event.data.RegisterDelegateUnbakedModelEvent;
 import top.begonia.wizardry.core.api.event.data.RegisterParticleEvent;
-import top.begonia.wizardry.core.data.network.handbook.HandbookRecipesRequest;
+import top.begonia.wizardry.core.network.data.HandbookRecipesRequestPayload;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.util.ArmourHelper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 @EventBusSubscriber(modid = Wizardry.MODID)
 public class ClientEvents {
-    public static Collection<ItemStack> GLOWING_ITEMS = new ArrayList<>();
-
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.@NonNull RegisterLayerDefinitions event) {
         final CubeDeformation OUTER_ARMOR_DEFORMATION = new CubeDeformation(1.0F);
@@ -126,6 +123,14 @@ public class ClientEvents {
         bloomPass.executes(() -> {
             Minecraft minecraft = Minecraft.getInstance();
         });
+    }
+
+    @SubscribeEvent
+    public static void onRegisterParticleGroups(@NonNull RegisterParticleGroupsEvent event) {
+        event.register(
+                CustomParticle.CUSTOM,
+                CustomParticleGroup::new
+        );
     }
 
     @SubscribeEvent
@@ -317,7 +322,7 @@ public class ClientEvents {
         HandbookData handbookData = WizardryClientDataManager.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "handbook"), HandbookData.class).orElse(null);
         if (handbookData != null && Minecraft.getInstance().getConnection() != null) {
             Wizardry.LOGGER.info("正在向服务端发送手册配方同步请求...");
-            ClientPacketDistributor.sendToServer(new HandbookRecipesRequest(handbookData.recipes()));
+            ClientPacketDistributor.sendToServer(new HandbookRecipesRequestPayload(handbookData.recipes()));
         }
     }
 
