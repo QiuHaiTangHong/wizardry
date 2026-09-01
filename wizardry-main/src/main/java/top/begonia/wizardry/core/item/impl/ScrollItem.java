@@ -4,7 +4,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -16,13 +15,15 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.client.particle.impl.BeamParticle;
 import top.begonia.wizardry.core.api.event.SpellCastEvent;
+import top.begonia.wizardry.core.api.particle.options.BeamParticleOptions;
 import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
 import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.item.ISpellCastingItem;
 import top.begonia.wizardry.core.item.IWorkbenchItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;
+import top.begonia.wizardry.core.registry.WizardryParticles;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 import top.begonia.wizardry.core.util.ItemStackHelper;
@@ -51,7 +52,12 @@ public class ScrollItem extends Item implements ISpellCastingItem, IWorkbenchIte
         ItemStack handItem = player.getItemInHand(hand);
         AbstractSpell spell = this.getCurrentSpell(handItem);
         if (level instanceof ClientLevel clientLevel) {
-            Minecraft.getInstance().gameRenderer.setPostEffect(Identifier.fromNamespaceAndPath(Wizardry.MODID, "slow_time"));
+            BeamParticle beamParticle = new BeamParticle(
+                    clientLevel,
+                    new BeamParticleOptions(WizardryParticles.BEAM.get(), player.getX(), player.getY(), player.getZ()),
+                    player.getX(), player.getY(), player.getZ()
+            );
+            Minecraft.getInstance().particleEngine.add(beamParticle);
         }
         SpellContextFlow spellContextFlow = SpellContextFlow.create();
         if (this.canCast(handItem, spell, player, hand, 0, spellContextFlow)) {

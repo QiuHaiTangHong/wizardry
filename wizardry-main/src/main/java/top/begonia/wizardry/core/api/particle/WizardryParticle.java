@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.particle;
+package top.begonia.wizardry.core.api.particle;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -9,24 +9,20 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.core.particles.ParticleOptions;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.core.api.particle.options.IParticleOptionsExtension;
 
-public abstract class CustomParticle extends Particle {
+public abstract class WizardryParticle<T extends IParticleOptionsExtension> extends Particle {
     public static final ParticleRenderType CUSTOM = new ParticleRenderType("wizardry:custom", "WC");
-    public CustomParticle(
+    public ParticleOptions options;
+    public WizardryParticle(
             ClientLevel level,
+            @NonNull T options,
             double x, double y, double z
     ) {
-        super(level, x, y, z);
-    }
-
-    public CustomParticle(
-            ClientLevel level,
-            double x, double y, double z,
-            double xa, double ya, double za
-    ) {
-        super(level, x, y, z, xa, ya, za);
+        super(level, x, y, z, options.xa(), options.ya(), options.za());
     }
 
     public abstract void extractRenderState(
@@ -43,6 +39,6 @@ public abstract class CustomParticle extends Particle {
 
     @Override
     public @NonNull ParticleRenderType getGroup() {
-        return CustomParticle.CUSTOM;
+        return WizardryParticle.CUSTOM;
     }
 }

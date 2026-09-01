@@ -19,11 +19,6 @@ public class BookshelfModelParser implements IStaticDataParser<OnlyModelQuads> {
     public static final Identifier PARSER_NAME = Identifier.fromNamespaceAndPath(Wizardry.MODID, "bookshelf_model_parser");
 
     @Override
-    public Dist getSupportedDist() {
-        return Dist.CLIENT;
-    }
-
-    @Override
     public Identifier getIdentifier() {
         return PARSER_NAME;
     }

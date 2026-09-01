@@ -2,19 +2,11 @@ package top.begonia.wizardry.client.particle.impl;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.particle.AbstractParticle;
-import top.begonia.wizardry.client.particle.MutableDoubleSpriteSet;
-import top.begonia.wizardry.client.particle.WizardryParticleOptions;
+import top.begonia.wizardry.core.api.particle.impl.WizardryQuadParticle;
+import top.begonia.wizardry.core.api.particle.options.QuadParticleOptions;
 
-public class MagicFlameParticle extends AbstractParticle {
-    public MagicFlameParticle(WizardryParticleOptions options, ClientLevel level, double x, double y, double z, double xd, double yd, double zd, @NonNull MutableDoubleSpriteSet sprites) {
-        super(options, level, x, y, z, xd, yd, zd, sprites);
-        this.animationRowIndex = this.random.nextInt(4);
-        this.setColor(1.0F, 1.0F, 1.0F);
-        this.setFadeColor(1.0F, 1.0F, 1.0F);
-        this.lifetime = 12 + this.random.nextInt(4);
-        this.shaded = false;
-        this.hasPhysics = true;
-        this.setSpriteFromAge(sprites);
+public class MagicFlameParticle extends WizardryQuadParticle {
+    public MagicFlameParticle(ClientLevel level, @NonNull QuadParticleOptions options, double x, double y, double z) {
+        super(level, options, x, y, z);
     }
 }

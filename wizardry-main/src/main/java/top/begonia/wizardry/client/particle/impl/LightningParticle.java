@@ -2,12 +2,11 @@ package top.begonia.wizardry.client.particle.impl;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.particle.AbstractParticle;
-import top.begonia.wizardry.client.particle.MutableDoubleSpriteSet;
-import top.begonia.wizardry.client.particle.WizardryParticleOptions;
+import top.begonia.wizardry.core.api.particle.impl.WizardryQuadParticle;
+import top.begonia.wizardry.core.api.particle.options.QuadParticleOptions;
 
-public class LightningParticle extends AbstractParticle {
-    public LightningParticle(WizardryParticleOptions options, ClientLevel level, double x, double y, double z, double xd, double yd, double zd, @NonNull MutableDoubleSpriteSet sprites) {
-        super(options, level, x, y, z, xd, yd, zd, sprites);
+public class LightningParticle extends WizardryQuadParticle {
+    public LightningParticle(ClientLevel level, @NonNull QuadParticleOptions options, double x, double y, double z) {
+        super(level, options, x, y, z);
     }
 }

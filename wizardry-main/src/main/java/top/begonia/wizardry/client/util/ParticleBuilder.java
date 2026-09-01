@@ -1,12 +1,9 @@
 package top.begonia.wizardry.client.util;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -15,15 +12,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.client.data.definition.particle.ParticleResultData;
-import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
-import top.begonia.wizardry.client.particle.AbstractParticle;
-import top.begonia.wizardry.client.particle.WizardryParticleOptions;
+import top.begonia.wizardry.core.api.particle.options.IParticleOptionsExtension;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 
 public final class ParticleBuilder {
     public static final ParticleBuilder instance = new ParticleBuilder();
-    private ParticleType<? extends WizardryParticleOptions> type;
+    private ParticleType<? extends IParticleOptionsExtension> type;
     private boolean building = false;
     private double x, y, z;
     private double vx, vy, vz;
@@ -48,11 +42,11 @@ public final class ParticleBuilder {
         reset();
     }
 
-    public static ParticleBuilder create(ParticleType<? extends WizardryParticleOptions> type) {
+    public static ParticleBuilder create(ParticleType<? extends IParticleOptionsExtension> type) {
         return ParticleBuilder.instance.particle(type);
     }
 
-    public ParticleBuilder particle(ParticleType<? extends WizardryParticleOptions> type) {
+    public ParticleBuilder particle(ParticleType<? extends IParticleOptionsExtension> type) {
         if (building) {
             throw new IllegalStateException("Already building! Particle being built: " + getCurrentParticleString());
         }
@@ -270,67 +264,56 @@ public final class ParticleBuilder {
             return;
         }
 
-        ParticleResultData particleData = WizardryClientDataManager.getInstance().getData(BuiltInRegistries.PARTICLE_TYPE.getKey(this.type), ParticleResultData.class).orElse(null);
-        if (particleData == null) {
-            reset();
-            return;
-        }
-
-        Particle particle = particleData.particleHolder().create(
-                new WizardryParticleOptions(this.type),
-                (ClientLevel) level,
-                this.x, this.y, this.z,
-                0, 0, 0
-        );
+        Particle particle = null;
 
         if (particle == null) {
             reset();
             return;
         }
 
-        if (particle instanceof AbstractParticle abstractParticle) {
-            if (!Double.isNaN(vx) && !Double.isNaN(vy) && !Double.isNaN(vz)) {
-                abstractParticle.setParticleSpeed(vx, vy, vz);
-            }
-            if (r >= 0 && g >= 0 && b >= 0) {
-                abstractParticle.setColor(r, g, b);
-                abstractParticle.setFadeColor(r, g, b);
-                abstractParticle.setInitialColor(r, g, b);
-            }
-            if (fr >= 0 && fg >= 0 && fb >= 0) {
-                abstractParticle.setFadeColor(fr, fg, fb);
-            }
-            if (lifetime >= 0) {
-                abstractParticle.setLifetime(lifetime);
-            }
-            if (radius > 0) {
-                abstractParticle.setSpin(radius, rpt);
-            }
-            if (!Float.isNaN(yaw) && !Float.isNaN(pitch)) {
-                abstractParticle.setFacing(yaw, pitch);
-            }
-            if (seed != 0) {
-                abstractParticle.setSeed(seed);
-            }
-            if (!Double.isNaN(tvx) && !Double.isNaN(tvy) && !Double.isNaN(tvz)) {
-                abstractParticle.setTargetVelocity(tvx, tvy, tvz);
-            }
-            if (length > 0) {
-                abstractParticle.setLength(length);
-            }
-
-            abstractParticle.scale(scale);
-            abstractParticle.setGravity(gravity);
-            abstractParticle.setShaded(shaded);
-            abstractParticle.setCollisions(collide);
-            abstractParticle.setEntity(entity);
-            abstractParticle.setTargetPosition(tx, ty, tz);
-            abstractParticle.setTargetEntity(target);
-
-            Minecraft.getInstance().particleEngine.add(abstractParticle);
-
-            reset();
-        }
+//        if (particle instanceof AbstractParticle abstractParticle) {
+//            if (!Double.isNaN(vx) && !Double.isNaN(vy) && !Double.isNaN(vz)) {
+//                abstractParticle.setParticleSpeed(vx, vy, vz);
+//            }
+//            if (r >= 0 && g >= 0 && b >= 0) {
+//                abstractParticle.setColor(r, g, b);
+//                abstractParticle.setFadeColor(r, g, b);
+//                abstractParticle.setInitialColor(r, g, b);
+//            }
+//            if (fr >= 0 && fg >= 0 && fb >= 0) {
+//                abstractParticle.setFadeColor(fr, fg, fb);
+//            }
+//            if (lifetime >= 0) {
+//                abstractParticle.setLifetime(lifetime);
+//            }
+//            if (radius > 0) {
+//                abstractParticle.setSpin(radius, rpt);
+//            }
+//            if (!Float.isNaN(yaw) && !Float.isNaN(pitch)) {
+//                abstractParticle.setFacing(yaw, pitch);
+//            }
+//            if (seed != 0) {
+//                abstractParticle.setSeed(seed);
+//            }
+//            if (!Double.isNaN(tvx) && !Double.isNaN(tvy) && !Double.isNaN(tvz)) {
+//                abstractParticle.setTargetVelocity(tvx, tvy, tvz);
+//            }
+//            if (length > 0) {
+//                abstractParticle.setLength(length);
+//            }
+//
+//            abstractParticle.scale(scale);
+//            abstractParticle.setGravity(gravity);
+//            abstractParticle.setShaded(shaded);
+//            abstractParticle.setCollisions(collide);
+//            abstractParticle.setEntity(entity);
+//            abstractParticle.setTargetPosition(tx, ty, tz);
+//            abstractParticle.setTargetEntity(target);
+//
+//            Minecraft.getInstance().particleEngine.add(abstractParticle);
+//
+//            reset();
+//        }
     }
 
     private void reset() {
@@ -369,7 +352,7 @@ public final class ParticleBuilder {
         length = -1;
     }
 
-    public static ParticleBuilder create(ParticleType<? extends WizardryParticleOptions> type, Entity entity) {
+    public static ParticleBuilder create(ParticleType<? extends IParticleOptionsExtension> type, Entity entity) {
 
         double x = entity.getX() + (entity.level().getRandom().nextDouble() - 0.5D) * (double) entity.getBbWidth();
         double y = entity.getY() + entity.level().getRandom().nextDouble() * (double) entity.getBbHeight();
@@ -378,7 +361,7 @@ public final class ParticleBuilder {
         return ParticleBuilder.instance.particle(type).pos(x, y, z);
     }
 
-    public static ParticleBuilder create(ParticleType<? extends WizardryParticleOptions> type, RandomSource random, double x, double y, double z, double radius, boolean move) {
+    public static ParticleBuilder create(ParticleType<? extends IParticleOptionsExtension> type, RandomSource random, double x, double y, double z, double radius, boolean move) {
 
         double px = x + (random.nextDouble() * 2 - 1) * radius;
         double py = y + (random.nextDouble() * 2 - 1) * radius;

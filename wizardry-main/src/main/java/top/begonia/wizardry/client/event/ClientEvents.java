@@ -22,7 +22,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.Equippable;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModLoader;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
@@ -34,7 +33,6 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.constants.WizardryKeyMappings;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
-import top.begonia.wizardry.client.data.definition.particle.ParticleParserContextData;
 import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.client.data.parser.*;
 import top.begonia.wizardry.client.gui.ArcaneWorkbenchScreen;
@@ -51,8 +49,7 @@ import top.begonia.wizardry.client.model.item.RunestoneUnbakedItemModel;
 import top.begonia.wizardry.client.model.item.SpellBookUnbakedItemModel;
 import top.begonia.wizardry.client.model.loader.WizardryModelLoader;
 import top.begonia.wizardry.client.network.ClientPayloadHandler;
-import top.begonia.wizardry.client.particle.CustomParticle;
-import top.begonia.wizardry.client.particle.impl.*;
+import top.begonia.wizardry.client.particle.impl.BeamParticle;
 import top.begonia.wizardry.client.renderer.WizardryPotionRender;
 import top.begonia.wizardry.client.renderer.entity.BlackHoleRender;
 import top.begonia.wizardry.client.renderer.entity.BubbleRender;
@@ -63,10 +60,11 @@ import top.begonia.wizardry.client.renderer.entity.block.BookshelfRender;
 import top.begonia.wizardry.client.renderer.entity.block.ImbuementAltarRender;
 import top.begonia.wizardry.client.renderer.entity.block.LecternRender;
 import top.begonia.wizardry.client.renderer.particle.CustomParticleGroup;
-import top.begonia.wizardry.core.api.event.data.DataParserBefore;
 import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.core.api.event.data.RegisterDelegateUnbakedModelEvent;
 import top.begonia.wizardry.core.api.event.data.RegisterParticleEvent;
+import top.begonia.wizardry.core.api.particle.WizardryParticle;
+import top.begonia.wizardry.core.api.particle.options.SimpleParticleOptions;
 import top.begonia.wizardry.core.network.data.HandbookRecipesRequestPayload;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.util.ArmourHelper;
@@ -128,7 +126,7 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onRegisterParticleGroups(@NonNull RegisterParticleGroupsEvent event) {
         event.register(
-                CustomParticle.CUSTOM,
+                WizardryParticle.CUSTOM,
                 CustomParticleGroup::new
         );
     }
@@ -237,37 +235,9 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void registerParticleFactories(@NonNull RegisterParticleEvent event) {
-        event.register(WizardryParticles.BEAM.get(), BeamParticle::new);
-        event.register(WizardryParticles.BLOCK_HIGHLIGHT.get(), BlockHighlightParticle::new);
-        event.register(WizardryParticles.BUFF.get(), BuffParticle::new);
-        event.register(WizardryParticles.CLOUD.get(), CloudParticle::new);
-        event.register(WizardryParticles.DARK_MAGIC.get(), DarkMagicParticle::new);
-        event.register(WizardryParticles.DUST.get(), DustParticle::new);
-        event.register(WizardryParticles.FLASH.get(), FlashParticle::new);
-        event.register(WizardryParticles.GUARDIAN_BEAM.get(), GuardianBeamParticle::new);
-        event.register(WizardryParticles.ICE.get(), IceParticle::new);
-        event.register(WizardryParticles.LEAF.get(), LeafParticle::new);
-        event.register(WizardryParticles.LIGHTNING.get(), LightningParticle::new);
-        event.register(WizardryParticles.LIGHTNING_PULSE.get(), LightningPulseParticle::new);
-        event.register(WizardryParticles.MAGIC_BUBBLE.get(), MagicBubbleParticle::new);
-        event.register(WizardryParticles.MAGIC_FIRE.get(), MagicFlameParticle::new);
-        event.register(WizardryParticles.PATH.get(), PathParticle::new);
-        event.register(WizardryParticles.SCORCH.get(), ScorchParticle::new);
-        event.register(WizardryParticles.SNOW.get(), SnowParticle::new);
-        event.register(WizardryParticles.SPARK.get(), SparkParticle::new);
-        event.register(WizardryParticles.SPARKLE.get(), SparkleParticle::new);
-        event.register(WizardryParticles.SPHERE.get(), SphereParticle::new);
-        event.register(WizardryParticles.VINE.get(), VineParticle::new);
-    }
-
-
-    @SubscribeEvent
-    public static void onDataParserBefore(@NonNull DataParserBefore event) {
-        event.registry(ParticleParser.PARSER_NAME, (_) -> {
-            ParticleParserContextData parserContext = new ParticleParserContextData();
-            ModLoader.postEvent(new RegisterParticleEvent(parserContext.getParticleHolders()));
-            return parserContext;
+    public static void onRegisterParticle(@NonNull RegisterParticleEvent event) {
+        event.register(WizardryParticles.BEAM.get(), (particleResourceAccessor, clientLevel, options, x, y, z) -> {
+            return new BeamParticle(clientLevel, options, x, y, z);
         });
     }
 

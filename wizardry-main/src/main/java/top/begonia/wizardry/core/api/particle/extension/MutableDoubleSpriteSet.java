@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.particle;
+package top.begonia.wizardry.core.api.particle.extension;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Mth;

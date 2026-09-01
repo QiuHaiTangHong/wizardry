@@ -15,10 +15,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.BonemealEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.client.particle.WizardryParticleOptions;
 import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.registry.WizardryBlocks;
-import top.begonia.wizardry.core.registry.WizardryParticles;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
 public class CrystalFlowerBlock extends BushBlock {
@@ -37,17 +35,6 @@ public class CrystalFlowerBlock extends BushBlock {
     @Override
     public void animateTick(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull RandomSource random) {
         if (random.nextBoolean()) {
-            double x = pos.getX() + random.nextDouble();
-            double y = pos.getY() + (random.nextDouble() * 0.5D) + 0.5D;
-            double z = pos.getZ() + random.nextDouble();
-//            level.addParticle(
-//                    WizardryParticleOptions
-//                            .create(WizardryParticles.SPARKLE.get())
-//                            .time(20 + random.nextInt(10))
-//                            .clr(0.5f + (random.nextFloat() / 2), 0.5f + (random.nextFloat() / 2), 0.5f + (random.nextFloat() / 2)),
-//                    x, y, z,
-//                    0, 0, 0
-//            );
         }
     }
 

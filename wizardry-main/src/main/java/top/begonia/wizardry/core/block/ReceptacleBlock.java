@@ -27,7 +27,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.client.particle.WizardryParticleOptions;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.client.util.ParticleBuilder;
 import top.begonia.wizardry.core.constants.ElementEnum;

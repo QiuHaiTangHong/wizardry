@@ -15,7 +15,7 @@ import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 @Mod(value = Wizardry.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = Wizardry.MODID, value = Dist.CLIENT)
 public class WizardryClient {
-    public WizardryClient(IEventBus modEventBus, @NonNull ModContainer container) {
+    public WizardryClient(@NonNull IEventBus modEventBus, @NonNull ModContainer container) {
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         modEventBus.addListener(this::clientSetup);
     }

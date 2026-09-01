@@ -10,7 +10,9 @@ import top.begonia.wizardry.core.api.data.IResultData;
 
 import java.util.List;
 
-public record ParticleDescriptionData(List<List<Identifier>> textures) implements IResultData {
+public record ParticleDescriptionData(
+        List<List<Identifier>> textures
+) implements IResultData {
     private static final Codec<List<List<Identifier>>> SMART_MATRIX_CODEC = Codec.either(
             Codec.list(Identifier.CODEC),
             Codec.list(Codec.list(Identifier.CODEC))

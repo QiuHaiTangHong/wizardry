@@ -1,36 +1,24 @@
 package top.begonia.wizardry.core.api.event.data;
 
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.core.particles.ParticleType;
 import net.neoforged.bus.api.Event;
 import net.neoforged.fml.event.IModBusEvent;
-import top.begonia.wizardry.client.data.definition.particle.ParticleCombinedHolder;
-import top.begonia.wizardry.client.particle.MutableDoubleSpriteSet;
-import top.begonia.wizardry.client.particle.WizardryParticleOptions;
+import top.begonia.wizardry.core.api.particle.manager.WizardryParticleProvider;
+import top.begonia.wizardry.core.api.particle.options.IParticleOptionsExtension;
+import top.begonia.wizardry.core.api.particle.type.ParticleTypeExtension;
 
 import java.util.Map;
 
 public class RegisterParticleEvent extends Event implements IModBusEvent {
-    private final Map<ParticleType<?>, ParticleCombinedHolder> particleHolders;
+    private final Map<ParticleTypeExtension<?>, WizardryParticleProvider<? extends IParticleOptionsExtension>> particleProviders;
 
-    public RegisterParticleEvent(Map<ParticleType<?>, ParticleCombinedHolder> particleHolders) {
-        this.particleHolders = particleHolders;
+    public RegisterParticleEvent(Map<ParticleTypeExtension<?>, WizardryParticleProvider<? extends IParticleOptionsExtension>> particleProviders) {
+        this.particleProviders = particleProviders;
     }
 
-    public <T extends WizardryParticleOptions> void register(ParticleType<T> type, ParticleConstructor constructor) {
-        var holder = this.particleHolders.computeIfAbsent(type, _ -> new ParticleCombinedHolder());
-        holder.setConstructor(constructor);
-    }
-
-    @FunctionalInterface
-    public interface ParticleConstructor {
-        <T extends WizardryParticleOptions> Particle create(
-                T options,
-                ClientLevel level,
-                double x, double y, double z,
-                double xSpeed, double ySpeed, double zSpeed,
-                MutableDoubleSpriteSet spriteSet
-        );
+    public <T extends IParticleOptionsExtension> void register(
+            ParticleTypeExtension<T> type,
+            WizardryParticleProvider<T> provider
+    ) {
+        this.particleProviders.put(type, provider);
     }
 }
