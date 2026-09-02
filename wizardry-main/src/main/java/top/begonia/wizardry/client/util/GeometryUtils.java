@@ -1,8 +1,5 @@
 package top.begonia.wizardry.client.util;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -10,6 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
 public final class GeometryUtils {
@@ -18,19 +16,21 @@ public final class GeometryUtils {
 
     public static final double ANTI_Z_FIGHTING_OFFSET = 0.005;
 
-    public static Vec3 getCentre(BlockPos pos) {
+    @Contract("_ -> new")
+    public static @NonNull Vec3 getCentre(BlockPos pos) {
         return Vec3.atCenterOf(pos);
     }
 
-    public static Vec3 getCentre(AABB box) {
+    public static @NonNull Vec3 getCentre(@NonNull AABB box) {
         return box.getCenter();
     }
 
-    public static Vec3 getCentre(Entity entity) {
+    @Contract("_ -> new")
+    public static @NonNull Vec3 getCentre(@NonNull Entity entity) {
         return new Vec3(entity.getX(), entity.getY() + entity.getBbHeight() / 2.0D, entity.getZ());
     }
 
-    public static Vec3 getFaceCentre(BlockPos pos, Direction face) {
+    public static @NonNull Vec3 getFaceCentre(BlockPos pos, @NonNull Direction face) {
         return getCentre(pos).add(
                 face.getStepX() * 0.5D,
                 face.getStepY() * 0.5D,
@@ -38,33 +38,36 @@ public final class GeometryUtils {
         );
     }
 
-    public static double component(Vec3 vec, Direction.Axis axis) {
+    public static double component(@NonNull Vec3 vec, Direction.@NonNull Axis axis) {
         return axis.choose(vec.x, vec.y, vec.z);
     }
 
-    public static int component(Vec3i vec, Direction.Axis axis) {
+    public static int component(@NonNull Vec3i vec, Direction.@NonNull Axis axis) {
         return axis.choose(vec.getX(), vec.getY(), vec.getZ());
     }
 
-    public static Vec3 replaceComponent(Vec3 vec, Direction.Axis axis, double newValue) {
+    @Contract(value = "_, _, _ -> new", pure = true)
+    public static @NonNull Vec3 replaceComponent(Vec3 vec, Direction.Axis axis, double newValue) {
         double x = (axis == Direction.Axis.X) ? newValue : vec.x;
         double y = (axis == Direction.Axis.Y) ? newValue : vec.y;
         double z = (axis == Direction.Axis.Z) ? newValue : vec.z;
         return new Vec3(x, y, z);
     }
 
-    public static Vec3i replaceComponent(Vec3i vec, Direction.Axis axis, int newValue) {
+    @Contract("_, _, _ -> new")
+    public static @NonNull Vec3i replaceComponent(Vec3i vec, Direction.Axis axis, int newValue) {
         int x = (axis == Direction.Axis.X) ? newValue : vec.getX();
         int y = (axis == Direction.Axis.Y) ? newValue : vec.getY();
         int z = (axis == Direction.Axis.Z) ? newValue : vec.getZ();
         return new Vec3i(x, y, z);
     }
 
-    public static Vec3 horizontal(Vec3 vec) {
+    public static @NonNull Vec3 horizontal(Vec3 vec) {
         return replaceComponent(vec, Direction.Axis.Y, 0).normalize();
     }
 
-    public static Vec3[] getVertices(AABB box) {
+    @Contract("_ -> new")
+    public static Vec3 @NonNull [] getVertices(@NonNull AABB box) {
         return new Vec3[]{
                 new Vec3(box.minX, box.minY, box.minZ),
                 new Vec3(box.maxX, box.minY, box.minZ),
@@ -77,7 +80,7 @@ public final class GeometryUtils {
         };
     }
 
-    public static Vec3[] getVertices(Level level, BlockPos pos) {
+    public static Vec3 @NonNull [] getVertices(@NonNull Level level, BlockPos pos) {
         AABB box = level.getBlockState(pos).getShape(level, pos).bounds().move(pos);
         return getVertices(box);
     }

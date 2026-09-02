@@ -6,7 +6,7 @@ import net.minecraft.util.ExtraCodecs;
 import top.begonia.wizardry.client.data.definition.handbook.part.ImageData;
 import top.begonia.wizardry.client.data.definition.handbook.part.RecipeTagData;
 import top.begonia.wizardry.client.data.definition.handbook.part.SectionData;
-import top.begonia.wizardry.core.api.data.IResultData;
+import top.begonia.wizardry.api.data.IResultData;
 
 import java.util.Map;
 

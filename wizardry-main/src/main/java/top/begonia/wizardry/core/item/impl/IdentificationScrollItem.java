@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.api.event.DiscoverSpellEvent;
+import top.begonia.wizardry.api.event.DiscoverSpellEvent;
 import top.begonia.wizardry.core.data.player.WizardPlayerData;
 import top.begonia.wizardry.core.registry.WizardryAttachment;
 import top.begonia.wizardry.core.registry.WizardryComponents;

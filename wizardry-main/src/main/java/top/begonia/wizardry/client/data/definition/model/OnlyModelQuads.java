@@ -3,7 +3,7 @@ package top.begonia.wizardry.client.data.definition.model;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.client.model.quad.BakedNormals;
 import org.joml.Vector3fc;
-import top.begonia.wizardry.core.api.data.IResultData;
+import top.begonia.wizardry.api.data.IResultData;
 
 import java.util.List;
 

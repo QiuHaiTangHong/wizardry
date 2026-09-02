@@ -10,7 +10,7 @@ import net.neoforged.neoforge.client.model.DelegateUnbakedModel;
 import net.neoforged.neoforge.client.model.UnbakedModelLoader;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.api.event.data.RegisterDelegateUnbakedModelEvent;
+import top.begonia.wizardry.api.event.data.RegisterDelegateUnbakedModelEvent;
 
 import java.util.HashMap;
 import java.util.Map;

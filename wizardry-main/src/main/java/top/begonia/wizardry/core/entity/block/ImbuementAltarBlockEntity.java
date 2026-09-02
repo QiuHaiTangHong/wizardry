@@ -27,12 +27,11 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.client.util.ParticleBuilder;
-import top.begonia.wizardry.core.api.event.ImbuementActivateEvent;
+import top.begonia.wizardry.api.event.ImbuementActivateEvent;
 import top.begonia.wizardry.core.block.ReceptacleBlock;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.item.impl.WizardArmourItem;
 import top.begonia.wizardry.core.registry.*;
-import top.begonia.wizardry.core.util.ArmourHelper;
 import top.begonia.wizardry.core.util.ItemStackHelper;
 
 import javax.annotation.Nullable;

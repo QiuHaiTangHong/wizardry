@@ -14,7 +14,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
+import top.begonia.wizardry.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.core.commond.DebugCommond;
 import top.begonia.wizardry.core.data.SpellGlyph;
 import top.begonia.wizardry.core.data.player.WizardPlayerData;

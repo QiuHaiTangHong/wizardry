@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.api.particle.options.IParticleOptionsExtension;
+import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 
 public final class ParticleBuilder {

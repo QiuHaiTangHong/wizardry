@@ -5,6 +5,7 @@ import net.minecraft.network.chat.FontDescription;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
@@ -24,7 +25,7 @@ public final class GlyphGenerator {
         return enchantFont;
     }
 
-    public static void update(Map<Identifier, String> names, Map<Identifier, String> descriptions) {
+    public static void update(@NonNull Map<Identifier, String> names, @NonNull Map<Identifier, String> descriptions) {
         names.forEach((identifier, value) -> randomNames.put(identifier, Component.literal(value).withStyle(defaultStyle)));
         descriptions.forEach((identifier, value) -> randomDescriptions.put(identifier, Component.literal(value).withStyle(defaultStyle)));
     }

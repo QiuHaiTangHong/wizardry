@@ -6,13 +6,13 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.state.level.ParticleGroupRenderState;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.api.particle.WizardryParticle;
+import top.begonia.wizardry.api.particle.WizardryParticle;
 
 import java.util.List;
 import java.util.Map;
 
 public record CustomParticleGroupRenderState(
-        Map<RenderType, List<WizardryParticle>> categorizedParticles,
+        Map<RenderType, List<WizardryParticle<?>>> categorizedParticles,
         net.minecraft.client.Camera camera,
         float partialTick
 ) implements ParticleGroupRenderState {
@@ -25,7 +25,7 @@ public record CustomParticleGroupRenderState(
         PoseStack poseStack = new PoseStack();
         this.categorizedParticles.forEach((renderType, particleList) -> {
             submitNodeCollector.submitCustomGeometry(poseStack, renderType, (pose, vertexConsumer) -> {
-                for (WizardryParticle particle : particleList) {
+                for (WizardryParticle<?> particle : particleList) {
                     particle.extractRenderState(
                             vertexConsumer,
                             this.camera,

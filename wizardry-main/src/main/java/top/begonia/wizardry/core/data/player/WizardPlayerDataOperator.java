@@ -15,7 +15,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.api.event.SpellCastEvent;
+import top.begonia.wizardry.api.event.SpellCastEvent;
 import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.data.packet.CastContinuousSpellPacket;

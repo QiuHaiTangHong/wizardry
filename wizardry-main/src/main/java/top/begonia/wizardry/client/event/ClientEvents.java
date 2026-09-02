@@ -51,11 +51,11 @@ import top.begonia.wizardry.client.model.item.RunestoneUnbakedItemModel;
 import top.begonia.wizardry.client.model.item.SpellBookUnbakedItemModel;
 import top.begonia.wizardry.client.model.loader.WizardryModelLoader;
 import top.begonia.wizardry.client.network.ClientPayloadHandler;
-import top.begonia.wizardry.client.particle.impl.BeamParticle;
+import top.begonia.wizardry.client.particle.BeamParticle;
 import top.begonia.wizardry.client.renderer.WizardryPotionRender;
-import top.begonia.wizardry.client.renderer.entity.BlackHoleRender;
-import top.begonia.wizardry.client.renderer.entity.BubbleRender;
-import top.begonia.wizardry.client.renderer.entity.DecayRender;
+import top.begonia.wizardry.client.renderer.entity.BlackHoleRenderer;
+import top.begonia.wizardry.client.renderer.entity.BubbleRenderer;
+import top.begonia.wizardry.client.renderer.entity.DecayRenderer;
 import top.begonia.wizardry.client.renderer.entity.MagicArrowRenderer;
 import top.begonia.wizardry.client.renderer.entity.block.ArcaneWorkbenchRender;
 import top.begonia.wizardry.client.renderer.entity.block.BookshelfRender;
@@ -63,10 +63,10 @@ import top.begonia.wizardry.client.renderer.entity.block.ImbuementAltarRender;
 import top.begonia.wizardry.client.renderer.entity.block.LecternRender;
 import top.begonia.wizardry.client.renderer.particle.CustomParticleGroup;
 import top.begonia.wizardry.client.renderer.uniform.MouseUniform;
-import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
-import top.begonia.wizardry.core.api.event.data.RegisterDelegateUnbakedModelEvent;
-import top.begonia.wizardry.core.api.event.data.RegisterParticleEvent;
-import top.begonia.wizardry.core.api.particle.WizardryParticle;
+import top.begonia.wizardry.api.event.data.RegisterDataParserEvent;
+import top.begonia.wizardry.api.event.data.RegisterDelegateUnbakedModelEvent;
+import top.begonia.wizardry.api.event.data.RegisterParticleEvent;
+import top.begonia.wizardry.api.particle.WizardryParticle;
 import top.begonia.wizardry.core.network.data.HandbookRecipesRequestPayload;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.util.ArmourHelper;
@@ -185,11 +185,11 @@ public class ClientEvents {
         );
         event.registerEntityRenderer(
                 WizardryEntities.DECAY.get(),
-                DecayRender::new
+                DecayRenderer::new
         );
         event.registerEntityRenderer(
                 WizardryEntities.BUBBLE.get(),
-                BubbleRender::new
+                BubbleRenderer::new
         );
         event.registerBlockEntityRenderer(
                 WizardryBlockEntities.ARCANE_WORKBENCH.get(),
@@ -209,7 +209,7 @@ public class ClientEvents {
         );
         event.registerEntityRenderer(
                 WizardryEntities.BLACK_HOLE.get(),
-                BlackHoleRender::new
+                BlackHoleRenderer::new
         );
         event.registerEntityRenderer(
                 WizardryEntities.ZOMBIE_MINION.get(),

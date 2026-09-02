@@ -17,7 +17,7 @@ import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.api.event.SpellBindEvent;
+import top.begonia.wizardry.api.event.SpellBindEvent;
 import top.begonia.wizardry.core.block.BookshelfBlock;
 import top.begonia.wizardry.core.inventory.handler.BookshelfItemHandler;
 import top.begonia.wizardry.core.inventory.slot.*;

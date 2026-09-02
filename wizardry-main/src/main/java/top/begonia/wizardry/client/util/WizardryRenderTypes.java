@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
+import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 
 import java.util.function.Function;
@@ -80,7 +81,7 @@ public final class WizardryRenderTypes {
         return OVERLY.apply(atlasLocation);
     }
 
-    public static RenderType getOverlyRenderTypeWithColor(Identifier atlasLocation) {
+    public static @NonNull RenderType getOverlyRenderTypeWithColor(Identifier atlasLocation) {
         RenderSetup setup = RenderSetup.builder(CUSTOM_OVERLY_COLOR_ITEM_PIPELINE)
                 .withTexture("Sampler0", atlasLocation)
                 .useOverlay()

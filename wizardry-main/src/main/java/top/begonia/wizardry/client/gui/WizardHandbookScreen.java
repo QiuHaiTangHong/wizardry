@@ -12,8 +12,8 @@ import net.minecraft.util.ARGB;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.client.gui.widget.InvisibleButton;
 import top.begonia.wizardry.client.gui.widget.TurnPageButton;
-import top.begonia.wizardry.core.api.layout.container.handbook.HandbookElement;
-import top.begonia.wizardry.core.api.layout.util.Context;
+import top.begonia.wizardry.api.layout.container.handbook.HandbookElement;
+import top.begonia.wizardry.api.layout.util.Context;
 import top.begonia.wizardry.core.registry.WizardrySounds;
 
 public class WizardHandbookScreen extends Screen {

@@ -3,14 +3,13 @@ package top.begonia.wizardry.client.data.parser;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.resources.Identifier;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.model.quad.BakedNormals;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.data.definition.model.BookshelfModel;
 import top.begonia.wizardry.client.data.definition.model.OnlyModelQuads;
-import top.begonia.wizardry.core.api.data.IStaticDataParser;
+import top.begonia.wizardry.api.data.IStaticDataParser;
 
 import java.util.ArrayList;
 import java.util.List;

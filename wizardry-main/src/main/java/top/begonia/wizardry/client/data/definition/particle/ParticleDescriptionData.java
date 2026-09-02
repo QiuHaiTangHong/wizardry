@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.api.data.IResultData;
+import top.begonia.wizardry.api.data.IResultData;
 
 import java.util.List;
 

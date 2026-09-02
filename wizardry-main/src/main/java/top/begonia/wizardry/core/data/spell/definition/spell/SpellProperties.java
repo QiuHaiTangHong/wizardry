@@ -6,7 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.StringRepresentable;
-import top.begonia.wizardry.core.api.data.IResultData;
+import top.begonia.wizardry.api.data.IResultData;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.constants.EnabledEnum;
 import top.begonia.wizardry.core.constants.SpellTypeEnum;

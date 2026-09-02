@@ -2,7 +2,7 @@ package top.begonia.wizardry.client.data.definition.hub;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import top.begonia.wizardry.core.api.data.IResultData;
+import top.begonia.wizardry.api.data.IResultData;
 
 public record SpellHubConfigData(
         String name,

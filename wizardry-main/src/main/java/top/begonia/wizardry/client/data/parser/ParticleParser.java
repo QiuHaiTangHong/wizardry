@@ -5,7 +5,7 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.resources.Identifier;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.data.definition.particle.ParticleDescriptionData;
-import top.begonia.wizardry.core.api.data.IStaticDataParser;
+import top.begonia.wizardry.api.data.IStaticDataParser;
 
 public class ParticleParser implements IStaticDataParser<ParticleDescriptionData> {
     public static final Identifier PARSER_NAME = Identifier.fromNamespaceAndPath(Wizardry.MODID, "particle");
