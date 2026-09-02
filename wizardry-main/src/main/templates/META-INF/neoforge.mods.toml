@@ -8,9 +8,7 @@ credits='''${mod_credits}'''
 description="${mod_description}"
 iconFile="assets/wizardry/textures/gui/logo.png"
 [[mixins]]
-config="${mod_id}.client.mixins.json"
-[[mixins]]
-config="${mod_id}.core.mixins.json"
+config="${mod_id}.mixins.json"
 
 [[accessTransformers]]
 file="META-INF/accesstransformer.cfg"

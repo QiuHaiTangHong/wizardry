@@ -4,9 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.framegraph.FrameGraphBuilder;
 import com.mojang.blaze3d.framegraph.FramePass;
 import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.resource.RenderTargetDescriptor;
 import com.mojang.blaze3d.resource.ResourceHandle;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.MouseHandler;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -60,17 +62,36 @@ import top.begonia.wizardry.client.renderer.entity.block.BookshelfRender;
 import top.begonia.wizardry.client.renderer.entity.block.ImbuementAltarRender;
 import top.begonia.wizardry.client.renderer.entity.block.LecternRender;
 import top.begonia.wizardry.client.renderer.particle.CustomParticleGroup;
+import top.begonia.wizardry.client.renderer.uniform.MouseUniform;
 import top.begonia.wizardry.core.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.core.api.event.data.RegisterDelegateUnbakedModelEvent;
 import top.begonia.wizardry.core.api.event.data.RegisterParticleEvent;
 import top.begonia.wizardry.core.api.particle.WizardryParticle;
-import top.begonia.wizardry.core.api.particle.options.SimpleParticleOptions;
 import top.begonia.wizardry.core.network.data.HandbookRecipesRequestPayload;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.util.ArmourHelper;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
 public class ClientEvents {
+    private static MouseUniform mouseUniform;
+
+    @SubscribeEvent
+    public static void onRenderFramePre(RenderFrameEvent.Pre event) {
+        if (mouseUniform == null) {
+            mouseUniform = new MouseUniform();
+        }
+        Minecraft minecraft = Minecraft.getInstance();
+        Window window = minecraft.getWindow();
+        MouseHandler mouseHandler = minecraft.mouseHandler;
+        float mouseX = (float) mouseHandler.xpos();
+        float mouseY = (float) (window.getHeight() - mouseHandler.ypos());
+        mouseUniform.update(mouseX, mouseY, window.getGuiScaledWidth(), window.getScreenHeight());
+    }
+
+    public static MouseUniform getMouseUniform() {
+        return mouseUniform;
+    }
+
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.@NonNull RegisterLayerDefinitions event) {
         final CubeDeformation OUTER_ARMOR_DEFORMATION = new CubeDeformation(1.0F);

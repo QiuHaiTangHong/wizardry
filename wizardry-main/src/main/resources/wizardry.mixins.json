@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "top.begonia.wizardry.mixin",
+  "plugin": "top.begonia.wizardry.natives.loader.WizardryEarlyLoadPlugin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "client": [
+    "GlProgramMixin",
+    "GuiGraphicsExtractorMixin",
+    "RenderSystemMixin"
+  ]
+}

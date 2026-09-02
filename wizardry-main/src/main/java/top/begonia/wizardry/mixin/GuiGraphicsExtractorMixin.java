@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.mixin;
+package top.begonia.wizardry.mixin;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;

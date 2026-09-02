@@ -1,5 +1,7 @@
 package top.begonia.wizardry.client;
 
+import com.mojang.blaze3d.opengl.GlProgram;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -23,6 +25,7 @@ public class WizardryClient {
     private void clientSetup(final @NonNull FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             WizardryClientDataManager.getInstance().fireRegisterEvents();
+            GlProgram.BUILT_IN_UNIFORMS.add("MouseInfo");
         });
     }
 }

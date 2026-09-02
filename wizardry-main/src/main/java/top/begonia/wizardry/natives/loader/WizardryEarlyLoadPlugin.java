@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.loader;
+package top.begonia.wizardry.natives.loader;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
