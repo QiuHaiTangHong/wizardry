@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.entity.living.minion.HuskMinionEntity;
 import top.begonia.wizardry.core.entity.living.minion.ZombieMinionEntity;
-import top.begonia.wizardry.core.item.impl.ArtefactItem;
+import top.begonia.wizardry.core.item.ArtefactItem;
 import top.begonia.wizardry.core.registry.WizardryItems;
 
 import java.util.function.Function;

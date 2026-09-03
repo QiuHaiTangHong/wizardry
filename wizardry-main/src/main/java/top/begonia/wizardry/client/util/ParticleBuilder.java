@@ -1,23 +1,27 @@
 package top.begonia.wizardry.client.util;
 
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.particle.WizardryParticle;
+import top.begonia.wizardry.api.particle.impl.WizardryQuadParticle;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
+import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
+import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 
 public final class ParticleBuilder {
     public static final ParticleBuilder instance = new ParticleBuilder();
-    private ParticleType<? extends IParticleOptionsExtension> type;
+    private IParticleOptionsExtension options;
     private boolean building = false;
     private double x, y, z;
     private double vx, vy, vz;
@@ -42,24 +46,25 @@ public final class ParticleBuilder {
         reset();
     }
 
-    public static ParticleBuilder create(ParticleType<? extends IParticleOptionsExtension> type) {
-        return ParticleBuilder.instance.particle(type);
+    public static ParticleBuilder create(IParticleOptionsExtension options) {
+        return ParticleBuilder.instance.particle(options);
     }
 
-    public ParticleBuilder particle(ParticleType<? extends IParticleOptionsExtension> type) {
+    public ParticleBuilder particle(IParticleOptionsExtension options) {
         if (building) {
             throw new IllegalStateException("Already building! Particle being built: " + getCurrentParticleString());
         }
-        this.type = type;
+        this.options = options;
         this.building = true;
         return this;
     }
 
-    private String getCurrentParticleString() {
-        return String.format("[ Type: %s, Position: (%s, %s, %s), Velocity: (%s, %s, %s), Colour: (%s, %s, %s), "
+    @Contract(pure = true)
+    private @NonNull String getCurrentParticleString() {
+        return String.format("[ Options: %s, Position: (%s, %s, %s), Velocity: (%s, %s, %s), Colour: (%s, %s, %s), "
                         + "Fade Colour: (%s, %s, %s), Radius: %s, Revs/tick: %s, Lifetime: %s, Gravity: %s, Shaded: %s, "
                         + "Scale: %s, Entity: %s ]",
-                type, x, y, z, vx, vy, vz, r, g, b, fr, fg, fb, radius, rpt, lifetime, gravity, shaded, scale, entity);
+                options, x, y, z, vx, vy, vz, r, g, b, fr, fg, fb, radius, rpt, lifetime, gravity, shaded, scale, entity);
     }
 
     public ParticleBuilder pos(double x, double y, double z) {
@@ -72,7 +77,7 @@ public final class ParticleBuilder {
         return this;
     }
 
-    public ParticleBuilder pos(Vec3 pos) {
+    public ParticleBuilder pos(@NonNull Vec3 pos) {
         return pos(pos.x, pos.y, pos.z);
     }
 
@@ -86,7 +91,7 @@ public final class ParticleBuilder {
         return this;
     }
 
-    public ParticleBuilder vel(Vec3 vel) {
+    public ParticleBuilder vel(@NonNull Vec3 vel) {
         return vel(vel.x, vel.y, vel.z);
     }
 
@@ -216,7 +221,7 @@ public final class ParticleBuilder {
         return this;
     }
 
-    public ParticleBuilder target(Vec3 pos) {
+    public ParticleBuilder target(@NonNull Vec3 pos) {
         return target(pos.x, pos.y, pos.z);
     }
 
@@ -230,7 +235,7 @@ public final class ParticleBuilder {
         return this;
     }
 
-    public ParticleBuilder tvel(Vec3 vel) {
+    public ParticleBuilder tvel(@NonNull Vec3 vel) {
         return tvel(vel.x, vel.y, vel.z);
     }
 
@@ -247,7 +252,7 @@ public final class ParticleBuilder {
         return this;
     }
 
-    public void spawn(Level level) {
+    public void spawn(ClientLevel level) {
 
         if (!building) {
             throw new IllegalStateException("Not building yet!");
@@ -264,61 +269,62 @@ public final class ParticleBuilder {
             return;
         }
 
-        Particle particle = null;
+
+        WizardryParticle<?> particle = WizardryClient.particleManager.createParticle(level, options, x, y, z);
 
         if (particle == null) {
             reset();
             return;
         }
 
-//        if (particle instanceof AbstractParticle abstractParticle) {
-//            if (!Double.isNaN(vx) && !Double.isNaN(vy) && !Double.isNaN(vz)) {
-//                abstractParticle.setParticleSpeed(vx, vy, vz);
-//            }
-//            if (r >= 0 && g >= 0 && b >= 0) {
-//                abstractParticle.setColor(r, g, b);
-//                abstractParticle.setFadeColor(r, g, b);
-//                abstractParticle.setInitialColor(r, g, b);
-//            }
-//            if (fr >= 0 && fg >= 0 && fb >= 0) {
-//                abstractParticle.setFadeColor(fr, fg, fb);
-//            }
-//            if (lifetime >= 0) {
-//                abstractParticle.setLifetime(lifetime);
-//            }
-//            if (radius > 0) {
-//                abstractParticle.setSpin(radius, rpt);
-//            }
-//            if (!Float.isNaN(yaw) && !Float.isNaN(pitch)) {
-//                abstractParticle.setFacing(yaw, pitch);
-//            }
-//            if (seed != 0) {
-//                abstractParticle.setSeed(seed);
-//            }
-//            if (!Double.isNaN(tvx) && !Double.isNaN(tvy) && !Double.isNaN(tvz)) {
-//                abstractParticle.setTargetVelocity(tvx, tvy, tvz);
-//            }
-//            if (length > 0) {
-//                abstractParticle.setLength(length);
-//            }
-//
-//            abstractParticle.scale(scale);
-//            abstractParticle.setGravity(gravity);
-//            abstractParticle.setShaded(shaded);
-//            abstractParticle.setCollisions(collide);
-//            abstractParticle.setEntity(entity);
-//            abstractParticle.setTargetPosition(tx, ty, tz);
-//            abstractParticle.setTargetEntity(target);
-//
-//            Minecraft.getInstance().particleEngine.add(abstractParticle);
-//
-//            reset();
-//        }
+        if (particle instanceof WizardryQuadParticle quadParticle) {
+            if (!Double.isNaN(vx) && !Double.isNaN(vy) && !Double.isNaN(vz)) {
+                quadParticle.setParticleSpeed(vx, vy, vz);
+            }
+            if (r >= 0 && g >= 0 && b >= 0) {
+                quadParticle.setCurrentColor(1.0f, r, g, b);
+                quadParticle.setEndColor(1.0f, r, g, b);
+                quadParticle.setStartColor(1.0f, r, g, b);
+            }
+            if (fr >= 0 && fg >= 0 && fb >= 0) {
+                quadParticle.setEndColor(1.0f, fr, fg, fb);
+            }
+            if (lifetime >= 0) {
+                quadParticle.setLifetime(lifetime);
+            }
+            if (radius > 0) {
+                quadParticle.setSpin(radius, rpt);
+            }
+            if (!Float.isNaN(yaw) && !Float.isNaN(pitch)) {
+                quadParticle.setFacing(yaw, pitch);
+            }
+            if (seed != 0) {
+                quadParticle.setSeed(seed);
+            }
+            if (!Double.isNaN(tvx) && !Double.isNaN(tvy) && !Double.isNaN(tvz)) {
+                quadParticle.setTargetVelocity(tvx, tvy, tvz);
+            }
+            if (length > 0) {
+                quadParticle.setLength(length);
+            }
+
+            quadParticle.scale(scale);
+            quadParticle.setGravity(gravity);
+            quadParticle.setShaded(shaded);
+            quadParticle.setCollisions(collide);
+            quadParticle.setEntity(entity);
+            quadParticle.setTargetPosition(tx, ty, tz);
+            quadParticle.setTargetEntity(target);
+
+            Minecraft.getInstance().particleEngine.add(quadParticle);
+
+            reset();
+        }
     }
 
     private void reset() {
         building = false;
-        type = null;
+        options = null;
         x = 0;
         y = 0;
         z = 0;
@@ -352,33 +358,35 @@ public final class ParticleBuilder {
         length = -1;
     }
 
-    public static ParticleBuilder create(ParticleType<? extends IParticleOptionsExtension> type, Entity entity) {
+    public static ParticleBuilder create(IParticleOptionsExtension options, Entity entity) {
 
         double x = entity.getX() + (entity.level().getRandom().nextDouble() - 0.5D) * (double) entity.getBbWidth();
         double y = entity.getY() + entity.level().getRandom().nextDouble() * (double) entity.getBbHeight();
         double z = entity.getZ() + (entity.level().getRandom().nextDouble() - 0.5D) * (double) entity.getBbWidth();
 
-        return ParticleBuilder.instance.particle(type).pos(x, y, z);
+        return ParticleBuilder.instance.particle(options).pos(x, y, z);
     }
 
-    public static ParticleBuilder create(ParticleType<? extends IParticleOptionsExtension> type, RandomSource random, double x, double y, double z, double radius, boolean move) {
+    public static ParticleBuilder create(IParticleOptionsExtension options, RandomSource random, double x, double y, double z, double radius, boolean move) {
 
         double px = x + (random.nextDouble() * 2 - 1) * radius;
         double py = y + (random.nextDouble() * 2 - 1) * radius;
         double pz = z + (random.nextDouble() * 2 - 1) * radius;
 
-        if (move) return ParticleBuilder.instance.particle(type).pos(px, py, pz).vel(px - x, py - y, pz - z);
+        if (move) return ParticleBuilder.instance.particle(options).pos(px, py, pz).vel(px - x, py - y, pz - z);
 
-        return ParticleBuilder.instance.particle(type).pos(px, py, pz);
+        return ParticleBuilder.instance.particle(options).pos(px, py, pz);
     }
 
-    public static void spawnShockParticles(Level level, double x, double y, double z) {
+    public static void spawnShockParticles(ClientLevel level, double x, double y, double z) {
         double px, py, pz;
         for (int i = 0; i < 8; i++) {
             px = x + level.getRandom().nextDouble() - 0.5;
             py = y + level.getRandom().nextDouble() - 0.5;
             pz = z + level.getRandom().nextDouble() - 0.5;
-            ParticleBuilder.create(WizardryParticles.SPARK.get()).pos(px, py, pz).spawn(level);
+            ParticleBuilder.create(
+                    new QuadParticleOptions(WizardryParticles.SPARK.get())
+            ).pos(px, py, pz).spawn(level);
             px = x + level.getRandom().nextDouble() - 0.5;
             py = y + level.getRandom().nextDouble() - 0.5;
             pz = z + level.getRandom().nextDouble() - 0.5;
@@ -386,16 +394,20 @@ public final class ParticleBuilder {
         }
     }
 
-    public static void spawnHealParticles(Level level, LivingEntity entity) {
+    public static void spawnHealParticles(ClientLevel level, LivingEntity entity) {
 
         for (int i = 0; i < 10; i++) {
             double x = entity.getX() + level.getRandom().nextDouble() * 2 - 1;
             double y = entity.getY() + entity.getEyeHeight() - 0.5 + level.getRandom().nextDouble();
             double z = entity.getZ() + level.getRandom().nextDouble() * 2 - 1;
-            ParticleBuilder.create(WizardryParticles.SPARKLE.get()).pos(x, y, z).vel(0, 0.1, 0).clr(1, 1, 0.3f).spawn(level);
+            ParticleBuilder.create(
+                    new QuadParticleOptions(WizardryParticles.SPARKLE.get())
+            ).pos(x, y, z).vel(0, 0.1, 0).clr(1, 1, 0.3f).spawn(level);
         }
 
-        ParticleBuilder.create(WizardryParticles.BUFF.get()).entity(entity).clr(1, 1, 0.3f).spawn(level);
+        ParticleBuilder.create(
+                new QuadParticleOptions(WizardryParticles.BUFF.get())
+        ).entity(entity).clr(1, 1, 0.3f).spawn(level);
     }
 
 }

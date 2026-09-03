@@ -6,7 +6,7 @@ import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.item.IWorkbenchItem;
+import top.begonia.wizardry.api.item.IWorkbenchItem;
 
 import java.util.function.Consumer;
 

@@ -151,7 +151,7 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
                 JsonObject cleanObject = element.getAsJsonObject().deepCopy();
                 cleanObject.remove("parser");
                 @SuppressWarnings("unchecked")
-                IResultData result = this.safeExecutePipeline(location, parser, cleanObject, context, currentReload);
+                IResultData result = this.safeExecutePipeline(location, parser, cleanObject, context, currentReload, resourceManager, profilerFiller);
                 if (result == null) {
                     Wizardry.LOGGER.error("wizardry:解析数据 '{}' 失败: 解析器 [{}] 无法反序列化此数据，返回了 null (请检查控制台上的 Codec 具体报错)",
                             parser.getClass().getSimpleName(), location);
@@ -184,9 +184,11 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
             @NonNull IDataParser<P, C, R> parser,
             JsonElement element,
             @Nullable C context,
-            PreparableReloadListener.SharedState currentReload
+            PreparableReloadListener.SharedState currentReload,
+            @NonNull ResourceManager resourceManager,
+            @NonNull ProfilerFiller profilerFiller
     ) {
         P rawData = parser.parserItem(element);
-        return parser.transformItemToResult(identifier, rawData, context, currentReload);
+        return parser.transformItemToResult(identifier, rawData, context, currentReload, resourceManager);
     }
 }

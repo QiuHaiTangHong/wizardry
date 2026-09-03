@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.item.impl;
+package top.begonia.wizardry.core.item;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -7,13 +7,22 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.core.constants.ManaFlaskTypeEnum;
+import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.util.TextHelper;
 
 import java.util.function.Consumer;
 
-public class PurifyingElixirItem extends Item {
-    public PurifyingElixirItem(Properties properties) {
+public class ManaFlaskItem extends Item {
+    public ManaFlaskItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public @NonNull Component getName(@NonNull ItemStack stack) {
+        ManaFlaskTypeEnum type = stack.getOrDefault(WizardryComponents.MANA_FLASK_TYPE.get(), ManaFlaskTypeEnum.SMALL);
+        return Component.translatable("item." + Wizardry.MODID + "." + type.getSerializedName() + "_mana_flask").withStyle(type.rarity.getStyleModifier());
     }
 
     @SuppressWarnings("deprecation")

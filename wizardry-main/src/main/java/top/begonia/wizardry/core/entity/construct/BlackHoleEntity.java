@@ -19,7 +19,7 @@ import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.entity.LevitatingBlockEntity;
-import top.begonia.wizardry.core.item.impl.ArtefactItem;
+import top.begonia.wizardry.core.item.ArtefactItem;
 import top.begonia.wizardry.core.registry.WizardryEntities;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardrySounds;

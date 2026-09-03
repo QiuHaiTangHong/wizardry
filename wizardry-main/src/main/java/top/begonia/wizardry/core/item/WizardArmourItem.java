@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.item.impl;
+package top.begonia.wizardry.core.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -21,8 +21,8 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.constants.ElementEnum;
-import top.begonia.wizardry.core.item.IManaStoringItem;
-import top.begonia.wizardry.core.item.IWorkbenchItem;
+import top.begonia.wizardry.api.item.IManaStoringItem;
+import top.begonia.wizardry.api.item.IWorkbenchItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.util.ArmourHelper;

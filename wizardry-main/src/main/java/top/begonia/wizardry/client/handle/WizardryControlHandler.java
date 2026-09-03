@@ -13,7 +13,7 @@ import top.begonia.wizardry.client.constants.WizardryKeyMappings;
 import top.begonia.wizardry.client.gui.SpellHud;
 import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.core.constants.ControlType;
-import top.begonia.wizardry.core.item.ISpellCastingItem;
+import top.begonia.wizardry.api.item.ISpellCastingItem;
 import top.begonia.wizardry.core.network.data.ControlInputPayload;
 import top.begonia.wizardry.core.network.data.SpellQuickAccessPayload;
 import top.begonia.wizardry.core.registry.WizardrySounds;

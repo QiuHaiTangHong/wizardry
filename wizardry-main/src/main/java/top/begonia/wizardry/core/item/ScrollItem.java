@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.item.impl;
+package top.begonia.wizardry.core.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -20,8 +20,8 @@ import top.begonia.wizardry.api.event.SpellCastEvent;
 import top.begonia.wizardry.api.particle.options.BeamParticleOptions;
 import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
 import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
-import top.begonia.wizardry.core.item.ISpellCastingItem;
-import top.begonia.wizardry.core.item.IWorkbenchItem;
+import top.begonia.wizardry.api.item.ISpellCastingItem;
+import top.begonia.wizardry.api.item.IWorkbenchItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 import top.begonia.wizardry.core.registry.WizardrySpells;

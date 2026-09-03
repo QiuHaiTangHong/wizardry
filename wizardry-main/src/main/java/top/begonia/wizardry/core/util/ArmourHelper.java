@@ -33,7 +33,7 @@ import top.begonia.wizardry.client.model.RobeArmourModel;
 import top.begonia.wizardry.client.model.SageArmourModel;
 import top.begonia.wizardry.client.model.WizardArmourModel;
 import top.begonia.wizardry.core.constants.ElementEnum;
-import top.begonia.wizardry.core.item.impl.ArmourUpgradeItem;
+import top.begonia.wizardry.core.item.ArmourUpgradeItem;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardrySounds;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;

@@ -1,5 +1,6 @@
 package top.begonia.wizardry.core.entity.projectile.bomb;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,8 +11,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.util.ParticleBuilder;
-import top.begonia.wizardry.core.entity.projectile.MagicProjectileEntity;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 
@@ -45,18 +46,38 @@ public class PoisonBombEntity extends BombEntity {
     }
 
     @Override
-    protected void createParticles(Level level) {
+    protected void createParticles(ClientLevel level) {
         Vec3 hitPos = this.position();
-        ParticleBuilder.create(WizardryParticles.FLASH.get()).pos(hitPos).scale(5 * blastMultiplier)
-                .clr(0.2f + this.random.nextFloat() * 0.3f, 0.6f, 0.0f).spawn(this.level());
+        ParticleBuilder.create(
+                        new QuadParticleOptions(WizardryParticles.FLASH.get())
+                )
+                .pos(hitPos)
+                .scale(5 * blastMultiplier)
+                .clr(0.2f + this.random.nextFloat() * 0.3f, 0.6f, 0.0f)
+                .spawn(level);
 
         for (int i = 0; i < 60 * blastMultiplier; i++) {
 
-            ParticleBuilder.create(WizardryParticles.SPARKLE.get(), this.random, hitPos.x(), hitPos.y(), hitPos.z(), 2 * blastMultiplier, false).time(35)
-                    .scale(2).clr(0.2f + this.random.nextFloat() * 0.3f, 0.6f, 0.0f).spawn(this.level());
+            ParticleBuilder.create(
+                            new QuadParticleOptions(WizardryParticles.SPARKLE.get()),
+                            this.random,
+                            hitPos.x(), hitPos.y(), hitPos.z(),
+                            2 * blastMultiplier,
+                            false
+                    )
+                    .time(35)
+                    .scale(2).clr(0.2f + this.random.nextFloat() * 0.3f, 0.6f, 0.0f)
+                    .spawn(level);
 
-            ParticleBuilder.create(WizardryParticles.DARK_MAGIC.get(), this.random, hitPos.x(), hitPos.y(), hitPos.z(), 2 * blastMultiplier, false)
-                    .clr(0.2f + this.random.nextFloat() * 0.2f, 0.8f, 0.0f).spawn(this.level());
+            ParticleBuilder.create(
+                            new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),
+                            this.random,
+                            hitPos.x(), hitPos.y(), hitPos.z(),
+                            2 * blastMultiplier,
+                            false
+                    )
+                    .clr(0.2f + this.random.nextFloat() * 0.2f, 0.8f, 0.0f)
+                    .spawn(level);
         }
         this.level().addParticle(ParticleTypes.EXPLOSION, hitPos.x(), hitPos.y(), hitPos.z(), 0, 0, 0);
     }

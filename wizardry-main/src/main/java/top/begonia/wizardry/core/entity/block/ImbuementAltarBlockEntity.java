@@ -1,6 +1,7 @@
 package top.begonia.wizardry.core.entity.block;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.UUIDUtil;
@@ -25,12 +26,13 @@ import net.neoforged.neoforge.common.NeoForge;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.event.ImbuementActivateEvent;
+import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.client.util.ParticleBuilder;
-import top.begonia.wizardry.api.event.ImbuementActivateEvent;
 import top.begonia.wizardry.core.block.ReceptacleBlock;
 import top.begonia.wizardry.core.constants.ElementEnum;
-import top.begonia.wizardry.core.item.impl.WizardArmourItem;
+import top.begonia.wizardry.core.item.WizardArmourItem;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.util.ItemStackHelper;
 
@@ -101,7 +103,7 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
                     }
                 }
 
-                if (level.isClientSide() && level.getRandom().nextInt(2) == 0) {
+                if (level instanceof ClientLevel clientLevel && clientLevel.getRandom().nextInt(2) == 0) {
 
                     ElementEnum[] elements = getReceptacleElements();
 
@@ -116,8 +118,18 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
 
                         int[] colours = ReceptacleBlock.PARTICLE_COLOURS.get(elements[i]);
 
-                        ParticleBuilder.create(WizardryParticles.DUST.get(), level.getRandom(), vec.x, vec.y, vec.z, 0.1, false)
-                                .vel(centre.subtract(vec).scale(0.02)).clr(colours[1]).fade(colours[2]).time(50).spawn(level);
+                        ParticleBuilder.create(
+                                        new QuadParticleOptions(WizardryParticles.DUST.get()),
+                                        level.getRandom(),
+                                        vec.x, vec.y, vec.z,
+                                        0.1,
+                                        false
+                                )
+                                .vel(centre.subtract(vec).scale(0.02))
+                                .clr(colours[1])
+                                .fade(colours[2])
+                                .time(50)
+                                .spawn(clientLevel);
                     }
                 }
             }

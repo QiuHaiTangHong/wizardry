@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.item.impl;
+package top.begonia.wizardry.core.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -28,9 +28,9 @@ import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.data.player.WizardPlayerDataOperator;
 import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
 import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
-import top.begonia.wizardry.core.item.IManaStoringItem;
-import top.begonia.wizardry.core.item.ISpellCastingItem;
-import top.begonia.wizardry.core.item.IWorkbenchItem;
+import top.begonia.wizardry.api.item.IManaStoringItem;
+import top.begonia.wizardry.api.item.ISpellCastingItem;
+import top.begonia.wizardry.api.item.IWorkbenchItem;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 import top.begonia.wizardry.core.util.ItemStackHelper;

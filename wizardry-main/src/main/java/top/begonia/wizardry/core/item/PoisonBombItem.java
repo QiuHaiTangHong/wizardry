@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.item.impl;
+package top.begonia.wizardry.core.item;
 
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -9,12 +9,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.entity.projectile.bomb.SmokeBombEntity;
+import top.begonia.wizardry.core.entity.projectile.bomb.PoisonBombEntity;
 import top.begonia.wizardry.core.registry.WizardryEntities;
 import top.begonia.wizardry.core.registry.WizardrySounds;
 
-public class SmokeBombItem extends Item {
-    public SmokeBombItem(Properties properties) {
+public class PoisonBombItem extends Item {
+    public PoisonBombItem(Properties properties) {
         super(properties);
     }
 
@@ -29,10 +29,10 @@ public class SmokeBombItem extends Item {
 
         player.getCooldowns().addCooldown(itemStack, 20);
         if (!level.isClientSide()) {
-            SmokeBombEntity smokeBomb = WizardryEntities.SMOKE_BOMB.get().create(level, EntitySpawnReason.SPAWN_ITEM_USE);
-            if (smokeBomb != null) {
-                smokeBomb.aim(player, 1.0F);
-                level.addFreshEntity(smokeBomb);
+            PoisonBombEntity poisonBomb = WizardryEntities.POISON_BOMB.get().create(level, EntitySpawnReason.SPAWN_ITEM_USE);
+            if (poisonBomb != null) {
+                poisonBomb.aim(player, 1.0F);
+                level.addFreshEntity(poisonBomb);
             }
         }
         if (!player.getAbilities().instabuild) {

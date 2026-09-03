@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.item;
+package top.begonia.wizardry.api.item;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;

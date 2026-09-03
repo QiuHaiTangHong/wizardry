@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.item.impl;
+package top.begonia.wizardry.core.item;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.constants.ElementEnum;
-import top.begonia.wizardry.core.item.IMultiTexturedItem;
+import top.begonia.wizardry.api.item.IMultiTexturedItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 
 public class MagicCrystalItem extends Item implements IMultiTexturedItem {

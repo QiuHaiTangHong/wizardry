@@ -12,7 +12,7 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.entity.living.minion.SkeletonMinionEntity;
 import top.begonia.wizardry.core.entity.living.minion.StrayMinionEntity;
-import top.begonia.wizardry.core.item.impl.ArtefactItem;
+import top.begonia.wizardry.core.item.ArtefactItem;
 import top.begonia.wizardry.core.registry.WizardryItems;
 
 import java.util.function.Function;

@@ -2,28 +2,21 @@ package top.begonia.wizardry.api.particle.manager;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.Identifier;
-import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.data.definition.particle.ParticleDescriptionData;
-import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
-import top.begonia.wizardry.api.event.data.RegisterParticleEvent;
 import top.begonia.wizardry.api.particle.WizardryParticle;
 import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
 import top.begonia.wizardry.api.particle.type.ParticleTypeExtension;
+import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class WizardryParticleManager implements ParticleResourceAccessor {
-    private Map<Identifier, ParticleDescriptionData> particleDescriptionDataMap;
-    private final Map<Identifier, MutableDoubleSpriteSet> spriteSetCache = new HashMap<>();
-    private final Map<ParticleTypeExtension<?>, WizardryParticleProvider<? extends IParticleOptionsExtension>> providerRegistry = new HashMap<>();
+    private final Map<ParticleTypeExtension<?>, WizardryParticleProvider<? extends IParticleOptionsExtension>> providerRegistry;
 
-    public WizardryParticleManager(ClientLevel clientLevel) {
-        this.particleDescriptionDataMap = WizardryClientDataManager.getInstance().getAllDataByType(ParticleDescriptionData.class);
-        NeoForge.EVENT_BUS.post(new RegisterParticleEvent(this.providerRegistry));
+    public WizardryParticleManager(Map<ParticleTypeExtension<?>, WizardryParticleProvider<? extends IParticleOptionsExtension>> providerRegistry) {
+        this.providerRegistry = providerRegistry;
     }
 
     public <T extends IParticleOptionsExtension> WizardryParticle<T> createParticle(
@@ -54,6 +47,7 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
     @Override
     @Nullable
     public MutableDoubleSpriteSet getSpriteSet(@NonNull ParticleTypeExtension<?> type) {
-        return this.spriteSetCache.get(type.identifier());
+        Map<Identifier, MutableDoubleSpriteSet> spriteSetMap = WizardryClientDataManager.getInstance().getAllDataByType(MutableDoubleSpriteSet.class);
+        return spriteSetMap.get(type.identifier().withPrefix("particles/"));
     }
 }

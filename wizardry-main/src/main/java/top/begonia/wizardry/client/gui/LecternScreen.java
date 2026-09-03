@@ -20,13 +20,14 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.client.util.*;
+import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.gui.widget.InvisibleButton;
 import top.begonia.wizardry.client.gui.widget.SpellSortButton;
 import top.begonia.wizardry.client.gui.widget.TurnPageButton;
+import top.begonia.wizardry.client.util.*;
 import top.begonia.wizardry.core.block.BookshelfBlock;
 import top.begonia.wizardry.core.entity.block.LecternBlockEntity;
-import top.begonia.wizardry.core.item.impl.SpellBookItem;
+import top.begonia.wizardry.core.item.SpellBookItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 import top.begonia.wizardry.core.registry.WizardrySounds;
@@ -233,7 +234,10 @@ public class LecternScreen extends SpellInfoScreen implements ISpellSortable {
                                 AbstractSpell spell = spellBookItem.getCurrentSpell(resource);
                                 if (spell == this.currentSpell) {
                                     for (Direction side : Direction.values()) {
-                                        ParticleBuilder.create(WizardryParticles.BLOCK_HIGHLIGHT.get()).pos(
+                                        ParticleBuilder.create(
+                                                        new QuadParticleOptions(WizardryParticles.BLOCK_HIGHLIGHT.get())
+                                                )
+                                                .pos(
                                                         GeometryUtils.getFaceCentre(blockEntity.getBlockPos(), side)
                                                                 .add(new Vec3(side.getUnitVec3f())
                                                                         .scale(GeometryUtils.ANTI_Z_FIGHTING_OFFSET)))

@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.item.impl;
+package top.begonia.wizardry.core.item;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;

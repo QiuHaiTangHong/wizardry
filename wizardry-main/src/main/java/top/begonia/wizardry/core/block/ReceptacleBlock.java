@@ -2,6 +2,7 @@ package top.begonia.wizardry.core.block;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
@@ -27,11 +28,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.client.util.ParticleBuilder;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.entity.block.ReceptacleBlockEntity;
-import top.begonia.wizardry.core.item.impl.SpectralDustItem;
+import top.begonia.wizardry.core.item.SpectralDustItem;
 import top.begonia.wizardry.core.registry.*;
 
 import java.util.Collections;
@@ -146,14 +148,30 @@ public class ReceptacleBlock extends BaseEntityBlock {
                     centre = centre.add(facing.getUnitVec3().scale(WALL_PARTICLE_OFFSET)).add(0, 0.125, 0);
                 }
                 int[] colours = PARTICLE_COLOURS.get(element);
-                ParticleBuilder.create(WizardryParticles.FLASH.get()).pos(centre).scale(0.35f).time(48).clr(colours[0]).spawn(level);
-                double r = 0.12;
-                for (int i = 0; i < 3; i++) {
-                    double x = r * (rand.nextDouble() * 2 - 1);
-                    double y = r * (rand.nextDouble() * 2 - 1);
-                    double z = r * (rand.nextDouble() * 2 - 1);
-                    ParticleBuilder.create(WizardryParticles.DUST.get()).pos(centre.x + x, centre.y + y, centre.z + z)
-                            .vel(x * -0.03, 0.02, z * -0.03).time(24 + rand.nextInt(8)).clr(colours[1]).fade(colours[2]).spawn(level);
+                if (level instanceof ClientLevel clientLevel) {
+                    ParticleBuilder.create(
+                                    new QuadParticleOptions(WizardryParticles.FLASH.get())
+                            )
+                            .pos(centre)
+                            .scale(0.35f)
+                            .time(48)
+                            .clr(colours[0])
+                            .spawn(clientLevel);
+                    double r = 0.12;
+                    for (int i = 0; i < 3; i++) {
+                        double x = r * (rand.nextDouble() * 2 - 1);
+                        double y = r * (rand.nextDouble() * 2 - 1);
+                        double z = r * (rand.nextDouble() * 2 - 1);
+                        ParticleBuilder.create(
+                                        new QuadParticleOptions(WizardryParticles.DUST.get())
+                                )
+                                .pos(centre.x + x, centre.y + y, centre.z + z)
+                                .vel(x * -0.03, 0.02, z * -0.03)
+                                .time(24 + rand.nextInt(8))
+                                .clr(colours[1])
+                                .fade(colours[2])
+                                .spawn(clientLevel);
+                    }
                 }
             }
         }

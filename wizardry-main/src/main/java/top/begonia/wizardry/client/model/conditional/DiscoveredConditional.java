@@ -12,7 +12,7 @@ import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.client.util.ClientHelper;
 import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.core.config.CommonConfig;
-import top.begonia.wizardry.core.item.impl.ArtefactItem;
+import top.begonia.wizardry.core.item.ArtefactItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardrySpells;

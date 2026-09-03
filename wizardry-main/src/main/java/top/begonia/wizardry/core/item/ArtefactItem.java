@@ -1,28 +1,35 @@
-package top.begonia.wizardry.core.item.impl;
+package top.begonia.wizardry.core.item;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.constants.ManaFlaskTypeEnum;
-import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.util.TextHelper;
 
 import java.util.function.Consumer;
 
-public class ManaFlaskItem extends Item {
-    public ManaFlaskItem(Properties properties) {
+public class ArtefactItem extends Item {
+    private boolean enabled = true;
+
+    public ArtefactItem(Properties properties) {
         super(properties);
     }
 
-    @Override
-    public @NonNull Component getName(@NonNull ItemStack stack) {
-        ManaFlaskTypeEnum type = stack.getOrDefault(WizardryComponents.MANA_FLASK_TYPE.get(), ManaFlaskTypeEnum.SMALL);
-        return Component.translatable("item." + Wizardry.MODID + "." + type.getSerializedName() + "_mana_flask").withStyle(type.rarity.getStyleModifier());
+    public static boolean isArtefactActive(Player player, Item artefact) {
+        if (artefact instanceof ArtefactItem artefactItem) {
+            if (!artefactItem.enabled) {
+                return false;
+            }
+
+        } else {
+            throw new IllegalArgumentException("Not an artefact!");
+        }
+        return false;
     }
 
     @SuppressWarnings("deprecation")
@@ -34,5 +41,10 @@ public class ManaFlaskItem extends Item {
                 Style.EMPTY
         );
         super.appendHoverText(itemStack, context, display, builder, tooltipFlag);
+    }
+
+    @Override
+    public boolean isFoil(@NonNull ItemStack itemStack) {
+        return itemStack.getRarity() == Rarity.EPIC;
     }
 }

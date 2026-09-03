@@ -33,6 +33,10 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.event.data.RegisterDataParserEvent;
+import top.begonia.wizardry.api.event.data.RegisterDelegateUnbakedModelEvent;
+import top.begonia.wizardry.api.event.data.RegisterParticleEvent;
+import top.begonia.wizardry.api.particle.WizardryParticle;
 import top.begonia.wizardry.client.constants.WizardryKeyMappings;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
 import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
@@ -51,7 +55,7 @@ import top.begonia.wizardry.client.model.item.RunestoneUnbakedItemModel;
 import top.begonia.wizardry.client.model.item.SpellBookUnbakedItemModel;
 import top.begonia.wizardry.client.model.loader.WizardryModelLoader;
 import top.begonia.wizardry.client.network.ClientPayloadHandler;
-import top.begonia.wizardry.client.particle.BeamParticle;
+import top.begonia.wizardry.client.particle.*;
 import top.begonia.wizardry.client.renderer.WizardryPotionRender;
 import top.begonia.wizardry.client.renderer.entity.BlackHoleRenderer;
 import top.begonia.wizardry.client.renderer.entity.BubbleRenderer;
@@ -63,10 +67,6 @@ import top.begonia.wizardry.client.renderer.entity.block.ImbuementAltarRender;
 import top.begonia.wizardry.client.renderer.entity.block.LecternRender;
 import top.begonia.wizardry.client.renderer.particle.CustomParticleGroup;
 import top.begonia.wizardry.client.renderer.uniform.MouseUniform;
-import top.begonia.wizardry.api.event.data.RegisterDataParserEvent;
-import top.begonia.wizardry.api.event.data.RegisterDelegateUnbakedModelEvent;
-import top.begonia.wizardry.api.event.data.RegisterParticleEvent;
-import top.begonia.wizardry.api.particle.WizardryParticle;
 import top.begonia.wizardry.core.network.data.HandbookRecipesRequestPayload;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.util.ArmourHelper;
@@ -257,9 +257,27 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onRegisterParticle(@NonNull RegisterParticleEvent event) {
-        event.register(WizardryParticles.BEAM.get(), (particleResourceAccessor, clientLevel, options, x, y, z) -> {
-            return new BeamParticle(clientLevel, options, x, y, z);
-        });
+        event.registerSimpleProvider(WizardryParticles.BEAM.get(), BeamParticle::new);
+        event.registerSimpleProvider(WizardryParticles.BLOCK_HIGHLIGHT.get(), BlockHighlightParticle::new);
+        event.registerSimpleProvider(WizardryParticles.BUFF.get(), BuffParticle::new);
+        event.registerSimpleProvider(WizardryParticles.CLOUD.get(), CloudParticle::new);
+        event.registerSimpleProvider(WizardryParticles.DARK_MAGIC.get(), DarkMagicParticle::new);
+        event.registerSimpleProvider(WizardryParticles.DUST.get(), DustParticle::new);
+        event.registerSimpleProvider(WizardryParticles.FLASH.get(), FlashParticle::new);
+        event.registerSimpleProvider(WizardryParticles.GUARDIAN_BEAM.get(), GuardianBeamParticle::new);
+        event.registerSimpleProvider(WizardryParticles.ICE.get(), IceParticle::new);
+        event.registerSimpleProvider(WizardryParticles.LEAF.get(), LeafParticle::new);
+        event.registerSimpleProvider(WizardryParticles.LIGHTNING.get(), LightningParticle::new);
+        event.registerSimpleProvider(WizardryParticles.LIGHTNING_PULSE.get(), LightningPulseParticle::new);
+        event.registerSimpleProvider(WizardryParticles.MAGIC_BUBBLE.get(), MagicBubbleParticle::new);
+        event.registerSimpleProvider(WizardryParticles.MAGIC_FIRE.get(), MagicFlameParticle::new);
+        event.registerSimpleProvider(WizardryParticles.PATH.get(), PathParticle::new);
+        event.registerSimpleProvider(WizardryParticles.SCORCH.get(), ScorchParticle::new);
+        event.registerSimpleProvider(WizardryParticles.SNOW.get(), SnowParticle::new);
+        event.registerSimpleProvider(WizardryParticles.SPARK.get(), SparkParticle::new);
+        event.registerSimpleProvider(WizardryParticles.SPARKLE.get(), SparkleParticle::new);
+        event.registerSimpleProvider(WizardryParticles.SPHERE.get(), SphereParticle::new);
+        event.registerSimpleProvider(WizardryParticles.VINE.get(), VineParticle::new);
     }
 
     @SubscribeEvent

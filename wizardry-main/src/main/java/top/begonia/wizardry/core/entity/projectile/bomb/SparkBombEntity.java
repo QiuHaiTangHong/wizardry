@@ -1,5 +1,6 @@
 package top.begonia.wizardry.core.entity.projectile.bomb;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -42,7 +43,7 @@ public class SparkBombEntity extends BombEntity {
     }
 
     @Override
-    protected void createParticles(Level level) {
+    protected void createParticles(ClientLevel level) {
         Vec3 hitPos = this.position();
         ParticleBuilder.spawnShockParticles(level, hitPos.x(), hitPos.y() + this.getBbHeight() / 2, hitPos.z());
     }

@@ -1,5 +1,6 @@
 package top.begonia.wizardry.core.spell.impl.ray.impl;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.util.ParticleBuilder;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
@@ -64,7 +66,13 @@ public class BubbleRaySpell extends AbstractRaySpell {
 
     @Override
     protected void spawnParticle(@NonNull Level level, double x, double y, double z, double vx, double vy, double vz) {
-        level.addParticle(ParticleTypes.SPLASH, x, y, z, 0, 0, 0);
-        ParticleBuilder.create(WizardryParticles.MAGIC_BUBBLE.get()).pos(x, y, z).spawn(level);
+        if (level instanceof ClientLevel clientLevel) {
+            clientLevel.addParticle(ParticleTypes.SPLASH, x, y, z, 0, 0, 0);
+            ParticleBuilder.create(
+                            new QuadParticleOptions(WizardryParticles.MAGIC_BUBBLE.get())
+                    )
+                    .pos(x, y, z)
+                    .spawn(clientLevel);
+        }
     }
 }

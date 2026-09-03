@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.item;
+package top.begonia.wizardry.api.item;
 
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;

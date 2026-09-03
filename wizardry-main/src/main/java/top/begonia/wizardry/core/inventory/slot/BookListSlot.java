@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.inventory.menu.ArcaneWorkbenchMenu;
-import top.begonia.wizardry.core.item.impl.SpellBookItem;
+import top.begonia.wizardry.core.item.SpellBookItem;
 
 public class BookListSlot extends ItemClassListSlot {
     private final ArcaneWorkbenchMenu container;

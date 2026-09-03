@@ -23,7 +23,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
-import top.begonia.wizardry.core.item.impl.ArtefactItem;
+import top.begonia.wizardry.core.item.ArtefactItem;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.util.RayTracer;
 

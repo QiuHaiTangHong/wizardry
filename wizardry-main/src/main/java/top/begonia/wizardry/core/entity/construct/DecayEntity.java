@@ -1,10 +1,12 @@
 package top.begonia.wizardry.core.entity.construct;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.util.ParticleBuilder;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.spell.AbstractSpell;
@@ -21,7 +23,6 @@ import java.util.List;
  *
  * @author 秋海棠红
  * @version 1.0.0
- * @date 2026.07.09
  */
 public class DecayEntity extends MagicConstructEntity {
     public int textureIndex;
@@ -55,16 +56,18 @@ public class DecayEntity extends MagicConstructEntity {
                     }
                 }
             }
-        } else if (this.random.nextInt(15) == 0) {
+        } else if (this.random.nextInt(15) == 0 && this.level() instanceof ClientLevel clientLevel) {
 
             double radius = this.random.nextDouble() * 0.8;
             float angle = this.random.nextFloat() * (float) Math.PI * 2;
             float brightness = this.random.nextFloat() * 0.4f;
 
-            ParticleBuilder.create(WizardryParticles.DARK_MAGIC.get())
+            ParticleBuilder.create(
+                            new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get())
+                    )
                     .pos(this.getX() + radius * Mth.cos(angle), this.getY(), this.getZ() + radius * Mth.sin(angle))
                     .clr(brightness, 0, brightness + 0.1f)
-                    .spawn(this.level());
+                    .spawn(clientLevel);
         }
     }
 }

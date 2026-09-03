@@ -215,12 +215,16 @@ public class WizardryQuadParticle extends WizardryParticle<QuadParticleOptions> 
         }
     }
 
-    public void setStartColor(int alpha, int red, int green, int blue) {
-        this.startColor = ARGB.color(alpha, red, green, blue);
+    public void setStartColor(float alpha, float red, float green, float blue) {
+        this.startColor = ARGB.colorFromFloat(alpha, red, green, blue);
     }
 
-    public void setEndColor(int alpha, int red, int green, int blue) {
-        this.endColor = ARGB.color(alpha, red, green, blue);
+    public void setCurrentColor(float alpha, float red, float green, float blue){
+        this.currentColor = ARGB.colorFromFloat(alpha, red, green, blue);
+    }
+
+    public void setEndColor(float alpha, float red, float green, float blue) {
+        this.endColor = ARGB.colorFromFloat(alpha, red, green, blue);
     }
 
     public void setFacing(float yaw, float pitch) {

@@ -1,17 +1,17 @@
 package top.begonia.wizardry.api.particle.options;
 
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
+import top.begonia.wizardry.api.particle.type.ParticleTypeExtension;
 
 public class QuadParticleOptions implements IParticleOptionsExtension {
     private Vec3 acceleration = new Vec3(0.0f, 0.0f, 0.0f);
-    private final ParticleType<QuadParticleOptions> type;
+    private final ParticleTypeExtension<QuadParticleOptions> type;
     private MutableDoubleSpriteSet spriteSet;
 
     public QuadParticleOptions(
-            ParticleType<QuadParticleOptions> type
+            ParticleTypeExtension<QuadParticleOptions> type
     ) {
         this.type = type;
     }
@@ -40,7 +40,7 @@ public class QuadParticleOptions implements IParticleOptionsExtension {
     }
 
     @Override
-    public @NonNull ParticleType<QuadParticleOptions> getType() {
+    public @NonNull ParticleTypeExtension<QuadParticleOptions> getType() {
         return this.type;
     }
 

@@ -3,18 +3,15 @@ package top.begonia.wizardry.api.particle.extension;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Mth;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.api.data.IResultData;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MutableDoubleSpriteSet {
-    private volatile List<List<TextureAtlasSprite>> doubleSprites = new ArrayList<>();
+public class MutableDoubleSpriteSet implements IResultData {
+    private final List<List<TextureAtlasSprite>> doubleSprites;
 
-    public MutableDoubleSpriteSet() {
-    }
-
-    public void rebind(List<List<TextureAtlasSprite>> newSprites) {
-        this.doubleSprites = List.copyOf(newSprites);
+    public MutableDoubleSpriteSet(List<List<TextureAtlasSprite>> newSprites) {
+        this.doubleSprites =  newSprites;
     }
 
     public TextureAtlasSprite getSprite(int rowIndex, int age, int lifetime) {
@@ -55,5 +52,10 @@ public class MutableDoubleSpriteSet {
 
     public boolean isEmpty() {
         return this.doubleSprites.isEmpty();
+    }
+
+    @Override
+    public Class<? extends IResultData> getDataClass() {
+        return MutableDoubleSpriteSet.class;
     }
 }

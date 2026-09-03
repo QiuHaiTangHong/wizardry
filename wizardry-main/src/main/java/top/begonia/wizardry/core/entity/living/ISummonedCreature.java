@@ -1,5 +1,6 @@
 package top.begonia.wizardry.core.entity.living;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -17,13 +18,14 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.item.ISpellCastingItem;
+import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.util.ParticleBuilder;
 import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.data.player.WizardPlayerDataOperator;
 import top.begonia.wizardry.core.entity.WizardEntity;
-import top.begonia.wizardry.core.item.ISpellCastingItem;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 import top.begonia.wizardry.core.util.AllyDesignationSystem;
 
@@ -129,11 +131,13 @@ public interface ISummonedCreature extends TraceableEntity {
             thisEntity.discard();
         }
 
-        if (this.hasParticleEffect() && thisEntity.level().isClientSide() && thisEntity.getRandom().nextInt(8) == 0) {
-            ParticleBuilder.create(WizardryParticles.DARK_MAGIC.get())
+        if (this.hasParticleEffect() && thisEntity.level() instanceof ClientLevel clientLevel && thisEntity.getRandom().nextInt(8) == 0) {
+            ParticleBuilder.create(
+                            new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get())
+                    )
                     .pos(thisEntity.getX(), thisEntity.getY() + thisEntity.getRandom().nextDouble() * 1.5, thisEntity.getZ())
                     .clr(0.1f, 0.0f, 0.0f)
-                    .spawn(thisEntity.level());
+                    .spawn(clientLevel);
         }
 
     }

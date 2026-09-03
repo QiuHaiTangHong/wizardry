@@ -24,7 +24,7 @@ import top.begonia.wizardry.client.gui.widget.Skin;
 import top.begonia.wizardry.client.util.DrawingUtils;
 import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.core.config.ClientConfig;
-import top.begonia.wizardry.core.item.ISpellCastingItem;
+import top.begonia.wizardry.api.item.ISpellCastingItem;
 import top.begonia.wizardry.core.registry.WizardryAttachment;
 import top.begonia.wizardry.core.registry.WizardryMobEffects;
 import top.begonia.wizardry.core.registry.WizardrySpells;

@@ -1,5 +1,6 @@
 package top.begonia.wizardry.core.entity.projectile;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -83,14 +84,14 @@ public abstract class MagicProjectileEntity extends ThrowableItemProjectile {
         return 0.0F;
     }
 
-    protected void createParticles(Level level) {
+    protected void createParticles(ClientLevel level) {
     }
 
     @Override
     public void onRemoval(@NonNull RemovalReason reason) {
         super.onRemoval(reason);
-        if (reason == RemovalReason.DISCARDED && this.level().isClientSide()) {
-            this.createParticles(this.level());
+        if (reason == RemovalReason.DISCARDED && this.level() instanceof ClientLevel clientLevel) {
+            this.createParticles(clientLevel);
         }
     }
 

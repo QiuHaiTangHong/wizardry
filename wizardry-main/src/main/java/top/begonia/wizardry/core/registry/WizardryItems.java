@@ -23,7 +23,7 @@ import top.begonia.wizardry.core.block.CrystalBlock;
 import top.begonia.wizardry.core.block.GildedWoodBlock;
 import top.begonia.wizardry.core.block.LecternBlock;
 import top.begonia.wizardry.core.constants.*;
-import top.begonia.wizardry.core.item.impl.*;
+import top.begonia.wizardry.core.item.*;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 import top.begonia.wizardry.core.util.ArmourHelper;
 import top.begonia.wizardry.core.util.ItemStackHelper;
