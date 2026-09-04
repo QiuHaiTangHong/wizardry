@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
-import top.begonia.wizardry.client.util.ParticleBuilder;
+import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;

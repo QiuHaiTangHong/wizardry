@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Mod(value = Wizardry.MODID, dist = Dist.CLIENT)
-@EventBusSubscriber(modid = Wizardry.MODID, value = Dist.CLIENT)
 public class WizardryClient {
     public static WizardryParticleManager particleManager;
     public WizardryClient(@NonNull IEventBus modEventBus, @NonNull ModContainer container) {

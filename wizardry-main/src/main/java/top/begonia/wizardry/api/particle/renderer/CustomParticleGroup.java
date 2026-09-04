@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.renderer.particle;
+package top.begonia.wizardry.api.particle.renderer;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.particle.ParticleEngine;
@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.state.level.ParticleGroupRenderState;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.particle.WizardryParticle;
-import top.begonia.wizardry.client.renderer.particle.state.CustomParticleGroupRenderState;
+import top.begonia.wizardry.api.particle.renderer.state.CustomParticleGroupRenderState;
 
 import java.util.ArrayList;
 import java.util.HashMap;

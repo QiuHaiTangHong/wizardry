@@ -20,6 +20,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.gui.widget.InvisibleButton;
 import top.begonia.wizardry.client.gui.widget.SpellSortButton;

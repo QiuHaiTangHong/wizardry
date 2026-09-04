@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.renderer.particle.state;
+package top.begonia.wizardry.api.particle.renderer.state;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.SubmitNodeCollector;

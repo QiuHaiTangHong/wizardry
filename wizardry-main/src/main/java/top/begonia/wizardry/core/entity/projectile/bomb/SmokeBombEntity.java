@@ -12,7 +12,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
-import top.begonia.wizardry.client.util.ParticleBuilder;
+import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 

@@ -5,6 +5,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ARGB;
@@ -28,6 +30,7 @@ import java.util.List;
 public class WizardryQuadParticle extends WizardryParticle<QuadParticleOptions> {
     private static final double SPREAD_FACTOR = 0.2;
     private static final double IMPACT_FRICTION = 0.2;
+    private static final int DEFAULT_COLOR = ARGB.color(255, 255, 255, 255);
     /**
      * 二维纹理集
      */
@@ -51,15 +54,15 @@ public class WizardryQuadParticle extends WizardryParticle<QuadParticleOptions> 
     /**
      * 粒子的开始颜色 ARGB 格式
      */
-    protected int startColor = 16843009;
+    protected int startColor = DEFAULT_COLOR;
     /**
      * 粒子的当前颜色 ARGB 格式
      */
-    protected int currentColor = 16843009;
+    protected int currentColor = DEFAULT_COLOR;
     /**
      * 粒子的结束颜色 ARGB 格式
      */
-    protected int endColor = 16843009;
+    protected int endColor = DEFAULT_COLOR;
     /**
      * 粒子的角度
      */
@@ -89,6 +92,7 @@ public class WizardryQuadParticle extends WizardryParticle<QuadParticleOptions> 
     ) {
         super(level, options, x, y, z);
         this.spriteSet = options.getSpriteSet();
+        this.quadSize = 0.1F * (this.random.nextFloat() * 0.5F + 0.5F) * 2.0F;
         this.setSpriteFromAge(this.spriteSet);
     }
 
@@ -153,6 +157,10 @@ public class WizardryQuadParticle extends WizardryParticle<QuadParticleOptions> 
         builder.addVertex(scratch.x(), scratch.y(), scratch.z()).setUv(u, v).setColor(color).setLight(lightCoords);
     }
 
+    public RenderType renderType(){
+        return RenderTypes.lightning();
+    }
+
     public float getQuadSize(float partialTick) {
         return this.quadSize;
     }
@@ -185,8 +193,8 @@ public class WizardryQuadParticle extends WizardryParticle<QuadParticleOptions> 
         this.gravity = gravity ? 1.0F : 0.0F;
     }
 
-    public void setCollisions(boolean canCollide) {
-        this.hasPhysics = canCollide;
+    public void hasPhysics(boolean hasPhysics) {
+        this.hasPhysics = hasPhysics;
     }
 
     public void setSpin(double radius, double speed) {
@@ -309,7 +317,7 @@ public class WizardryQuadParticle extends WizardryParticle<QuadParticleOptions> 
             this.relativeY += this.relativeMotionY;
             this.relativeZ += this.relativeMotionZ;
         }
-        float ageFraction = (float) this.age / (float) this.lifetime;
+        float ageFraction = Mth.clamp((float) this.age / (float) this.lifetime, 0.0F, 1.0F);
         this.currentColor = ARGB.linearLerp(ageFraction, startColor, endColor);
         this.setSpriteFromAge(this.spriteSet);
         if (this.hasPhysics) {

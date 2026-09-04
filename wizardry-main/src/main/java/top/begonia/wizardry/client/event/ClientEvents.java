@@ -23,6 +23,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.Equippable;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.*;
@@ -65,13 +66,13 @@ import top.begonia.wizardry.client.renderer.entity.block.ArcaneWorkbenchRender;
 import top.begonia.wizardry.client.renderer.entity.block.BookshelfRender;
 import top.begonia.wizardry.client.renderer.entity.block.ImbuementAltarRender;
 import top.begonia.wizardry.client.renderer.entity.block.LecternRender;
-import top.begonia.wizardry.client.renderer.particle.CustomParticleGroup;
+import top.begonia.wizardry.api.particle.renderer.CustomParticleGroup;
 import top.begonia.wizardry.client.renderer.uniform.MouseUniform;
 import top.begonia.wizardry.core.network.data.HandbookRecipesRequestPayload;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.util.ArmourHelper;
 
-@EventBusSubscriber(modid = Wizardry.MODID)
+@EventBusSubscriber(modid = Wizardry.MODID, value = Dist.CLIENT)
 public class ClientEvents {
     private static MouseUniform mouseUniform;
 
@@ -139,9 +140,6 @@ public class ClientEvents {
         ResourceHandle<RenderTarget> bloomTarget = frame.createInternal("bloom", screenSize);
         FramePass bloomPass = frame.addPass("render_glowing_items");
         bloomPass.readsAndWrites(bloomTarget);
-        bloomPass.executes(() -> {
-            Minecraft minecraft = Minecraft.getInstance();
-        });
     }
 
     @SubscribeEvent

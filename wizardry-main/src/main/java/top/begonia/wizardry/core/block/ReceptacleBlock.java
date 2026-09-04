@@ -30,7 +30,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.util.GeometryUtils;
-import top.begonia.wizardry.client.util.ParticleBuilder;
+import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.entity.block.ReceptacleBlockEntity;
 import top.begonia.wizardry.core.item.SpectralDustItem;

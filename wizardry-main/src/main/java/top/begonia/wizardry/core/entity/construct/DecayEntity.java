@@ -7,7 +7,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
-import top.begonia.wizardry.client.util.ParticleBuilder;
+import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 

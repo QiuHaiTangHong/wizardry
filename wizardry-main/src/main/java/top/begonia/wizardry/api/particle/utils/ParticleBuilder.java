@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.util;
+package top.begonia.wizardry.api.particle.utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -311,7 +311,7 @@ public final class ParticleBuilder {
             quadParticle.scale(scale);
             quadParticle.setGravity(gravity);
             quadParticle.setShaded(shaded);
-            quadParticle.setCollisions(collide);
+            quadParticle.hasPhysics(collide);
             quadParticle.setEntity(entity);
             quadParticle.setTargetPosition(tx, ty, tz);
             quadParticle.setTargetEntity(target);
@@ -358,7 +358,7 @@ public final class ParticleBuilder {
         length = -1;
     }
 
-    public static ParticleBuilder create(IParticleOptionsExtension options, Entity entity) {
+    public static ParticleBuilder create(IParticleOptionsExtension options, @NonNull Entity entity) {
 
         double x = entity.getX() + (entity.level().getRandom().nextDouble() - 0.5D) * (double) entity.getBbWidth();
         double y = entity.getY() + entity.level().getRandom().nextDouble() * (double) entity.getBbHeight();
@@ -367,7 +367,7 @@ public final class ParticleBuilder {
         return ParticleBuilder.instance.particle(options).pos(x, y, z);
     }
 
-    public static ParticleBuilder create(IParticleOptionsExtension options, RandomSource random, double x, double y, double z, double radius, boolean move) {
+    public static ParticleBuilder create(IParticleOptionsExtension options, @NonNull RandomSource random, double x, double y, double z, double radius, boolean move) {
 
         double px = x + (random.nextDouble() * 2 - 1) * radius;
         double py = y + (random.nextDouble() * 2 - 1) * radius;

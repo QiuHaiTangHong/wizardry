@@ -17,6 +17,7 @@ import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
 public abstract class WizardryParticle<T extends IParticleOptionsExtension> extends Particle {
     public static final ParticleRenderType CUSTOM = new ParticleRenderType("wizardry:custom", "WC");
     public ParticleOptions options;
+
     public WizardryParticle(
             ClientLevel level,
             @NonNull T options,
@@ -33,7 +34,7 @@ public abstract class WizardryParticle<T extends IParticleOptionsExtension> exte
             float partialTick
     );
 
-    public RenderType renderType(){
+    public RenderType renderType() {
         return RenderTypes.glint();
     }
 

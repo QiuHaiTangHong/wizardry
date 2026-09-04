@@ -10,7 +10,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.util.ParticleBuilder;
+import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
 import top.begonia.wizardry.core.registry.WizardryItems;
 
 public class SparkBombEntity extends BombEntity {

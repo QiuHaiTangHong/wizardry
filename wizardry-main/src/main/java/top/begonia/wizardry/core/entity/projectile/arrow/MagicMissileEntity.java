@@ -8,7 +8,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
-import top.begonia.wizardry.client.util.ParticleBuilder;
+import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
 import top.begonia.wizardry.core.entity.projectile.MagicArrowEntity;
 import top.begonia.wizardry.core.registry.WizardryEntities;
 import top.begonia.wizardry.core.registry.WizardryParticles;

@@ -20,7 +20,7 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.item.ISpellCastingItem;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
-import top.begonia.wizardry.client.util.ParticleBuilder;
+import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
 import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;

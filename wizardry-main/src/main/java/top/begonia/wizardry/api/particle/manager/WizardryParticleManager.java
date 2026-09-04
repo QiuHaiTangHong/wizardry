@@ -4,6 +4,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.particle.WizardryParticle;
 import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
@@ -19,6 +20,7 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
         this.providerRegistry = providerRegistry;
     }
 
+    @Nullable
     public <T extends IParticleOptionsExtension> WizardryParticle<T> createParticle(
             ClientLevel clientLevel,
             @NonNull T options,
@@ -28,9 +30,13 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
             WizardryParticleProvider<?> provider = this.providerRegistry.get(typeExtension);
             if (provider != null) {
                 return dispatchCreate(provider, clientLevel, options, x, y, z);
+            } else {
+                Wizardry.LOGGER.info("未对粒子类型: {}, 关联 Provider.", options.getType());
+                return null;
             }
+        } else {
+            throw new IllegalArgumentException("未注册的粒子类型: " + options.getType());
         }
-        throw new IllegalArgumentException("未注册的粒子类型: " + options.getType());
     }
 
     @SuppressWarnings("unchecked")
