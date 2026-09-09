@@ -1,12 +1,21 @@
 license="${mod_license}"
+issueTrackerURL="https://github.com/QiuHaiTangHong/wizardry/issues"
+
 [[mods]]
 modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 enumExtensions="META-INF/enum_extensions.json"
-credits='''${mod_credits}'''
+credits='''Designed, coded and textured by Electroblob.
+Discord Moderators: FavouriteDragon, WinDanesz
+Code contributed by: Corail31, 12foo, Shadows-of-Fire, Tora-B, Avatair, Aeronica, UltraHex, Azim-Palmer, raoulvdberge, rafasoares, xinyuan-liu, SettingDust, Aralu115, WinDanesz, ZettaSword.
+Translators: Alsentar (Spanish), MadWrist (Mexican Spanish), VilagVil, kellixon, bigenergy, MugGod2 & DrHesperus (Russian), Hahdrim & Crowller (French), lorrampi (Brazilian Portuguese), ZHENGLOC, dragon-evol, Hokorizero, TUsama & Determancer (Chinese - Simplified), shejery, rewi_wire, 방통 & red1854th (Korean), Trozuu & Olej (Polish), BirdyDragon & Lemopav (German), chesterccj305 (Chinese - Traditional), Bombadil (Hungarian).\nSound Effects: OhhWowProductions, fredzed, deleted_user_3277771, DiscoveryME, OGSoundFX, leosalom, juskiddink'''
+authors="${mod_authors}"
 description="${mod_description}"
-iconFile="assets/wizardry/textures/gui/logo.png"
+iconFile="assets/wizardry/textures/gui/icon.png"
+bannerFile="assets/wizardry/textures/gui/banner.png"
+displayURL="https://github.com/QiuHaiTangHong/wizardry"
+
 [[mixins]]
 config="${mod_id}.mixins.json"
 

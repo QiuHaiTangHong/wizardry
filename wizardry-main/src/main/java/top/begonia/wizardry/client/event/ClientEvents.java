@@ -38,6 +38,8 @@ import top.begonia.wizardry.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.api.event.data.RegisterDelegateUnbakedModelEvent;
 import top.begonia.wizardry.api.event.data.RegisterParticleEvent;
 import top.begonia.wizardry.api.particle.WizardryParticle;
+import top.begonia.wizardry.api.particle.renderer.MultipleQuadParticleFeatureRenderer;
+import top.begonia.wizardry.api.particle.renderer.MultipleQuadParticleGroup;
 import top.begonia.wizardry.client.constants.WizardryKeyMappings;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
 import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
@@ -66,7 +68,6 @@ import top.begonia.wizardry.client.renderer.entity.block.ArcaneWorkbenchRender;
 import top.begonia.wizardry.client.renderer.entity.block.BookshelfRender;
 import top.begonia.wizardry.client.renderer.entity.block.ImbuementAltarRender;
 import top.begonia.wizardry.client.renderer.entity.block.LecternRender;
-import top.begonia.wizardry.api.particle.renderer.CustomParticleGroup;
 import top.begonia.wizardry.client.renderer.uniform.MouseUniform;
 import top.begonia.wizardry.core.network.data.HandbookRecipesRequestPayload;
 import top.begonia.wizardry.core.registry.*;
@@ -146,8 +147,13 @@ public class ClientEvents {
     public static void onRegisterParticleGroups(@NonNull RegisterParticleGroupsEvent event) {
         event.register(
                 WizardryParticle.CUSTOM,
-                CustomParticleGroup::new
+                MultipleQuadParticleGroup::new
         );
+    }
+
+    @SubscribeEvent
+    public static void onRegisterFeatureRenderers(@NonNull RegisterFeatureRenderersEvent event) {
+        event.register(MultipleQuadParticleFeatureRenderer.TYPE, new MultipleQuadParticleFeatureRenderer());
     }
 
     @SubscribeEvent

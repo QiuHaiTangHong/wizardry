@@ -1,27 +1,24 @@
 package top.begonia.wizardry.api.particle.impl;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.SingleQuadParticle;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.particle.WizardryParticle;
 import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
+import top.begonia.wizardry.api.particle.renderer.state.MultipleQuadParticleRenderState;
 import top.begonia.wizardry.core.entity.ICustomHitbox;
 
 import javax.annotation.Nullable;
@@ -96,69 +93,102 @@ public class WizardryQuadParticle extends WizardryParticle<QuadParticleOptions> 
         this.setSpriteFromAge(this.spriteSet);
     }
 
-    @Override
-    public void extractRenderState(
-            @NonNull VertexConsumer vertexBuilder,
-            @NonNull Camera camera,
-            @NotNull CameraRenderState cameraRenderState,
-            @NotNull PoseStack.Pose pose,
-            float partialTick
-    ) {
-        Vec3 pos = camera.position();
-        float x = (float) (Mth.lerp(partialTick, this.xo, this.x) - pos.x());
-        float y = (float) (Mth.lerp(partialTick, this.yo, this.y) - pos.y());
-        float z = (float) (Mth.lerp(partialTick, this.zo, this.z) - pos.z());
+    public double x() {
+        return this.x;
+    }
+
+    public double y() {
+        return this.y;
+    }
+
+    public double z() {
+        return this.z;
+    }
+
+    public void extract(MultipleQuadParticleRenderState particleTypeRenderState, Camera camera, float partialTickTime) {
         Quaternionf rotation = new Quaternionf();
-        this.getFacingCameraMode().setRotation(rotation, camera, partialTick);
+        this.getFacingCameraMode().setRotation(rotation, camera, partialTickTime);
         if (this.roll != 0.0F) {
-            rotation.rotateZ(Mth.lerp(partialTick, this.oRoll, this.roll));
+            rotation.rotateZ(Mth.lerp(partialTickTime, this.oRoll, this.roll));
         }
-        this.extractRotatedQuad(
-                vertexBuilder,
-                x, y, z,
-                rotation,
-                this.getQuadSize(partialTick),
-                this.getU0(), this.getU1(),
-                this.getV0(), this.getV1(),
-                this.currentColor, this.getLightCoords(partialTick)
+
+        // 3. 获取位置信息 (相对于相机)
+        Vec3 pos = camera.position();
+        float baseX = (float) (Mth.lerp(partialTickTime, this.xo, this.x) - pos.x());
+        float baseY = (float) (Mth.lerp(partialTickTime, this.yo, this.y) - pos.y());
+        float baseZ = (float) (Mth.lerp(partialTickTime, this.zo, this.z) - pos.z());
+
+        // 4. 获取纹理和颜色属性
+        float u0 = this.getU0();
+        float u1 = this.getU1();
+        float v0 = this.getV0();
+        float v1 = this.getV1();
+        int color = this.currentColor;
+        int light = this.getLightCoords(partialTickTime);
+        float scale = this.getQuadSize(partialTickTime);
+        Layer layer = this.getLayer();
+        particleTypeRenderState.addQuad(
+                layer,
+                baseX, baseY, baseZ,
+                rotation.x, rotation.y, rotation.z, rotation.w,
+                scale, u0, u1, v0, v1, color, light
         );
     }
 
-    public SingleQuadParticle.FacingCameraMode getFacingCameraMode() {
-        return SingleQuadParticle.FacingCameraMode.LOOKAT_XYZ;
+    protected Layer getLayer() {
+        return Layer.bySprite(this.currentSprite);
     }
 
-    public void extractRotatedQuad(
-            VertexConsumer builder,
-            float x, float y, float z,
-            Quaternionf rotation,
-            float scale,
-            float u0, float u1,
-            float v0, float v1,
-            int color, int lightCoords
+    public record Layer(
+            boolean translucent,
+            Identifier textureAtlasLocation,
+            RenderPipeline pipeline
     ) {
-        this.extractVertex(builder, rotation, x, y, z, 1.0F, -1.0F, scale, u1, v1, color, lightCoords);
-        this.extractVertex(builder, rotation, x, y, z, 1.0F, 1.0F, scale, u1, v0, color, lightCoords);
-        this.extractVertex(builder, rotation, x, y, z, -1.0F, 1.0F, scale, u0, v0, color, lightCoords);
-        this.extractVertex(builder, rotation, x, y, z, -1.0F, -1.0F, scale, u0, v1, color, lightCoords);
+        public static final WizardryQuadParticle.Layer OPAQUE_TERRAIN = new WizardryQuadParticle.Layer(
+                false,
+                TextureAtlas.LOCATION_BLOCKS,
+                RenderPipelines.OPAQUE_PARTICLE
+        );
+        public static final WizardryQuadParticle.Layer TRANSLUCENT_TERRAIN = new WizardryQuadParticle.Layer(
+                true,
+                TextureAtlas.LOCATION_BLOCKS,
+                RenderPipelines.TRANSLUCENT_PARTICLE
+        );
+        public static final WizardryQuadParticle.Layer OPAQUE_ITEMS = new WizardryQuadParticle.Layer(
+                false,
+                TextureAtlas.LOCATION_ITEMS,
+                RenderPipelines.OPAQUE_PARTICLE
+        );
+        public static final WizardryQuadParticle.Layer TRANSLUCENT_ITEMS = new WizardryQuadParticle.Layer(
+                true,
+                TextureAtlas.LOCATION_ITEMS,
+                RenderPipelines.TRANSLUCENT_PARTICLE
+        );
+        public static final WizardryQuadParticle.Layer OPAQUE = new WizardryQuadParticle.Layer(
+                false,
+                TextureAtlas.LOCATION_PARTICLES,
+                RenderPipelines.OPAQUE_PARTICLE
+        );
+        public static final WizardryQuadParticle.Layer TRANSLUCENT = new WizardryQuadParticle.Layer(
+                true,
+                TextureAtlas.LOCATION_PARTICLES,
+                RenderPipelines.TRANSLUCENT_PARTICLE
+        );
+
+        public static WizardryQuadParticle.Layer bySprite(@NonNull TextureAtlasSprite sprite) {
+            boolean translucent = sprite.transparency().hasTranslucent();
+            if (sprite.atlasLocation().equals(TextureAtlas.LOCATION_BLOCKS)) {
+                return translucent ? TRANSLUCENT_TERRAIN : OPAQUE_TERRAIN;
+            } else if (sprite.atlasLocation().equals(TextureAtlas.LOCATION_ITEMS)) {
+                return translucent ? TRANSLUCENT_ITEMS : OPAQUE_ITEMS;
+            } else {
+                return translucent ? TRANSLUCENT : OPAQUE;
+            }
+        }
     }
 
-    private void extractVertex(
-            @NonNull VertexConsumer builder,
-            Quaternionf rotation,
-            float x, float y, float z,
-            float nx, float ny,
-            float scale,
-            float u, float v,
-            int color,
-            int lightCoords
-    ) {
-        Vector3f scratch = (new Vector3f(nx, ny, 0.0F)).rotate(rotation).mul(scale).add(x, y, z);
-        builder.addVertex(scratch.x(), scratch.y(), scratch.z()).setUv(u, v).setColor(color).setLight(lightCoords);
-    }
-
-    public RenderType renderType(){
-        return RenderTypes.lightning();
+    public FacingCameraMode getFacingCameraMode() {
+        return FacingCameraMode.LOOKAT_XYZ;
     }
 
     public float getQuadSize(float partialTick) {
@@ -227,7 +257,7 @@ public class WizardryQuadParticle extends WizardryParticle<QuadParticleOptions> 
         this.startColor = ARGB.colorFromFloat(alpha, red, green, blue);
     }
 
-    public void setCurrentColor(float alpha, float red, float green, float blue){
+    public void setCurrentColor(float alpha, float red, float green, float blue) {
         this.currentColor = ARGB.colorFromFloat(alpha, red, green, blue);
     }
 
@@ -380,8 +410,8 @@ public class WizardryQuadParticle extends WizardryParticle<QuadParticleOptions> 
     }
 
     public interface FacingCameraMode {
-        SingleQuadParticle.FacingCameraMode LOOKAT_XYZ = (target, camera, partialTickTime) -> target.set(camera.rotation());
-        SingleQuadParticle.FacingCameraMode LOOKAT_Y = (target, camera, partialTickTime) -> target.set(0.0F, camera.rotation().y, 0.0F, camera.rotation().w);
+        FacingCameraMode LOOKAT_XYZ = (target, camera, partialTickTime) -> target.set(camera.rotation());
+        FacingCameraMode LOOKAT_Y = (target, camera, partialTickTime) -> target.set(0.0F, camera.rotation().y, 0.0F, camera.rotation().w);
 
         void setRotation(Quaternionf var1, Camera var2, float var3);
     }
