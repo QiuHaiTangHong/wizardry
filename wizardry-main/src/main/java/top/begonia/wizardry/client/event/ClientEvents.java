@@ -37,9 +37,9 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.api.event.data.RegisterDelegateUnbakedModelEvent;
 import top.begonia.wizardry.api.event.data.RegisterParticleEvent;
-import top.begonia.wizardry.api.particle.WizardryParticle;
-import top.begonia.wizardry.api.particle.renderer.MultipleQuadParticleFeatureRenderer;
-import top.begonia.wizardry.api.particle.renderer.MultipleQuadParticleGroup;
+import top.begonia.wizardry.api.particle.CompositeQuadParticle;
+import top.begonia.wizardry.api.particle.renderer.CompositeQuadParticleFeatureRenderer;
+import top.begonia.wizardry.api.particle.renderer.CompositeQuadParticleGroup;
 import top.begonia.wizardry.client.constants.WizardryKeyMappings;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
 import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
@@ -58,7 +58,8 @@ import top.begonia.wizardry.client.model.item.RunestoneUnbakedItemModel;
 import top.begonia.wizardry.client.model.item.SpellBookUnbakedItemModel;
 import top.begonia.wizardry.client.model.loader.WizardryModelLoader;
 import top.begonia.wizardry.client.network.ClientPayloadHandler;
-import top.begonia.wizardry.client.particle.*;
+import top.begonia.wizardry.client.particle.quad.*;
+import top.begonia.wizardry.client.particle.ray.BeamParticle;
 import top.begonia.wizardry.client.renderer.WizardryPotionRender;
 import top.begonia.wizardry.client.renderer.entity.BlackHoleRenderer;
 import top.begonia.wizardry.client.renderer.entity.BubbleRenderer;
@@ -146,14 +147,14 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onRegisterParticleGroups(@NonNull RegisterParticleGroupsEvent event) {
         event.register(
-                WizardryParticle.CUSTOM,
-                MultipleQuadParticleGroup::new
+                CompositeQuadParticle.RENDER_TYPE,
+                CompositeQuadParticleGroup::new
         );
     }
 
     @SubscribeEvent
     public static void onRegisterFeatureRenderers(@NonNull RegisterFeatureRenderersEvent event) {
-        event.register(MultipleQuadParticleFeatureRenderer.TYPE, new MultipleQuadParticleFeatureRenderer());
+        event.register(CompositeQuadParticleFeatureRenderer.TYPE, new CompositeQuadParticleFeatureRenderer());
     }
 
     @SubscribeEvent

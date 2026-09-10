@@ -4,7 +4,6 @@ import com.mojang.blaze3d.opengl.GlProgram;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
@@ -24,7 +23,7 @@ import java.util.Map;
 
 @Mod(value = Wizardry.MODID, dist = Dist.CLIENT)
 public class WizardryClient {
-    public static WizardryParticleManager particleManager;
+    public static WizardryParticleManager particleManager = new WizardryParticleManager();
     public WizardryClient(@NonNull IEventBus modEventBus, @NonNull ModContainer container) {
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         modEventBus.addListener(this::clientSetup);
@@ -36,7 +35,7 @@ public class WizardryClient {
             GlProgram.BUILT_IN_UNIFORMS.add("MouseInfo");
             Map<ParticleTypeExtension<?>, WizardryParticleProvider<? extends IParticleOptionsExtension>> particleProviders = new HashMap<>();
             NeoForge.EVENT_BUS.post(new RegisterParticleEvent(particleProviders));
-            WizardryClient.particleManager = new WizardryParticleManager(particleProviders);
+            WizardryClient.particleManager.updateProvider(particleProviders);
             Wizardry.LOGGER.info("aaa");
         });
     }

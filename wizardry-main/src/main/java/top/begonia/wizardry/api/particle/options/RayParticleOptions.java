@@ -10,27 +10,27 @@ import net.minecraft.network.codec.StreamCodec;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
-public class BeamParticleOptions implements IParticleOptionsExtension {
-    private final ParticleType<BeamParticleOptions> type;
+public class RayParticleOptions implements IParticleOptionsExtension {
+    private final ParticleType<RayParticleOptions> type;
 
     @Contract("_ -> new")
-    public static @NonNull MapCodec<BeamParticleOptions> codec(ParticleType<BeamParticleOptions> type) {
+    public static @NonNull MapCodec<RayParticleOptions> codec(ParticleType<RayParticleOptions> type) {
         return RecordCodecBuilder.mapCodec(instance ->
                 instance.group(
-                        Codec.DOUBLE.fieldOf("targetX").forGetter(BeamParticleOptions::targetX),
-                        Codec.DOUBLE.fieldOf("targetY").forGetter(BeamParticleOptions::targetY),
-                        Codec.DOUBLE.fieldOf("targetZ").forGetter(BeamParticleOptions::targetZ)
-                ).apply(instance, (tx, ty, tz) -> new BeamParticleOptions(type, tx, ty, tz))
+                        Codec.DOUBLE.fieldOf("targetX").forGetter(RayParticleOptions::targetX),
+                        Codec.DOUBLE.fieldOf("targetY").forGetter(RayParticleOptions::targetY),
+                        Codec.DOUBLE.fieldOf("targetZ").forGetter(RayParticleOptions::targetZ)
+                ).apply(instance, (tx, ty, tz) -> new RayParticleOptions(type, tx, ty, tz))
         );
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public static @NonNull StreamCodec<RegistryFriendlyByteBuf, BeamParticleOptions> streamCodec(ParticleType<BeamParticleOptions> type) {
+    public static @NonNull StreamCodec<RegistryFriendlyByteBuf, RayParticleOptions> streamCodec(ParticleType<RayParticleOptions> type) {
         return StreamCodec.composite(
-                ByteBufCodecs.DOUBLE, BeamParticleOptions::targetX,
-                ByteBufCodecs.DOUBLE, BeamParticleOptions::targetY,
-                ByteBufCodecs.DOUBLE, BeamParticleOptions::targetZ,
-                (tx, ty, tz) -> new BeamParticleOptions(type, tx, ty, tz)
+                ByteBufCodecs.DOUBLE, RayParticleOptions::targetX,
+                ByteBufCodecs.DOUBLE, RayParticleOptions::targetY,
+                ByteBufCodecs.DOUBLE, RayParticleOptions::targetZ,
+                (tx, ty, tz) -> new RayParticleOptions(type, tx, ty, tz)
         );
     }
 
@@ -38,7 +38,7 @@ public class BeamParticleOptions implements IParticleOptionsExtension {
     private final double targetY;
     private final double targetZ;
 
-    public BeamParticleOptions(ParticleType<BeamParticleOptions> type, double targetX, double targetY, double targetZ) {
+    public RayParticleOptions(ParticleType<RayParticleOptions> type, double targetX, double targetY, double targetZ) {
         this.targetX = targetX;
         this.targetY = targetY;
         this.targetZ = targetZ;
@@ -61,7 +61,7 @@ public class BeamParticleOptions implements IParticleOptionsExtension {
     }
 
     @Override
-    public @NonNull ParticleType<BeamParticleOptions> getType() {
+    public @NonNull ParticleType<RayParticleOptions> getType() {
         return this.type;
     }
 

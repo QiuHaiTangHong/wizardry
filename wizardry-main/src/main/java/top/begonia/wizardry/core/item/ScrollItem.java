@@ -15,9 +15,9 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.particle.BeamParticle;
+import top.begonia.wizardry.client.particle.ray.BeamParticle;
 import top.begonia.wizardry.api.event.SpellCastEvent;
-import top.begonia.wizardry.api.particle.options.BeamParticleOptions;
+import top.begonia.wizardry.api.particle.options.RayParticleOptions;
 import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
 import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
 import top.begonia.wizardry.api.item.ISpellCastingItem;
@@ -54,7 +54,7 @@ public class ScrollItem extends Item implements ISpellCastingItem, IWorkbenchIte
         if (level instanceof ClientLevel clientLevel) {
             BeamParticle beamParticle = new BeamParticle(
                     clientLevel,
-                    new BeamParticleOptions(WizardryParticles.BEAM.get(), player.getX(), player.getY(), player.getZ()),
+                    new RayParticleOptions(WizardryParticles.BEAM.get(), player.getX(), player.getY(), player.getZ()),
                     player.getX(), player.getY(), player.getZ()
             );
             Minecraft.getInstance().particleEngine.add(beamParticle);

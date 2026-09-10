@@ -12,13 +12,13 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.particle.WizardryParticle;
-import top.begonia.wizardry.api.particle.impl.WizardryQuadParticle;
+import top.begonia.wizardry.api.particle.CompositeQuadParticle;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public final class ParticleBuilder {
     public static final ParticleBuilder instance = new ParticleBuilder();
     private IParticleOptionsExtension options;
@@ -270,53 +270,50 @@ public final class ParticleBuilder {
         }
 
 
-        WizardryParticle<?> particle = WizardryClient.particleManager.createParticle(level, options, x, y, z);
+        CompositeQuadParticle<?> particle = WizardryClient.particleManager.createParticle(level, options, x, y, z);
 
         if (particle == null) {
             reset();
             return;
         }
 
-        if (particle instanceof WizardryQuadParticle quadParticle) {
+        if (particle instanceof CompositeQuadParticle<?> compositeQuadParticle) {
             if (!Double.isNaN(vx) && !Double.isNaN(vy) && !Double.isNaN(vz)) {
-                quadParticle.setParticleSpeed(vx, vy, vz);
+                compositeQuadParticle.setParticleSpeed(vx, vy, vz);
             }
             if (r >= 0 && g >= 0 && b >= 0) {
-                quadParticle.setCurrentColor(1.0f, r, g, b);
-                quadParticle.setEndColor(1.0f, r, g, b);
-                quadParticle.setStartColor(1.0f, r, g, b);
+                compositeQuadParticle.currentColor(r, g, b);
+                compositeQuadParticle.endColor(r, g, b);
+                compositeQuadParticle.startColor(r, g, b);
             }
             if (fr >= 0 && fg >= 0 && fb >= 0) {
-                quadParticle.setEndColor(1.0f, fr, fg, fb);
+                compositeQuadParticle.endColor(fr, fg, fb);
             }
             if (lifetime >= 0) {
-                quadParticle.setLifetime(lifetime);
+                compositeQuadParticle.setLifetime(lifetime);
             }
             if (radius > 0) {
-                quadParticle.setSpin(radius, rpt);
+                compositeQuadParticle.setSpin(radius, rpt);
             }
             if (!Float.isNaN(yaw) && !Float.isNaN(pitch)) {
-                quadParticle.setFacing(yaw, pitch);
-            }
-            if (seed != 0) {
-                quadParticle.setSeed(seed);
+                compositeQuadParticle.setFacing(yaw, pitch);
             }
             if (!Double.isNaN(tvx) && !Double.isNaN(tvy) && !Double.isNaN(tvz)) {
-                quadParticle.setTargetVelocity(tvx, tvy, tvz);
+                compositeQuadParticle.setTargetVelocity(tvx, tvy, tvz);
             }
             if (length > 0) {
-                quadParticle.setLength(length);
+                compositeQuadParticle.setLength(length);
             }
 
-            quadParticle.scale(scale);
-            quadParticle.setGravity(gravity);
-            quadParticle.setShaded(shaded);
-            quadParticle.hasPhysics(collide);
-            quadParticle.setEntity(entity);
-            quadParticle.setTargetPosition(tx, ty, tz);
-            quadParticle.setTargetEntity(target);
+            compositeQuadParticle.scale(scale);
+            compositeQuadParticle.setGravity(gravity);
+            compositeQuadParticle.setShaded(shaded);
+            compositeQuadParticle.hasPhysics(collide);
+            compositeQuadParticle.setEntity(entity);
+            compositeQuadParticle.setTargetPosition(tx, ty, tz);
+            compositeQuadParticle.setTargetEntity(target);
 
-            Minecraft.getInstance().particleEngine.add(quadParticle);
+            Minecraft.getInstance().particleEngine.add(compositeQuadParticle);
 
             reset();
         }

@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.particle.options.BeamParticleOptions;
+import top.begonia.wizardry.api.particle.options.RayParticleOptions;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
@@ -50,7 +50,7 @@ public class CelestialSmiteRaySpell extends AbstractRaySpell {
             }
         } else if (level instanceof ClientLevel clientLevel) {
             ParticleBuilder.create(
-                            new BeamParticleOptions(WizardryParticles.BEAM.get(), hit.x, hit.y, hit.z)
+                            new RayParticleOptions(WizardryParticles.BEAM.get(), hit.x, hit.y, hit.z)
                     ).pos(hit.x, level.getHeight(), hit.z).target(hit).scale(8)
                     .clr(0xffbf00).time(10).spawn(clientLevel);
             ParticleBuilder.create(

@@ -29,8 +29,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
+import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.GeometryUtils;
-import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.entity.block.ReceptacleBlockEntity;
 import top.begonia.wizardry.core.item.SpectralDustItem;
@@ -149,28 +149,29 @@ public class ReceptacleBlock extends BaseEntityBlock {
                 }
                 int[] colours = PARTICLE_COLOURS.get(element);
                 if (level instanceof ClientLevel clientLevel) {
-                    ParticleBuilder.create(
-                                    new QuadParticleOptions(WizardryParticles.FLASH.get())
-                            )
-                            .pos(centre)
-                            .scale(0.35f)
-                            .time(48)
-                            .clr(colours[0])
-                            .spawn(clientLevel);
+                    WizardryClient.particleManager.createParticleOpt(
+                            clientLevel,
+                            new QuadParticleOptions(WizardryParticles.FLASH.get()),
+                            centre.x, centre.y, centre.z
+                    ).ifPresent(p -> p
+                            .scale(0.35f).time(48).color(colours[0]).build()
+                    );
                     double r = 0.12;
                     for (int i = 0; i < 3; i++) {
                         double x = r * (rand.nextDouble() * 2 - 1);
                         double y = r * (rand.nextDouble() * 2 - 1);
                         double z = r * (rand.nextDouble() * 2 - 1);
-                        ParticleBuilder.create(
-                                        new QuadParticleOptions(WizardryParticles.DUST.get())
-                                )
-                                .pos(centre.x + x, centre.y + y, centre.z + z)
-                                .vel(x * -0.03, 0.02, z * -0.03)
+                        WizardryClient.particleManager.createParticleOpt(
+                                clientLevel,
+                                new QuadParticleOptions(WizardryParticles.DUST.get()),
+                                centre.x + x, centre.y + y, centre.z + z
+                        ).ifPresent(p -> p
+                                .speed(x * -0.03, 0.02, z * -0.03)
                                 .time(24 + rand.nextInt(8))
-                                .clr(colours[1])
-                                .fade(colours[2])
-                                .spawn(clientLevel);
+                                .color(colours[1])
+                                .endColor(colours[2])
+                                .build()
+                        );
                     }
                 }
             }
