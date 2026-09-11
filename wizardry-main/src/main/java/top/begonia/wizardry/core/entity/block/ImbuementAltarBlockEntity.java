@@ -118,7 +118,7 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
 
                         int[] colours = ReceptacleBlock.PARTICLE_COLOURS.get(elements[i]);
 
-                        WizardryClient.particleManager.createParticleOpt(
+                        WizardryClient.particleManager.getParticle(
                                 clientLevel,
                                 clientLevel.getRandom(),
                                 new QuadParticleOptions(WizardryParticles.DUST.get()),

@@ -96,7 +96,7 @@ public class LecternBlock extends BaseEntityBlock {
         );
 
         if (entityplayer != null && level instanceof ClientLevel clientLevel) {
-            WizardryClient.particleManager.createParticleOpt(
+            WizardryClient.particleManager.getParticle(
                     clientLevel,
                     new QuadParticleOptions(WizardryParticles.DUST.get()),
                     pos.getX() + random.nextFloat(), pos.getY() + 1, pos.getZ() + random.nextFloat()

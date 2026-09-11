@@ -44,7 +44,7 @@ public class SmokeBombEntity extends BombEntity {
     @Override
     protected void createParticles(ClientLevel level) {
         Vec3 hitPos = this.position();
-        WizardryClient.particleManager.createParticleOpt(
+        WizardryClient.particleManager.getParticle(
                 level,
                 new QuadParticleOptions(WizardryParticles.FLASH.get()),
                 hitPos.x, hitPos.y, hitPos.z
@@ -56,7 +56,7 @@ public class SmokeBombEntity extends BombEntity {
         this.level().addParticle(ParticleTypes.EXPLOSION, hitPos.x(), hitPos.y(), hitPos.z(), 0, 0, 0);
 
         for (int i = 0; i < 60 * blastMultiplier; i++) {
-            WizardryClient.particleManager.createParticleOpt(
+            WizardryClient.particleManager.getParticle(
                     level,
                     this.random,
                     new QuadParticleOptions(WizardryParticles.FLASH.get()),
@@ -73,7 +73,7 @@ public class SmokeBombEntity extends BombEntity {
                     }
             );
 
-            WizardryClient.particleManager.createParticleOpt(
+            WizardryClient.particleManager.getParticle(
                     level,
                     this.random,
                     new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),

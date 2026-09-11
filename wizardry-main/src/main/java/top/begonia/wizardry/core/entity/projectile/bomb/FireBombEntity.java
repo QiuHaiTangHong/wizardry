@@ -91,7 +91,7 @@ public class FireBombEntity extends BombEntity {
     @Override
     protected void createParticles(ClientLevel level) {
         Vec3 hitPos = this.position();
-        WizardryClient.particleManager.createParticleOpt(
+        WizardryClient.particleManager.getParticle(
                 level,
                 new QuadParticleOptions(WizardryParticles.FLASH.get()),
                 hitPos.x, hitPos.y, hitPos.z
@@ -100,7 +100,7 @@ public class FireBombEntity extends BombEntity {
                 .spawn()
         );
         for (int i = 0; i < 60 * this.blastMultiplier; i++) {
-            WizardryClient.particleManager.createParticleOpt(
+            WizardryClient.particleManager.getParticle(
                     level,
                     this.random,
                     new QuadParticleOptions(WizardryParticles.MAGIC_FIRE.get()),
@@ -112,7 +112,7 @@ public class FireBombEntity extends BombEntity {
                     .spawn()
             );
 
-            WizardryClient.particleManager.createParticleOpt(
+            WizardryClient.particleManager.getParticle(
                     level,
                     this.random,
                     new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),

@@ -62,7 +62,7 @@ public class DecayEntity extends MagicConstructEntity {
             float angle = this.random.nextFloat() * (float) Math.PI * 2;
             float brightness = this.random.nextFloat() * 0.4f;
 
-            WizardryClient.particleManager.createParticleOpt(
+            WizardryClient.particleManager.getParticle(
                     clientLevel,
                     new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),
                     this.getX() + radius * Mth.cos(angle), this.getY(), this.getZ() + radius * Mth.sin(angle)

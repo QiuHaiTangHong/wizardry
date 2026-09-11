@@ -21,57 +21,30 @@ import top.begonia.wizardry.core.registry.WizardryParticles;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * 巫师粒子系统中央调度器。
+ * <p>
+ * 负责管理粒子 Provider 注册表、统一创建入口及常用特效快捷生成。
+ * </p>
+ *
+ * @see ParticleInitAccessor
+ * @see WizardryParticleProvider
+ */
 public class WizardryParticleManager implements ParticleResourceAccessor {
     private Map<ParticleTypeExtension<?>, WizardryParticleProvider<? extends IParticleOptionsExtension>> providerRegistry;
 
     public WizardryParticleManager() {
     }
 
+    /**
+     * 注入 Provider 映射表
+     */
     public void updateProvider(Map<ParticleTypeExtension<?>, WizardryParticleProvider<? extends IParticleOptionsExtension>> providerRegistry) {
         this.providerRegistry = providerRegistry;
     }
 
-    @Nullable
-    public <T extends IParticleOptionsExtension> CompositeQuadParticle<T> createParticle(
-            ClientLevel clientLevel,
-            @NonNull T options,
-            double x, double y, double z
-    ) {
-        if (options.getType() instanceof ParticleTypeExtension<?> typeExtension) {
-            WizardryParticleProvider<?> provider = this.providerRegistry.get(typeExtension);
-            if (provider != null) {
-                return dispatchCreate(provider, clientLevel, options, x, y, z);
-            } else {
-                Wizardry.LOGGER.info("未对粒子类型: {}, 关联 Provider.", options.getType());
-                return null;
-            }
-        } else {
-            throw new IllegalArgumentException("未注册的粒子类型: " + options.getType());
-        }
-    }
-
     @NotNull
-    public <T extends IParticleOptionsExtension> Optional<ParticleInitAccessor> createParticleOpt(
-            ClientLevel clientLevel,
-            @NonNull T options,
-            double x, double y, double z
-    ) {
-        if (options.getType() instanceof ParticleTypeExtension<?> typeExtension) {
-            WizardryParticleProvider<?> provider = this.providerRegistry.get(typeExtension);
-            if (provider != null) {
-                return Optional.ofNullable(dispatchCreate(provider, clientLevel, options, x, y, z));
-            } else {
-                Wizardry.LOGGER.info("未对粒子类型: {}, 关联 Provider.", options.getType());
-                return Optional.empty();
-            }
-        } else {
-            Wizardry.LOGGER.warn("未注册的粒子类型: " + options.getType());
-            return Optional.empty();
-        }
-    }
-
-    @NotNull
-    public <T extends IParticleOptionsExtension> Optional<ParticleInitAccessor> createParticleOpt(
+    public <T extends IParticleOptionsExtension> Optional<ParticleInitAccessor> getParticle(
             ClientLevel clientLevel,
             @NonNull RandomSource random,
             @NonNull T options,
@@ -81,26 +54,44 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
         double px = x + (random.nextDouble() * 2 - 1) * radius;
         double py = y + (random.nextDouble() * 2 - 1) * radius;
         double pz = z + (random.nextDouble() * 2 - 1) * radius;
+        ParticleInitAccessor particleInitAccessor = this.createParticle(clientLevel, options, px, py, pz);
+        if (particleInitAccessor != null && move) {
+            particleInitAccessor.speed(px - x, py - y, pz - z);
+        }
+        return Optional.ofNullable(particleInitAccessor);
+    }
+
+    @NotNull
+    public <T extends IParticleOptionsExtension> Optional<ParticleInitAccessor> getParticle(
+            ClientLevel clientLevel,
+            @NonNull T options,
+            double x, double y, double z
+    ) {
+        return Optional.ofNullable(this.createParticle(clientLevel, options, x, y, z));
+    }
+
+    @Nullable
+    protected <T extends IParticleOptionsExtension> ParticleInitAccessor createParticle(
+            ClientLevel clientLevel,
+            @NonNull T options,
+            double x, double y, double z
+    ) {
         if (options.getType() instanceof ParticleTypeExtension<?> typeExtension) {
             WizardryParticleProvider<?> provider = this.providerRegistry.get(typeExtension);
             if (provider != null) {
-                CompositeQuadParticle<T> particle = dispatchCreate(provider, clientLevel, options, x, y, z);
-                if (particle != null && move){
-                    particle.speed(px - x, py - y, pz - z);
-                }
-                return Optional.ofNullable(particle);
+                return dispatchCreate(provider, clientLevel, options, x, y, z);
             } else {
-                Wizardry.LOGGER.info("未对粒子类型: {}, 关联 Provider.", options.getType());
-                return Optional.empty();
+                Wizardry.LOGGER.warn("未对粒子类型: {}, 关联 Provider.", options.getType());
+                return null;
             }
         } else {
-            Wizardry.LOGGER.warn("未注册的粒子类型: " + options.getType());
-            return Optional.empty();
+            Wizardry.LOGGER.warn("未注册的粒子类型: {}", options.getType());
+            return null;
         }
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends IParticleOptionsExtension> CompositeQuadParticle<T> dispatchCreate(
+    protected <T extends IParticleOptionsExtension> CompositeQuadParticle<T> dispatchCreate(
             WizardryParticleProvider<?> rawProvider,
             ClientLevel clientLevel,
             T options,
@@ -110,13 +101,16 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
         return provider.createParticle(this, clientLevel, options, x, y, z);
     }
 
+    /**
+     * 快捷特效：电击/火花效果（伴随原版烟雾）。
+     */
     public void spawnShockParticles(ClientLevel level, double x, double y, double z) {
         double px, py, pz;
         for (int i = 0; i < 8; i++) {
             px = x + level.getRandom().nextDouble() - 0.5;
             py = y + level.getRandom().nextDouble() - 0.5;
             pz = z + level.getRandom().nextDouble() - 0.5;
-            this.createParticleOpt(
+            this.getParticle(
                     level,
                     new QuadParticleOptions(WizardryParticles.SPARK.get()),
                     px, py, pz
@@ -128,13 +122,15 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
         }
     }
 
+    /**
+     * 快捷特效：治疗/增益效果（上升气泡 + 跟随光环）。
+     */
     public void spawnHealParticles(ClientLevel level, LivingEntity entity) {
-
         for (int i = 0; i < 10; i++) {
             double x = entity.getX() + level.getRandom().nextDouble() * 2 - 1;
             double y = entity.getY() + entity.getEyeHeight() - 0.5 + level.getRandom().nextDouble();
             double z = entity.getZ() + level.getRandom().nextDouble() * 2 - 1;
-            this.createParticleOpt(
+            this.getParticle(
                     level,
                     new QuadParticleOptions(WizardryParticles.SPARKLE.get()),
                     x, y, z
@@ -144,7 +140,7 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
             );
         }
 
-        this.createParticleOpt(
+        this.getParticle(
                 level,
                 new QuadParticleOptions(WizardryParticles.BUFF.get()),
                 entity.getX(), entity.getY(), entity.getZ()

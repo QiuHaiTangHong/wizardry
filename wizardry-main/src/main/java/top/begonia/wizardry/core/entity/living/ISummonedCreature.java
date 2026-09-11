@@ -135,7 +135,7 @@ public interface ISummonedCreature extends TraceableEntity {
                 && thisEntity.level() instanceof ClientLevel clientLevel
                 && thisEntity.getRandom().nextInt(8) == 0
         ) {
-            WizardryClient.particleManager.createParticleOpt(
+            WizardryClient.particleManager.getParticle(
                     clientLevel,
                     new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),
                     thisEntity.getX(), thisEntity.getY() + thisEntity.getRandom().nextDouble() * 1.5, thisEntity.getZ()

@@ -149,7 +149,7 @@ public class ReceptacleBlock extends BaseEntityBlock {
                 }
                 int[] colours = PARTICLE_COLOURS.get(element);
                 if (level instanceof ClientLevel clientLevel) {
-                    WizardryClient.particleManager.createParticleOpt(
+                    WizardryClient.particleManager.getParticle(
                             clientLevel,
                             new QuadParticleOptions(WizardryParticles.FLASH.get()),
                             centre.x, centre.y, centre.z
@@ -164,7 +164,7 @@ public class ReceptacleBlock extends BaseEntityBlock {
                         double x = r * (rand.nextDouble() * 2 - 1);
                         double y = r * (rand.nextDouble() * 2 - 1);
                         double z = r * (rand.nextDouble() * 2 - 1);
-                        WizardryClient.particleManager.createParticleOpt(
+                        WizardryClient.particleManager.getParticle(
                                 clientLevel,
                                 new QuadParticleOptions(WizardryParticles.DUST.get()),
                                 centre.x + x, centre.y + y, centre.z + z

@@ -241,7 +241,7 @@ public class LecternScreen extends SpellInfoScreen implements ISpellSortable {
                                         Vec3 pos = GeometryUtils.getFaceCentre(blockEntity.getBlockPos(), side)
                                                 .add(new Vec3(side.getUnitVec3f())
                                                 .scale(GeometryUtils.ANTI_Z_FIGHTING_OFFSET));
-                                        WizardryClient.particleManager.createParticleOpt(
+                                        WizardryClient.particleManager.getParticle(
                                                 level,
                                                 new QuadParticleOptions(WizardryParticles.BLOCK_HIGHLIGHT.get()),
                                                 pos.x, pos.y, pos.z

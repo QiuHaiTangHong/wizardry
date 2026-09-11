@@ -69,7 +69,7 @@ public class BubbleRaySpell extends AbstractRaySpell {
     protected void spawnParticle(@NonNull Level level, double x, double y, double z, double vx, double vy, double vz) {
         if (level instanceof ClientLevel clientLevel) {
             clientLevel.addParticle(ParticleTypes.SPLASH, x, y, z, 0, 0, 0);
-            WizardryClient.particleManager.createParticleOpt(
+            WizardryClient.particleManager.getParticle(
                     clientLevel,
                     new QuadParticleOptions(WizardryParticles.MAGIC_BUBBLE.get()),
                     x, y, z
