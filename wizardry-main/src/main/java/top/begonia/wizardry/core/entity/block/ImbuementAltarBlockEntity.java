@@ -28,8 +28,8 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.event.ImbuementActivateEvent;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
+import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.GeometryUtils;
-import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
 import top.begonia.wizardry.core.block.ReceptacleBlock;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.item.WizardArmourItem;
@@ -118,18 +118,20 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
 
                         int[] colours = ReceptacleBlock.PARTICLE_COLOURS.get(elements[i]);
 
-                        ParticleBuilder.create(
-                                        new QuadParticleOptions(WizardryParticles.DUST.get()),
-                                        level.getRandom(),
-                                        vec.x, vec.y, vec.z,
-                                        0.1,
-                                        false
-                                )
-                                .vel(centre.subtract(vec).scale(0.02))
-                                .clr(colours[1])
-                                .fade(colours[2])
+                        WizardryClient.particleManager.createParticleOpt(
+                                clientLevel,
+                                clientLevel.getRandom(),
+                                new QuadParticleOptions(WizardryParticles.DUST.get()),
+                                vec.x, vec.y, vec.z,
+                                0.1,
+                                false
+                        ).ifPresent(p -> p.speed(centre.subtract(vec).scale(0.02))
+                                .scaleValue(0.02f)
+                                .color(colours[1])
+                                .endColor(colours[2])
                                 .time(50)
-                                .spawn(clientLevel);
+                                .spawn()
+                        );
                     }
                 }
             }

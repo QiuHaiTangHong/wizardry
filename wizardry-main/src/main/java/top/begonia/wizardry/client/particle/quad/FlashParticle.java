@@ -34,7 +34,7 @@ public class FlashParticle extends OneQuadParticle {
             float v0, float v1,
             int color, int lightCoords
     ) {
-        this.setAlpha(0.6F - ((float) this.age + partialTick - 1.0F) / this.lifetime * 0.5F);
+        this.alpha(0.6F - ((float) this.age + partialTick - 1.0F) / this.lifetime * 0.5F);
         int finalColor = ARGB.colorFromFloat(this.alpha, this.currentRed, this.currentGreen, this.currentBlue);
         float finalScale = scale * Mth.sin(((float) this.age + partialTick - 1.0F) / this.lifetime * (float) Math.PI);
         super.extractSurface(

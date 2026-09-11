@@ -20,12 +20,15 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
+import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.gui.widget.InvisibleButton;
 import top.begonia.wizardry.client.gui.widget.SpellSortButton;
 import top.begonia.wizardry.client.gui.widget.TurnPageButton;
-import top.begonia.wizardry.client.util.*;
+import top.begonia.wizardry.client.util.ClientHelper;
+import top.begonia.wizardry.client.util.GeometryUtils;
+import top.begonia.wizardry.client.util.GlyphGenerator;
+import top.begonia.wizardry.client.util.ISpellSortable;
 import top.begonia.wizardry.core.block.BookshelfBlock;
 import top.begonia.wizardry.core.entity.block.LecternBlockEntity;
 import top.begonia.wizardry.core.item.SpellBookItem;
@@ -235,14 +238,18 @@ public class LecternScreen extends SpellInfoScreen implements ISpellSortable {
                                 AbstractSpell spell = spellBookItem.getCurrentSpell(resource);
                                 if (spell == this.currentSpell) {
                                     for (Direction side : Direction.values()) {
-                                        ParticleBuilder.create(
-                                                        new QuadParticleOptions(WizardryParticles.BLOCK_HIGHLIGHT.get())
-                                                )
-                                                .pos(
-                                                        GeometryUtils.getFaceCentre(blockEntity.getBlockPos(), side)
-                                                                .add(new Vec3(side.getUnitVec3f())
-                                                                        .scale(GeometryUtils.ANTI_Z_FIGHTING_OFFSET)))
-                                                .face(side).clr(0.9f, 0.5f, 0.8f).fade(0.7f, 0, 1).spawn(level);
+                                        Vec3 pos = GeometryUtils.getFaceCentre(blockEntity.getBlockPos(), side)
+                                                .add(new Vec3(side.getUnitVec3f())
+                                                .scale(GeometryUtils.ANTI_Z_FIGHTING_OFFSET));
+                                        WizardryClient.particleManager.createParticleOpt(
+                                                level,
+                                                new QuadParticleOptions(WizardryParticles.BLOCK_HIGHLIGHT.get()),
+                                                pos.x, pos.y, pos.z
+                                        ).ifPresent(p -> p.facing(side)
+                                                .color(0.9f, 0.5f, 0.8f)
+                                                .endColor(0.7f, 0.0f, 1.0f)
+                                                .spawn()
+                                        );
                                     }
                                     level.playLocalSound(
                                             blockEntity.getBlockPos(),

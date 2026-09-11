@@ -14,8 +14,8 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.api.particle.options.RayParticleOptions;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
+import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.GeometryUtils;
-import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
@@ -49,27 +49,38 @@ public class CelestialSmiteRaySpell extends AbstractRaySpell {
                 target.setRemainingFireTicks((int) this.getBaseProperty(BURN_DURATION));
             }
         } else if (level instanceof ClientLevel clientLevel) {
-            ParticleBuilder.create(
-                            new RayParticleOptions(WizardryParticles.BEAM.get(), hit.x, hit.y, hit.z)
-                    ).pos(hit.x, level.getHeight(), hit.z).target(hit).scale(8)
-                    .clr(0xffbf00).time(10).spawn(clientLevel);
-            ParticleBuilder.create(
-                            new QuadParticleOptions(WizardryParticles.SPHERE.get())
-                    )
-                    .pos(hit)
-                    .scale(4)
-                    .clr(0xfff098)
-                    .spawn(clientLevel);
+            WizardryClient.particleManager.createParticleOpt(
+                    clientLevel,
+                    new RayParticleOptions(
+                            WizardryParticles.BEAM.get(),
+                            hit.x, hit.y, hit.z
+                    ),
+                    hit.x, level.getHeight(), hit.z
+            ).ifPresent(p -> p.targetPosition(hit.x, hit.y, hit.z)
+                    .scaleValue(8)
+                    .color(0xffbf00)
+                    .time(10)
+                    .spawn()
+            );
 
+            WizardryClient.particleManager.createParticleOpt(
+                    clientLevel,
+                    new QuadParticleOptions(WizardryParticles.SPHERE.get()),
+                    hit.x, hit.y, hit.z
+            ).ifPresent(p -> p.scaleValue(4)
+                    .color(0xfff098)
+                    .spawn()
+            );
             if (side == Direction.UP) {
                 Vec3 vec = hit.add(new Vec3(side.getUnitVec3f()).scale(GeometryUtils.ANTI_Z_FIGHTING_OFFSET));
-                ParticleBuilder.create(
-                                new QuadParticleOptions(WizardryParticles.SCORCH.get())
-                        )
-                        .pos(vec)
-                        .face(side)
-                        .scale(3)
-                        .spawn(clientLevel);
+                WizardryClient.particleManager.createParticleOpt(
+                        clientLevel,
+                        new QuadParticleOptions(WizardryParticles.SCORCH.get()),
+                        vec.x, vec.y, vec.z
+                ).ifPresent(p -> p.facing(side)
+                        .scaleValue(3)
+                        .spawn()
+                );
             }
         }
 

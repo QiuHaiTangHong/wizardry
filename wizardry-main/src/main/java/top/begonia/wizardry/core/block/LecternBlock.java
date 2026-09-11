@@ -26,8 +26,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
+import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.gui.LecternScreen;
-import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
 import top.begonia.wizardry.core.constants.WoodTypeEnum;
 import top.begonia.wizardry.core.entity.block.LecternBlockEntity;
 import top.begonia.wizardry.core.registry.WizardryBlockEntities;
@@ -96,14 +96,16 @@ public class LecternBlock extends BaseEntityBlock {
         );
 
         if (entityplayer != null && level instanceof ClientLevel clientLevel) {
-            ParticleBuilder.create(
-                            new QuadParticleOptions(WizardryParticles.DUST.get())
-                    )
-                    .pos(pos.getX() + random.nextFloat(), pos.getY() + 1, pos.getZ() + random.nextFloat())
-                    .vel(0, 0.03, 0).clr(1, 1, 0.65f)
-                    .fade(0.7f, 0, 1)
+            WizardryClient.particleManager.createParticleOpt(
+                    clientLevel,
+                    new QuadParticleOptions(WizardryParticles.DUST.get()),
+                    pos.getX() + random.nextFloat(), pos.getY() + 1, pos.getZ() + random.nextFloat()
+            ).ifPresent(p -> p.speed(0.0f, 0.03f, 0.0f)
+                    .color(1.0f, 1.0f, 0.65f)
+                    .endColor(0.7f, 0.0f, 1.0f)
                     .shaded(false)
-                    .spawn(clientLevel);
+                    .spawn()
+            );
         }
     }
 

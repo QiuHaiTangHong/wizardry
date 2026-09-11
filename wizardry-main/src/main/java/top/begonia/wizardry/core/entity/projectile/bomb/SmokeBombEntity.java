@@ -12,7 +12,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
-import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
+import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 
@@ -24,10 +24,6 @@ public class SmokeBombEntity extends BombEntity {
 
     public SmokeBombEntity(EntityType<? extends BombEntity> type, LivingEntity owner, Level level, ItemStack itemStack) {
         super(type, owner, level, itemStack);
-    }
-
-    public SmokeBombEntity(EntityType<? extends BombEntity> type, double x, double y, double z, Level level, ItemStack itemStack) {
-        super(type, x, y, z, level, itemStack);
     }
 
     @Override
@@ -48,41 +44,48 @@ public class SmokeBombEntity extends BombEntity {
     @Override
     protected void createParticles(ClientLevel level) {
         Vec3 hitPos = this.position();
-        ParticleBuilder.create(
-                        new QuadParticleOptions(WizardryParticles.FLASH.get())
-                )
-                .pos(hitPos)
-                .scale(5 * blastMultiplier)
-                .clr(0, 0, 0)
-                .spawn(level);
+        WizardryClient.particleManager.createParticleOpt(
+                level,
+                new QuadParticleOptions(WizardryParticles.FLASH.get()),
+                hitPos.x, hitPos.y, hitPos.z
+        ).ifPresent(p -> p.scaleValue(5 * blastMultiplier)
+                .color(0.0f, 0.0f, 0.0f)
+                .spawn()
+        );
 
         this.level().addParticle(ParticleTypes.EXPLOSION, hitPos.x(), hitPos.y(), hitPos.z(), 0, 0, 0);
 
         for (int i = 0; i < 60 * blastMultiplier; i++) {
+            WizardryClient.particleManager.createParticleOpt(
+                    level,
+                    this.random,
+                    new QuadParticleOptions(WizardryParticles.FLASH.get()),
+                    hitPos.x(), hitPos.y(), hitPos.z(),
+                    2 * blastMultiplier,
+                    false
+            ).ifPresent(p -> {
+                        float brightness = this.random.nextFloat() * 0.1f + 0.1f;
+                        p.scaleValue(5 * blastMultiplier)
+                                .color(brightness, brightness, brightness)
+                                .time(80 + this.random.nextInt(12))
+                                .shaded(true)
+                                .spawn();
+                    }
+            );
 
-            float brightness = this.random.nextFloat() * 0.1f + 0.1f;
-            ParticleBuilder.create(
-                            new QuadParticleOptions(WizardryParticles.CLOUD.get()),
-                            this.random,
-                            hitPos.x(), hitPos.y(), hitPos.z(),
-                            2 * blastMultiplier,
-                            false
-                    )
-                    .clr(brightness, brightness, brightness)
-                    .time(80 + this.random.nextInt(12))
-                    .shaded(true)
-                    .spawn(level);
-
-            brightness = this.random.nextFloat() * 0.3f;
-            ParticleBuilder.create(
-                            new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),
-                            this.random,
-                            hitPos.x(), hitPos.y(), hitPos.z(),
-                            2 * blastMultiplier,
-                            false
-                    )
-                    .clr(brightness, brightness, brightness)
-                    .spawn(level);
+            WizardryClient.particleManager.createParticleOpt(
+                    level,
+                    this.random,
+                    new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),
+                    hitPos.x(), hitPos.y(), hitPos.z(),
+                    2 * blastMultiplier,
+                    false
+            ).ifPresent(p -> {
+                        float brightness = this.random.nextFloat() * 0.3f;
+                        p.color(brightness, brightness, brightness)
+                                .spawn();
+                    }
+            );
         }
     }
 

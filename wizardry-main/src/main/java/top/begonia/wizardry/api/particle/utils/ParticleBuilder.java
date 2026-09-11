@@ -293,25 +293,25 @@ public final class ParticleBuilder {
                 compositeQuadParticle.setLifetime(lifetime);
             }
             if (radius > 0) {
-                compositeQuadParticle.setSpin(radius, rpt);
+                compositeQuadParticle.spin(radius, rpt);
             }
             if (!Float.isNaN(yaw) && !Float.isNaN(pitch)) {
-                compositeQuadParticle.setFacing(yaw, pitch);
+                compositeQuadParticle.facing(yaw, pitch);
             }
             if (!Double.isNaN(tvx) && !Double.isNaN(tvy) && !Double.isNaN(tvz)) {
-                compositeQuadParticle.setTargetVelocity(tvx, tvy, tvz);
+                compositeQuadParticle.targetVelocity(tvx, tvy, tvz);
             }
             if (length > 0) {
-                compositeQuadParticle.setLength(length);
+                compositeQuadParticle.length(length);
             }
 
             compositeQuadParticle.scale(scale);
-            compositeQuadParticle.setGravity(gravity);
-            compositeQuadParticle.setShaded(shaded);
-            compositeQuadParticle.hasPhysics(collide);
-            compositeQuadParticle.setEntity(entity);
-            compositeQuadParticle.setTargetPosition(tx, ty, tz);
-            compositeQuadParticle.setTargetEntity(target);
+            compositeQuadParticle.gravity(gravity);
+            compositeQuadParticle.shaded(shaded);
+            compositeQuadParticle.physics(collide);
+            compositeQuadParticle.entity(entity);
+            compositeQuadParticle.targetPosition(tx, ty, tz);
+            compositeQuadParticle.targetEntity(target);
 
             Minecraft.getInstance().particleEngine.add(compositeQuadParticle);
 

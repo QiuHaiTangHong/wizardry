@@ -20,7 +20,7 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.item.ISpellCastingItem;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
-import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
+import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
@@ -131,13 +131,17 @@ public interface ISummonedCreature extends TraceableEntity {
             thisEntity.discard();
         }
 
-        if (this.hasParticleEffect() && thisEntity.level() instanceof ClientLevel clientLevel && thisEntity.getRandom().nextInt(8) == 0) {
-            ParticleBuilder.create(
-                            new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get())
-                    )
-                    .pos(thisEntity.getX(), thisEntity.getY() + thisEntity.getRandom().nextDouble() * 1.5, thisEntity.getZ())
-                    .clr(0.1f, 0.0f, 0.0f)
-                    .spawn(clientLevel);
+        if (this.hasParticleEffect()
+                && thisEntity.level() instanceof ClientLevel clientLevel
+                && thisEntity.getRandom().nextInt(8) == 0
+        ) {
+            WizardryClient.particleManager.createParticleOpt(
+                    clientLevel,
+                    new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),
+                    thisEntity.getX(), thisEntity.getY() + thisEntity.getRandom().nextDouble() * 1.5, thisEntity.getZ()
+            ).ifPresent(p -> p.color(0.1f, 0.0f, 0.0f)
+                    .spawn()
+            );
         }
 
     }

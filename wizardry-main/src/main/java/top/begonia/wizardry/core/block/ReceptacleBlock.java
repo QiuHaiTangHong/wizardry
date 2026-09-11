@@ -154,7 +154,10 @@ public class ReceptacleBlock extends BaseEntityBlock {
                             new QuadParticleOptions(WizardryParticles.FLASH.get()),
                             centre.x, centre.y, centre.z
                     ).ifPresent(p -> p
-                            .scale(0.35f).time(48).color(colours[0]).build()
+                            .scaleValue(0.35f)
+                            .time(48)
+                            .color(colours[0])
+                            .spawn()
                     );
                     double r = 0.12;
                     for (int i = 0; i < 3; i++) {
@@ -170,7 +173,7 @@ public class ReceptacleBlock extends BaseEntityBlock {
                                 .time(24 + rand.nextInt(8))
                                 .color(colours[1])
                                 .endColor(colours[2])
-                                .build()
+                                .spawn()
                         );
                     }
                 }

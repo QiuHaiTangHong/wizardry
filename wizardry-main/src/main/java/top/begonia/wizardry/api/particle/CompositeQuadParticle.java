@@ -16,6 +16,7 @@ import org.joml.Quaternionf;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.particle.extension.FacingCameraMode;
 import top.begonia.wizardry.api.particle.extension.Layer;
+import top.begonia.wizardry.api.particle.extension.ParticleInitAccessor;
 import top.begonia.wizardry.api.particle.extension.TextureParticle;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
 import top.begonia.wizardry.api.particle.renderer.state.CompositeQuadParticleRenderState;
@@ -24,7 +25,7 @@ import top.begonia.wizardry.core.entity.ICustomHitbox;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension> extends Particle {
+public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension> extends Particle  implements ParticleInitAccessor {
     public static final ParticleRenderType RENDER_TYPE = new ParticleRenderType("wizardry_composite_quad", "WCQ");
     private static final double SPREAD_FACTOR = 0.2;
     private static final double IMPACT_FRICTION = 0.2;
@@ -102,66 +103,135 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
     }
 
     @Override
-    @NonNull
-    public CompositeQuadParticle<T> scale(float scale) {
+    public @NonNull ParticleInitAccessor scaleValue(float scale) {
         this.quadSize *= scale;
         this.setSize(0.2F * scale, 0.2F * scale);
         return this;
     }
 
-    public CompositeQuadParticle<T> time(int time){
+    @Override
+    public ParticleInitAccessor time(int time){
         this.lifetime = time;
         return this;
     }
 
-    public CompositeQuadParticle<T> speed(double xd, double yd, double zd){
+    @Override
+    public ParticleInitAccessor speed(double xd, double yd, double zd){
         this.xd = xd;
         this.yd = yd;
         this.zd = zd;
         return this;
     }
 
-    public CompositeQuadParticle<T> color(int hex){
-        float r = ((hex & 0xFF0000) >> 16) / 255.0F;
-        float g = ((hex & 0xFF00) >> 8) / 255.0F;
-        float b = ((hex & 0xFF)) / 255.0F;
-        this.startColor(r, g, b);
-        this.currentColor(r, g, b);
-        this.endColor(r, g, b);
-        return this;
-    }
-
-    public CompositeQuadParticle<T> startColor(float red, float green, float blue) {
+    @Override
+    public ParticleInitAccessor startColor(float red, float green, float blue) {
         this.startRed = red;
         this.startGreen = green;
         this.startBlue = blue;
         return this;
     }
 
-    public CompositeQuadParticle<T> currentColor(float red, float green, float blue) {
+    @Override
+    public ParticleInitAccessor currentColor(float red, float green, float blue) {
         this.currentRed = red;
         this.currentGreen = green;
         this.currentBlue = blue;
         return this;
     }
 
-    public CompositeQuadParticle<T> endColor(float red, float green, float blue) {
+    @Override
+    public ParticleInitAccessor endColor(float red, float green, float blue) {
         this.endRed = red;
         this.endGreen = green;
         this.endBlue = blue;
         return this;
     }
 
-    public CompositeQuadParticle<T> endColor(int hex) {
-        this.endRed = ((hex & 0xFF0000) >> 16) / 255.0F;
-        this.endGreen = ((hex & 0xFF00) >> 8) / 255.0F;
-        this.endBlue  = ((hex & 0xFF)) / 255.0F;
+    @Override
+    public ParticleInitAccessor alpha(float alpha) {
+        this.alpha = alpha;
         return this;
     }
 
-    public CompositeQuadParticle<T> setAlpha(float alpha) {
-        this.alpha = alpha;
+    @Override
+    public ParticleInitAccessor shaded(boolean shaded) {
+        this.shaded = shaded;
         return this;
+    }
+
+    @Override
+    public ParticleInitAccessor gravity(boolean gravity) {
+        this.gravity = gravity ? 1.0F : 0.0F;
+        return this;
+    }
+
+    @Override
+    public ParticleInitAccessor spin(double radius, double speed) {
+        this.radius = radius;
+        this.speed = speed * 2 * Math.PI;
+        this.angle = this.random.nextFloat() * (float) Math.PI * 2;
+
+        this.x = relativeX - radius * Mth.cos(angle);
+        this.z = relativeZ + radius * Mth.sin(angle);
+
+        this.relativeMotionX = xd;
+        this.relativeMotionY = yd;
+        this.relativeMotionZ = zd;
+
+        return this;
+    }
+
+    @Override
+    public ParticleInitAccessor entity(Entity entity) {
+        this.entity = entity;
+        if (entity != null) {
+            this.setPos(entity.getX() + relativeX, entity.getY() + relativeY, entity.getZ() + relativeZ);
+            this.xo = this.x;
+            this.yo = this.y;
+            this.zo = this.z;
+            this.relativeMotionX = xd;
+            this.relativeMotionY = yd;
+            this.relativeMotionZ = zd;
+        }
+        return this;
+    }
+
+    @Override
+    public ParticleInitAccessor facing(float yaw, float pitch) {
+        this.yaw = yaw;
+        this.pitch = pitch;
+        return this;
+    }
+
+    @Override
+    public ParticleInitAccessor targetPosition(double x, double y, double z) {
+        return this;
+    }
+
+    @Override
+    public ParticleInitAccessor targetVelocity(double vx, double vy, double vz) {
+        return this;
+    }
+
+    @Override
+    public ParticleInitAccessor targetEntity(Entity target) {
+        return this;
+    }
+
+    @Override
+    public ParticleInitAccessor length(double length) {
+        return this;
+    }
+
+    @Override
+    public ParticleInitAccessor physics(boolean hasPhysics) {
+        this.hasPhysics = hasPhysics;
+        return this;
+    }
+
+    @Override
+    public void spawn(){
+        Minecraft.getInstance().particleEngine.add(this);
     }
 
     @Override
@@ -336,77 +406,5 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
             return Layer.bySprite(textureParticle.getCurrentAtlasSprite(textureParticle.getCurrentRawIndex()));
         }
         return Layer.DEFAULT_QUAD;
-    }
-
-    public CompositeQuadParticle<T> setShaded(boolean shaded) {
-        this.shaded = shaded;
-        return this;
-    }
-
-    public CompositeQuadParticle<T> setGravity(boolean gravity) {
-        this.gravity = gravity ? 1.0F : 0.0F;
-        return this;
-    }
-
-    public void setSpin(double radius, double speed) {
-        this.radius = radius;
-        this.speed = speed * 2 * Math.PI;
-        this.angle = this.random.nextFloat() * (float) Math.PI * 2;
-
-        this.x = relativeX - radius * Mth.cos(angle);
-        this.z = relativeZ + radius * Mth.sin(angle);
-
-        this.relativeMotionX = xd;
-        this.relativeMotionY = yd;
-        this.relativeMotionZ = zd;
-    }
-
-    public CompositeQuadParticle<T> setEntity(Entity entity) {
-        this.entity = entity;
-        if (entity != null) {
-            this.setPos(entity.getX() + relativeX, entity.getY() + relativeY, entity.getZ() + relativeZ);
-            this.xo = this.x;
-            this.yo = this.y;
-            this.zo = this.z;
-            this.relativeMotionX = xd;
-            this.relativeMotionY = yd;
-            this.relativeMotionZ = zd;
-        }
-        return this;
-    }
-
-    public CompositeQuadParticle<T> setFacing(float yaw, float pitch) {
-        this.yaw = yaw;
-        this.pitch = pitch;
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    public CompositeQuadParticle<T> setTargetPosition(double x, double y, double z) {
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    public CompositeQuadParticle<T> setTargetVelocity(double vx, double vy, double vz) {
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    public CompositeQuadParticle<T> setTargetEntity(Entity target) {
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    public CompositeQuadParticle<T> setLength(double length) {
-        return this;
-    }
-
-    public CompositeQuadParticle<T> hasPhysics(boolean hasPhysics) {
-        this.hasPhysics = hasPhysics;
-        return this;
-    }
-
-    public void build(){
-        Minecraft.getInstance().particleEngine.add(this);
     }
 }

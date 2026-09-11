@@ -14,7 +14,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
-import top.begonia.wizardry.api.particle.utils.ParticleBuilder;
+import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.registry.WizardryItems;
@@ -91,32 +91,37 @@ public class FireBombEntity extends BombEntity {
     @Override
     protected void createParticles(ClientLevel level) {
         Vec3 hitPos = this.position();
-        ParticleBuilder.create(
-                        new QuadParticleOptions(WizardryParticles.FLASH.get())
-                ).pos(hitPos)
-                .scale(5 * blastMultiplier)
-                .clr(1, 0.6f, 0)
-                .spawn(level);
+        WizardryClient.particleManager.createParticleOpt(
+                level,
+                new QuadParticleOptions(WizardryParticles.FLASH.get()),
+                hitPos.x, hitPos.y, hitPos.z
+        ).ifPresent(p -> p.scaleValue(5 * blastMultiplier)
+                .color(1.0f, 0.6f, 0.0f)
+                .spawn()
+        );
         for (int i = 0; i < 60 * this.blastMultiplier; i++) {
-            ParticleBuilder.create(
-                            new QuadParticleOptions(WizardryParticles.MAGIC_FIRE.get()),
-                            this.random,
-                            hitPos.x(), hitPos.y(), hitPos.z(),
-                            2 * blastMultiplier,
-                            false
-                    )
-                    .time(10 + this.random.nextInt(4))
-                    .scale(2 + this.random.nextFloat())
-                    .spawn(level);
+            WizardryClient.particleManager.createParticleOpt(
+                    level,
+                    this.random,
+                    new QuadParticleOptions(WizardryParticles.MAGIC_FIRE.get()),
+                    hitPos.x, hitPos.y, hitPos.z,
+                    2 * blastMultiplier,
+                    false
+            ).ifPresent(p -> p.time(10 + this.random.nextInt(4))
+                    .scaleValue(2 + this.random.nextFloat())
+                    .spawn()
+            );
 
-            ParticleBuilder.create(
-                            new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),
-                            this.random,
-                            hitPos.x(), hitPos.y(), hitPos.z(),
-                            2 * blastMultiplier,
-                            false
-                    ).clr(1.0f, 0.2f + this.getRandom().nextFloat() * 0.4f, 0.0f)
-                    .spawn(level);
+            WizardryClient.particleManager.createParticleOpt(
+                    level,
+                    this.random,
+                    new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),
+                    hitPos.x, hitPos.y, hitPos.z,
+                    2 * blastMultiplier,
+                    false
+            ).ifPresent(p -> p.color(1.0f, 0.2f + this.getRandom().nextFloat() * 0.4f, 0.0f)
+                    .spawn()
+            );
         }
 
         this.level().addParticle(
