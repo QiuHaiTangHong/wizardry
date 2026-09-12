@@ -1,17 +1,11 @@
-package top.begonia.wizardry.core.data.spell.definition.spell.part;
+package top.begonia.wizardry.core.data.constant.definition.spell.part;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Contract;
-import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.spell.AbstractSpell;
 
 import java.util.HashMap;
 import java.util.Map;

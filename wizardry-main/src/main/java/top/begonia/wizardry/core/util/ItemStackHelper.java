@@ -3,6 +3,7 @@ package top.begonia.wizardry.core.util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EntityTypes;
@@ -13,32 +14,29 @@ import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.Equippable;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.item.IManaStoringItem;
+import top.begonia.wizardry.api.item.IWorkbenchItem;
 import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.data.WandUpgradesData;
-import top.begonia.wizardry.api.item.IManaStoringItem;
-import top.begonia.wizardry.api.item.IWorkbenchItem;
-import top.begonia.wizardry.core.item.MagicCrystalItem;
-import top.begonia.wizardry.core.item.WandItem;
-import top.begonia.wizardry.core.item.WandUpgradeItem;
-import top.begonia.wizardry.core.item.WizardArmourItem;
+import top.begonia.wizardry.core.item.*;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.registry.WizardryTags;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 物品堆辅助工具类
  * <p> 提供与 <b> 魔杖 </b>,<b> 卷轴 </b> 和 <b> 盔甲 </b> 等模组物品相关的全套数据组件操作逻辑
- * <p> 该类作为 <b> 内部基础设施 </b>, 封装了所有对 {@link ItemStack} 数据组件的读取和修改操作, 避免业务代码直接依赖底层组件细节
  * <p> 主要功能包括:
  * <ul>
  *   <li><b> 法术管理 </b>: 获取, 设置, 选择和循环切换魔杖上的法术列表, 支持前后法术索引计算 </li>
@@ -49,16 +47,8 @@ import java.util.List;
  *   <li><b> 进度操作 </b>: 修改和查询魔杖的升级进度值 </li>
  *   <li><b> 显示名称 </b>: 为卷轴生成包含内部法术名称的本地化显示名 </li>
  * </ul>
- * <p> 设计要点:
- * <ul>
- *   <li><b> 无状态工具类 </b>: 除静态的升级映射表外不持有任何状态, 所有方法均为静态方法 </li>
- *   <li><b> 不可实例化 </b>: 使用 {@code final} 类声明, 防止被继承或实例化 </li>
- *   <li><b> 仅内部使用 </b>: 不负责请求处理, 仅为上层业务逻辑提供原子化的数据组件访问能力 </li>
- * </ul>
  *
  * @author 秋海棠红
- * @version 1.0.0
- * @date 2026.07.03
  * @since 1.0.0
  */
 @SuppressWarnings("deprecation")
@@ -104,6 +94,12 @@ public final class ItemStackHelper {
                 })
                 .toList();
         wand.set(WizardryComponents.SPELLS.get(), spellHolders);
+    }
+
+    @Contract("_, _ -> param1")
+    public static @NonNull ItemStack setSpell(@NonNull ItemStack stack, @NonNull AbstractSpell spell) {
+        stack.set(WizardryComponents.SPELL.get(), WizardrySpells.getHolder(spell.getIdentifier()));
+        return stack;
     }
 
     /**
@@ -664,6 +660,45 @@ public final class ItemStackHelper {
         ItemStackHelper.setTier(itemStack, tier);
         ItemStackHelper.setElement(itemStack, element);
         itemStack.set(DataComponents.MAX_DAMAGE, tier.getMaxCharge());
+        return itemStack;
+    }
+
+    public static Set<Item> getSpecialUpgrades() {
+        return BuiltInRegistries.ITEM.entrySet()
+                .stream()
+                .map(Map.Entry::getValue)
+                .filter(item -> item instanceof WandUpgradeItem)
+                .collect(Collectors.toSet());
+    }
+
+    public static @NotNull ItemStack getArcaneTome(TierEnum tier, int count) {
+        ItemStack itemStack = new ItemStack(WizardryItems.ARCANE_TOME.get(), count);
+        ItemStackHelper.setTier(itemStack, tier);
+        return itemStack;
+    }
+
+    public static @NotNull ItemStack getSpellBook(@NonNull AbstractSpell spell, int count) {
+        String modid = spell.getIdentifier().getNamespace();
+        if (modid.equals(Wizardry.MODID)) {
+            ItemStack itemStack = new ItemStack(WizardryItems.SPELL_BOOK.get(), count);
+            return ItemStackHelper.setSpell(itemStack, spell);
+        } else {
+            Optional<Item> firstMatch = BuiltInRegistries.ITEM.entrySet()
+                    .stream()
+                    .map(Map.Entry::getValue)
+                    .filter(v -> v instanceof SpellBookItem
+                            && spell.applicableForItem(v)
+                            && BuiltInRegistries.ITEM.getKey(v).getNamespace().equals(modid)
+                    )
+                    .findFirst();
+            return firstMatch.map(item -> ItemStackHelper.setSpell(new ItemStack(item, count), spell))
+                    .orElseGet(() -> ItemStackHelper.setSpell(new ItemStack(WizardryItems.SPELL_BOOK.get(), count), spell));
+        }
+    }
+
+    public static @NotNull ItemStack getMagicCrystal(ElementEnum element, int count) {
+        ItemStack itemStack = new ItemStack(WizardryItems.MAGIC_CRYSTAL.get(), count);
+        ItemStackHelper.setElement(itemStack, element);
         return itemStack;
     }
 

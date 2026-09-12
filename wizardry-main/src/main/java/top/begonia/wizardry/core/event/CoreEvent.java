@@ -17,11 +17,13 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.core.commond.DebugCommond;
 import top.begonia.wizardry.core.data.SpellGlyph;
+import top.begonia.wizardry.core.data.constant.parser.CurrencyParser;
 import top.begonia.wizardry.core.data.player.WizardPlayerData;
-import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
-import top.begonia.wizardry.core.data.spell.parser.SpellPropertiesParser;
+import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
+import top.begonia.wizardry.core.data.constant.parser.SpellPropertiesParser;
 import top.begonia.wizardry.core.effect.impl.DecayMobEffect;
 import top.begonia.wizardry.core.entity.construct.BubbleEntity;
+import top.begonia.wizardry.core.entity.living.WizardEntity;
 import top.begonia.wizardry.core.entity.living.minion.WitherSkeletonMinionEntity;
 import top.begonia.wizardry.core.entity.living.minion.ZombieMinionEntity;
 import top.begonia.wizardry.core.registry.WizardryAttachment;
@@ -75,6 +77,7 @@ public class CoreEvent {
     @SubscribeEvent
     public static void onCommonRegisterDataParserEvent(RegisterDataParserEvent.@NonNull CommonRegisterDataParserEvent event) {
         event.register(new SpellPropertiesParser());
+        event.register(new CurrencyParser());
     }
 
     @SubscribeEvent
@@ -107,5 +110,6 @@ public class CoreEvent {
     public static void onEntityAttributeCreation(@NonNull EntityAttributeCreationEvent event) {
         event.put(WizardryEntities.ZOMBIE_MINION.get(), ZombieMinionEntity.createAttributes().build());
         event.put(WizardryEntities.WITHER_SKELETON_MINION.get(), WitherSkeletonMinionEntity.createAttributes().build());
+        event.put(WizardryEntities.WIZARD.get(), WizardEntity.createAttributes().build());
     }
 }

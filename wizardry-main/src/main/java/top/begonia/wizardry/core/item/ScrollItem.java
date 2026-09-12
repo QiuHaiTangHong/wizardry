@@ -19,7 +19,7 @@ import top.begonia.wizardry.client.particle.ray.BeamParticle;
 import top.begonia.wizardry.api.event.SpellCastEvent;
 import top.begonia.wizardry.api.particle.options.RayParticleOptions;
 import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
-import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
+import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.api.item.ISpellCastingItem;
 import top.begonia.wizardry.api.item.IWorkbenchItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;

@@ -16,7 +16,7 @@ import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
-import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
+import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.entity.construct.BubbleEntity;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardryParticles;

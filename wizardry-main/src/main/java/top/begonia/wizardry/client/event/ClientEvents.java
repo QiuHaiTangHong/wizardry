@@ -48,9 +48,9 @@ import top.begonia.wizardry.client.gui.ArcaneWorkbenchScreen;
 import top.begonia.wizardry.client.gui.BookshelfScreen;
 import top.begonia.wizardry.client.gui.SpellHud;
 import top.begonia.wizardry.client.handle.WizardryControlHandler;
-import top.begonia.wizardry.client.model.RobeArmourModel;
-import top.begonia.wizardry.client.model.SageArmourModel;
-import top.begonia.wizardry.client.model.WizardArmourModel;
+import top.begonia.wizardry.client.model.armour.RobeArmourModel;
+import top.begonia.wizardry.client.model.armour.SageArmourModel;
+import top.begonia.wizardry.client.model.armour.WizardArmourModel;
 import top.begonia.wizardry.client.model.block.RunestoneUnbakedBlockModel;
 import top.begonia.wizardry.client.model.conditional.DiscoveredConditional;
 import top.begonia.wizardry.client.model.conditional.FestivalConditional;
@@ -61,10 +61,7 @@ import top.begonia.wizardry.client.network.ClientPayloadHandler;
 import top.begonia.wizardry.client.particle.quad.*;
 import top.begonia.wizardry.client.particle.ray.BeamParticle;
 import top.begonia.wizardry.client.renderer.WizardryPotionRender;
-import top.begonia.wizardry.client.renderer.entity.BlackHoleRenderer;
-import top.begonia.wizardry.client.renderer.entity.BubbleRenderer;
-import top.begonia.wizardry.client.renderer.entity.DecayRenderer;
-import top.begonia.wizardry.client.renderer.entity.MagicArrowRenderer;
+import top.begonia.wizardry.client.renderer.entity.*;
 import top.begonia.wizardry.client.renderer.entity.block.ArcaneWorkbenchRender;
 import top.begonia.wizardry.client.renderer.entity.block.BookshelfRender;
 import top.begonia.wizardry.client.renderer.entity.block.ImbuementAltarRender;
@@ -191,6 +188,10 @@ public class ClientEvents {
         event.registerEntityRenderer(
                 WizardryEntities.DECAY.get(),
                 DecayRenderer::new
+        );
+        event.registerEntityRenderer(
+                WizardryEntities.WIZARD.get(),
+                WizardRenderer::new
         );
         event.registerEntityRenderer(
                 WizardryEntities.BUBBLE.get(),

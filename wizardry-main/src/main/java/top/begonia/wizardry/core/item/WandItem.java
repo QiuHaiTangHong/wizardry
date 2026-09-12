@@ -27,7 +27,7 @@ import top.begonia.wizardry.core.constants.EnabledEnum;
 import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.data.player.WizardPlayerDataOperator;
 import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
-import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
+import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.api.item.IManaStoringItem;
 import top.begonia.wizardry.api.item.ISpellCastingItem;
 import top.begonia.wizardry.api.item.IWorkbenchItem;

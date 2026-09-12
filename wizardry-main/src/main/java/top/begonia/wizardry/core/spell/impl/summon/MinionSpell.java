@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
+import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.entity.living.ISummonedCreature;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.spell.AbstractSpell;

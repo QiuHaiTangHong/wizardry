@@ -25,7 +25,6 @@ import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.data.player.WizardPlayerDataOperator;
-import top.begonia.wizardry.core.entity.WizardEntity;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 import top.begonia.wizardry.core.util.AllyDesignationSystem;
 

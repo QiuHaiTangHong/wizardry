@@ -4,7 +4,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
+import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.entity.living.minion.HuskMinionEntity;
 import top.begonia.wizardry.core.entity.living.minion.ZombieMinionEntity;
 import top.begonia.wizardry.core.item.ArtefactItem;

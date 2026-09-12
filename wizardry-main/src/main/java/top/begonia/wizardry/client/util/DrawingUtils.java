@@ -1,6 +1,5 @@
 package top.begonia.wizardry.client.util;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -9,8 +8,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import org.joml.Matrix3x2fStack;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 import org.jspecify.annotations.NonNull;
 
 public final class DrawingUtils {

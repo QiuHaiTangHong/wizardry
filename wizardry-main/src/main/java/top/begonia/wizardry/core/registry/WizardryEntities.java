@@ -13,6 +13,8 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.entity.*;
 import top.begonia.wizardry.core.entity.construct.*;
+import top.begonia.wizardry.core.entity.living.EvilWizardEntity;
+import top.begonia.wizardry.core.entity.living.WizardEntity;
 import top.begonia.wizardry.core.entity.living.minion.*;
 import top.begonia.wizardry.core.entity.projectile.arrow.MagicMissileEntity;
 import top.begonia.wizardry.core.entity.projectile.bomb.FireBombEntity;

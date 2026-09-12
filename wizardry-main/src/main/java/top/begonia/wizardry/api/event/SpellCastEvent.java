@@ -7,7 +7,7 @@ import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
-import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
+import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
 import javax.annotation.Nullable;

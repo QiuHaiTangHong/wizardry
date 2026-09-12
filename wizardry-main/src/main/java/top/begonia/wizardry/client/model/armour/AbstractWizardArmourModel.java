@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.model;
+package top.begonia.wizardry.client.model.armour;
 
 import com.google.common.collect.Maps;
 import net.minecraft.client.model.HumanoidModel;

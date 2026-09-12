@@ -20,7 +20,6 @@ import java.util.Map;
  *
  * @author 秋海棠红
  * @version 1.0.0
- * @date 2026.06.27
  */
 public class RegisterDataParserEvent extends Event implements IModBusEvent {
     protected final Map<Identifier, IDataParser<?, ?, ?>> registry;
@@ -48,8 +47,6 @@ public class RegisterDataParserEvent extends Event implements IModBusEvent {
      * </ul>
      *
      * @author 秋海棠红
-     * @version 1.0.0
-     * @date 2026.06.27
      * @since 1.0.0
      */
     public static class ClientRegisterDataParserEvent extends RegisterDataParserEvent {

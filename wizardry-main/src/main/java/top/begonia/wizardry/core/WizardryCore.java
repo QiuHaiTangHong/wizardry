@@ -13,7 +13,7 @@ import top.begonia.wizardry.client.network.ClientPayloadHandler;
 import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.core.config.CommonConfig;
 import top.begonia.wizardry.core.config.ServerConfig;
-import top.begonia.wizardry.core.data.spell.WizardryServerDataManager;
+import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
 import top.begonia.wizardry.core.network.ServerPayloadHandler;
 import top.begonia.wizardry.core.network.data.*;
 import top.begonia.wizardry.core.registry.*;

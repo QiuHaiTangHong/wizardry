@@ -99,7 +99,7 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
                     imbuementTimer = 0;
                     displayElement = null;
                     if (lastUser instanceof ServerPlayer serverPlayer) {
-//                        WizardryAdvancementTriggers.imbuement_altar.trigger((EntityPlayerMP) lastUser, this.stack);
+                        WizardryAdvancementTriggers.IMBUEMENT_ALTAR.get().trigger(serverPlayer, this.stack);
                     }
                 }
 

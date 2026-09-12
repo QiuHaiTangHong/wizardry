@@ -32,7 +32,7 @@ public class DecayRenderer extends EntityRenderer<DecayEntity, DecayRenderState>
 
     public DecayRenderer(EntityRendererProvider.Context context) {
         super(context);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < TEXTURES.length; i++) {
             TEXTURES[i] = Identifier.fromNamespaceAndPath(Wizardry.MODID, "textures/entity/decay/decay_" + i + ".png");
         }
         this.shadowRadius = 0.0F;

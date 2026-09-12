@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.data.spell;
+package top.begonia.wizardry.core.data.constant;
 
 import net.minecraft.resources.FileToIdConverter;
 import net.neoforged.fml.ModLoader;

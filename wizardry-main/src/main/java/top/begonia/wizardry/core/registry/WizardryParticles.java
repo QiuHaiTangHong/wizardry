@@ -98,7 +98,10 @@ public final class WizardryParticles {
 
     public static final DeferredHolder<ParticleType<?>, QuadParticleType> SPARK = register("spark");
 
-    public static final DeferredHolder<ParticleType<?>, QuadParticleType> SPARKLE = register("sparkle");
+    public static final DeferredHolder<ParticleType<?>, QuadParticleType> SPARKLE = PARTICLES.register(
+            "sparkle",
+            identifier -> new QuadParticleType(identifier, false)
+    );
 
     public static final DeferredHolder<ParticleType<?>, QuadParticleType> SPHERE = register("sphere");
 

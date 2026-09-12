@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.model;
+package top.begonia.wizardry.client.model.armour;
 
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.*;

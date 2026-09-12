@@ -1,10 +1,12 @@
 package top.begonia.wizardry.core.registry;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.extensions.IHolderExtension;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jspecify.annotations.NonNull;
@@ -31,7 +33,12 @@ import top.begonia.wizardry.core.spell.impl.summon.SkeletonSummonSpell;
 import top.begonia.wizardry.core.spell.impl.summon.WitherSkeletonSummonSpell;
 import top.begonia.wizardry.core.spell.impl.summon.ZombieSummonSpell;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public final class WizardrySpells {
     public static final ResourceKey<Registry<AbstractSpell>> SPELLS_KEY = ResourceKey.createRegistryKey(
@@ -327,15 +334,33 @@ public final class WizardrySpells {
             Function<Identifier, T> spellFactory
     ) {
         Identifier identifier = Identifier.fromNamespaceAndPath(Wizardry.MODID, name);
-        return SPELLS.register(name, () -> spellFactory.apply(identifier));
+        return WizardrySpells.SPELLS.register(name, () -> spellFactory.apply(identifier));
+    }
+
+    public static @NonNull AbstractSpell get(Identifier identifier) {
+        return WizardrySpells.SPELLS.getRegistry().get().getOptional(identifier).orElse(WizardrySpells.NONE.get());
+    }
+
+    public static @NonNull Holder<AbstractSpell> getHolder(Identifier identifier){
+        Optional<Holder.Reference<AbstractSpell>> optionalHolder = WizardrySpells.SPELLS.getRegistry().get().get(identifier);
+        return optionalHolder.map(IHolderExtension::getDelegate).orElseGet(NONE::getDelegate);
+    }
+
+    public static List<AbstractSpell> getSpells(@NonNull Predicate<AbstractSpell> filter){
+        return WizardrySpells.SPELLS.getRegistry()
+                .get()
+                .entrySet()
+                .stream()
+                .map(Map.Entry::getValue)
+                .filter(filter.and(s -> s != WizardrySpells.NONE.get()))
+                .collect(Collectors.toList());
     }
 
     public static void register(IEventBus modBus) {
-        SPELLS.makeRegistry(builder -> builder
+        WizardrySpells.SPELLS.makeRegistry(builder -> builder
                 .sync(true)
                 .maxId(65535)
         );
-        SPELLS.register(modBus);
-
+        WizardrySpells.SPELLS.register(modBus);
     }
 }

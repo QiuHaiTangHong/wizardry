@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.data.spell.definition.spell.part;
+package top.begonia.wizardry.core.data.constant.definition.spell.part;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.network.FriendlyByteBuf;
@@ -7,7 +7,6 @@ import net.minecraft.network.codec.StreamCodec;
 import top.begonia.wizardry.core.constants.EnabledEnum;
 
 import java.util.Collections;
-import java.util.EnumMap;
 import java.util.Map;
 
 public record EnableProperties(

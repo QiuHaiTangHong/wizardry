@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.model;
+package top.begonia.wizardry.client.model.armour;
 
 import net.minecraft.client.renderer.entity.ArmorModelSet;
 import net.minecraft.world.entity.EquipmentSlot;

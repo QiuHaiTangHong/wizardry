@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.data.spell.definition.spell.part;
+package top.begonia.wizardry.core.data.constant.definition.spell.part;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.network.FriendlyByteBuf;

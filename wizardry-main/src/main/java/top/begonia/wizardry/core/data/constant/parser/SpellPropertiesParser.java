@@ -1,11 +1,11 @@
-package top.begonia.wizardry.core.data.spell.parser;
+package top.begonia.wizardry.core.data.constant.parser;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.resources.Identifier;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.data.IStaticDataParser;
-import top.begonia.wizardry.core.data.spell.definition.spell.SpellProperties;
+import top.begonia.wizardry.core.data.constant.definition.spell.SpellProperties;
 
 public class SpellPropertiesParser implements IStaticDataParser<SpellProperties> {
     public static final Identifier PARSER_NAME = Identifier.fromNamespaceAndPath(Wizardry.MODID, "spell_properties_parser");

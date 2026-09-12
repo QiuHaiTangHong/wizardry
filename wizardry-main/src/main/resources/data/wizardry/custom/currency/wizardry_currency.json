@@ -1,0 +1,13 @@
+{
+  "parser": "wizardry:currency_parser",
+  "currency": [
+    {
+      "id": "minecraft:gold_ingot",
+      "value": 3
+    },
+    {
+      "id": "minecraft:emerald",
+      "value": 6
+    }
+  ]
+}

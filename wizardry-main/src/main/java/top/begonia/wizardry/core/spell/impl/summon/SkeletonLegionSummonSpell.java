@@ -8,7 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import top.begonia.wizardry.core.data.spell.definition.spell.part.SpellContext;
+import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.entity.living.minion.SkeletonMinionEntity;
 import top.begonia.wizardry.core.entity.living.minion.StrayMinionEntity;
 import top.begonia.wizardry.core.item.ArtefactItem;

@@ -1,5 +1,6 @@
 package top.begonia.wizardry.core.block;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
@@ -15,8 +16,11 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.BonemealEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
+import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.registry.WizardryBlocks;
+import top.begonia.wizardry.core.registry.WizardryParticles;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
 public class CrystalFlowerBlock extends BushBlock {
@@ -34,7 +38,19 @@ public class CrystalFlowerBlock extends BushBlock {
 
     @Override
     public void animateTick(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull RandomSource random) {
-        if (random.nextBoolean()) {
+        if (random.nextBoolean() && level instanceof ClientLevel clientLevel) {
+            WizardryClient.particleManager.getParticle(
+                    clientLevel,
+                    new QuadParticleOptions(WizardryParticles.SPARKLE.get()),
+                    pos.getX() + random.nextDouble(), pos.getY() + random.nextDouble() / 2 + 0.5, pos.getZ() + random.nextDouble()
+            ).ifPresent(p -> p.speed(0.0f, 0.01f, 0.0f)
+                    .time(20 + random.nextInt(10))
+                    .color(0.5f + (random.nextFloat() / 2),
+                            0.5f + (random.nextFloat() / 2),
+                            0.5f + (random.nextFloat() / 2)
+                    )
+                    .spawn()
+            );
         }
     }
 
