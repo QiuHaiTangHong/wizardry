@@ -1,37 +1,26 @@
 package top.begonia.wizardry.client.renderer.entity;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.client.model.entity.WizardModel;
 import top.begonia.wizardry.client.renderer.entity.state.WizardRenderState;
 import top.begonia.wizardry.core.entity.living.WizardEntity;
 
-public class WizardRenderer extends EntityRenderer<WizardEntity, WizardRenderState> {
+public class WizardRenderer extends MobRenderer<WizardEntity, WizardRenderState, WizardModel> {
     private static final Identifier[] TEXTURES = new Identifier[6];
-    private final EntityRenderDispatcher entityRenderDispatcher;
     public WizardRenderer(EntityRendererProvider.Context context) {
-        super(context);
-        this.entityRenderDispatcher = context.getEntityRenderDispatcher();
+        super(context, new WizardModel(context.bakeLayer(WizardModel.MODEL_LAYER_LOCATION)), 0.5F);
         for (int i = 0; i < TEXTURES.length; i++) {
             TEXTURES[i] = Identifier.fromNamespaceAndPath(Wizardry.MODID, "textures/entity/wizard/wizard_" + i + ".png");
         }
-        this.shadowRadius = 0.5F;
     }
 
     @Override
-    public void submit(
-            @NonNull WizardRenderState state,
-            @NonNull PoseStack poseStack,
-            @NonNull SubmitNodeCollector submitNodeCollector,
-            @NonNull CameraRenderState camera
-    ) {
-        super.submit(state, poseStack, submitNodeCollector, camera);
+    public @NonNull Identifier getTextureLocation(@NonNull WizardRenderState state) {
+        return WizardRenderer.TEXTURES[state.textureIndex];
     }
 
     @Override

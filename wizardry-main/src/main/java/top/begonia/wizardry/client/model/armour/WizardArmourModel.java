@@ -42,22 +42,40 @@ public class WizardArmourModel<T extends HumanoidRenderState> extends AbstractWi
                         .addBox(-8.0F, -6.85F, -8.0F, 16.0F, 1.0F, 16.0F, new CubeDeformation(0.6F)),
                 PartPose.ZERO);
         head.addOrReplaceChild("hat_segment_1",
-                CubeListBuilder.create().texOffs(0, 32).mirror().addBox(0.0F, 0.0F, 0.0F, 6.0F, 2.0F, 6.0F, new CubeDeformation(0.2F)),
+                CubeListBuilder.create()
+                        .texOffs(0, 32)
+                        .mirror()
+                        .addBox(0.0F, 0.0F, 0.0F, 6.0F, 2.0F, 6.0F, new CubeDeformation(0.2F)),
                 PartPose.offsetAndRotation(-3.0F, -10.6F, -3.0F, -0.1396263F, 0.0F, 0.0F));
         head.addOrReplaceChild("hat_segment_2",
-                CubeListBuilder.create().texOffs(0, 40).mirror().addBox(0.0F, 0.0F, 0.0F, 5.0F, 2.0F, 5.0F, new CubeDeformation(0.1F)),
+                CubeListBuilder.create()
+                        .texOffs(0, 40)
+                        .mirror()
+                        .addBox(0.0F, 0.0F, 0.0F, 5.0F, 2.0F, 5.0F, new CubeDeformation(0.1F)),
                 PartPose.offsetAndRotation(-2.5F, -12.13333F, -2.0F, -0.2443461F, 0.0F, 0.0F));
         head.addOrReplaceChild("hat_segment_3",
-                CubeListBuilder.create().texOffs(24, 32).mirror().addBox(0.0F, 0.0F, 0.0F, 4.0F, 2.0F, 4.0F),
+                CubeListBuilder.create()
+                        .texOffs(24, 32)
+                        .mirror()
+                        .addBox(0.0F, 0.0F, 0.0F, 4.0F, 2.0F, 4.0F),
                 PartPose.offsetAndRotation(-2.0F, -13.6F, -1.0F, -0.4014257F, 0.0F, 0.0F));
         head.addOrReplaceChild("hat_segment_4",
-                CubeListBuilder.create().texOffs(24, 38).mirror().addBox(0.0F, 0.0F, 0.0F, 3.0F, 2.0F, 3.0F),
+                CubeListBuilder.create()
+                        .texOffs(24, 38)
+                        .mirror()
+                        .addBox(0.0F, 0.0F, 0.0F, 3.0F, 2.0F, 3.0F),
                 PartPose.offsetAndRotation(-1.5F, -14.6F, 0.0F, -0.5759587F, 0.0F, 0.0F));
         head.addOrReplaceChild("hat_segment_5",
-                CubeListBuilder.create().texOffs(20, 43).mirror().addBox(0.0F, 0.0F, 0.0F, 2.0F, 2.0F, 2.0F),
+                CubeListBuilder.create()
+                        .texOffs(20, 43)
+                        .mirror()
+                        .addBox(0.0F, 0.0F, 0.0F, 2.0F, 2.0F, 2.0F),
                 PartPose.offsetAndRotation(-1.0F, -14.6F, 0.0F, 0.3316126F, 0.0F, 0.0F));
         head.addOrReplaceChild("hat_segment_6",
-                CubeListBuilder.create().texOffs(28, 43).mirror().addBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 3.0F),
+                CubeListBuilder.create()
+                        .texOffs(28, 43)
+                        .mirror()
+                        .addBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 3.0F),
                 PartPose.offsetAndRotation(-0.5F, -15.1F, 2.0F, -0.5585054F, 0.0F, 0.0F));
         head.addOrReplaceChild("hat_bobble",
                 CubeListBuilder.create()

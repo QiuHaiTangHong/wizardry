@@ -20,24 +20,21 @@ import java.util.function.Function;
 
 public abstract class AbstractWizardArmourModel<T extends HumanoidRenderState> extends HumanoidModel<T> {
     private final ModelPart robe;
-    protected static final Map<EquipmentSlot, Set<String>> ADULT_ARMOR_PARTS_PER_SLOT;
+    protected static final Map<EquipmentSlot, Set<String>> ADULT_ARMOR_PARTS_PER_SLOT = Maps.newEnumMap(
+            Map.of(
+                    EquipmentSlot.HEAD, Set.of("head"),
+                    EquipmentSlot.CHEST, Set.of("body", "left_arm", "right_arm", "robe"),
+                    EquipmentSlot.LEGS, Set.of("left_leg", "right_leg", "body"),
+                    EquipmentSlot.FEET, Set.of("left_leg", "right_leg")
+            )
+    );
 
     public AbstractWizardArmourModel(ModelPart root) {
         super(root);
         this.robe = root.getChild("robe");
     }
 
-    static {
-        ADULT_ARMOR_PARTS_PER_SLOT = Maps.newEnumMap(
-                Map.of(
-                        EquipmentSlot.HEAD, Set.of("head"),
-                        EquipmentSlot.CHEST, Set.of("body", "left_arm", "right_arm", "robe"),
-                        EquipmentSlot.LEGS, Set.of("left_leg", "right_leg", "body"),
-                        EquipmentSlot.FEET, Set.of("left_leg", "right_leg")
-                )
-        );
-    }
-
+    @SuppressWarnings("SameParameterValue")
     @Contract("_, _, _, _ -> new")
     protected static @NonNull ArmorModelSetExtension<MeshDefinition> createArmorMeshSetExtension(
             @NonNull Function<CubeDeformation, MeshDefinition> baseFactory,
@@ -62,13 +59,6 @@ public abstract class AbstractWizardArmourModel<T extends HumanoidRenderState> e
             @NonNull CubeDeformation outerDeformation
     ) {
         return createArmorMeshSetExtension(baseFactory, ADULT_ARMOR_PARTS_PER_SLOT, innerDeformation, outerDeformation);
-    }
-
-    public static @NonNull ArmorModelSetExtension<MeshDefinition> createArmorMeshSetExtension(
-            @NonNull CubeDeformation innerDeformation,
-            @NonNull CubeDeformation outerDeformation
-    ) {
-        return createArmorMeshSetExtension(AbstractWizardArmourModel::createBaseArmorMesh, innerDeformation, outerDeformation);
     }
 
     protected static @NonNull MeshDefinition createBaseArmorMesh(CubeDeformation cubeDeformation) {

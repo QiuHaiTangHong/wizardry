@@ -54,6 +54,7 @@ import top.begonia.wizardry.client.model.armour.WizardArmourModel;
 import top.begonia.wizardry.client.model.block.RunestoneUnbakedBlockModel;
 import top.begonia.wizardry.client.model.conditional.DiscoveredConditional;
 import top.begonia.wizardry.client.model.conditional.FestivalConditional;
+import top.begonia.wizardry.client.model.entity.WizardModel;
 import top.begonia.wizardry.client.model.item.RunestoneUnbakedItemModel;
 import top.begonia.wizardry.client.model.item.SpellBookUnbakedItemModel;
 import top.begonia.wizardry.client.model.loader.WizardryModelLoader;
@@ -124,7 +125,10 @@ public class ClientEvents {
                         ),
                 result
         );
-        result.build().forEach((modelLayerLocation, layerDefinition) -> event.registerLayerDefinition(modelLayerLocation, () -> layerDefinition));
+        result.build().forEach((modelLayerLocation, layerDefinition) ->
+                event.registerLayerDefinition(modelLayerLocation, () -> layerDefinition)
+        );
+        event.registerLayerDefinition(WizardModel.MODEL_LAYER_LOCATION, () -> WizardModel.createLayer(new CubeDeformation(1.0f)));
     }
 
     @SubscribeEvent
