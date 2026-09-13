@@ -11,7 +11,7 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.particle.CompositeQuadParticle;
 import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
-import top.begonia.wizardry.api.particle.extension.ParticleInitAccessor;
+import top.begonia.wizardry.api.particle.extension.ParticleBuilder;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.api.particle.type.ParticleTypeExtension;
@@ -27,7 +27,7 @@ import java.util.Optional;
  * 负责管理粒子 Provider 注册表、统一创建入口及常用特效快捷生成。
  * </p>
  *
- * @see ParticleInitAccessor
+ * @see ParticleBuilder
  * @see WizardryParticleProvider
  */
 public class WizardryParticleManager implements ParticleResourceAccessor {
@@ -44,7 +44,7 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
     }
 
     @NotNull
-    public <T extends IParticleOptionsExtension> Optional<ParticleInitAccessor> getParticle(
+    public <T extends IParticleOptionsExtension> Optional<ParticleBuilder> getParticle(
             ClientLevel clientLevel,
             @NonNull RandomSource random,
             @NonNull T options,
@@ -54,7 +54,7 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
         double px = x + (random.nextDouble() * 2 - 1) * radius;
         double py = y + (random.nextDouble() * 2 - 1) * radius;
         double pz = z + (random.nextDouble() * 2 - 1) * radius;
-        ParticleInitAccessor particleInitAccessor = this.createParticle(clientLevel, options, px, py, pz);
+        ParticleBuilder particleInitAccessor = this.createParticle(clientLevel, options, px, py, pz);
         if (particleInitAccessor != null && move) {
             particleInitAccessor.speed(px - x, py - y, pz - z);
         }
@@ -62,7 +62,7 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
     }
 
     @NotNull
-    public <T extends IParticleOptionsExtension> Optional<ParticleInitAccessor> getParticle(
+    public <T extends IParticleOptionsExtension> Optional<ParticleBuilder> getParticle(
             ClientLevel clientLevel,
             @NonNull T options,
             double x, double y, double z
@@ -71,7 +71,7 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
     }
 
     @Nullable
-    protected <T extends IParticleOptionsExtension> ParticleInitAccessor createParticle(
+    protected <T extends IParticleOptionsExtension> ParticleBuilder createParticle(
             ClientLevel clientLevel,
             @NonNull T options,
             double x, double y, double z
@@ -114,7 +114,7 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
                     level,
                     new QuadParticleOptions(WizardryParticles.SPARK.get()),
                     px, py, pz
-            ).ifPresent(ParticleInitAccessor::spawn);
+            ).ifPresent(ParticleBuilder::spawn);
             px = x + level.getRandom().nextDouble() - 0.5;
             py = y + level.getRandom().nextDouble() - 0.5;
             pz = z + level.getRandom().nextDouble() - 0.5;

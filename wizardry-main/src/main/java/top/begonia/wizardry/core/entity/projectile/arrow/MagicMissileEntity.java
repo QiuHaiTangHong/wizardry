@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.particle.extension.ParticleInitAccessor;
+import top.begonia.wizardry.api.particle.extension.ParticleBuilder;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.entity.projectile.MagicArrowEntity;
@@ -102,7 +102,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
                         clientLevel,
                         new QuadParticleOptions(WizardryParticles.SNOW.get()),
                         this.getX(), this.getY(), this.getZ()
-                ).ifPresent(ParticleInitAccessor::spawn);
+                ).ifPresent(ParticleBuilder::spawn);
 
                 if (this.tickCount > 1) {
                     Vec3 motion = this.getDeltaMovement();

@@ -22,6 +22,7 @@ import top.begonia.wizardry.core.data.player.WizardPlayerData;
 import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.constant.parser.SpellPropertiesParser;
 import top.begonia.wizardry.core.effect.impl.DecayMobEffect;
+import top.begonia.wizardry.core.entity.living.RemnantEntity;
 import top.begonia.wizardry.core.entity.construct.BubbleEntity;
 import top.begonia.wizardry.core.entity.living.WizardEntity;
 import top.begonia.wizardry.core.entity.living.minion.WitherSkeletonMinionEntity;
@@ -111,5 +112,6 @@ public class CoreEvent {
         event.put(WizardryEntities.ZOMBIE_MINION.get(), ZombieMinionEntity.createAttributes().build());
         event.put(WizardryEntities.WITHER_SKELETON_MINION.get(), WitherSkeletonMinionEntity.createAttributes().build());
         event.put(WizardryEntities.WIZARD.get(), WizardEntity.createAttributes().build());
+        event.put(WizardryEntities.REMNANT.get(), RemnantEntity.createAttributes().build());
     }
 }

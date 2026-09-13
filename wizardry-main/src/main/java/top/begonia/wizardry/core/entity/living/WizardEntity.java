@@ -151,6 +151,26 @@ public class WizardEntity extends PathfinderMob implements Merchant, ISpellCaste
     }
 
     @Override
+    protected SoundEvent getAmbientSound() {
+        if (Wizardry.tisTheSeason) {
+            return WizardrySounds.ENTITY_WIZARD_HOHOHO.get();
+        }
+        return this.getTradingPlayer() != null
+                ? WizardrySounds.ENTITY_WIZARD_TRADING.get()
+                : WizardrySounds.ENTITY_WIZARD_AMBIENT.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(@NonNull DamageSource source) {
+        return WizardrySounds.ENTITY_WIZARD_HURT.get();
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return WizardrySounds.ENTITY_WIZARD_DEATH.get();
+    }
+
+    @Override
     public @NonNull List<AbstractSpell> getSpells() {
         return this.spells;
     }

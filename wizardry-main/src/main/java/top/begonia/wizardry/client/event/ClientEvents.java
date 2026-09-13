@@ -54,6 +54,8 @@ import top.begonia.wizardry.client.model.armour.WizardArmourModel;
 import top.begonia.wizardry.client.model.block.RunestoneUnbakedBlockModel;
 import top.begonia.wizardry.client.model.conditional.DiscoveredConditional;
 import top.begonia.wizardry.client.model.conditional.FestivalConditional;
+import top.begonia.wizardry.client.model.entity.HammerModel;
+import top.begonia.wizardry.client.model.entity.RemnantModel;
 import top.begonia.wizardry.client.model.entity.WizardModel;
 import top.begonia.wizardry.client.model.item.RunestoneUnbakedItemModel;
 import top.begonia.wizardry.client.model.item.SpellBookUnbakedItemModel;
@@ -68,6 +70,7 @@ import top.begonia.wizardry.client.renderer.entity.block.BookshelfRender;
 import top.begonia.wizardry.client.renderer.entity.block.ImbuementAltarRender;
 import top.begonia.wizardry.client.renderer.entity.block.LecternRender;
 import top.begonia.wizardry.client.renderer.uniform.MouseUniform;
+import top.begonia.wizardry.client.util.EntityLayerLocations;
 import top.begonia.wizardry.core.network.data.HandbookRecipesRequestPayload;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.util.ArmourHelper;
@@ -95,8 +98,8 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.@NonNull RegisterLayerDefinitions event) {
-        final CubeDeformation OUTER_ARMOR_DEFORMATION = new CubeDeformation(1.0F);
-        final CubeDeformation INNER_ARMOR_DEFORMATION = new CubeDeformation(0.5F);
+        final CubeDeformation OUTER_ARMOR_DEFORMATION = new CubeDeformation(0.75F);
+        final CubeDeformation INNER_ARMOR_DEFORMATION = new CubeDeformation(0.75F);
         ImmutableMap.Builder<ModelLayerLocation, LayerDefinition> result = ImmutableMap.builder();
         ArmourHelper.ModelLayers.WIZARD.putFrom(
                 WizardArmourModel
@@ -128,7 +131,9 @@ public class ClientEvents {
         result.build().forEach((modelLayerLocation, layerDefinition) ->
                 event.registerLayerDefinition(modelLayerLocation, () -> layerDefinition)
         );
-        event.registerLayerDefinition(WizardModel.MODEL_LAYER_LOCATION, () -> WizardModel.createLayer(new CubeDeformation(1.0f)));
+        event.registerLayerDefinition(EntityLayerLocations.WIZARD_ENTITY, () -> WizardModel.createLayer(CubeDeformation.NONE));
+        event.registerLayerDefinition(EntityLayerLocations.HAMMER_ENTITY, () -> HammerModel.createLayer(CubeDeformation.NONE));
+        event.registerLayerDefinition(EntityLayerLocations.REMNANT_ENTITY, () -> RemnantModel.createLayer(CubeDeformation.NONE));
     }
 
     @SubscribeEvent
@@ -155,7 +160,10 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onRegisterFeatureRenderers(@NonNull RegisterFeatureRenderersEvent event) {
-        event.register(CompositeQuadParticleFeatureRenderer.TYPE, new CompositeQuadParticleFeatureRenderer());
+        event.register(
+                CompositeQuadParticleFeatureRenderer.TYPE,
+                new CompositeQuadParticleFeatureRenderer()
+        );
     }
 
     @SubscribeEvent
@@ -196,6 +204,14 @@ public class ClientEvents {
         event.registerEntityRenderer(
                 WizardryEntities.WIZARD.get(),
                 WizardRenderer::new
+        );
+        event.registerEntityRenderer(
+                WizardryEntities.LIGHTNING_HAMMER.get(),
+                HammerRenderer::new
+        );
+        event.registerEntityRenderer(
+                WizardryEntities.REMNANT.get(),
+                RemnantRenderer::new
         );
         event.registerEntityRenderer(
                 WizardryEntities.BUBBLE.get(),
@@ -245,7 +261,10 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onRegisterModelLoaders(ModelEvent.@NonNull RegisterLoaders event) {
-        event.register(WizardryModelLoader.ID, new WizardryModelLoader());
+        event.register(
+                WizardryModelLoader.ID,
+                new WizardryModelLoader()
+        );
     }
 
     @SubscribeEvent

@@ -14,6 +14,7 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.entity.*;
 import top.begonia.wizardry.core.entity.construct.*;
 import top.begonia.wizardry.core.entity.living.EvilWizardEntity;
+import top.begonia.wizardry.core.entity.living.RemnantEntity;
 import top.begonia.wizardry.core.entity.living.WizardEntity;
 import top.begonia.wizardry.core.entity.living.minion.*;
 import top.begonia.wizardry.core.entity.projectile.arrow.MagicMissileEntity;
@@ -191,7 +192,6 @@ public final class WizardryEntities {
             "wizard",
             EntityType.Builder
                     .of(WizardEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
     );
@@ -207,7 +207,7 @@ public final class WizardryEntities {
             "remnant",
             EntityType.Builder
                     .of(RemnantEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .sized(0.8F, 0.8F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
     );
@@ -403,11 +403,11 @@ public final class WizardryEntities {
                     .clientTrackingRange(4)
                     .updateInterval(10)
     );
-    public static final DeferredHolder<EntityType<?>, EntityType<LightningHammerEntity>> LIGHTNING_HAMMER = register(
+    public static final DeferredHolder<EntityType<?>, EntityType<HammerEntity>> LIGHTNING_HAMMER = register(
             "lightning_hammer",
             EntityType.Builder
-                    .of(LightningHammerEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .of(HammerEntity::new, MobCategory.MISC)
+                    .sized(1.0F, 1.9F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
     );

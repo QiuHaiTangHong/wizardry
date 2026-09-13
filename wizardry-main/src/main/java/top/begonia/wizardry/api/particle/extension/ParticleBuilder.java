@@ -17,14 +17,14 @@ import top.begonia.wizardry.api.particle.manager.WizardryParticleManager;
  * @see CompositeQuadParticle
  */
 @SuppressWarnings("UnusedReturnValue")
-public interface ParticleInitAccessor {
+public interface ParticleBuilder {
     /**
      * 设置粒子的缩放比例。
      *
      * @param scale 缩放因子
      * @return 当前访问器实例
      */
-    @NonNull ParticleInitAccessor scaleValue(float scale);
+    @NonNull ParticleBuilder scaleValue(float scale);
 
     /**
      * 设置粒子的生命周期（tick 数）。
@@ -32,7 +32,7 @@ public interface ParticleInitAccessor {
      * @param time 生命周期时长
      * @return 当前访问器实例
      */
-    ParticleInitAccessor time(int time);
+    ParticleBuilder time(int time);
 
     /**
      * 设置粒子的初始速度向量。
@@ -42,7 +42,7 @@ public interface ParticleInitAccessor {
      * @param zd Z 轴速度
      * @return 当前访问器实例
      */
-    ParticleInitAccessor speed(double xd, double yd, double zd);
+    ParticleBuilder speed(double xd, double yd, double zd);
 
     /**
      * 设置粒子的初始速度向量。
@@ -50,7 +50,7 @@ public interface ParticleInitAccessor {
      * @param vel 速度向量
      * @return 当前访问器实例
      */
-    default ParticleInitAccessor speed(@NonNull Vec3 vel) {
+    default ParticleBuilder speed(@NonNull Vec3 vel) {
         return this.speed(vel.x, vel.y, vel.z);
     }
 
@@ -68,7 +68,7 @@ public interface ParticleInitAccessor {
      * @param hex ARGB 颜色值 (例如 {@code 0xFF0000FF} 表示不透明的红色)
      * @return 当前访问器实例
      */
-    default ParticleInitAccessor color(int hex) {
+    default ParticleBuilder color(int hex) {
         float r = ((hex & 0xFF0000) >> 16) / 255.0F;
         float g = ((hex & 0xFF00) >> 8) / 255.0F;
         float b = ((hex & 0xFF)) / 255.0F;
@@ -94,7 +94,7 @@ public interface ParticleInitAccessor {
      * @param blue  蓝色分量
      * @return 当前访问器实例
      */
-    default ParticleInitAccessor color(float red, float green, float blue) {
+    default ParticleBuilder color(float red, float green, float blue) {
         this.startColor(red, green, blue);
         this.currentColor(red, green, blue);
         this.endColor(red, green, blue);
@@ -109,7 +109,7 @@ public interface ParticleInitAccessor {
      * @param blue  蓝色分量 (0.0-1.0)
      * @return 当前访问器实例
      */
-    ParticleInitAccessor startColor(float red, float green, float blue);
+    ParticleBuilder startColor(float red, float green, float blue);
 
     /**
      * 设置粒子的当前颜色。
@@ -122,7 +122,7 @@ public interface ParticleInitAccessor {
      * @param blue  蓝色分量 (0.0-1.0)
      * @return 当前访问器实例
      */
-    ParticleInitAccessor currentColor(float red, float green, float blue);
+    ParticleBuilder currentColor(float red, float green, float blue);
 
     /**
      * 设置粒子的结束颜色。
@@ -132,7 +132,7 @@ public interface ParticleInitAccessor {
      * @param blue  蓝色分量 (0.0-1.0)
      * @return 当前访问器实例
      */
-    ParticleInitAccessor endColor(float red, float green, float blue);
+    ParticleBuilder endColor(float red, float green, float blue);
 
     /**
      * 设置粒子的结束颜色（ARGB Hex 格式）。
@@ -140,7 +140,7 @@ public interface ParticleInitAccessor {
      * @param hex ARGB 颜色值
      * @return 当前访问器实例
      */
-    default ParticleInitAccessor endColor(int hex) {
+    default ParticleBuilder endColor(int hex) {
         float r = ((hex & 0xFF0000) >> 16) / 255.0F;
         float g = ((hex & 0xFF00) >> 8) / 255.0F;
         float b = ((hex & 0xFF)) / 255.0F;
@@ -153,7 +153,7 @@ public interface ParticleInitAccessor {
      * @param alpha 透明度 (0.0-1.0)，0.0 为完全透明，1.0 为完全不透明
      * @return 当前访问器实例
      */
-    ParticleInitAccessor alpha(float alpha);
+    ParticleBuilder alpha(float alpha);
 
     /**
      * 设置粒子是否启用阴影效果。
@@ -161,7 +161,7 @@ public interface ParticleInitAccessor {
      * @param shaded true 如果粒子应根据光照产生阴影，false 否则
      * @return 当前访问器实例
      */
-    ParticleInitAccessor shaded(boolean shaded);
+    ParticleBuilder shaded(boolean shaded);
 
     /**
      * 设置粒子是否受重力影响。
@@ -169,7 +169,7 @@ public interface ParticleInitAccessor {
      * @param gravity true 如果粒子应受重力向下加速，false 否则
      * @return 当前访问器实例
      */
-    ParticleInitAccessor gravity(boolean gravity);
+    ParticleBuilder gravity(boolean gravity);
 
     /**
      * 设置粒子绕自身轴旋转的效果。
@@ -178,18 +178,7 @@ public interface ParticleInitAccessor {
      * @param speed  旋转角速度
      * @return 当前访问器实例
      */
-    ParticleInitAccessor spin(double radius, double speed);
-
-    /**
-     * 设置粒子附着于某个实体。
-     * <p>
-     * 粒子将跟随该实体的位置移动。
-     * </p>
-     *
-     * @param entity 目标实体
-     * @return 当前访问器实例
-     */
-    ParticleInitAccessor entity(Entity entity);
+    ParticleBuilder spin(double radius, double speed);
 
     /**
      * 设置粒子的朝向（偏航角和俯仰角）。
@@ -198,7 +187,7 @@ public interface ParticleInitAccessor {
      * @param pitch 俯仰角 (X 轴旋转角度)
      * @return 当前访问器实例
      */
-    ParticleInitAccessor facing(float yaw, float pitch);
+    ParticleBuilder facing(float yaw, float pitch);
 
     /**
      * 根据方向设置粒子的朝向。
@@ -206,7 +195,7 @@ public interface ParticleInitAccessor {
      * @param direction 目标方向
      * @return 当前访问器实例
      */
-    default ParticleInitAccessor facing(@NonNull Direction direction) {
+    default ParticleBuilder facing(@NonNull Direction direction) {
         return this.facing(direction.toYRot(), direction.getAxis().isVertical() ? direction.getAxisDirection().getStep() * -90.0F : 0.0F);
     }
 
@@ -221,7 +210,7 @@ public interface ParticleInitAccessor {
      * @param z 目标 Z 坐标
      * @return 当前访问器实例
      */
-    ParticleInitAccessor targetPosition(double x, double y, double z);
+    ParticleBuilder targetPosition(double x, double y, double z);
 
     /**
      * 设置粒子的目标速度。
@@ -234,7 +223,7 @@ public interface ParticleInitAccessor {
      * @param vz 目标 Z 速度
      * @return 当前访问器实例
      */
-    ParticleInitAccessor targetVelocity(double vx, double vy, double vz);
+    ParticleBuilder targetVelocity(double vx, double vy, double vz);
 
     /**
      * 设置粒子的目标实体。
@@ -245,7 +234,7 @@ public interface ParticleInitAccessor {
      * @param target 目标实体
      * @return 当前访问器实例
      */
-    ParticleInitAccessor targetEntity(Entity target);
+    ParticleBuilder targetEntity(Entity target);
 
     /**
      * 设置粒子的长度或拉伸程度。
@@ -256,7 +245,7 @@ public interface ParticleInitAccessor {
      * @param length 长度值
      * @return 当前访问器实例
      */
-    ParticleInitAccessor length(double length);
+    ParticleBuilder length(double length);
 
     /**
      * 设置粒子是否启用物理碰撞检测。
@@ -264,7 +253,7 @@ public interface ParticleInitAccessor {
      * @param hasPhysics true 如果粒子应与世界发生物理交互（如碰撞反弹），否则 false
      * @return 当前访问器实例
      */
-    ParticleInitAccessor physics(boolean hasPhysics);
+    ParticleBuilder physics(boolean hasPhysics);
 
     /**
      * 将配置好的粒子添加到粒子引擎中进行渲染。

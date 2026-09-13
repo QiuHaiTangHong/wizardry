@@ -64,27 +64,31 @@ public abstract class AbstractWizardArmourModel<T extends HumanoidRenderState> e
     protected static @NonNull MeshDefinition createBaseArmorMesh(CubeDeformation cubeDeformation) {
         MeshDefinition mesh = createMesh(cubeDeformation, 0.0F);
         PartDefinition root = mesh.getRoot();
-        root.addOrReplaceChild("right_leg",
-                CubeListBuilder.create()
-                        .texOffs(0, 16)
-                        .addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation.extend(-0.1F)), PartPose.offset(-1.9F, 12.0F, 0.0F));
-        root.addOrReplaceChild("left_leg",
-                CubeListBuilder.create()
-                        .texOffs(0, 16)
-                        .mirror()
-                        .addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation.extend(-0.1F)), PartPose.offset(1.9F, 12.0F, 0.0F));
         root.addOrReplaceChild("robe",
                 CubeListBuilder.create()
                         .texOffs(40, 32)
-                        .addBox(-4.0F, 0.0F, -2.0F, 8.0F, 9.0F, 4.0F, cubeDeformation),
-                PartPose.offset(0.0F, 12.0F, 0.0F)
+                        .mirror()
+                        .addBox(
+                                -4.0F, 0.0F, -2.0F,
+                                8.0F, 9.0F, 4.0F,
+                                cubeDeformation
+                        ),
+                PartPose.offsetAndRotation(
+                        0.0F, 12.0F, 0.0F,
+                        0.0F, 0.0F, 0.0F
+                )
         );
         root.addOrReplaceChild("body",
                 CubeListBuilder.create()
                         .texOffs(16, 16)
                         .mirror()
-                        .addBox(-4.0F, 0.0F, -2.0F, 8.0F, 11.0F, 4.0F, cubeDeformation),
-                PartPose.ZERO);
+                        .addBox(
+                                -4.0F, 0.0F, -2.0F,
+                                8.0F, 11.0F, 4.0F,
+                                cubeDeformation
+                        ),
+                PartPose.ZERO
+        );
         return mesh;
     }
 
