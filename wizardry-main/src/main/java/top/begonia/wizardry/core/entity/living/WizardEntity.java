@@ -221,7 +221,7 @@ public class WizardEntity extends PathfinderMob implements Merchant, ISpellCaste
     }
 
     public boolean stillValid(@NonNull Player player) {
-        return this.getTradingPlayer() == player && this.isAlive() && player.isWithinEntityInteractionRange(this, LOOK_DISTANCE);
+        return this.getTradingPlayer() != null && this.isAlive() && player.isWithinEntityInteractionRange(this, LOOK_DISTANCE);
     }
 
     // 替代 processInteract
