@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.entity.ai.goal;
+package top.begonia.wizardry.api.entity.ai.goal;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;

@@ -11,7 +11,7 @@ import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.*;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.entity.ICustomHitbox;
+import top.begonia.wizardry.api.entity.atom.ICustomHitbox;
 
 import java.util.List;
 import java.util.Optional;

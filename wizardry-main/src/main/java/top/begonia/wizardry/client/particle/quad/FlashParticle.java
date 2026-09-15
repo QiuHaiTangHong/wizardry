@@ -1,15 +1,12 @@
 package top.begonia.wizardry.client.particle.quad;
 
-import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
-import org.joml.Quaternionf;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.particle.extension.Layer;
+import top.begonia.wizardry.api.particle.extension.extract.IColorFlowOperation;
+import top.begonia.wizardry.api.particle.extension.extract.ISizeFlowOperation;
 import top.begonia.wizardry.api.particle.impl.OneQuadParticle;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
-import top.begonia.wizardry.api.particle.renderer.state.CompositeQuadParticleRenderState;
 
 public class FlashParticle extends OneQuadParticle {
     public FlashParticle(ClientLevel level, @NonNull QuadParticleOptions options, double x, double y, double z) {
@@ -22,32 +19,15 @@ public class FlashParticle extends OneQuadParticle {
     }
 
     @Override
-    protected void extractSurface(
-            @NonNull CompositeQuadParticleRenderState state,
-            Layer layer,
-            @NonNull Camera camera,
-            float partialTick,
-            float lerpX, float lerpY, float lerpZ,
-            Quaternionf rotation,
-            float scale,
-            float u0, float u1,
-            float v0, float v1,
-            int color, int lightCoords
-    ) {
-        this.alpha(0.6F - ((float) this.age + partialTick - 1.0F) / this.lifetime * 0.5F);
-        int finalColor = ARGB.colorFromFloat(this.alpha, this.currentRed, this.currentGreen, this.currentBlue);
-        float finalScale = scale * Mth.sin(((float) this.age + partialTick - 1.0F) / this.lifetime * (float) Math.PI);
-        super.extractSurface(
-                state,
-                layer,
-                camera,
-                partialTick,
-                lerpX, lerpY, lerpZ,
-                rotation,
-                finalScale,
-                u0, u1,
-                v0, v1,
-                finalColor, lightCoords
-        );
+    protected void extractColor(@NonNull IColorFlowOperation colorFlowOperation) {
+        super.extractColor(colorFlowOperation);
+        float alpha = 0.6F - ((float) this.age + colorFlowOperation.getPartialTick() - 1.0F) / this.lifetime * 0.5F;
+        colorFlowOperation.setAlpha(alpha);
+    }
+
+    @Override
+    protected void extractSize(@NonNull ISizeFlowOperation sizeFlowOperation) {
+        float finalScale = sizeFlowOperation.getScale() * Mth.sin(((float) this.age + sizeFlowOperation.getPartialTick() - 1.0F) / this.lifetime * (float) Math.PI);
+        sizeFlowOperation.setScale(finalScale);
     }
 }

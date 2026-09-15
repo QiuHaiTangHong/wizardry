@@ -1,26 +1,22 @@
-package top.begonia.wizardry.core.entity.living;
+package top.begonia.wizardry.core.entity.living.wizard.impl;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -35,210 +31,145 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.config.CommonConfig;
+import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.constants.EnabledEnum;
 import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.constant.definition.currency.Currency;
-import top.begonia.wizardry.core.entity.ISpellCaster;
-import top.begonia.wizardry.core.entity.ai.goal.LookAtTradePlayer;
-import top.begonia.wizardry.core.entity.ai.goal.RestrictOpenDoor;
-import top.begonia.wizardry.core.entity.ai.goal.TradePlayer;
-import top.begonia.wizardry.core.item.SpellBookItem;
+import top.begonia.wizardry.api.entity.ai.goal.LookAtTradePlayer;
+import top.begonia.wizardry.api.entity.ai.goal.TradePlayer;
+import top.begonia.wizardry.api.entity.hybrid.ISummonedCreature;
+import top.begonia.wizardry.core.entity.living.wizard.AbstractWizardEntity;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.spell.AbstractSpell;
-import top.begonia.wizardry.core.util.ArmourHelper;
-import top.begonia.wizardry.core.util.EntityUtils;
-import top.begonia.wizardry.core.util.ItemStackHelper;
-import top.begonia.wizardry.core.util.TierElementFilter;
+import top.begonia.wizardry.core.util.*;
 
 import java.util.*;
 
-public class WizardEntity extends PathfinderMob implements Merchant, ISpellCaster {
+public class WizardEntity extends AbstractWizardEntity implements Merchant {
     public static final float LOOK_DISTANCE = 8.0f;
-    public static final EntityDataAccessor<Integer> HEAL_COOLDOWN = SynchedEntityData.defineId(
-            WizardEntity.class,
-            EntityDataSerializers.INT
-    );
-    public static final EntityDataAccessor<Integer> ELEMENT = SynchedEntityData.defineId(
-            WizardEntity.class,
-            EntityDataSerializers.INT
-    );
-    public static final EntityDataAccessor<Identifier> CONTINUOUS_SPELL = SynchedEntityData.defineId(
-            WizardEntity.class,
-            WizardryEntityDataSerializers.IDENTIFIER.get()
-    );
-    public static final EntityDataAccessor<Integer> SPELL_COUNTER = SynchedEntityData.defineId(
-            WizardEntity.class,
-            EntityDataSerializers.INT
-    );
-    private static final EntityDataAccessor<Integer> TEXTURE_INDEX = SynchedEntityData.defineId(
-            WizardEntity.class,
-            EntityDataSerializers.INT
-    );
+    public static final Identifier[] TEXTURES = new Identifier[6];
+    protected @Nullable MerchantOffers offers;
+    TargetingConditions.@Nullable Selector targetSelector;
     @Nullable
     private Player trading;
-    private final List<AbstractSpell> spells = new ArrayList<>(4);
-    protected @Nullable MerchantOffers offers;
     private Set<BlockPos> towerBlocks;
     private int villagerXp = 0;
+    private int timeUntilReset = 0;
+    private boolean updateRecipes = false;
 
     public WizardEntity(EntityType<? extends WizardEntity> type, Level level) {
         super(type, level);
+        if (level.isClientSide()) {
+            for (int i = 0; i < TEXTURES.length; i++) {
+                TEXTURES[i] = Identifier.fromNamespaceAndPath(Wizardry.MODID, "textures/entity/wizard/wizard_" + i + ".png");
+            }
+        }
     }
 
-    protected void defineSynchedData(SynchedEntityData.@NonNull Builder entityData) {
-        super.defineSynchedData(entityData);
-        entityData.define(HEAL_COOLDOWN, -1)
-                .define(ELEMENT, 0)
-                .define(CONTINUOUS_SPELL, WizardrySpells.NONE.getId())
-                .define(SPELL_COUNTER, 0)
-                .define(TEXTURE_INDEX, 0);
+    public static void onBlockBreakEvent(@NonNull BreakBlockEvent event) {
+        if (event.getPlayer() instanceof FakePlayer) {
+            return;
+        }
+        List<WizardEntity> wizards = EntityUtils.getEntitiesWithinRadius(
+                64,
+                event.getPos().getX(),
+                event.getPos().getY(),
+                event.getPos().getZ(),
+                event.getPlayer().level(),
+                WizardEntity.class
+        );
+
+        if (!wizards.isEmpty()) {
+            for (WizardEntity wizard : wizards) {
+                if (wizard.isBlockPartOfTower(event.getPos())) {
+                    wizard.setTarget(event.getPlayer());
+                    WizardryAdvancementTriggers.ANGER_WIZARD.get().triggerFor(event.getPlayer());
+                }
+            }
+        }
     }
 
     @Override
     protected void registerGoals() {
-        // 游泳的浮动
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        //交易
+        super.registerGoals();
         this.goalSelector.addGoal(1, new TradePlayer(this));
-        // 看向交易实体
         this.goalSelector.addGoal(1, new LookAtTradePlayer(this, LOOK_DISTANCE));
-        this.goalSelector.addGoal(4, new RestrictOpenDoor(this));
-        // 开门
-        this.goalSelector.addGoal(5, new OpenDoorGoal(this, true));
-//        this.goalSelector.addGoal(6, new EntityAIMoveTowardsRestriction(this, 0.6D));
-        // 看向目标实体 Player
-        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
-        // 看向目标实体 WizardEntity
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, WizardEntity.class, 5.0F, 0.02F));
-        // 随机漫步
-        this.goalSelector.addGoal(7, new RandomStrollGoal(this, 0.6D));
-        // 看向目标实体 LivingEntity
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, LivingEntity.class, 8.0F));
-    }
 
-    public static AttributeSupplier.@NonNull Builder createAttributes() {
-        return Mob.createMobAttributes()
-                .add(Attributes.MOVEMENT_SPEED, 0.5)
-                .add(Attributes.MAX_HEALTH, 30.0);
-    }
+        this.targetSelector = (entity, _) -> {
+            if (!entity.isInvisible()
+                    && AllyDesignationSystem.isValidTarget(WizardEntity.this, entity)
+            ) {
+                return (
+                        entity instanceof Mob
+                                && !(entity instanceof ISummonedCreature)
+                                || entity instanceof ISummonedCreature
+                                && (((ISummonedCreature) entity).getOwner() instanceof Mob
+                                || ((ISummonedCreature) entity).getOwner() == this.getLastHurtByMob()
+                                || ((ISummonedCreature) entity).getOwner() == this.getTarget())
+                                || ServerConfig.summonedCreatureTargetsWhitelist
+                                .contains(EntityUtils.getIdentifier(entity))
+                )
+                        && !ServerConfig.summonedCreatureTargetsBlacklist
+                        .contains(EntityUtils.getIdentifier(entity));
+            }
 
-    private int getHealCooldown() {
-        return this.entityData.get(HEAL_COOLDOWN);
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private void setHealCooldown(int cooldown) {
-        this.entityData.set(HEAL_COOLDOWN, cooldown);
-    }
-
-    public ElementEnum getElement() {
-        return ElementEnum.values()[this.entityData.get(ELEMENT)];
-    }
-
-    public void setElement(@NonNull ElementEnum element) {
-        this.entityData.set(ELEMENT, element.ordinal());
-    }
-
-    public int getTextureIndex() {
-        return this.entityData.get(TEXTURE_INDEX);
-    }
-
-    @Override
-    protected SoundEvent getAmbientSound() {
-        if (Wizardry.tisTheSeason) {
-            return WizardrySounds.ENTITY_WIZARD_HOHOHO.get();
-        }
-        return this.getTradingPlayer() != null
-                ? WizardrySounds.ENTITY_WIZARD_TRADING.get()
-                : WizardrySounds.ENTITY_WIZARD_AMBIENT.get();
-    }
-
-    @Override
-    protected SoundEvent getHurtSound(@NonNull DamageSource source) {
-        return WizardrySounds.ENTITY_WIZARD_HURT.get();
-    }
-
-    @Override
-    protected SoundEvent getDeathSound() {
-        return WizardrySounds.ENTITY_WIZARD_DEATH.get();
-    }
-
-    @Override
-    public @NonNull List<AbstractSpell> getSpells() {
-        return this.spells;
-    }
-
-    @Override
-    public void setContinuousSpell(@NonNull AbstractSpell spell) {
-        this.entityData.set(CONTINUOUS_SPELL, spell.getIdentifier());
-    }
-
-    @Override
-    public @NonNull AbstractSpell getContinuousSpell() {
-        return WizardrySpells.get(this.entityData.get(CONTINUOUS_SPELL));
-    }
-
-    @Override
-    public void setSpellCounter(int count) {
-        this.entityData.set(SPELL_COUNTER, count);
-    }
-
-    @Override
-    public int getSpellCounter() {
-        return this.entityData.get(SPELL_COUNTER);
-    }
-
-    @Override
-    public int getAimingError(@NonNull Difficulty difficulty) {
-        return switch (difficulty) {
-            case EASY -> 7;
-            case NORMAL -> 4;
-            case HARD -> 1;
-            default -> 7; // Peaceful counts as easy
+            return false;
         };
+
+        this.goalSelector.addGoal(1, new HurtByTargetGoal(this));
+        // By default, wizards don't attack players unless the player has attacked them.
+        this.goalSelector.addGoal(0, new NearestAttackableTargetGoal<>(
+                this,
+                LivingEntity.class,
+                0,
+                false,
+                true,
+                this.targetSelector
+        ));
     }
 
     @Override
-    public @NonNull HumanoidArm getMainArm() {
-        return HumanoidArm.RIGHT;
+    protected void addAdditionalSaveData(@NonNull ValueOutput valueOutput) {
+        super.addAdditionalSaveData(valueOutput);
+        valueOutput.storeNullable("offers", MerchantOffers.CODEC, this.offers);
+        if (this.towerBlocks != null && !this.towerBlocks.isEmpty()) {
+            var blocksOutput = valueOutput.list("towerBlocks", BlockPos.CODEC);
+            this.towerBlocks.forEach(blocksOutput::add);
+        }
     }
 
     @Override
-    public void setTradingPlayer(@Nullable Player player) {
-        this.trading = player;
+    protected void readAdditionalSaveData(@NonNull ValueInput valueInput) {
+        super.readAdditionalSaveData(valueInput);
+        valueInput.read("offers", MerchantOffers.CODEC).ifPresent(offers -> this.offers = offers);
+        var blocksInput = valueInput.listOrEmpty("towerBlocks", BlockPos.CODEC);
+        blocksInput.forEach(blockPos -> this.towerBlocks.add(blockPos));
     }
 
-    @Override
-    public @Nullable Player getTradingPlayer() {
-        return this.trading;
-    }
-
-    public boolean stillValid(@NonNull Player player) {
-        return this.getTradingPlayer() != null && this.isAlive() && player.isWithinEntityInteractionRange(this, LOOK_DISTANCE);
+    public @Nullable SpawnGroupData finalizeSpawn(
+            @NonNull ServerLevelAccessor level,
+            @NonNull DifficultyInstance difficulty,
+            @NonNull EntitySpawnReason spawnReason,
+            @Nullable SpawnGroupData groupData
+    ) {
+        groupData = super.finalizeSpawn(level, difficulty, spawnReason, groupData);
+        this.setHealCooldown(50);
+        return groupData;
     }
 
     // 替代 processInteract
     protected @NonNull InteractionResult mobInteract(@NonNull Player player, @NonNull InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-        if (player.isCreative()
-                && stack.getItem() instanceof SpellBookItem
-        ) {
-            AbstractSpell spell = stack.getOrDefault(WizardryComponents.SPELL, WizardrySpells.NONE).value();
-            if (this.spells.size() >= 4 && spell.canBeCastBy(this, true)) {
-                // The set(...) method returns the element that was replaced - neat!
-                player.sendSystemMessage(Component.translatable("item." + Wizardry.MODID + ".spell_book.apply_to_wizard",
-                        this.getDisplayName(), this.spells.set(this.random.nextInt(3) + 1, spell).getDisplayNameWithFormatting(),
-                        spell.getDisplayNameWithFormatting()));
-                return InteractionResult.SUCCESS;
-            }
-        }
+        super.mobInteract(player, hand);
         // Won't trade with a player that has attacked them.
         if (this.isAlive()
                 && !this.stillValid(player)
@@ -257,63 +188,61 @@ public class WizardEntity extends PathfinderMob implements Merchant, ISpellCaste
     }
 
     @Override
-    protected void addAdditionalSaveData(@NonNull ValueOutput valueOutput) {
-        super.addAdditionalSaveData(valueOutput);
-        valueOutput.storeNullable("offers", MerchantOffers.CODEC, this.offers);
-
-        ElementEnum element = this.getElement();
-        valueOutput.putInt("element", element == null ? 0 : element.ordinal());
-        valueOutput.putInt("skin", this.entityData.get(TEXTURE_INDEX));
-        var spellsOutput = valueOutput.list("spells", AbstractSpell.CODEC);
-        this.spells.forEach(spell ->
-                spellsOutput.add(WizardrySpells.getHolder(spell.getIdentifier()))
-        );
-
-        if (this.towerBlocks != null && !this.towerBlocks.isEmpty()) {
-            var blocksOutput = valueOutput.list("towerBlocks", BlockPos.CODEC);
-            this.towerBlocks.forEach(blocksOutput::add);
-        }
+    public Identifier[] getWizardTextures() {
+        return TEXTURES;
     }
 
     @Override
-    protected void readAdditionalSaveData(@NonNull ValueInput valueInput) {
-        super.readAdditionalSaveData(valueInput);
-
-        valueInput.read("offers", MerchantOffers.CODEC).ifPresent(offers -> this.offers = offers);
-
-        this.setElement(ElementEnum.values()[valueInput.getIntOr("element", 0)]);
-        this.entityData.set(TEXTURE_INDEX, valueInput.getIntOr("skin", 0));
-        var spellsInput = valueInput.listOrEmpty("spells", AbstractSpell.CODEC);
-        spellsInput.forEach(spell -> this.spells.add(spell.value()));
-
-        var blocksInput = valueInput.listOrEmpty("towerBlocks", BlockPos.CODEC);
-        blocksInput.forEach(blockPos -> this.towerBlocks.add(blockPos));
+    public void setTradingPlayer(@Nullable Player player) {
+        this.trading = player;
     }
 
     @Override
-    public @NonNull MerchantOffers getOffers() {
-        if (this.offers == null) {
-
-            this.offers = new MerchantOffers();
-
-            // 默认有使用法术书换魔力水晶
-            ItemCost anySpellBook = new ItemCost(WizardryItems.SPELL_BOOK.get(), 1);
-            ItemStack crystalStack = ItemStackHelper.getMagicCrystal(ElementEnum.DEFAULT, 5);
-
-            this.offers.add(new MerchantOffer(
-                    anySpellBook,
-                    Optional.empty(),
-                    crystalStack,
-                    Integer.MAX_VALUE,
-                    1,
-                    1.0f
-            ));
-
-            // 随机商品
-            this.addRandomRecipes(3);
+    protected SoundEvent getAmbientSound() {
+        if (Wizardry.tisTheSeason) {
+            return WizardrySounds.ENTITY_WIZARD_HOHOHO.get();
         }
+        return this.getTradingPlayer() != null
+                ? WizardrySounds.ENTITY_WIZARD_TRADING.get()
+                : WizardrySounds.ENTITY_WIZARD_AMBIENT.get();
+    }
 
-        return this.offers;
+    @Override
+    public @Nullable Player getTradingPlayer() {
+        return this.trading;
+    }
+
+    @Override
+    protected void customServerAiStep(@NonNull ServerLevel level) {
+        if (this.trading != null && this.timeUntilReset > 0) {
+            --this.timeUntilReset;
+            if (this.timeUntilReset <= 0) {
+                if (this.updateRecipes) {
+                    MerchantOffers offers = this.getOffers();
+                    for (MerchantOffer offer : offers) {
+                        if (offer.isOutOfStock()) {
+                            offer.resetUses();
+                        }
+                    }
+                    if (offers.size() < 12) {
+                        this.addRandomRecipes(1);
+                    }
+                    this.updateRecipes = false;
+                }
+                this.addEffect(
+                        new MobEffectInstance(
+                                MobEffects.REGENERATION,
+                                200,
+                                0
+                        )
+                );
+            }
+        }
+        super.customServerAiStep(level);
+    }
+
+    public boolean stillValid(@NonNull Player player) {
+        return this.getTradingPlayer() != null && this.isAlive() && player.isWithinEntityInteractionRange(this, LOOK_DISTANCE);
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -522,56 +451,33 @@ public class WizardEntity extends PathfinderMob implements Merchant, ISpellCaste
         }
     }
 
-    @SuppressWarnings("deprecation")
-    public @Nullable SpawnGroupData finalizeSpawn(
-            @NonNull ServerLevelAccessor level,
-            @NonNull DifficultyInstance difficulty,
-            @NonNull EntitySpawnReason spawnReason,
-            @Nullable SpawnGroupData groupData
-    ) {
-        groupData = super.finalizeSpawn(level, difficulty, spawnReason, groupData);
-        this.entityData.set(TEXTURE_INDEX, this.random.nextInt(6));
+    @Override
+    public @NonNull MerchantOffers getOffers() {
+        if (this.offers == null) {
 
-        if (this.random.nextBoolean()) {
-            this.setElement(ElementEnum.values()[this.random.nextInt(ElementEnum.values().length - 1) + 1]);
-        } else {
-            this.setElement(ElementEnum.MAGIC);
-        }
-        ElementEnum element = this.getElement();
+            this.offers = new MerchantOffers();
 
-        // Adds armour.
-        for (ArmorType type : ArmorType.values()) {
-            this.setItemSlot(
-                    type.getSlot(),
-                    ItemStackHelper.generateArmour(
-                            WizardryItems.ARMOUR.get(),
-                            element,
-                            ArmourHelper.ArmourMaterialType.WIZARD,
-                            type
-                    )
-            );
-        }
-        // Default chance is 0.085f, for reference.
-        for (ArmorType type : ArmorType.values()) {
-            this.setDropChance(type.getSlot(), 0.0f);
+            // 默认有使用法术书换魔力水晶
+            ItemCost anySpellBook = new ItemCost(WizardryItems.SPELL_BOOK.get(), 1);
+            ItemStack crystalStack = ItemStackHelper.getMagicCrystal(ElementEnum.DEFAULT, 5);
+
+            this.offers.add(new MerchantOffer(
+                    anySpellBook,
+                    Optional.empty(),
+                    crystalStack,
+                    Integer.MAX_VALUE,
+                    1,
+                    1.0f
+            ));
+
+            // 随机商品
+            this.addRandomRecipes(3);
         }
 
-        // All wizards know magic missile, even if it is disabled.
-        spells.add(WizardrySpells.MAGIC_MISSILE.get());
-        TierEnum maxTier = EntityUtils.populateSpells(this, spells, element, false, 3, this.random);
-
-        // Now done after the spells so it can take the tier into account.
-        ItemStack wand = ItemStackHelper.getWand(maxTier, element);
-        ArrayList<AbstractSpell> list = new ArrayList<>(spells);
-        list.add(WizardrySpells.HEAL.get());
-        ItemStackHelper.setSpells(wand, list.toArray(new AbstractSpell[5]));
-        this.setItemSlot(EquipmentSlot.MAINHAND, wand);
-
-        this.setHealCooldown(50);
-
-        return groupData;
+        return this.offers;
     }
 
+    @SuppressWarnings("unused")
     public void setTowerBlocks(Set<BlockPos> blocks) {
         this.towerBlocks = blocks;
     }
@@ -595,26 +501,16 @@ public class WizardEntity extends PathfinderMob implements Merchant, ISpellCaste
         return super.hurtServer(level, source, damage);
     }
 
-    // TODO
-    public static void onBlockBreakEvent(BlockEvent.@NonNull EntityPlaceEvent event) {
-//        // Makes wizards angry if a player breaks a block in their tower
-//        if(event.getEntity() instanceof ServerPlayer serverPlayer){
-//            List<WizardEntity> wizards = EntityUtils.getEntitiesWithinRadius(
-//                    64,
-//                    event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(),
-//                    event.getLevel(),
-//                    WizardEntity.class
-//            );
-//            if(!wizards.isEmpty()){
-//                for(WizardEntity wizard : wizards){
-//                    if(wizard.isBlockPartOfTower(event.getPos())){
-//                        wizard.setRevengeTarget(event.getPlayer());
-//                        WizardryAdvancementTriggers.ANGER_WIZARD.get().triggerFor(serverPlayer);
-//                    }
-//                }
-//            }
-//        }
+    @Override
+    protected SoundEvent getHurtSound(@NonNull DamageSource source) {
+        return WizardrySounds.ENTITY_WIZARD_HURT.get();
     }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return WizardrySounds.ENTITY_WIZARD_DEATH.get();
+    }
+
 
     @Override
     public void overrideOffers(@NonNull MerchantOffers merchantOffers) {
@@ -623,12 +519,25 @@ public class WizardEntity extends PathfinderMob implements Merchant, ISpellCaste
 
     @Override
     public void notifyTrade(@NonNull MerchantOffer merchantOffer) {
-
+        if (merchantOffer.isOutOfStock()) {
+            this.timeUntilReset = 40;
+            this.updateRecipes = true;
+        }
     }
 
     @Override
     public void notifyTradeUpdated(@NonNull ItemStack itemStack) {
-
+        // Copied from EntityVillager
+        if (this.level().isClientSide()) {
+            return;
+        }
+        if (itemStack.isEmpty()) {
+            this.playSound(
+                    WizardrySounds.ENTITY_WIZARD_NO.get(),
+                    this.getSoundVolume(),
+                    this.getVoicePitch()
+            );
+        }
     }
 
     @Override
@@ -648,7 +557,9 @@ public class WizardEntity extends PathfinderMob implements Merchant, ISpellCaste
 
     @Override
     public @NonNull SoundEvent getNotifyTradeSound() {
-        return null;
+        return Wizardry.tisTheSeason
+                ? WizardrySounds.ENTITY_WIZARD_HOHOHO.get()
+                : WizardrySounds.ENTITY_WIZARD_YES.get();
     }
 
     @Override

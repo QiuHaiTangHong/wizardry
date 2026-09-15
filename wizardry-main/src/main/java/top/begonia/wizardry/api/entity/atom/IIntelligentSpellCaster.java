@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.entity.living;
+package top.begonia.wizardry.api.entity.atom;
 
 import top.begonia.wizardry.core.spell.AbstractSpell;
 

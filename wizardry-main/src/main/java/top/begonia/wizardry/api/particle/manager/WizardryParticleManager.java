@@ -11,7 +11,7 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.particle.CompositeQuadParticle;
 import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
-import top.begonia.wizardry.api.particle.extension.ParticleBuilder;
+import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.api.particle.type.ParticleTypeExtension;

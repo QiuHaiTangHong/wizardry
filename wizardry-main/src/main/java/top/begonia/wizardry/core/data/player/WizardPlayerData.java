@@ -10,7 +10,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.Entity;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.constants.TierEnum;
-import top.begonia.wizardry.core.entity.living.ISummonedCreature;
+import top.begonia.wizardry.api.entity.hybrid.ISummonedCreature;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 import top.begonia.wizardry.core.spell.impl.None;

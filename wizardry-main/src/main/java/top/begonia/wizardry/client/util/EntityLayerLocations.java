@@ -26,4 +26,11 @@ public final class EntityLayerLocations{
             ),
             "main"
     );
+    public static final ModelLayerLocation ICE_BARRIER_ENTITY = new ModelLayerLocation(
+            Identifier.fromNamespaceAndPath(
+                    Wizardry.MODID,
+                    "ice_barrier"
+            ),
+            "main"
+    );
 }

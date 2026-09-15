@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.entity.block;
+package top.begonia.wizardry.api.entity.atom;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.NonNull;
 
-public interface ITick {
+public interface IBlockTickEntity {
     default <T extends BlockEntity> void tick(@NonNull Level level, BlockPos pos, BlockState state, @NonNull T blockEntity) {
         if (level instanceof ServerLevel serverLevel) {
             this.serverTick(serverLevel, pos, state, blockEntity);

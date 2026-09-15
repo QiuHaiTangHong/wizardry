@@ -20,6 +20,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.entity.atom.IBlockTickEntity;
 import top.begonia.wizardry.core.inventory.handler.BookshelfItemHandler;
 import top.begonia.wizardry.core.inventory.menu.BookshelfMenu;
 import top.begonia.wizardry.core.registry.WizardryBlockEntities;
@@ -27,7 +28,7 @@ import top.begonia.wizardry.core.registry.WizardryBlockEntities;
 import java.util.Collections;
 import java.util.List;
 
-public class BookshelfBlockEntity extends RandomizableContainerBlockEntity implements ITick {
+public class BookshelfBlockEntity extends RandomizableContainerBlockEntity implements IBlockTickEntity {
     /**
      * 自然生成标识符 key
      */

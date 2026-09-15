@@ -1,4 +1,4 @@
-package top.begonia.wizardry.core.entity;
+package top.begonia.wizardry.api.entity.atom;
 
 import net.minecraft.world.phys.Vec3;
 

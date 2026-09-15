@@ -1,4 +1,4 @@
-package top.begonia.wizardry.api.particle.extension;
+package top.begonia.wizardry.api.particle.extension.builder;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
@@ -198,6 +198,8 @@ public interface ParticleBuilder {
     default ParticleBuilder facing(@NonNull Direction direction) {
         return this.facing(direction.toYRot(), direction.getAxis().isVertical() ? direction.getAxisDirection().getStep() * -90.0F : 0.0F);
     }
+
+    ParticleBuilder linkEntity(Entity entity);
 
     /**
      * 设置粒子的目标位置。

@@ -1,6 +1,5 @@
 package top.begonia.wizardry.api.particle.impl;
 
-import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import org.jetbrains.annotations.NotNull;
@@ -8,11 +7,11 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.particle.CompositeQuadParticle;
+import top.begonia.wizardry.api.particle.extension.extract.ExtractFlow;
 import top.begonia.wizardry.api.particle.extension.Layer;
 import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
 import top.begonia.wizardry.api.particle.extension.TextureParticle;
 import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
-import top.begonia.wizardry.api.particle.renderer.state.CompositeQuadParticleRenderState;
 
 public class OneQuadParticle extends CompositeQuadParticle<QuadParticleOptions> implements TextureParticle {
     /**
@@ -39,19 +38,18 @@ public class OneQuadParticle extends CompositeQuadParticle<QuadParticleOptions> 
     }
 
     @Override
-    protected void extractSurface(
-            @NonNull CompositeQuadParticleRenderState state,
-            Layer layer,
-            @NonNull Camera camera,
-            float partialTick,
-            float lerpX, float lerpY, float lerpZ,
-            Quaternionf rotation,
-            float scale,
-            float u0, float u1,
-            float v0, float v1,
-            int color, int lightCoords
-    ) {
+    protected void extractSurface(@NonNull ExtractFlow extractFlow) {
+        Quaternionf rotation = extractFlow.getRotate();
+        Layer layer = extractFlow.getLayer();
         Vector3f scratch = new Vector3f();
+        float scale = extractFlow.getScale();
+        float lerpX = extractFlow.getX();
+        float lerpY = extractFlow.getY();
+        float lerpZ = extractFlow.getZ();
+        float u0 = extractFlow.getU0();
+        float u1 = extractFlow.getU1();
+        float v0 = extractFlow.getV0();
+        float v1 = extractFlow.getV1();
 
         scratch.set(1.0F, -1.0F, 0.0F).rotate(rotation).mul(scale).add(lerpX, lerpY, lerpZ);
         float x0 = scratch.x();
@@ -73,12 +71,12 @@ public class OneQuadParticle extends CompositeQuadParticle<QuadParticleOptions> 
         float y3 = scratch.y();
         float z3 = scratch.z();
 
-        state.addQuad(layer,
+        extractFlow.getState().addQuad(layer,
                 x0, y0, z0, u1, v1,
                 x1, y1, z1, u1, v0,
                 x2, y2, z2, u0, v0,
                 x3, y3, z3, u0, v1,
-                color, lightCoords
+                extractFlow.getHEXColor(), extractFlow.getLightCoords()
         );
     }
 

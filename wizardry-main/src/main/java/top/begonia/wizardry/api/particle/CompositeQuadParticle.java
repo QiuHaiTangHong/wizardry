@@ -6,46 +6,31 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.util.ARGB;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.particle.extension.FacingCameraMode;
-import top.begonia.wizardry.api.particle.extension.Layer;
-import top.begonia.wizardry.api.particle.extension.ParticleBuilder;
-import top.begonia.wizardry.api.particle.extension.TextureParticle;
+import top.begonia.wizardry.api.entity.atom.ICustomHitbox;
+import top.begonia.wizardry.api.particle.extension.*;
+import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
+import top.begonia.wizardry.api.particle.extension.extract.*;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
 import top.begonia.wizardry.api.particle.renderer.state.CompositeQuadParticleRenderState;
-import top.begonia.wizardry.core.entity.ICustomHitbox;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension> extends Particle  implements ParticleBuilder {
+public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension> extends Particle implements ParticleBuilder {
     public static final ParticleRenderType RENDER_TYPE = new ParticleRenderType("wizardry_composite_quad", "WCQ");
     private static final double SPREAD_FACTOR = 0.2;
     private static final double IMPACT_FRICTION = 0.2;
-    public ParticleOptions options;
-    /**
-     * 粒子的开始颜色
-     */
-    protected float startRed = 1.0f, startGreen = 1.0f, startBlue = 1.0f;
-    /**
-     * 粒子的当前颜色
-     */
-    protected float currentRed = 1.0f, currentGreen = 1.0f, currentBlue = 1.0f;
-    /**
-     * 粒子的结束颜色 ARGB 格式
-     */
-    protected float endRed = 1.0f, endGreen = 1.0f, endBlue = 1.0f;
-    /**
-     * 粒子的透明度
-     */
-    protected float alpha = 1.0f;
+    protected ParticleOptions options;
+    protected ExtractFlow extractFlow = new ExtractFlow();
     /**
      * 是否启用阴影
      */
@@ -69,14 +54,14 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
      */
     protected double radius = 0;
     @Nullable
-    protected Entity entity = null;
+    protected EntityReference<Entity> linkEntityReference = null;
     protected double relativeX, relativeY, relativeZ;
     protected double prevVelX, prevVelY, prevVelZ;
     protected double relativeMotionX, relativeMotionY, relativeMotionZ;
     /**
      * 粒子的当前俯仰和偏航角
      */
-    protected float yaw = Float.NaN, pitch = Float.NaN;
+    protected float yaw, pitch;
 
     public CompositeQuadParticle(
             ClientLevel level,
@@ -87,6 +72,7 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
         this.xd = 0;
         this.yd = 0;
         this.zd = 0;
+        this.friction = 0.9800000190734863F;
         this.quadSize = 0.1F * (this.random.nextFloat() * 0.5F + 0.5F) * 2.0F;
     }
 
@@ -110,13 +96,13 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
     }
 
     @Override
-    public ParticleBuilder time(int time){
+    public ParticleBuilder time(int time) {
         this.lifetime = time;
         return this;
     }
 
     @Override
-    public ParticleBuilder speed(double xd, double yd, double zd){
+    public ParticleBuilder speed(double xd, double yd, double zd) {
         this.xd = xd;
         this.yd = yd;
         this.zd = zd;
@@ -125,31 +111,25 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
 
     @Override
     public ParticleBuilder startColor(float red, float green, float blue) {
-        this.startRed = red;
-        this.startGreen = green;
-        this.startBlue = blue;
+        this.extractFlow.setStartColor(red, green, blue);
         return this;
     }
 
     @Override
     public ParticleBuilder currentColor(float red, float green, float blue) {
-        this.currentRed = red;
-        this.currentGreen = green;
-        this.currentBlue = blue;
+        this.extractFlow.setColor(red, green, blue);
         return this;
     }
 
     @Override
     public ParticleBuilder endColor(float red, float green, float blue) {
-        this.endRed = red;
-        this.endGreen = green;
-        this.endBlue = blue;
+        this.extractFlow.setEndColor(red, green, blue);
         return this;
     }
 
     @Override
     public ParticleBuilder alpha(float alpha) {
-        this.alpha = alpha;
+        this.extractFlow.setAlpha(alpha);
         return this;
     }
 
@@ -189,6 +169,12 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
     }
 
     @Override
+    public ParticleBuilder linkEntity(Entity linkEntity) {
+        this.linkEntityReference = EntityReference.of(linkEntity);
+        return this;
+    }
+
+    @Override
     public ParticleBuilder targetPosition(double x, double y, double z) {
         return this;
     }
@@ -200,16 +186,6 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
 
     @Override
     public ParticleBuilder targetEntity(Entity target) {
-        this.entity = target;
-        if (entity != null) {
-            this.setPos(entity.getX() + relativeX, entity.getY() + relativeY, entity.getZ() + relativeZ);
-            this.xo = this.x;
-            this.yo = this.y;
-            this.zo = this.z;
-            this.relativeMotionX = xd;
-            this.relativeMotionY = yd;
-            this.relativeMotionZ = zd;
-        }
         return this;
     }
 
@@ -225,29 +201,48 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
     }
 
     @Override
-    public void spawn(){
+    public void spawn() {
         Minecraft.getInstance().particleEngine.add(this);
     }
 
     @Override
     public void tick() {
-        super.tick();
-        if (this.hasPhysics && this.onGround) {
-            this.xd /= 0.699999988079071D;
-            this.zd /= 0.699999988079071D;
+        this.xo = this.x;
+        this.yo = this.y;
+        this.zo = this.z;
+
+        if (this.age++ >= this.lifetime) {
+            this.remove();
         }
-        if (this.entity != null || this.radius > 0) {
+
+        this.yd -= 0.04D * (double) this.gravity;
+        this.move(this.xd, this.yd, this.zd);
+        if (this.speedUpWhenYMotionIsBlocked && this.y == this.yo) {
+            this.xd *= 1.1;
+            this.zd *= 1.1;
+        }
+        this.xd *= this.friction;
+        this.yd *= this.friction;
+        this.zd *= this.friction;
+
+        if (this.onGround && !this.hasPhysics) {
+            this.xd *= 0.699999988079071D;
+            this.zd *= 0.699999988079071D;
+        }
+
+        Entity linkEntity = this.getLinkEntity();
+        if (linkEntity != null || this.radius > 0) {
             double tx = this.relativeX;
             double ty = this.relativeY;
             double tz = this.relativeZ;
-            if (this.entity != null) {
-                if (this.entity.isRemoved()) {
+            if (linkEntity != null) {
+                if (linkEntity.isRemoved()) {
                     this.remove();
-                    return;
                 } else {
-                    tx += this.entity.getX();
-                    ty += this.entity.getY();
-                    tz += this.entity.getZ();
+                    Vec3 entityCenter = linkEntity.getBoundingBox().getCenter();
+                    tx += entityCenter.x();
+                    ty += entityCenter.y();
+                    tz += entityCenter.z();
                 }
             }
             if (this.radius > 0) {
@@ -261,12 +256,6 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
             this.relativeY += this.relativeMotionY;
             this.relativeZ += this.relativeMotionZ;
         }
-
-        // 计算当前的颜色
-        float ageFraction = (float) this.age / (float) this.lifetime;
-        this.currentRed = this.startRed + (this.endRed - this.startRed) * ageFraction;
-        this.currentGreen = this.startGreen + (this.endGreen - this.startGreen) * ageFraction;
-        this.currentBlue = this.startBlue + (this.endBlue - this.startBlue) * ageFraction;
 
         if (this instanceof TextureParticle textureParticle) {
             textureParticle.setSpriteFromAge();
@@ -326,74 +315,81 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
         }
     }
 
+    protected Entity getLinkEntity() {
+        if (this.linkEntityReference != null) {
+            return this.linkEntityReference.getEntity(this.level, Entity.class);
+        }
+        return null;
+    }
+
     @SuppressWarnings("unused")
     public float getQuadSize(float partialTick) {
         return this.quadSize;
-    }
-
-    protected @NonNull Quaternionf calculateRotation(Camera camera, float partialTickTime) {
-        Quaternionf rotation = new Quaternionf();
-        this.getFacingCameraMode().setRotation(rotation, camera, partialTickTime);
-        if (this.roll != 0.0F) {
-            rotation.rotateZ(Mth.lerp(partialTickTime, this.oRoll, this.roll));
-        }
-        return rotation;
     }
 
     public FacingCameraMode getFacingCameraMode() {
         return FacingCameraMode.LOOK_AT_XYZ;
     }
 
-    protected abstract void extractSurface(
-            CompositeQuadParticleRenderState state,
-            Layer layer,
-            @NonNull Camera camera,
-            float partialTick,
-            float lerpX, float lerpY, float lerpZ,
-            Quaternionf rotation,
-            float scale,
-            float u0, float u1,
-            float v0, float v1,
-            int color, int lightCoords
-    );
+    protected void extractPosition(@NonNull IPositionFlowOperation positionOperation) {
+        Vec3 pos = positionOperation.getCamera().position();
+        float x = (float) (Mth.lerp(positionOperation.getPartialTick(), this.xo, this.x) - pos.x());
+        float y = (float) (Mth.lerp(positionOperation.getPartialTick(), this.yo, this.y) - pos.y());
+        float z = (float) (Mth.lerp(positionOperation.getPartialTick(), this.zo, this.z) - pos.z());
+        positionOperation.setX(x)
+                .setY(y)
+                .setZ(z);
+    }
+
+    protected void extractColor(@NonNull IColorFlowOperation colorFlowOperation) {
+        // 计算当前的颜色
+        float ageFraction = colorFlowOperation.getAge() / colorFlowOperation.getLifetime();
+        Vector3f startColor = colorFlowOperation.getStartColor();
+        Vector3f endColor = colorFlowOperation.getEndColor();
+        colorFlowOperation.setVecColor(endColor.sub(startColor).mul(ageFraction).add(startColor));
+    }
+
+    protected void extractSize(ISizeFlowOperation sizeFlowOperation) {
+    }
+
+    protected void extractRotation(@NonNull IRotateFlowOperation rotateOperation) {
+        Quaternionf rotation = new Quaternionf();
+        this.getFacingCameraMode().setRotation(rotation, rotateOperation.getCamera(), rotateOperation.getPartialTick());
+        if (this.roll != 0.0F) {
+            rotation.rotateZ(Mth.lerp(rotateOperation.getPartialTick(), this.oRoll, this.roll));
+        }
+        rotateOperation.setRotate(rotation);
+    }
+
+    public void extractUv(IUvFlowOperation uvOperation) {
+        if (this instanceof TextureParticle textureParticle) {
+            uvOperation.setU0(textureParticle.getU0())
+                    .setU1(textureParticle.getU1())
+                    .setV0(textureParticle.getV0())
+                    .setV1(textureParticle.getV1());
+        }
+    }
+
+    protected abstract void extractSurface(ExtractFlow extractFlow);
 
     public void extract(CompositeQuadParticleRenderState state, @NonNull Camera camera, float partialTick) {
-        Layer layer = this.getLayer();
-        int color = ARGB.colorFromFloat(this.alpha, this.currentRed, this.currentGreen, this.currentBlue);
-        int lightCoords = this.getLightCoords(partialTick);
-
-        float u0 = 0.0f;
-        float u1 = 1.0f;
-        float v0 = 0.0f;
-        float v1 = 1.0f;
-
-        if (this instanceof TextureParticle textureParticle) {
-            u0 = textureParticle.getU0();
-            u1 = textureParticle.getU1();
-            v0 = textureParticle.getV0();
-            v1 = textureParticle.getV1();
-        }
-
-        Vec3 pos = camera.position();
-        float lerpX = (float) (Mth.lerp(partialTick, this.xo, this.x) - pos.x());
-        float lerpY = (float) (Mth.lerp(partialTick, this.yo, this.y) - pos.y());
-        float lerpZ = (float) (Mth.lerp(partialTick, this.zo, this.z) - pos.z());
-
-        float scale = this.getQuadSize(partialTick);
-
-        Quaternionf rotation = this.calculateRotation(camera, partialTick);
-
-        this.extractSurface(
+        this.extractFlow.beginExtraction(
                 state,
-                layer,
+                this.getLayer(),
                 camera,
+                this.getLinkEntity(),
+                this.getQuadSize(partialTick),
                 partialTick,
-                lerpX, lerpY, lerpZ,
-                rotation,
-                scale,
-                u0, u1, v0, v1,
-                color, lightCoords
+                this.age,
+                this.lifetime,
+                this.getLightCoords(partialTick)
         );
+        this.extractPosition(extractFlow);
+        this.extractSize(extractFlow);
+        this.extractRotation(extractFlow);
+        this.extractColor(extractFlow);
+        this.extractUv(extractFlow);
+        this.extractSurface(extractFlow);
     }
 
     protected Layer getLayer() {

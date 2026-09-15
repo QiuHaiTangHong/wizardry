@@ -1,11 +1,11 @@
-package top.begonia.wizardry.client.renderer;
+package top.begonia.wizardry.client.util;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.util.LightCoordsUtil;
 import org.joml.Matrix4f;
 import org.jspecify.annotations.NonNull;
 
-public class RendererUtils {
+public final class RendererUtils {
     public static void drawShearedBox(VertexConsumer buffer, float x1, float y1, float z1, float x2, float y2, float z2, float width, float r, float g, float b, float a, int light) {
         addVertex(buffer, x1 - width, y1 - width, z1, r, g, b, a, light);
         addVertex(buffer, x2 - width, y2 - width, z2, r, g, b, a, light);

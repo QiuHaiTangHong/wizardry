@@ -14,9 +14,9 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
-import top.begonia.wizardry.core.entity.ISpellCaster;
+import top.begonia.wizardry.api.entity.atom.ISpellCaster;
 import top.begonia.wizardry.core.entity.projectile.MagicProjectileEntity;
-import top.begonia.wizardry.core.entity.projectile.QuadFunction;
+import top.begonia.wizardry.api.entity.utils.IQuadFunction;
 import top.begonia.wizardry.core.entity.projectile.bomb.BombEntity;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.spell.AbstractSpell;
@@ -31,13 +31,13 @@ public class ProjectileSpell<T extends MagicProjectileEntity> extends AbstractSp
 
     protected final Supplier<EntityType<T>> entityTypeSupplier;
     protected final Supplier<ItemStack> renderItemSupplier;
-    protected final QuadFunction<EntityType<? extends T>, LivingEntity, Level, ItemStack, T> projectileFactory;
+    protected final IQuadFunction<EntityType<? extends T>, LivingEntity, Level, ItemStack, T> projectileFactory;
 
     public ProjectileSpell(
             Identifier identifier,
             Supplier<EntityType<T>> entityTypeSupplier,
             Supplier<ItemStack> renderItemSupplier,
-            QuadFunction<EntityType<? extends T>, LivingEntity, Level, ItemStack, T> projectileFactory
+            IQuadFunction<EntityType<? extends T>, LivingEntity, Level, ItemStack, T> projectileFactory
     ) {
         super(identifier, ItemUseAnimation.NONE, false);
         this.entityTypeSupplier = entityTypeSupplier;

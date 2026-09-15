@@ -21,7 +21,7 @@ import top.begonia.wizardry.core.constants.TierEnum;
 import top.begonia.wizardry.core.data.packet.CastContinuousSpellPacket;
 import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.enchantment.Imbuement;
-import top.begonia.wizardry.core.entity.living.ISummonedCreature;
+import top.begonia.wizardry.api.entity.hybrid.ISummonedCreature;
 import top.begonia.wizardry.core.registry.WizardryAttachment;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;

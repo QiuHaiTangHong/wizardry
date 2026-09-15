@@ -11,6 +11,7 @@ import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
@@ -22,11 +23,8 @@ import top.begonia.wizardry.core.data.player.WizardPlayerData;
 import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.constant.parser.SpellPropertiesParser;
 import top.begonia.wizardry.core.effect.impl.DecayMobEffect;
-import top.begonia.wizardry.core.entity.living.RemnantEntity;
 import top.begonia.wizardry.core.entity.construct.BubbleEntity;
-import top.begonia.wizardry.core.entity.living.WizardEntity;
-import top.begonia.wizardry.core.entity.living.minion.WitherSkeletonMinionEntity;
-import top.begonia.wizardry.core.entity.living.minion.ZombieMinionEntity;
+import top.begonia.wizardry.core.entity.living.wizard.impl.WizardEntity;
 import top.begonia.wizardry.core.registry.WizardryAttachment;
 import top.begonia.wizardry.core.registry.WizardryCreativeTabs;
 import top.begonia.wizardry.core.registry.WizardryEntities;
@@ -42,6 +40,11 @@ public class CoreEvent {
         );
     }
 
+    /**
+     * 在玩家登入时添加逻辑
+     * @param event 玩家登入事件
+     * @see PlayerEvent.PlayerLoggedInEvent
+     */
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.@NonNull PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
@@ -54,9 +57,24 @@ public class CoreEvent {
         }
     }
 
+    /**
+     * 注册自定义命令
+     * @param event 注册命令事件
+     * @see RegisterCommandsEvent
+     */
     @SubscribeEvent
     public static void onRegisterCommands(@NonNull RegisterCommandsEvent event) {
         DebugCommond.register(event.getDispatcher());
+    }
+
+    /**
+     * 当方块被玩家破坏时触发
+     * @param event 方块破坏事件
+     * @see BreakBlockEvent
+     */
+    @SubscribeEvent
+    public static void onBlockBreakEvent(BreakBlockEvent event) {
+        WizardEntity.onBlockBreakEvent(event);
     }
 
     @SubscribeEvent
@@ -75,12 +93,22 @@ public class CoreEvent {
         }
     }
 
+    /**
+     * 注册数据解析器
+     * @param event Wizardry的数据解析器注册事件
+     * @see RegisterDataParserEvent.CommonRegisterDataParserEvent
+     */
     @SubscribeEvent
     public static void onCommonRegisterDataParserEvent(RegisterDataParserEvent.@NonNull CommonRegisterDataParserEvent event) {
         event.register(new SpellPropertiesParser());
         event.register(new CurrencyParser());
     }
 
+    /**
+     * 创造模式标签页构造时触发
+     * @param event 构建创造模式标签页事件
+     * @see BuildCreativeModeTabContentsEvent
+     */
     @SubscribeEvent
     public static void onBuildCreativeModeTabContents(@NonNull BuildCreativeModeTabContentsEvent event) {
         if (event.getTab() == WizardryCreativeTabs.GEAR.get()) {
@@ -107,11 +135,13 @@ public class CoreEvent {
         DamageSafetyChecker.updateVanillaDamages(event.getRegistries());
     }
 
+    /**
+     * 为实体创建默认属性
+     * @param event 实体属性创建事件
+     * @see EntityAttributeCreationEvent
+     */
     @SubscribeEvent
     public static void onEntityAttributeCreation(@NonNull EntityAttributeCreationEvent event) {
-        event.put(WizardryEntities.ZOMBIE_MINION.get(), ZombieMinionEntity.createAttributes().build());
-        event.put(WizardryEntities.WITHER_SKELETON_MINION.get(), WitherSkeletonMinionEntity.createAttributes().build());
-        event.put(WizardryEntities.WIZARD.get(), WizardEntity.createAttributes().build());
-        event.put(WizardryEntities.REMNANT.get(), RemnantEntity.createAttributes().build());
+        WizardryEntities.creationDefaultEntityAttribute(event);
     }
 }

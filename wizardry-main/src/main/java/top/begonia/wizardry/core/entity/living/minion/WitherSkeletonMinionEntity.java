@@ -1,12 +1,11 @@
 package top.begonia.wizardry.core.entity.living.minion;
 
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -21,15 +20,11 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.core.config.ClientConfig;
-import top.begonia.wizardry.core.entity.living.ISummonedCreature;
+import top.begonia.wizardry.api.entity.hybrid.ISummonedCreature;
 import top.begonia.wizardry.core.registry.WizardryEntities;
-import top.begonia.wizardry.core.registry.WizardryEntityDataSerializers;
-
-import java.util.Optional;
-import java.util.UUID;
 
 public class WitherSkeletonMinionEntity extends WitherSkeleton implements ISummonedCreature {
-    private static final EntityDataAccessor<Optional<UUID>> DATA_OWNER_UUID = SynchedEntityData.defineId(WitherSkeletonMinionEntity.class, WizardryEntityDataSerializers.CASTER_UUID.get());
+    private @Nullable EntityReference<LivingEntity> owner;
     private static final EntityDataAccessor<Integer> DATA_LIFETIME = SynchedEntityData.defineId(WitherSkeletonMinionEntity.class, EntityDataSerializers.INT);
 
     public WitherSkeletonMinionEntity(EntityType<? extends WitherSkeleton> type, Level level) {
@@ -50,7 +45,6 @@ public class WitherSkeletonMinionEntity extends WitherSkeleton implements ISummo
     @Override
     protected void defineSynchedData(SynchedEntityData.@NonNull Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(DATA_OWNER_UUID, Optional.empty());
         builder.define(DATA_LIFETIME, -1);
     }
 
@@ -62,14 +56,19 @@ public class WitherSkeletonMinionEntity extends WitherSkeleton implements ISummo
 
     @Override
     protected void addAdditionalSaveData(@NonNull ValueOutput valueOutput) {
-        valueOutput.storeNullable("casterUUID", UUIDUtil.CODEC, this.getEntityData().get(DATA_OWNER_UUID).orElse(null));
+        EntityReference.store(this.owner, valueOutput, "owner");
         valueOutput.putInt("lifetime", this.getEntityData().get(DATA_LIFETIME));
     }
 
     @Override
     protected void readAdditionalSaveData(@NonNull ValueInput valueInput) {
-        this.getEntityData().set(DATA_OWNER_UUID, valueInput.read("casterUUID", UUIDUtil.CODEC));
+        this.owner = EntityReference.read(valueInput, "owner");
         this.getEntityData().set(DATA_LIFETIME, valueInput.getIntOr("lifetime", -1));
+    }
+
+    @Override
+    public void setOwner(LivingEntity entity) {
+        this.owner = EntityReference.of(entity);
     }
 
     @Override
@@ -83,15 +82,13 @@ public class WitherSkeletonMinionEntity extends WitherSkeleton implements ISummo
     }
 
     @Override
-    public @Nullable Entity getOwner() {
-        return this.getEntityData().get(DATA_OWNER_UUID).map(uuid -> this.level().getEntity(uuid)).orElse(null);
+    public @Nullable EntityReference<LivingEntity> getOwnerReference() {
+        return this.owner;
     }
 
     @Override
-    public void setOwner(Entity entity) {
-        if (entity != null) {
-            this.getEntityData().set(DATA_OWNER_UUID, Optional.of(entity.getUUID()));
-        }
+    public @Nullable LivingEntity getOwner() {
+        return EntityReference.getLivingEntity(this.owner, this.level());
     }
 
     @Override

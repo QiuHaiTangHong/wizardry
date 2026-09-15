@@ -55,6 +55,7 @@ import top.begonia.wizardry.client.model.block.RunestoneUnbakedBlockModel;
 import top.begonia.wizardry.client.model.conditional.DiscoveredConditional;
 import top.begonia.wizardry.client.model.conditional.FestivalConditional;
 import top.begonia.wizardry.client.model.entity.HammerModel;
+import top.begonia.wizardry.client.model.entity.IceBarrierModel;
 import top.begonia.wizardry.client.model.entity.RemnantModel;
 import top.begonia.wizardry.client.model.entity.WizardModel;
 import top.begonia.wizardry.client.model.item.RunestoneUnbakedItemModel;
@@ -99,7 +100,7 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.@NonNull RegisterLayerDefinitions event) {
         final CubeDeformation OUTER_ARMOR_DEFORMATION = new CubeDeformation(0.75F);
-        final CubeDeformation INNER_ARMOR_DEFORMATION = new CubeDeformation(0.75F);
+        final CubeDeformation INNER_ARMOR_DEFORMATION = new CubeDeformation(0.75f);
         ImmutableMap.Builder<ModelLayerLocation, LayerDefinition> result = ImmutableMap.builder();
         ArmourHelper.ModelLayers.WIZARD.putFrom(
                 WizardArmourModel
@@ -134,6 +135,7 @@ public class ClientEvents {
         event.registerLayerDefinition(EntityLayerLocations.WIZARD_ENTITY, () -> WizardModel.createLayer(CubeDeformation.NONE));
         event.registerLayerDefinition(EntityLayerLocations.HAMMER_ENTITY, () -> HammerModel.createLayer(CubeDeformation.NONE));
         event.registerLayerDefinition(EntityLayerLocations.REMNANT_ENTITY, () -> RemnantModel.createLayer(CubeDeformation.NONE));
+        event.registerLayerDefinition(EntityLayerLocations.ICE_BARRIER_ENTITY, () -> IceBarrierModel.createLayer(CubeDeformation.NONE));
     }
 
     @SubscribeEvent
@@ -204,6 +206,14 @@ public class ClientEvents {
         event.registerEntityRenderer(
                 WizardryEntities.WIZARD.get(),
                 WizardRenderer::new
+        );
+        event.registerEntityRenderer(
+                WizardryEntities.EVIL_WIZARD.get(),
+                WizardRenderer::new
+        );
+        event.registerEntityRenderer(
+                WizardryEntities.VEX_MINION.get(),
+                VexMinionRenderer::new
         );
         event.registerEntityRenderer(
                 WizardryEntities.LIGHTNING_HAMMER.get(),

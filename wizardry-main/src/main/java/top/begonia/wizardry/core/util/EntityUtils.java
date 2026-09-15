@@ -1,11 +1,14 @@
 package top.begonia.wizardry.core.util;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
@@ -16,6 +19,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.config.ServerConfig;
@@ -46,6 +50,10 @@ public final class EntityUtils {
         boolean succeeded = entity.hurtServer(serverLevel, source, amount);
         entity.setDeltaMovement(prevDeltaMove);
         return succeeded;
+    }
+
+    public static @NonNull Identifier getIdentifier(@NonNull Entity entity){
+        return BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
     }
 
     public static @NonNull List<LivingEntity> getLivingWithinRadius(double radius, double x, double y, double z, Level level) {

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.entity.ArrowRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.ArrowRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -15,7 +15,7 @@ import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.entity.projectile.MagicArrowEntity;
 
-public class MagicArrowRenderer extends ArrowRenderer<MagicArrowEntity, ArrowRenderState> {
+public class MagicArrowRenderer extends EntityRenderer<MagicArrowEntity, ArrowRenderState> {
     private final Identifier texture;
     private final boolean blend;
     private final boolean renderEnds;
@@ -49,7 +49,12 @@ public class MagicArrowRenderer extends ArrowRenderer<MagicArrowEntity, ArrowRen
         return new ArrowRenderState();
     }
 
-    public void submit(@NonNull ArrowRenderState state, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState camera) {
+    public void submit(
+            @NonNull ArrowRenderState state,
+            @NonNull PoseStack poseStack,
+            @NonNull SubmitNodeCollector submitNodeCollector,
+            @NonNull CameraRenderState camera
+    ) {
         RenderType targetRenderType = this.blend
                 ? RenderTypes.entityTranslucentEmissive(this.texture)
                 : RenderTypes.entityCutout(this.texture);
@@ -75,15 +80,15 @@ public class MagicArrowRenderer extends ArrowRenderer<MagicArrowEntity, ArrowRen
                     }
                     pose.scale(scale, scale, scale);
                     if (renderEnds) {
-                        addMagicVertex(vertexConsumer, pose, -7.0D, -width, -width, endMinU, endMinV, magicLight, 1.0F, 0.0F, 0.0F);
-                        addMagicVertex(vertexConsumer, pose, -7.0D, -width, width, endMaxU, endMinV, magicLight, 1.0F, 0.0F, 0.0F);
-                        addMagicVertex(vertexConsumer, pose, -7.0D, width, width, endMaxU, endMaxV, magicLight, 1.0F, 0.0F, 0.0F);
-                        addMagicVertex(vertexConsumer, pose, -7.0D, width, -width, endMinU, endMaxV, magicLight, 1.0F, 0.0F, 0.0F);
+                        this.addMagicVertex(vertexConsumer, pose, -7.0D, -width, -width, endMinU, endMinV, magicLight, 1.0F, 0.0F, 0.0F);
+                        this.addMagicVertex(vertexConsumer, pose, -7.0D, -width, width, endMaxU, endMinV, magicLight, 1.0F, 0.0F, 0.0F);
+                        this.addMagicVertex(vertexConsumer, pose, -7.0D, width, width, endMaxU, endMaxV, magicLight, 1.0F, 0.0F, 0.0F);
+                        this.addMagicVertex(vertexConsumer, pose, -7.0D, width, -width, endMinU, endMaxV, magicLight, 1.0F, 0.0F, 0.0F);
 
-                        addMagicVertex(vertexConsumer, pose, -7.0D, width, -width, endMinU, endMinV, magicLight, -1.0F, 0.0F, 0.0F);
-                        addMagicVertex(vertexConsumer, pose, -7.0D, width, width, endMaxU, endMinV, magicLight, -1.0F, 0.0F, 0.0F);
-                        addMagicVertex(vertexConsumer, pose, -7.0D, -width, width, endMaxU, endMaxV, magicLight, -1.0F, 0.0F, 0.0F);
-                        addMagicVertex(vertexConsumer, pose, -7.0D, -width, -width, endMinU, endMaxV, magicLight, -1.0F, 0.0F, 0.0F);
+                        this.addMagicVertex(vertexConsumer, pose, -7.0D, width, -width, endMinU, endMinV, magicLight, -1.0F, 0.0F, 0.0F);
+                        this.addMagicVertex(vertexConsumer, pose, -7.0D, width, width, endMaxU, endMinV, magicLight, -1.0F, 0.0F, 0.0F);
+                        this.addMagicVertex(vertexConsumer, pose, -7.0D, -width, width, endMaxU, endMaxV, magicLight, -1.0F, 0.0F, 0.0F);
+                        this.addMagicVertex(vertexConsumer, pose, -7.0D, -width, -width, endMinU, endMaxV, magicLight, -1.0F, 0.0F, 0.0F);
                     }
                     for (int i = 0; i < 4; ++i) {
                         double angle = Math.toRadians(i * 90.0);
@@ -96,14 +101,13 @@ public class MagicArrowRenderer extends ArrowRenderer<MagicArrowEntity, ArrowRen
                         double y2 = width * nz;
                         double z2 = width * sin;
 
-                        addMagicVertex(vertexConsumer, pose, -length, y1, z1, sideMinU, sideMinV, magicLight, nx, ny, nz);
-                        addMagicVertex(vertexConsumer, pose, length, y1, z1, sideMaxU, sideMinV, magicLight, nx, ny, nz);
-                        addMagicVertex(vertexConsumer, pose, length, y2, z2, sideMaxU, sideMaxV, magicLight, nx, ny, nz);
-                        addMagicVertex(vertexConsumer, pose, -length, y2, z2, sideMinU, sideMaxV, magicLight, nx, ny, nz);
+                        this.addMagicVertex(vertexConsumer, pose, -length, y1, z1, sideMinU, sideMinV, magicLight, nx, ny, nz);
+                        this.addMagicVertex(vertexConsumer, pose, length, y1, z1, sideMaxU, sideMinV, magicLight, nx, ny, nz);
+                        this.addMagicVertex(vertexConsumer, pose, length, y2, z2, sideMaxU, sideMaxV, magicLight, nx, ny, nz);
+                        this.addMagicVertex(vertexConsumer, pose, -length, y2, z2, sideMinU, sideMaxV, magicLight, nx, ny, nz);
                     }
                 }
         );
-        super.submit(state, poseStack, submitNodeCollector, camera);
     }
 
     private void addMagicVertex(@NonNull VertexConsumer consumer, PoseStack.Pose pose, double x, double y, double z, float u, float v, int light, float nx, float ny, float nz) {
@@ -113,10 +117,5 @@ public class MagicArrowRenderer extends ArrowRenderer<MagicArrowEntity, ArrowRen
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(light)
                 .setNormal(pose, nx, ny, nz);
-    }
-
-    @Override
-    protected @NonNull Identifier getTextureLocation(@NonNull ArrowRenderState arrowRenderState) {
-        return this.texture;
     }
 }

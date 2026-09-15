@@ -1,6 +1,7 @@
-package top.begonia.wizardry.core.entity.living;
+package top.begonia.wizardry.api.entity.atom;
 
 import net.minecraft.world.Difficulty;
+import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
 import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
@@ -14,7 +15,9 @@ public interface ISpellCaster {
     List<AbstractSpell> getSpells();
 
     @Nonnull
-    SpellContext getSpellContext();
+    default SpellContext getSpellContext() {
+        return SpellContext.DEFAULT;
+    }
 
     @Nonnull
     default AbstractSpell getContinuousSpell() {
@@ -31,6 +34,11 @@ public interface ISpellCaster {
 
     default void setSpellCounter(int count) {
         // Do nothing
+    }
+
+    @Nonnull
+    default SpellContextFlow getSpellContextFlow(){
+        return SpellContextFlow.create(); // May seem wasteful but this should never be called so it doesn't matter
     }
 
     default int getAimingError(Difficulty difficulty) {

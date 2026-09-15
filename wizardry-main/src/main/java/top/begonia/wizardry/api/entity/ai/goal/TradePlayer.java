@@ -1,8 +1,8 @@
-package top.begonia.wizardry.core.entity.ai.goal;
+package top.begonia.wizardry.api.entity.ai.goal;
 
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
-import top.begonia.wizardry.core.entity.living.WizardEntity;
+import top.begonia.wizardry.core.entity.living.wizard.impl.WizardEntity;
 
 import java.util.EnumSet;
 

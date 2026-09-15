@@ -1,6 +1,5 @@
 package top.begonia.wizardry.core.entity.living.minion;
 
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -10,10 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -30,19 +26,15 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.core.config.ClientConfig;
-import top.begonia.wizardry.core.entity.living.ISummonedCreature;
+import top.begonia.wizardry.api.entity.hybrid.ISummonedCreature;
 import top.begonia.wizardry.core.item.ArtefactItem;
 import top.begonia.wizardry.core.registry.WizardryEntities;
-import top.begonia.wizardry.core.registry.WizardryEntityDataSerializers;
 import top.begonia.wizardry.core.registry.WizardryItems;
 
-import java.util.Optional;
-import java.util.UUID;
-
 public class ZombieMinionEntity extends Zombie implements ISummonedCreature {
-    private static final EntityDataAccessor<Optional<UUID>> DATA_OWNER_UUID = SynchedEntityData.defineId(ZombieMinionEntity.class, WizardryEntityDataSerializers.CASTER_UUID.get());
     private static final EntityDataAccessor<Integer> DATA_LIFETIME = SynchedEntityData.defineId(ZombieMinionEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> SPAWN_PARTICLES = SynchedEntityData.defineId(ZombieMinionEntity.class, EntityDataSerializers.BOOLEAN);
+    private @Nullable EntityReference<LivingEntity> owner;
 
     public ZombieMinionEntity(EntityType<? extends ZombieMinionEntity> type, Level level) {
         super(type, level);
@@ -77,7 +69,6 @@ public class ZombieMinionEntity extends Zombie implements ISummonedCreature {
     @Override
     protected void defineSynchedData(SynchedEntityData.@NonNull Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(DATA_OWNER_UUID, Optional.empty());
         builder.define(DATA_LIFETIME, -1);
         builder.define(SPAWN_PARTICLES, true);
     }
@@ -108,13 +99,13 @@ public class ZombieMinionEntity extends Zombie implements ISummonedCreature {
 
     @Override
     protected void addAdditionalSaveData(@NonNull ValueOutput valueOutput) {
-        valueOutput.storeNullable("ownerUUID", UUIDUtil.CODEC, this.getEntityData().get(DATA_OWNER_UUID).orElse(null));
+        EntityReference.store(this.owner, valueOutput, "owner");
         valueOutput.putInt("lifetime", this.getEntityData().get(DATA_LIFETIME));
     }
 
     @Override
     protected void readAdditionalSaveData(@NonNull ValueInput valueInput) {
-        this.getEntityData().set(DATA_OWNER_UUID, valueInput.read("ownerUUID", UUIDUtil.CODEC));
+        this.owner = EntityReference.read(valueInput, "owner");
         this.getEntityData().set(DATA_LIFETIME, valueInput.getIntOr("lifetime", -1));
     }
 
@@ -138,6 +129,21 @@ public class ZombieMinionEntity extends Zombie implements ISummonedCreature {
     }
 
     @Override
+    public @Nullable EntityReference<LivingEntity> getOwnerReference() {
+        return this.owner;
+    }
+
+    @Override
+    public @Nullable LivingEntity getOwner() {
+        return EntityReference.getLivingEntity(this.owner, this.level());
+    }
+
+    @Override
+    public void setOwner(LivingEntity entity) {
+        this.owner = EntityReference.of(entity);
+    }
+
+    @Override
     public int getLifetime() {
         return this.getEntityData().get(DATA_LIFETIME);
     }
@@ -145,18 +151,6 @@ public class ZombieMinionEntity extends Zombie implements ISummonedCreature {
     @Override
     public void setLifetime(int lifetime) {
         this.getEntityData().set(DATA_LIFETIME, lifetime);
-    }
-
-    @Override
-    public @Nullable Entity getOwner() {
-        return this.getEntityData().get(DATA_OWNER_UUID).map(uuid -> this.level().getEntity(uuid)).orElse(null);
-    }
-
-    @Override
-    public void setOwner(Entity entity) {
-        if (entity != null) {
-            this.getEntityData().set(DATA_OWNER_UUID, Optional.of(entity.getUUID()));
-        }
     }
 
     @Override
