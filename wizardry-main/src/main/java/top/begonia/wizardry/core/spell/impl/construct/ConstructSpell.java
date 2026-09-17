@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.entity.construct.MagicConstructEntity;
-import top.begonia.wizardry.core.entity.construct.ScaledConstructEntity;
+import top.begonia.wizardry.core.entity.construct.scaled.ScaledConstructEntity;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 import top.begonia.wizardry.core.util.BlockUtils;

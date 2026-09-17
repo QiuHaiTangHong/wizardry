@@ -20,7 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.api.entity.hybrid.ISummonedCreature;
 import top.begonia.wizardry.api.entity.ai.control.VexMoveControl;
@@ -140,7 +139,7 @@ public class VexMinionEntity extends AbstractVexFlavorEntity implements Traceabl
             for (int i = 0; i < 15; i++) {
                 WizardryClient.particleManager.getParticle(
                         clientLevel,
-                        new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),
+                        WizardryParticles.DARK_MAGIC.get(),
                         this.getX() + this.getRandom().nextFloat(),
                         this.getY() + this.getRandom().nextFloat(),
                         this.getZ() + this.getRandom().nextFloat()

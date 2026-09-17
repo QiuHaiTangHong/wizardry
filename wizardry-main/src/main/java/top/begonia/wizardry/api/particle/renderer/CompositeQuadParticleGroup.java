@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.state.level.ParticleGroupRenderState;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.particle.CompositeQuadParticle;
-import top.begonia.wizardry.api.particle.renderer.state.CompositeQuadParticleRenderState;
 
 import java.util.Objects;
 

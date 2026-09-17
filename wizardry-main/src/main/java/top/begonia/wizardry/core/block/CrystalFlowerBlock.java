@@ -16,7 +16,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.BonemealEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.registry.WizardryBlocks;
@@ -41,7 +40,7 @@ public class CrystalFlowerBlock extends BushBlock {
         if (random.nextBoolean() && level instanceof ClientLevel clientLevel) {
             WizardryClient.particleManager.getParticle(
                     clientLevel,
-                    new QuadParticleOptions(WizardryParticles.SPARKLE.get()),
+                    WizardryParticles.SPARKLE.get(),
                     pos.getX() + random.nextDouble(), pos.getY() + random.nextDouble() / 2 + 0.5, pos.getZ() + random.nextDouble()
             ).ifPresent(p -> p.speed(0.0f, 0.01f, 0.0f)
                     .time(20 + random.nextInt(10))

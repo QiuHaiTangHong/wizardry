@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
@@ -73,7 +72,7 @@ public class EntrapmentRaySpell extends AbstractRaySpell {
             clientLevel.addParticle(ParticleTypes.PORTAL, x, y - 0.5, z, 0, 0, 0);
             WizardryClient.particleManager.getParticle(
                     clientLevel,
-                    new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),
+                    WizardryParticles.DARK_MAGIC.get(),
                     x, y, z
             ).ifPresent(p -> p.color(0.1f, 0.0f, 0.0f)
                     .spawn()

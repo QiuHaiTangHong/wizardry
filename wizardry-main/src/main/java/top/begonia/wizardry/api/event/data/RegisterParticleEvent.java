@@ -4,7 +4,7 @@ import net.neoforged.bus.api.Event;
 import top.begonia.wizardry.api.particle.manager.SimpleParticleProvider;
 import top.begonia.wizardry.api.particle.manager.WizardryParticleProvider;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
+import top.begonia.wizardry.api.particle.options.impl.QuadParticleOptions;
 import top.begonia.wizardry.api.particle.type.ParticleTypeExtension;
 
 import java.util.Map;

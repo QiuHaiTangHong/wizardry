@@ -25,7 +25,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.gui.LecternScreen;
 import top.begonia.wizardry.core.constants.WoodTypeEnum;
@@ -98,7 +97,7 @@ public class LecternBlock extends BaseEntityBlock {
         if (entityplayer != null && level instanceof ClientLevel clientLevel) {
             WizardryClient.particleManager.getParticle(
                     clientLevel,
-                    new QuadParticleOptions(WizardryParticles.DUST.get()),
+                    WizardryParticles.DUST.get(),
                     pos.getX() + random.nextFloat(), pos.getY() + 1, pos.getZ() + random.nextFloat()
             ).ifPresent(p -> p.speed(0.0f, 0.03f, 0.0f)
                     .color(1.0f, 1.0f, 0.65f)

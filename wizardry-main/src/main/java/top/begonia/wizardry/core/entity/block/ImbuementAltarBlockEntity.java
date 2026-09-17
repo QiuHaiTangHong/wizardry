@@ -27,7 +27,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.event.ImbuementActivateEvent;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.core.block.ReceptacleBlock;
@@ -121,7 +120,7 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
                         WizardryClient.particleManager.getParticle(
                                 clientLevel,
                                 clientLevel.getRandom(),
-                                new QuadParticleOptions(WizardryParticles.DUST.get()),
+                                WizardryParticles.DUST.get(),
                                 vec.x, vec.y, vec.z,
                                 0.1,
                                 false

@@ -17,7 +17,6 @@ import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.particle.renderer.state.CompositeQuadParticleRenderState;
 import top.begonia.wizardry.api.particle.extension.Layer;
 
 import java.util.*;

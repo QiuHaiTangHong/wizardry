@@ -18,7 +18,6 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.item.ISpellCastingItem;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
@@ -119,7 +118,7 @@ public interface ISummonedCreature extends IOwnableEntity, ILifeTicksEntity, ISu
         ) {
             WizardryClient.particleManager.getParticle(
                     clientLevel,
-                    new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),
+                    WizardryParticles.DARK_MAGIC.get(),
                     thisEntity.getX(), thisEntity.getY() + thisEntity.getRandom().nextDouble() * 1.5, thisEntity.getZ()
             ).ifPresent(p -> p.color(0.1f, 0.0f, 0.0f)
                     .spawn()

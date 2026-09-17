@@ -14,6 +14,7 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.entity.*;
 import top.begonia.wizardry.core.entity.construct.*;
+import top.begonia.wizardry.core.entity.construct.scaled.impl.*;
 import top.begonia.wizardry.core.entity.living.RemnantEntity;
 import top.begonia.wizardry.core.entity.living.minion.*;
 import top.begonia.wizardry.core.entity.living.wizard.impl.EvilWizardEntity;
@@ -322,13 +323,13 @@ public final class WizardryEntities {
             "black_hole",
             EntityType.Builder
                     .<BlackHoleEntity>of(BlackHoleEntity::new, MobCategory.MISC)
-                    .sized(1.0F, 1.0F)
+                    .sized(2.0F, 1.0F)
     );
     public static final DeferredHolder<EntityType<?>, EntityType<BlizzardEntity>> BLIZZARD = register(
             "blizzard",
             EntityType.Builder
                     .of(BlizzardEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .sized(2.0F, 3.0F)
     );
     public static final DeferredHolder<EntityType<?>, EntityType<ForcefieldEntity>> FORCEFIELD = register(
             "forcefield",
@@ -340,37 +341,37 @@ public final class WizardryEntities {
             "fire_sigil",
             EntityType.Builder
                     .of(FireSigilEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .sized(2.0F, 0.2F)
     );
     public static final DeferredHolder<EntityType<?>, EntityType<FrostSigilEntity>> FROST_SIGIL = register(
             "frost_sigil",
             EntityType.Builder
                     .of(FrostSigilEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .sized(2.0F, 0.2F)
     );
     public static final DeferredHolder<EntityType<?>, EntityType<LightningSigilEntity>> LIGHTNING_SIGIL = register(
             "lightning_sigil",
             EntityType.Builder
                     .of(LightningSigilEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .sized(2.0F, 0.2F)
     );
     public static final DeferredHolder<EntityType<?>, EntityType<CombustionRuneEntity>> COMBUSTION_RUNE = register(
             "combustion_rune",
             EntityType.Builder
                     .of(CombustionRuneEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .sized(2.0F, 0.2F)
     );
-    public static final DeferredHolder<EntityType<?>, EntityType<RingOfFireEntity>> RING_OF_FIRE = register(
+    public static final DeferredHolder<EntityType<?>, EntityType<FireRingEntity>> RING_OF_FIRE = register(
             "ring_of_fire",
             EntityType.Builder
-                    .of(RingOfFireEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .of(FireRingEntity::new, MobCategory.MISC)
+                    .sized(2.0F, 1.0F)
     );
-    public static final DeferredHolder<EntityType<?>, EntityType<HealingAuraEntity>> HEALING_AURA = register(
+    public static final DeferredHolder<EntityType<?>, EntityType<HealAuraEntity>> HEALING_AURA = register(
             "healing_aura",
             EntityType.Builder
-                    .of(HealingAuraEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .of(HealAuraEntity::new, MobCategory.MISC)
+                    .sized(2.0F, 1.0F)
     );
     public static final DeferredHolder<EntityType<?>, EntityType<DecayEntity>> DECAY = register(
             "decay",
@@ -389,7 +390,7 @@ public final class WizardryEntities {
             "radiant_totem",
             EntityType.Builder
                     .of(RadiantTotemEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .sized(1.0F, 1.0F)
     );
     public static final DeferredHolder<EntityType<?>, EntityType<WitheringTotemEntity>> WITHERING_TOTEM = register(
             "withering_totem",
@@ -413,13 +414,13 @@ public final class WizardryEntities {
             "hailstorm",
             EntityType.Builder
                     .of(HailstormEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .sized(2.0F, 5.0F)
     );
     public static final DeferredHolder<EntityType<?>, EntityType<StormcloudEntity>> STORMCLOUD = register(
             "stormcloud",
             EntityType.Builder
                     .of(StormcloudEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .sized(2.0F, 2.0F)
     );
     public static final DeferredHolder<EntityType<?>, EntityType<ShieldEntity>> SHIELD = register(
             "shield",
@@ -453,8 +454,8 @@ public final class WizardryEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<IceBarrierEntity>> ICE_BARRIER = register(
             "ice_barrier",
             EntityType.Builder
-                    .of(IceBarrierEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
+                    .<IceBarrierEntity>of(IceBarrierEntity::new, MobCategory.MISC)
+                    .sized(1.8f, 1.05f)
     );
 
     private static <T extends Entity> @NonNull DeferredHolder<EntityType<?>, EntityType<T>> register(

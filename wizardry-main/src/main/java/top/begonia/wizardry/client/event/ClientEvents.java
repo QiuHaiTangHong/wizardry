@@ -63,7 +63,7 @@ import top.begonia.wizardry.client.model.item.SpellBookUnbakedItemModel;
 import top.begonia.wizardry.client.model.loader.WizardryModelLoader;
 import top.begonia.wizardry.client.network.ClientPayloadHandler;
 import top.begonia.wizardry.client.particle.quad.*;
-import top.begonia.wizardry.client.particle.ray.BeamParticle;
+import top.begonia.wizardry.client.particle.target.BeamParticle;
 import top.begonia.wizardry.client.renderer.WizardryPotionRender;
 import top.begonia.wizardry.client.renderer.entity.*;
 import top.begonia.wizardry.client.renderer.entity.block.ArcaneWorkbenchRender;
@@ -170,25 +170,14 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void registerEntityRenderers(EntityRenderersEvent.@NonNull RegisterRenderers event) {
-        event.registerEntityRenderer(
-                WizardryEntities.FIRE_BOMB.get(),
-                ThrownItemRenderer::new
-        );
-        event.registerEntityRenderer(
-                WizardryEntities.POISON_BOMB.get(),
-                ThrownItemRenderer::new
-        );
-        event.registerEntityRenderer(
-                WizardryEntities.SMOKE_BOMB.get(),
-                ThrownItemRenderer::new
-        );
-        event.registerEntityRenderer(
-                WizardryEntities.SPARK_BOMB.get(),
-                ThrownItemRenderer::new
-        );
-        event.registerEntityRenderer(
-                WizardryEntities.MAGIC_MISSILE.get(),
-                (context) -> new MagicArrowRenderer(
+        // @formatter:off
+        event.registerEntityRenderer(WizardryEntities.FIRE_BOMB.get(),   ThrownItemRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.POISON_BOMB.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.SMOKE_BOMB.get(),  ThrownItemRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.SPARK_BOMB.get(),  ThrownItemRenderer::new);
+
+        event.registerEntityRenderer(WizardryEntities.MAGIC_MISSILE.get(), (context) ->
+                new MagicArrowRenderer(
                         context,
                         Identifier.fromNamespaceAndPath(Wizardry.MODID, "textures/entity/magic_missile.png"),
                         false,
@@ -199,62 +188,43 @@ public class ClientEvents {
                         false
                 )
         );
-        event.registerEntityRenderer(
-                WizardryEntities.DECAY.get(),
-                DecayRenderer::new
-        );
-        event.registerEntityRenderer(
-                WizardryEntities.WIZARD.get(),
-                WizardRenderer::new
-        );
-        event.registerEntityRenderer(
-                WizardryEntities.EVIL_WIZARD.get(),
-                WizardRenderer::new
-        );
-        event.registerEntityRenderer(
-                WizardryEntities.VEX_MINION.get(),
-                VexMinionRenderer::new
-        );
-        event.registerEntityRenderer(
-                WizardryEntities.LIGHTNING_HAMMER.get(),
-                HammerRenderer::new
-        );
-        event.registerEntityRenderer(
-                WizardryEntities.REMNANT.get(),
-                RemnantRenderer::new
-        );
-        event.registerEntityRenderer(
-                WizardryEntities.BUBBLE.get(),
-                BubbleRenderer::new
-        );
-        event.registerBlockEntityRenderer(
-                WizardryBlockEntities.ARCANE_WORKBENCH.get(),
-                ArcaneWorkbenchRender::new
-        );
-        event.registerBlockEntityRenderer(
-                WizardryBlockEntities.BOOKSHELF.get(),
-                BookshelfRender::new
-        );
-        event.registerBlockEntityRenderer(
-                WizardryBlockEntities.IMBUEMENT_ALTAR.get(),
-                ImbuementAltarRender::new
-        );
-        event.registerBlockEntityRenderer(
-                WizardryBlockEntities.LECTERN.get(),
-                LecternRender::new
-        );
-        event.registerEntityRenderer(
-                WizardryEntities.BLACK_HOLE.get(),
-                BlackHoleRenderer::new
-        );
-        event.registerEntityRenderer(
-                WizardryEntities.ZOMBIE_MINION.get(),
-                ZombieRenderer::new
-        );
-        event.registerEntityRenderer(
-                WizardryEntities.WITHER_SKELETON_MINION.get(),
-                WitherSkeletonRenderer::new
-        );
+        event.registerEntityRenderer(WizardryEntities.DECAY.get(),       DecayRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.WIZARD.get(),      WizardRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.EVIL_WIZARD.get(), WizardRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.VEX_MINION.get(),  VexMinionRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.REMNANT.get(),     RemnantRenderer::new);
+
+        // Stuff that doesn't render
+        event.registerEntityRenderer(WizardryEntities.BLIZZARD.get(),        BlankRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.TORNADO.get(),         BlankRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.ARROW_RAIN.get(),      BlankRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.SHADOW_WRAITH.get(),   BlankRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.THUNDERBOLT.get(),     BlankRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.STORM_ELEMENTAL.get(), BlankRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.EARTHQUAKE.get(),      BlankRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.HAILSTORM.get(),       BlankRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.STORMCLOUD.get(),      BlankRenderer::new);
+
+        // Effects and constructs
+        event.registerEntityRenderer(WizardryEntities.BLACK_HOLE.get(),       BlackHoleRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.SHIELD.get(),           BlankRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.BUBBLE.get(),           BubbleRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.LIGHTNING_HAMMER.get(), HammerRenderer::new);
+//        event.registerEntityRenderer(WizardryEntities.ICE_SPIKE.get(),        IceSpikeRenderer::new);
+//        event.registerEntityRenderer(WizardryEntities.FORCEFIELD.get(),       ForcefieldRenderer::new);
+//        event.registerEntityRenderer(WizardryEntities.ZOMBIE_SPAWNER.get(),   ZombieSpawnerRenderer::new);
+//        event.registerEntityRenderer(WizardryEntities.RADIANT_TOTEM.get(),    RadiantTotemRenderer::new);
+//        event.registerEntityRenderer(WizardryEntities.BOULDER.get(),          BoulderRenderer::new);
+//        event.registerEntityRenderer(WizardryEntities.WITHERING_TOTEM.get(),  WitheringTotemRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.ICE_BARRIER.get(),      IceBarrierRenderer::new);
+
+        event.registerBlockEntityRenderer(WizardryBlockEntities.ARCANE_WORKBENCH.get(), ArcaneWorkbenchRender::new);
+        event.registerBlockEntityRenderer(WizardryBlockEntities.BOOKSHELF.get(),        BookshelfRender::new);
+        event.registerBlockEntityRenderer(WizardryBlockEntities.IMBUEMENT_ALTAR.get(),  ImbuementAltarRender::new);
+        event.registerBlockEntityRenderer(WizardryBlockEntities.LECTERN.get(),          LecternRender::new);
+        event.registerEntityRenderer(WizardryEntities.ZOMBIE_MINION.get(),              ZombieRenderer::new);
+        event.registerEntityRenderer(WizardryEntities.WITHER_SKELETON_MINION.get(),     WitherSkeletonRenderer::new);
+        // @formatter:on
     }
 
     @SubscribeEvent

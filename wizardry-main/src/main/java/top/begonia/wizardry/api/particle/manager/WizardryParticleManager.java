@@ -13,7 +13,6 @@ import top.begonia.wizardry.api.particle.CompositeQuadParticle;
 import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
 import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.api.particle.type.ParticleTypeExtension;
 import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.core.registry.WizardryParticles;
@@ -112,7 +111,7 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
             pz = z + level.getRandom().nextDouble() - 0.5;
             this.getParticle(
                     level,
-                    new QuadParticleOptions(WizardryParticles.SPARK.get()),
+                    WizardryParticles.SPARK.get(),
                     px, py, pz
             ).ifPresent(ParticleBuilder::spawn);
             px = x + level.getRandom().nextDouble() - 0.5;
@@ -132,7 +131,7 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
             double z = entity.getZ() + level.getRandom().nextDouble() * 2 - 1;
             this.getParticle(
                     level,
-                    new QuadParticleOptions(WizardryParticles.SPARKLE.get()),
+                    WizardryParticles.SPARKLE.get(),
                     x, y, z
             ).ifPresent(p -> p.speed(0.0f, 0.1f, 0.0f)
                     .color(1.0f, 1.0f, 0.3f)
@@ -142,7 +141,7 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
 
         this.getParticle(
                 level,
-                new QuadParticleOptions(WizardryParticles.BUFF.get()),
+                WizardryParticles.BUFF.get(),
                 entity.getX(), entity.getY(), entity.getZ()
         ).ifPresent(p -> p.targetEntity(entity)
                 .color(1.0f, 1.0f, 0.3f)
@@ -154,6 +153,6 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
     @Nullable
     public MutableDoubleSpriteSet getSpriteSet(@NonNull ParticleTypeExtension<?> type) {
         Map<Identifier, MutableDoubleSpriteSet> spriteSetMap = WizardryClientDataManager.getInstance().getAllDataByType(MutableDoubleSpriteSet.class);
-        return spriteSetMap.get(type.identifier().withPrefix("particles/"));
+        return spriteSetMap.get(type.identifier());
     }
 }

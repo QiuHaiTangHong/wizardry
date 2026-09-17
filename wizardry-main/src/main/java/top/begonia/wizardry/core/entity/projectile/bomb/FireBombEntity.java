@@ -13,7 +13,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
@@ -93,7 +92,7 @@ public class FireBombEntity extends BombEntity {
         Vec3 hitPos = this.position();
         WizardryClient.particleManager.getParticle(
                 level,
-                new QuadParticleOptions(WizardryParticles.FLASH.get()),
+                WizardryParticles.FLASH.get(),
                 hitPos.x, hitPos.y, hitPos.z
         ).ifPresent(p -> p.scaleValue(5 * blastMultiplier)
                 .color(1.0f, 0.6f, 0.0f)
@@ -103,7 +102,7 @@ public class FireBombEntity extends BombEntity {
             WizardryClient.particleManager.getParticle(
                     level,
                     this.random,
-                    new QuadParticleOptions(WizardryParticles.MAGIC_FIRE.get()),
+                    WizardryParticles.MAGIC_FIRE.get(),
                     hitPos.x, hitPos.y, hitPos.z,
                     2 * blastMultiplier,
                     false
@@ -115,7 +114,7 @@ public class FireBombEntity extends BombEntity {
             WizardryClient.particleManager.getParticle(
                     level,
                     this.random,
-                    new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),
+                    WizardryParticles.DARK_MAGIC.get(),
                     hitPos.x, hitPos.y, hitPos.z,
                     2 * blastMultiplier,
                     false

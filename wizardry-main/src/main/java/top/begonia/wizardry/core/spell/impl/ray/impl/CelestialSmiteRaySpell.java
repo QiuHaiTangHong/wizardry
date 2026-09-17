@@ -12,8 +12,6 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.particle.options.RayParticleOptions;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
@@ -51,10 +49,7 @@ public class CelestialSmiteRaySpell extends AbstractRaySpell {
         } else if (level instanceof ClientLevel clientLevel) {
             WizardryClient.particleManager.getParticle(
                     clientLevel,
-                    new RayParticleOptions(
-                            WizardryParticles.BEAM.get(),
-                            hit.x, hit.y, hit.z
-                    ),
+                    WizardryParticles.BEAM.get(),
                     hit.x, level.getHeight(), hit.z
             ).ifPresent(p -> p.targetPosition(hit.x, hit.y, hit.z)
                     .scaleValue(8)
@@ -65,7 +60,7 @@ public class CelestialSmiteRaySpell extends AbstractRaySpell {
 
             WizardryClient.particleManager.getParticle(
                     clientLevel,
-                    new QuadParticleOptions(WizardryParticles.SPHERE.get()),
+                    WizardryParticles.SPHERE.get(),
                     hit.x, hit.y, hit.z
             ).ifPresent(p -> p.scaleValue(4)
                     .color(0xfff098)
@@ -75,7 +70,7 @@ public class CelestialSmiteRaySpell extends AbstractRaySpell {
                 Vec3 vec = hit.add(new Vec3(side.getUnitVec3f()).scale(GeometryUtils.ANTI_Z_FIGHTING_OFFSET));
                 WizardryClient.particleManager.getParticle(
                         clientLevel,
-                        new QuadParticleOptions(WizardryParticles.SCORCH.get()),
+                        WizardryParticles.SCORCH.get(),
                         vec.x, vec.y, vec.z
                 ).ifPresent(p -> p.facing(side)
                         .scaleValue(3)

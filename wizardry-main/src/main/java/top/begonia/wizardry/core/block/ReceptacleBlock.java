@@ -28,7 +28,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.core.constants.ElementEnum;
@@ -151,7 +150,7 @@ public class ReceptacleBlock extends BaseEntityBlock {
                 if (level instanceof ClientLevel clientLevel) {
                     WizardryClient.particleManager.getParticle(
                             clientLevel,
-                            new QuadParticleOptions(WizardryParticles.FLASH.get()),
+                            WizardryParticles.FLASH.get(),
                             centre.x, centre.y, centre.z
                     ).ifPresent(p -> p
                             .scaleValue(0.35f)
@@ -166,7 +165,7 @@ public class ReceptacleBlock extends BaseEntityBlock {
                         double z = r * (rand.nextDouble() * 2 - 1);
                         WizardryClient.particleManager.getParticle(
                                 clientLevel,
-                                new QuadParticleOptions(WizardryParticles.DUST.get()),
+                                WizardryParticles.DUST.get(),
                                 centre.x + x, centre.y + y, centre.z + z
                         ).ifPresent(p -> p
                                 .speed(x * -0.03, 0.02, z * -0.03)

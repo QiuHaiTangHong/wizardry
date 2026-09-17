@@ -1,21 +1,31 @@
 package top.begonia.wizardry.api.particle.extension.extract;
 
-import org.joml.Vector3f;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
+import org.jspecify.annotations.NonNull;
 
 public interface IPositionFlowOperation extends IBaseFlowOperation{
-    IPositionFlowOperation setX(float x);
+    IPositionFlowOperation setX(double x);
 
-    IPositionFlowOperation setY(float y);
+    IPositionFlowOperation setY(double y);
 
-    IPositionFlowOperation setZ(float z);
+    IPositionFlowOperation setZ(double z);
 
-    IPositionFlowOperation setPosition(float x, float y, float z);
+    IPositionFlowOperation setPosition(double x, double y, double z);
 
-    float getX();
+    default IPositionFlowOperation setPosition(@NonNull Vector3d position){
+        return this.setPosition(position.x, position.y, position.z);
+    }
 
-    float getY();
+    double getX();
 
-    float getZ();
+    double getY();
 
-    Vector3f getPosition();
+    double getZ();
+
+    Vector3d getOldPos();
+
+    Vector3d getPosition();
+
+    Vec3 getVec3Position();
 }

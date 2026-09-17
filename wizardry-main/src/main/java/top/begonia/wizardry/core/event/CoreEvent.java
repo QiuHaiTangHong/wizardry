@@ -19,6 +19,7 @@ import top.begonia.wizardry.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.core.commond.DebugCommond;
 import top.begonia.wizardry.core.data.SpellGlyph;
 import top.begonia.wizardry.core.data.constant.parser.CurrencyParser;
+import top.begonia.wizardry.core.data.constant.parser.DamageImmuneParser;
 import top.begonia.wizardry.core.data.player.WizardPlayerData;
 import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.constant.parser.SpellPropertiesParser;
@@ -102,6 +103,7 @@ public class CoreEvent {
     public static void onCommonRegisterDataParserEvent(RegisterDataParserEvent.@NonNull CommonRegisterDataParserEvent event) {
         event.register(new SpellPropertiesParser());
         event.register(new CurrencyParser());
+        event.register(new DamageImmuneParser());
     }
 
     /**

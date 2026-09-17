@@ -17,7 +17,7 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.renderer.entity.state.BlackHoleRenderState;
 import top.begonia.wizardry.client.util.DrawingUtils;
-import top.begonia.wizardry.core.entity.construct.BlackHoleEntity;
+import top.begonia.wizardry.core.entity.construct.scaled.impl.BlackHoleEntity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -111,7 +111,7 @@ public class BlackHoleRenderer extends EntityRenderer<BlackHoleEntity, BlackHole
         state.thirdPersonFront = Minecraft.getInstance().options.getCameraType() == CameraType.THIRD_PERSON_FRONT;
         ArrayList<RayData> rays = new ArrayList<>(1);
         for (int j = 0; j < 30; j++) {
-            float radius = 3.0f * entity.getEntitySizeMultiplier();
+            float radius = 3.0f * entity.getSizeMultiplier();
             int a = entity.randomiser[j];
             int b = entity.randomiser2[j];
 

@@ -3,10 +3,15 @@ package top.begonia.wizardry.api.particle.extension.extract;
 import net.minecraft.client.Camera;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 import top.begonia.wizardry.api.particle.extension.Layer;
-import top.begonia.wizardry.api.particle.renderer.state.CompositeQuadParticleRenderState;
+import top.begonia.wizardry.api.particle.renderer.CompositeQuadParticleRenderState;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExtractFlow implements IRotateFlowOperation,
         IPositionFlowOperation,
@@ -20,7 +25,8 @@ public class ExtractFlow implements IRotateFlowOperation,
     private Quaternionf rotate = new Quaternionf();
     private int age = 0, lifetime = 0;
     private float partialTick = 0;
-    private float x, y, z;
+    private final Vector3d pos = new Vector3d();
+    private final Vector3d oldPos = new Vector3d();
     private float alpha = 1.0F, red = 1.0F, green = 1.0F, blue = 1.0F;
     private float startRed = 1.0F, startGreen = 1.0F, startBlue = 1.0F;
     private float endRed = 1.0F, endGreen = 1.0F, endBlue = 1.0F;
@@ -29,13 +35,23 @@ public class ExtractFlow implements IRotateFlowOperation,
     private float u1 = 1.0F;
     private float v0 = 0.0F;
     private float v1 = 1.0F;
+    /**
+     * 光照坐标
+     */
     private int lightCoords;
+    private final Map<Class<?>, Map<String, Object>> additionalData = new HashMap<>();
 
     public void beginExtraction(
             CompositeQuadParticleRenderState state,
             Layer layer,
             Camera camera,
             Entity linkEntity,
+            double x,
+            double y,
+            double z,
+            double oldX,
+            double oldY,
+            double oldZ,
             float scale,
             float partialTick,
             int age,
@@ -46,11 +62,18 @@ public class ExtractFlow implements IRotateFlowOperation,
         this.layer = layer;
         this.camera = camera;
         this.linkEntity = linkEntity;
+        this.oldPos.x = oldX;
+        this.oldPos.y = oldY;
+        this.oldPos.z = oldZ;
+        this.pos.x = x;
+        this.pos.y = y;
+        this.pos.z = z;
         this.scale = scale;
         this.age = age;
         this.lifetime = lifetime;
         this.partialTick = partialTick;
         this.lightCoords = lightCoords;
+        this.additionalData.clear();
     }
 
     public ExtractFlow() {
@@ -101,6 +124,21 @@ public class ExtractFlow implements IRotateFlowOperation,
     @Override
     public float getLifetime() {
         return this.lifetime;
+    }
+
+    @Override
+    public <T> void putAdditionalData(String name, T data, Class<T> type) {
+        Map<String, Object> classMap = this.additionalData.computeIfAbsent(type, _ -> new HashMap<>());
+        classMap.put(name, data);
+    }
+
+    @Override
+    public <T> T getAdditionalData(String name, Class<T> type) {
+        Map<String, Object> classMap = this.additionalData.get(type);
+        if (classMap == null) {
+            return null;
+        }
+        return type.cast(classMap.get(name));
     }
 
     @Override
@@ -223,48 +261,58 @@ public class ExtractFlow implements IRotateFlowOperation,
     }
 
     @Override
-    public IPositionFlowOperation setX(float x) {
-        this.x = x;
+    public IPositionFlowOperation setX(double x) {
+        this.pos.x = x;
         return this;
     }
 
     @Override
-    public IPositionFlowOperation setY(float y) {
-        this.y = y;
+    public IPositionFlowOperation setY(double y) {
+        this.pos.y = y;
         return this;
     }
 
     @Override
-    public IPositionFlowOperation setZ(float z) {
-        this.z = z;
+    public IPositionFlowOperation setZ(double z) {
+        this.pos.z = z;
         return this;
     }
 
     @Override
-    public IPositionFlowOperation setPosition(float x, float y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public IPositionFlowOperation setPosition(double x, double y, double z) {
+        this.pos.x = x;
+        this.pos.y = y;
+        this.pos.z = z;
         return this;
     }
 
     @Override
-    public float getX() {
-        return this.x;
+    public double getX() {
+        return this.pos.x;
     }
 
     @Override
-    public float getY() {
-        return this.y;
+    public double getY() {
+        return this.pos.y;
     }
 
     @Override
-    public float getZ() {
-        return this.z;
+    public double getZ() {
+        return this.pos.z;
     }
 
     @Override
-    public Vector3f getPosition() {
-        return new Vector3f(this.x, this.y, this.z);
+    public Vector3d getPosition() {
+        return new Vector3d(this.pos);
+    }
+
+    @Override
+    public Vector3d getOldPos() {
+        return new Vector3d(this.oldPos);
+    }
+
+    @Override
+    public Vec3 getVec3Position() {
+        return new Vec3(this.pos.x, this.pos.y, this.pos.z);
     }
 }

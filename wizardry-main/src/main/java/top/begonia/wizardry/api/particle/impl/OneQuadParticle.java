@@ -7,11 +7,11 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.particle.CompositeQuadParticle;
-import top.begonia.wizardry.api.particle.extension.extract.ExtractFlow;
 import top.begonia.wizardry.api.particle.extension.Layer;
 import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
 import top.begonia.wizardry.api.particle.extension.TextureParticle;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
+import top.begonia.wizardry.api.particle.extension.extract.ExtractFlow;
+import top.begonia.wizardry.api.particle.options.impl.QuadParticleOptions;
 
 public class OneQuadParticle extends CompositeQuadParticle<QuadParticleOptions> implements TextureParticle {
     /**
@@ -43,9 +43,9 @@ public class OneQuadParticle extends CompositeQuadParticle<QuadParticleOptions> 
         Layer layer = extractFlow.getLayer();
         Vector3f scratch = new Vector3f();
         float scale = extractFlow.getScale();
-        float lerpX = extractFlow.getX();
-        float lerpY = extractFlow.getY();
-        float lerpZ = extractFlow.getZ();
+        float lerpX = (float) extractFlow.getX();
+        float lerpY = (float) extractFlow.getY();
+        float lerpZ = (float) extractFlow.getZ();
         float u0 = extractFlow.getU0();
         float u1 = extractFlow.getU1();
         float v0 = extractFlow.getV0();

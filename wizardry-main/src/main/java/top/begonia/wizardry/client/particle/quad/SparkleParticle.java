@@ -4,7 +4,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.particle.extension.extract.IColorFlowOperation;
 import top.begonia.wizardry.api.particle.impl.OneQuadParticle;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
+import top.begonia.wizardry.api.particle.options.impl.QuadParticleOptions;
 
 public class SparkleParticle extends OneQuadParticle {
     public SparkleParticle(ClientLevel level, @NonNull QuadParticleOptions options, double x, double y, double z) {

@@ -8,7 +8,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.entity.projectile.MagicArrowEntity;
 import top.begonia.wizardry.core.registry.WizardryEntities;
@@ -56,7 +55,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
         if (this.level() instanceof ClientLevel clientLevel) {
             WizardryClient.particleManager.getParticle(
                     clientLevel,
-                    new QuadParticleOptions(WizardryParticles.FLASH.get()),
+                    WizardryParticles.FLASH.get(),
                     this.getX(), this.getY(), this.getZ()
             ).ifPresent(p -> p.color(1.0f, 1.0f, 0.65f)
                     .spawn()
@@ -70,7 +69,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
             Vec3 vec = hitResult.getLocation().add(new Vec3(hitResult.getDirection().getUnitVec3f()).scale(0.15));
             WizardryClient.particleManager.getParticle(
                     clientLevel,
-                    new QuadParticleOptions(WizardryParticles.FLASH.get()),
+                    WizardryParticles.FLASH.get(),
                     vec.x, vec.y, vec.z
             ).ifPresent(p -> p.color(1.0f, 1.0f, 0.65f)
                     .endColor(0.85f, 0.5f, 0.8f)
@@ -89,7 +88,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
                 WizardryClient.particleManager.getParticle(
                         clientLevel,
                         this.random,
-                        new QuadParticleOptions(WizardryParticles.SPARKLE.get()),
+                        WizardryParticles.SPARKLE.get(),
                         this.getX(), this.getY(), this.getZ(),
                         0.03,
                         true
@@ -100,7 +99,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
 
                 WizardryClient.particleManager.getParticle(
                         clientLevel,
-                        new QuadParticleOptions(WizardryParticles.SNOW.get()),
+                        WizardryParticles.SNOW.get(),
                         this.getX(), this.getY(), this.getZ()
                 ).ifPresent(ParticleBuilder::spawn);
 
@@ -112,7 +111,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
                     WizardryClient.particleManager.getParticle(
                             clientLevel,
                             this.random,
-                            new QuadParticleOptions(WizardryParticles.SPARKLE.get()),
+                            WizardryParticles.SPARKLE.get(),
                             x, y, z,
                             0.03,
                             true
@@ -127,7 +126,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
                 WizardryClient.particleManager.getParticle(
                         clientLevel,
                         this.random,
-                        new QuadParticleOptions(WizardryParticles.SPARKLE.get()),
+                        WizardryParticles.SPARKLE.get(),
                         this.getX(), this.getY(), this.getZ(),
                         0.03,
                         true
@@ -145,7 +144,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
                     WizardryClient.particleManager.getParticle(
                             clientLevel,
                             this.random,
-                            new QuadParticleOptions(WizardryParticles.SPARKLE.get()),
+                            WizardryParticles.SPARKLE.get(),
                             x, y, z,
                             0.03,
                             true

@@ -6,7 +6,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.spell.AbstractSpell;
@@ -64,7 +63,7 @@ public class DecayEntity extends MagicConstructEntity {
 
             WizardryClient.particleManager.getParticle(
                     clientLevel,
-                    new QuadParticleOptions(WizardryParticles.DARK_MAGIC.get()),
+                    WizardryParticles.DARK_MAGIC.get(),
                     this.getX() + radius * Mth.cos(angle), this.getY(), this.getZ() + radius * Mth.sin(angle)
             ).ifPresent(p -> p.color(brightness, 0, brightness + 0.1f)
                     .spawn()

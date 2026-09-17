@@ -21,7 +21,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.block.ReceptacleBlock;
 import top.begonia.wizardry.core.constants.ElementEnum;
@@ -77,7 +76,7 @@ public class RemnantEntity extends AbstractVexFlavorEntity implements IAttachedE
             if (this.random.nextInt(10) == 0) {
                 WizardryClient.particleManager.getParticle(
                         clientLevel,
-                        new QuadParticleOptions(WizardryParticles.FLASH.get()),
+                        WizardryParticles.FLASH.get(),
                         0, this.getBbHeight() / 2, 0
                 ).ifPresent(p -> p.scaleValue(this.getBbWidth())
                         .linkEntity(this)
@@ -97,7 +96,7 @@ public class RemnantEntity extends AbstractVexFlavorEntity implements IAttachedE
                     WizardryClient.particleManager.getParticle(
                             clientLevel,
                             this.random,
-                            new QuadParticleOptions(WizardryParticles.DUST.get()),
+                            WizardryParticles.DUST.get(),
                             centre.x + x, centre.y + y, centre.z + z,
                             0.1, true
                     ).ifPresent(p -> p.time(12)
@@ -109,7 +108,7 @@ public class RemnantEntity extends AbstractVexFlavorEntity implements IAttachedE
             } else {
                 WizardryClient.particleManager.getParticle(
                         clientLevel,
-                        new QuadParticleOptions(WizardryParticles.DUST.get()),
+                        WizardryParticles.DUST.get(),
                         centre.x + x, centre.y + y, centre.z + z
                 ).ifPresent(p -> p.speed(x * -0.03, 0.02, z * -0.03)
                         .time(24 + this.random.nextInt(8))

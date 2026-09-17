@@ -1,0 +1,14 @@
+{
+  "parser": "wizardry:damage_immune_parser",
+  "entries": {
+    "wizardry:magic": [],
+    "wizardry:fire": [],
+    "wizardry:frost": [],
+    "wizardry:shock": [],
+    "wizardry:wither": [],
+    "wizardry:poison": [],
+    "wizardry:force": [],
+    "wizardry:blast": [],
+    "wizardry:radiant": []
+  }
+}

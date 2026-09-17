@@ -13,14 +13,17 @@ import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.entity.atom.ICustomHitbox;
-import top.begonia.wizardry.api.particle.extension.*;
+import top.begonia.wizardry.api.particle.extension.FacingCameraMode;
+import top.begonia.wizardry.api.particle.extension.Layer;
+import top.begonia.wizardry.api.particle.extension.TextureParticle;
 import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
 import top.begonia.wizardry.api.particle.extension.extract.*;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
-import top.begonia.wizardry.api.particle.renderer.state.CompositeQuadParticleRenderState;
+import top.begonia.wizardry.api.particle.renderer.CompositeQuadParticleRenderState;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -331,14 +334,68 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
         return FacingCameraMode.LOOK_AT_XYZ;
     }
 
+    /**
+     * 渲染提交的入口，实际上现在的实现并不是性能最好的，但是为了可读性，采用现在的设计。
+     * 如果你不想使用 extractFlow 可以直接在这里完成所有的数据抽取和计算，
+     * 但是，除非你在有把握实现正确的效果，不然请继续使用现有设计。
+     *
+     * @param state       渲染状态
+     * @param camera      摄像机
+     * @param partialTick 帧间时差
+     */
+    public void extract(CompositeQuadParticleRenderState state, @NonNull Camera camera, float partialTick) {
+        this.extractFlow.beginExtraction(
+                state,
+                this.getLayer(),
+                camera,
+                this.getLinkEntity(),
+                this.xo, this.yo, this.zo,
+                this.x, this.y, this.z,
+                this.getQuadSize(partialTick),
+                partialTick,
+                this.age,
+                this.lifetime,
+                this.getLightCoords(partialTick)
+        );
+        this.extractGlobalAdditionalData(extractFlow);
+        this.extractPosition(extractFlow);
+        this.extractRotation(extractFlow);
+        this.extractSize(extractFlow);
+        this.extractColor(extractFlow);
+        this.extractUv(extractFlow);
+        this.extractSurface(extractFlow);
+    }
+
+    /**
+     * 在每一帧开始抽取时，向 extractFlow 注入不在标准流数据中的数据。
+     * 这个方法必须在其它extract*之前。
+     *
+     * @param extractFlow 拥有全部当前渲染数据的流
+     */
+    protected void extractGlobalAdditionalData(ExtractFlow extractFlow) {
+    }
+
     protected void extractPosition(@NonNull IPositionFlowOperation positionOperation) {
-        Vec3 pos = positionOperation.getCamera().position();
-        float x = (float) (Mth.lerp(positionOperation.getPartialTick(), this.xo, this.x) - pos.x());
-        float y = (float) (Mth.lerp(positionOperation.getPartialTick(), this.yo, this.y) - pos.y());
-        float z = (float) (Mth.lerp(positionOperation.getPartialTick(), this.zo, this.z) - pos.z());
-        positionOperation.setX(x)
-                .setY(y)
-                .setZ(z);
+        Vector3f camePos = positionOperation.getCamera().position().toVector3f();
+        Vector3d oldPos = positionOperation.getOldPos();
+        Vector3d pos = positionOperation.getPosition();
+        positionOperation.setPosition(pos.sub(oldPos)
+                .mul(positionOperation.getPartialTick())
+                .add(oldPos)
+                .sub(camePos)
+        );
+    }
+
+    protected void extractRotation(@NonNull IRotateFlowOperation rotateOperation) {
+        Quaternionf rotation = rotateOperation.getRotate();
+        this.getFacingCameraMode().setRotation(rotation, rotateOperation.getCamera(), rotateOperation.getPartialTick());
+        if (this.roll != 0.0F) {
+            rotation.rotateZ(Mth.lerp(rotateOperation.getPartialTick(), this.oRoll, this.roll));
+        }
+        rotateOperation.setRotate(rotation);
+    }
+
+    protected void extractSize(ISizeFlowOperation sizeFlowOperation) {
     }
 
     protected void extractColor(@NonNull IColorFlowOperation colorFlowOperation) {
@@ -347,18 +404,6 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
         Vector3f startColor = colorFlowOperation.getStartColor();
         Vector3f endColor = colorFlowOperation.getEndColor();
         colorFlowOperation.setVecColor(endColor.sub(startColor).mul(ageFraction).add(startColor));
-    }
-
-    protected void extractSize(ISizeFlowOperation sizeFlowOperation) {
-    }
-
-    protected void extractRotation(@NonNull IRotateFlowOperation rotateOperation) {
-        Quaternionf rotation = new Quaternionf();
-        this.getFacingCameraMode().setRotation(rotation, rotateOperation.getCamera(), rotateOperation.getPartialTick());
-        if (this.roll != 0.0F) {
-            rotation.rotateZ(Mth.lerp(rotateOperation.getPartialTick(), this.oRoll, this.roll));
-        }
-        rotateOperation.setRotate(rotation);
     }
 
     public void extractUv(IUvFlowOperation uvOperation) {
@@ -371,26 +416,6 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
     }
 
     protected abstract void extractSurface(ExtractFlow extractFlow);
-
-    public void extract(CompositeQuadParticleRenderState state, @NonNull Camera camera, float partialTick) {
-        this.extractFlow.beginExtraction(
-                state,
-                this.getLayer(),
-                camera,
-                this.getLinkEntity(),
-                this.getQuadSize(partialTick),
-                partialTick,
-                this.age,
-                this.lifetime,
-                this.getLightCoords(partialTick)
-        );
-        this.extractPosition(extractFlow);
-        this.extractSize(extractFlow);
-        this.extractRotation(extractFlow);
-        this.extractColor(extractFlow);
-        this.extractUv(extractFlow);
-        this.extractSurface(extractFlow);
-    }
 
     protected Layer getLayer() {
         if (this instanceof TextureParticle textureParticle) {

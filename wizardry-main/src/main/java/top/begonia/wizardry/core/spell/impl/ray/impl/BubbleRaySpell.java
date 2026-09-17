@@ -14,7 +14,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
@@ -71,7 +70,7 @@ public class BubbleRaySpell extends AbstractRaySpell {
             clientLevel.addParticle(ParticleTypes.SPLASH, x, y, z, 0, 0, 0);
             WizardryClient.particleManager.getParticle(
                     clientLevel,
-                    new QuadParticleOptions(WizardryParticles.MAGIC_BUBBLE.get()),
+                    WizardryParticles.MAGIC_BUBBLE.get(),
                     x, y, z
             ).ifPresent(ParticleBuilder::spawn);
         }

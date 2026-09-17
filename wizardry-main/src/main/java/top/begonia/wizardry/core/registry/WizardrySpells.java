@@ -11,7 +11,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.entity.construct.BlackHoleEntity;
+import top.begonia.wizardry.core.entity.construct.scaled.impl.BlackHoleEntity;
 import top.begonia.wizardry.core.entity.living.minion.SkeletonMinionEntity;
 import top.begonia.wizardry.core.entity.living.minion.WitherSkeletonMinionEntity;
 import top.begonia.wizardry.core.entity.living.minion.ZombieMinionEntity;

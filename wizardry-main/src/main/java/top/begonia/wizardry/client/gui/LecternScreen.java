@@ -20,7 +20,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.particle.options.QuadParticleOptions;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.gui.widget.InvisibleButton;
 import top.begonia.wizardry.client.gui.widget.SpellSortButton;
@@ -243,7 +242,7 @@ public class LecternScreen extends SpellInfoScreen implements ISpellSortable {
                                                 .scale(GeometryUtils.ANTI_Z_FIGHTING_OFFSET));
                                         WizardryClient.particleManager.getParticle(
                                                 level,
-                                                new QuadParticleOptions(WizardryParticles.BLOCK_HIGHLIGHT.get()),
+                                                WizardryParticles.BLOCK_HIGHLIGHT.get(),
                                                 pos.x, pos.y, pos.z
                                         ).ifPresent(p -> p.facing(side)
                                                 .color(0.9f, 0.5f, 0.8f)
