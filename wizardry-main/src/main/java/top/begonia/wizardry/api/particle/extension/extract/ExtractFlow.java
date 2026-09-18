@@ -1,12 +1,8 @@
 package top.begonia.wizardry.api.particle.extension.extract;
 
 import net.minecraft.client.Camera;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
-import org.joml.Vector3d;
-import org.joml.Vector3f;
 import top.begonia.wizardry.api.particle.extension.Layer;
 import top.begonia.wizardry.api.particle.renderer.CompositeQuadParticleRenderState;
 
@@ -18,6 +14,7 @@ public class ExtractFlow implements IRotateFlowOperation,
         IColorFlowOperation,
         IUvFlowOperation,
         ISizeFlowOperation {
+    private final Map<Class<?>, Map<String, Object>> additionalData = new HashMap<>();
     private CompositeQuadParticleRenderState state;
     private Layer layer;
     private Camera camera;
@@ -25,8 +22,8 @@ public class ExtractFlow implements IRotateFlowOperation,
     private Quaternionf rotate = new Quaternionf();
     private int age = 0, lifetime = 0;
     private float partialTick = 0;
-    private final Vector3d pos = new Vector3d();
-    private final Vector3d oldPos = new Vector3d();
+    private double x, y, z;
+    private double oldX, oldY, oldZ;
     private float alpha = 1.0F, red = 1.0F, green = 1.0F, blue = 1.0F;
     private float startRed = 1.0F, startGreen = 1.0F, startBlue = 1.0F;
     private float endRed = 1.0F, endGreen = 1.0F, endBlue = 1.0F;
@@ -39,7 +36,9 @@ public class ExtractFlow implements IRotateFlowOperation,
      * 光照坐标
      */
     private int lightCoords;
-    private final Map<Class<?>, Map<String, Object>> additionalData = new HashMap<>();
+
+    public ExtractFlow() {
+    }
 
     public void beginExtraction(
             CompositeQuadParticleRenderState state,
@@ -49,9 +48,6 @@ public class ExtractFlow implements IRotateFlowOperation,
             double x,
             double y,
             double z,
-            double oldX,
-            double oldY,
-            double oldZ,
             float scale,
             float partialTick,
             int age,
@@ -62,21 +58,15 @@ public class ExtractFlow implements IRotateFlowOperation,
         this.layer = layer;
         this.camera = camera;
         this.linkEntity = linkEntity;
-        this.oldPos.x = oldX;
-        this.oldPos.y = oldY;
-        this.oldPos.z = oldZ;
-        this.pos.x = x;
-        this.pos.y = y;
-        this.pos.z = z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
         this.scale = scale;
         this.age = age;
         this.lifetime = lifetime;
         this.partialTick = partialTick;
         this.lightCoords = lightCoords;
         this.additionalData.clear();
-    }
-
-    public ExtractFlow() {
     }
 
     public void setStartColor(float red, float green, float blue) {
@@ -176,11 +166,6 @@ public class ExtractFlow implements IRotateFlowOperation,
     }
 
     @Override
-    public IUvFlowOperation setUv(float u0, float u1, float v0, float v1) {
-        return this.setU0(u0).setU1(u1).setV0(v0).setV1(v1);
-    }
-
-    @Override
     public float getU0() {
         return this.u0;
     }
@@ -211,41 +196,107 @@ public class ExtractFlow implements IRotateFlowOperation,
     }
 
     @Override
-    public Vector3f getColor() {
-        return new Vector3f(this.red, this.green, this.blue);
+    public float getRed() {
+        return this.red;
     }
 
     @Override
-    public int getHEXColor() {
-        return ARGB.colorFromFloat(this.alpha, this.red, this.green, this.blue);
+    public IColorFlowOperation setRed(float red) {
+        this.red = red;
+        return this;
     }
 
     @Override
-    public Vector3f getStartColor() {
-        return new Vector3f(this.startRed, this.startGreen, this.startBlue);
+    public float getGreen() {
+        return this.green;
     }
 
     @Override
-    public Vector3f getEndColor() {
-        return new Vector3f(this.endRed, this.endGreen, this.endBlue);
+    public IColorFlowOperation setGreen(float green) {
+        this.green = green;
+        return this;
+    }
+
+    @Override
+    public float getBlue() {
+        return this.blue;
+    }
+
+    @Override
+    public IColorFlowOperation setBlue(float blue) {
+        this.blue = blue;
+        return this;
+    }
+
+    @Override
+    public float getStartRed() {
+        return this.startRed;
+    }
+
+    @Override
+    public IColorFlowOperation setStartRed(float red) {
+        this.startRed = red;
+        return this;
+    }
+
+    @Override
+    public float getStartGreen() {
+        return this.startGreen;
+    }
+
+    @Override
+    public IColorFlowOperation setStartGreen(float green) {
+        this.startGreen = green;
+        return this;
+    }
+
+    @Override
+    public float getStartBlue() {
+        return this.startBlue;
+    }
+
+    @Override
+    public IColorFlowOperation setStartBlue(float blue) {
+        this.startBlue = blue;
+        return this;
+    }
+
+    @Override
+    public float getEndRed() {
+        return this.endRed;
+    }
+
+    @Override
+    public IColorFlowOperation setEndRed(float red) {
+        this.endRed = red;
+        return this;
+    }
+
+    @Override
+    public float getEndGreen() {
+        return this.endGreen;
+    }
+
+    @Override
+    public IColorFlowOperation setEndGreen(float green) {
+        this.endGreen = green;
+        return this;
+    }
+
+    @Override
+    public float getEndBlue() {
+        return this.endBlue;
+    }
+
+    @Override
+    public IColorFlowOperation setEndBlue(float blue) {
+        this.endBlue = blue;
+        return this;
     }
 
     @Override
     public float getAlpha() {
         return this.alpha;
-    }
-
-    @Override
-    public int getLightCoords() {
-        return this.lightCoords;
-    }
-
-    @Override
-    public IColorFlowOperation setColor(float red, float green, float blue) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        return this;
     }
 
     @Override
@@ -255,64 +306,79 @@ public class ExtractFlow implements IRotateFlowOperation,
     }
 
     @Override
+    public int getLightCoords() {
+        return this.lightCoords;
+    }
+
+    @Override
     public IColorFlowOperation setLightCoords(int lightCoords) {
         this.lightCoords = lightCoords;
         return this;
     }
 
     @Override
-    public IPositionFlowOperation setX(double x) {
-        this.pos.x = x;
-        return this;
-    }
-
-    @Override
-    public IPositionFlowOperation setY(double y) {
-        this.pos.y = y;
-        return this;
-    }
-
-    @Override
-    public IPositionFlowOperation setZ(double z) {
-        this.pos.z = z;
-        return this;
-    }
-
-    @Override
-    public IPositionFlowOperation setPosition(double x, double y, double z) {
-        this.pos.x = x;
-        this.pos.y = y;
-        this.pos.z = z;
-        return this;
-    }
-
-    @Override
     public double getX() {
-        return this.pos.x;
+        return this.x;
+    }
+
+    @Override
+    public IPositionFlowOperation setX(double x) {
+        this.x = x;
+        return this;
     }
 
     @Override
     public double getY() {
-        return this.pos.y;
+        return this.y;
+    }
+
+    @Override
+    public IPositionFlowOperation setY(double y) {
+        this.y = y;
+        return this;
     }
 
     @Override
     public double getZ() {
-        return this.pos.z;
+        return this.z;
     }
 
     @Override
-    public Vector3d getPosition() {
-        return new Vector3d(this.pos);
+    public IPositionFlowOperation setZ(double z) {
+        this.z = z;
+        return this;
     }
 
     @Override
-    public Vector3d getOldPos() {
-        return new Vector3d(this.oldPos);
+    public double getOldX() {
+        return this.oldX;
     }
 
     @Override
-    public Vec3 getVec3Position() {
-        return new Vec3(this.pos.x, this.pos.y, this.pos.z);
+    public IPositionFlowOperation setOldX(double x) {
+        this.oldX = x;
+        return this;
+    }
+
+    @Override
+    public double getOldY() {
+        return this.oldY;
+    }
+
+    @Override
+    public IPositionFlowOperation setOldY(double y) {
+        this.oldY = y;
+        return this;
+    }
+
+    @Override
+    public double getOldZ() {
+        return this.oldZ;
+    }
+
+    @Override
+    public IPositionFlowOperation setOldZ(double z) {
+        this.oldZ = z;
+        return this;
     }
 }

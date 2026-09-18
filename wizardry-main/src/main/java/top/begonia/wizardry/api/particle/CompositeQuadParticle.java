@@ -13,7 +13,6 @@ import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
-import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.entity.atom.ICustomHitbox;
@@ -213,6 +212,8 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
         this.xo = this.x;
         this.yo = this.y;
         this.zo = this.z;
+        // 因为 tick 和 extract 没有先后关系，所以需要在这里收集oldPos, 保证位置插值的正确。
+        this.extractFlow.setOldPosition(this.xo, this.yo, this.zo);
 
         if (this.age++ >= this.lifetime) {
             this.remove();
@@ -349,7 +350,6 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
                 this.getLayer(),
                 camera,
                 this.getLinkEntity(),
-                this.xo, this.yo, this.zo,
                 this.x, this.y, this.z,
                 this.getQuadSize(partialTick),
                 partialTick,
@@ -376,13 +376,13 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
     }
 
     protected void extractPosition(@NonNull IPositionFlowOperation positionOperation) {
-        Vector3f camePos = positionOperation.getCamera().position().toVector3f();
-        Vector3d oldPos = positionOperation.getOldPos();
-        Vector3d pos = positionOperation.getPosition();
-        positionOperation.setPosition(pos.sub(oldPos)
-                .mul(positionOperation.getPartialTick())
+        Vec3 cameraPos = positionOperation.getCamera().position();
+        Vec3 oldPos = positionOperation.getVec3OldPos();
+        Vec3 pos = positionOperation.getVec3Position();
+        positionOperation.setPosition(pos.subtract(oldPos)
+                .scale(positionOperation.getPartialTick())
                 .add(oldPos)
-                .sub(camePos)
+                .subtract(cameraPos)
         );
     }
 
