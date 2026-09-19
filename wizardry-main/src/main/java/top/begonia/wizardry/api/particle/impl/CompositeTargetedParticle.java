@@ -7,7 +7,7 @@ import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.particle.CompositeQuadParticle;
+import top.begonia.wizardry.api.particle.CompositeParticle;
 import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
 import top.begonia.wizardry.api.particle.extension.extract.ExtractFlow;
 import top.begonia.wizardry.api.particle.extension.extract.IPositionFlowOperation;
@@ -16,7 +16,7 @@ import top.begonia.wizardry.api.particle.options.impl.TargetParticleOptions;
 
 import javax.annotation.Nullable;
 
-public class CompositeTargetedParticle<T extends TargetParticleOptions> extends CompositeQuadParticle<T> {
+public class CompositeTargetedParticle<T extends TargetParticleOptions> extends CompositeParticle<T> {
     private static final double THIRD_PERSON_AXIAL_OFFSET = 1.2;
     protected double targetX;
     protected double targetY;
@@ -76,52 +76,11 @@ public class CompositeTargetedParticle<T extends TargetParticleOptions> extends 
     @Override
     protected void extractPosition(@NonNull IPositionFlowOperation positionOperation) {
         super.extractPosition(positionOperation);
-        // Translates the particle a short distance in front of the entity
-        Entity linkEntity = positionOperation.getLinkEntity();
-        Entity viewEntity = positionOperation.getCamera().entity();
-        if (linkEntity != null && this.shouldApplyOriginOffset()) {
-            if (linkEntity != viewEntity || Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
-                Vec3 look = linkEntity.getLookAngle().scale(THIRD_PERSON_AXIAL_OFFSET);
-                positionOperation.setPosition(positionOperation.getPosition().add(look.toVector3f()));
-            }
-        }
-        float partialTick = positionOperation.getPartialTick();
-        double length = positionOperation.getAdditionalData("length", Double.class);
-        Entity targetEntity = positionOperation.getAdditionalData("targetEntity", Entity.class);
-        Vec3 targetPos = positionOperation.getAdditionalData("targetPos", Vec3.class);
-        Vec3 targetVel = positionOperation.getAdditionalData("targetVel", Vec3.class);
-        Vec3 targetDisplacement = new Vec3(0, 0, 0);
-        if (targetEntity != null) {
-            Vec3 targetPrevPos = positionOperation.getAdditionalData("targetPrevPos", Vec3.class);
-            targetPos = targetPos.subtract(targetPrevPos)
-                    .scale(partialTick)
-                    .add(targetPrevPos)
-                    .add(0.0F, targetEntity.getBbHeight() / 2, 0.0F);
-            targetDisplacement = targetPos.subtract(positionOperation.getVec3Position()).add(targetVel.scale(partialTick));
-        } else if (length > 0) {
-            if (viewEntity != null) {
-                Vec3 look = viewEntity.getLookAngle().scale(length);
-                targetPos = positionOperation.getVec3Position().add(look);
-                targetDisplacement = targetPos.subtract(positionOperation.getVec3Position());
-            }
-        }
-        positionOperation.putAdditionalData("targetDisplacement", targetDisplacement, Vec3.class);
-        positionOperation.putAdditionalData("length", targetDisplacement.length(), Double.class);
     }
 
     @Override
     protected void extractRotation(@NonNull IRotateFlowOperation rotateOperation) {
         super.extractRotation(rotateOperation);
-        Vec3 targetDisplacement = rotateOperation.getAdditionalData("targetDisplacement", Vec3.class);
-        double dx = targetDisplacement.x();
-        double dy = targetDisplacement.y();
-        double dz = targetDisplacement.z();
-        Quaternionf rotate = rotateOperation.getRotate();
-        float pitch = (float) (180d / Math.PI * Math.atan(-dy / Math.sqrt(dz * dz + dx * dx)));
-        float yaw = (float) (180d / Math.PI * Math.atan2(dx, dz));
-        rotate.rotateAxis(pitch, 1, 0, 0);
-        rotate.rotateAxis(yaw, 0, 1, 0);
-        rotateOperation.setRotate(rotate);
     }
 
     @Override

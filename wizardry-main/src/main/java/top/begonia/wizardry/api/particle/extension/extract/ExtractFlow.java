@@ -4,7 +4,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.world.entity.Entity;
 import org.joml.Quaternionf;
 import top.begonia.wizardry.api.particle.extension.Layer;
-import top.begonia.wizardry.api.particle.renderer.CompositeQuadParticleRenderState;
+import top.begonia.wizardry.api.particle.renderer.CompositeParticleRenderState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ public class ExtractFlow implements IRotateFlowOperation,
         IUvFlowOperation,
         ISizeFlowOperation {
     private final Map<Class<?>, Map<String, Object>> additionalData = new HashMap<>();
-    private CompositeQuadParticleRenderState state;
+    private CompositeParticleRenderState state;
     private Layer layer;
     private Camera camera;
     private Entity linkEntity;
@@ -41,7 +41,7 @@ public class ExtractFlow implements IRotateFlowOperation,
     }
 
     public void beginExtraction(
-            CompositeQuadParticleRenderState state,
+            CompositeParticleRenderState state,
             Layer layer,
             Camera camera,
             Entity linkEntity,
@@ -92,7 +92,7 @@ public class ExtractFlow implements IRotateFlowOperation,
     }
 
     @Override
-    public CompositeQuadParticleRenderState getState() {
+    public CompositeParticleRenderState getState() {
         return this.state;
     }
 

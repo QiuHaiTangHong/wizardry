@@ -21,9 +21,9 @@ import top.begonia.wizardry.api.particle.extension.Layer;
 
 import java.util.*;
 
-public class CompositeQuadParticleFeatureRenderer implements FeatureRenderer<CompositeQuadParticleFeatureRenderer.Submit> {
-    public static final FeatureRendererType<CompositeQuadParticleFeatureRenderer.Submit> TYPE = FeatureRendererType.create("MultipleQuadParticle");
-    private final List<CompositeQuadParticleFeatureRenderer.PreparedGroup> groups = new ArrayList<>();
+public class CompositeParticleFeatureRenderer implements FeatureRenderer<CompositeParticleFeatureRenderer.Submit> {
+    public static final FeatureRendererType<CompositeParticleFeatureRenderer.Submit> TYPE = FeatureRendererType.create("MultipleQuadParticle");
+    private final List<CompositeParticleFeatureRenderer.PreparedGroup> groups = new ArrayList<>();
     private @Nullable GpuBufferSlice dynamicTransforms;
 
     @Override
@@ -32,8 +32,8 @@ public class CompositeQuadParticleFeatureRenderer implements FeatureRenderer<Com
             StagedVertexBuffer stagedVertexBuffer = featureFrameContext.stagedVertexBuffer();
             Map<Layer, StagedVertexBuffer.Draw> drawByLayer = new IdentityHashMap<>();
 
-            for (CompositeQuadParticleFeatureRenderer.Submit submit : submits) {
-                CompositeQuadParticleRenderState particles = submit.particles();
+            for (CompositeParticleFeatureRenderer.Submit submit : submits) {
+                CompositeParticleRenderState particles = submit.particles();
                 if (!particles.isEmpty()) {
                     for (Layer layer : particles.layers()) {
                         if (layer.translucent() == submit.translucent()) {
@@ -45,7 +45,7 @@ public class CompositeQuadParticleFeatureRenderer implements FeatureRenderer<Com
             }
 
             boolean translucent = submits.getFirst().translucent();
-            this.groups.add(new CompositeQuadParticleFeatureRenderer.PreparedGroup(drawByLayer, translucent));
+            this.groups.add(new CompositeParticleFeatureRenderer.PreparedGroup(drawByLayer, translucent));
         }
     }
 
@@ -56,7 +56,7 @@ public class CompositeQuadParticleFeatureRenderer implements FeatureRenderer<Com
 
     @Override
     public void executeGroup(@NonNull FeatureFrameContext featureFrameContext, int groupIndex, @NonNull List<Submit> submits, boolean strictlyOrdered) {
-        CompositeQuadParticleFeatureRenderer.PreparedGroup group = this.groups.get(groupIndex);
+        CompositeParticleFeatureRenderer.PreparedGroup group = this.groups.get(groupIndex);
         GpuDevice device = RenderSystem.getDevice();
         Minecraft minecraft = Minecraft.getInstance();
         RenderTarget mainTarget = minecraft.gameRenderer.mainRenderTarget();
@@ -79,7 +79,7 @@ public class CompositeQuadParticleFeatureRenderer implements FeatureRenderer<Com
         for (Map.Entry<Layer, StagedVertexBuffer.Draw> entry : layers.entrySet()) {
             StagedVertexBuffer.ExecuteInfo executeInfo = stagedBuffer.getExecuteInfo(entry.getValue());
             if (executeInfo != null) {
-                renderPass.setPipeline(entry.getKey().pipeline());
+                renderPass.setPipeline(entry.getKey().getRenderPipeline());
                 renderPass.setVertexBuffer(0, executeInfo.vertexBuffer().slice());
                 renderPass.setIndexBuffer(executeInfo.indexBuffer(), executeInfo.indexType());
                 entry.getKey().textureAtlasLocation().ifPresent(textureAtlasLocation -> {
@@ -100,9 +100,9 @@ public class CompositeQuadParticleFeatureRenderer implements FeatureRenderer<Com
                                  boolean translucent) {
     }
 
-    public record Submit(CompositeQuadParticleRenderState particles, boolean translucent) implements SubmitNode {
-        public @NonNull FeatureRendererType<CompositeQuadParticleFeatureRenderer.Submit> featureType() {
-            return CompositeQuadParticleFeatureRenderer.TYPE;
+    public record Submit(CompositeParticleRenderState particles, boolean translucent) implements SubmitNode {
+        public @NonNull FeatureRendererType<CompositeParticleFeatureRenderer.Submit> featureType() {
+            return CompositeParticleFeatureRenderer.TYPE;
         }
     }
 }

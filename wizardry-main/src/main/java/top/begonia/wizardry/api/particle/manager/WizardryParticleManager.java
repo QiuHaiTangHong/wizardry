@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.particle.CompositeQuadParticle;
+import top.begonia.wizardry.api.particle.CompositeParticle;
 import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
 import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
@@ -90,7 +90,7 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
     }
 
     @SuppressWarnings("unchecked")
-    protected <T extends IParticleOptionsExtension> CompositeQuadParticle<T> dispatchCreate(
+    protected <T extends IParticleOptionsExtension> CompositeParticle<T> dispatchCreate(
             WizardryParticleProvider<?> rawProvider,
             ClientLevel clientLevel,
             T options,

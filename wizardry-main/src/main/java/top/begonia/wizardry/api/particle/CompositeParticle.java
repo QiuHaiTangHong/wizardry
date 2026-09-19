@@ -22,12 +22,12 @@ import top.begonia.wizardry.api.particle.extension.TextureParticle;
 import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
 import top.begonia.wizardry.api.particle.extension.extract.*;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
-import top.begonia.wizardry.api.particle.renderer.CompositeQuadParticleRenderState;
+import top.begonia.wizardry.api.particle.renderer.CompositeParticleRenderState;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension> extends Particle implements ParticleBuilder {
+public abstract class CompositeParticle<T extends IParticleOptionsExtension> extends Particle implements ParticleBuilder {
     public static final ParticleRenderType RENDER_TYPE = new ParticleRenderType("wizardry_composite_quad", "WCQ");
     private static final double SPREAD_FACTOR = 0.2;
     private static final double IMPACT_FRICTION = 0.2;
@@ -65,7 +65,7 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
      */
     protected float yaw, pitch;
 
-    public CompositeQuadParticle(
+    public CompositeParticle(
             ClientLevel level,
             @NonNull T options,
             double x, double y, double z
@@ -307,7 +307,7 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
 
     @Override
     public @NonNull ParticleRenderType getGroup() {
-        return CompositeQuadParticle.RENDER_TYPE;
+        return CompositeParticle.RENDER_TYPE;
     }
 
     @Override
@@ -344,7 +344,7 @@ public abstract class CompositeQuadParticle<T extends IParticleOptionsExtension>
      * @param camera      摄像机
      * @param partialTick 帧间时差
      */
-    public void extract(CompositeQuadParticleRenderState state, @NonNull Camera camera, float partialTick) {
+    public void extract(CompositeParticleRenderState state, @NonNull Camera camera, float partialTick) {
         this.extractFlow.beginExtraction(
                 state,
                 this.getLayer(),

@@ -6,14 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.particle.CompositeQuadParticle;
+import top.begonia.wizardry.api.particle.CompositeParticle;
 import top.begonia.wizardry.api.particle.extension.Layer;
 import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
 import top.begonia.wizardry.api.particle.extension.TextureParticle;
 import top.begonia.wizardry.api.particle.extension.extract.ExtractFlow;
 import top.begonia.wizardry.api.particle.options.impl.QuadParticleOptions;
 
-public class OneQuadParticle extends CompositeQuadParticle<QuadParticleOptions> implements TextureParticle {
+public class OneQuadParticle extends CompositeParticle<QuadParticleOptions> implements TextureParticle {
     /**
      * 二维纹理集
      */

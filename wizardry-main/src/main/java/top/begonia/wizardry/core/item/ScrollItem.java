@@ -1,7 +1,6 @@
 package top.begonia.wizardry.core.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -15,8 +14,8 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.particle.target.BeamParticle;
 import top.begonia.wizardry.api.event.SpellCastEvent;
+import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
 import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.api.item.ISpellCastingItem;
@@ -50,15 +49,17 @@ public class ScrollItem extends Item implements ISpellCastingItem, IWorkbenchIte
     public @NonNull InteractionResult use(@NonNull Level level, @NonNull Player player, @NonNull InteractionHand hand) {
         ItemStack handItem = player.getItemInHand(hand);
         AbstractSpell spell = this.getCurrentSpell(handItem);
-        if (level instanceof ClientLevel clientLevel) {
-            BeamParticle beamParticle = new BeamParticle(
+        SpellContextFlow spellContextFlow = SpellContextFlow.create();
+        if (level instanceof ClientLevel clientLevel){
+            WizardryClient.particleManager.getParticle(
                     clientLevel,
                     WizardryParticles.BEAM.get(),
                     player.getX(), player.getY(), player.getZ()
+            ).ifPresent(p -> p.time(20)
+                    .linkEntity(player)
+                    .spawn()
             );
-            Minecraft.getInstance().particleEngine.add(beamParticle);
         }
-        SpellContextFlow spellContextFlow = SpellContextFlow.create();
         if (this.canCast(handItem, spell, player, hand, 0, spellContextFlow)) {
             if (spell.isContinuous) {
 

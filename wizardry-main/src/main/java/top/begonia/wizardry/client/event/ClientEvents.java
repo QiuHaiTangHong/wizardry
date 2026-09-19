@@ -37,9 +37,9 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.api.event.data.RegisterDelegateUnbakedModelEvent;
 import top.begonia.wizardry.api.event.data.RegisterParticleEvent;
-import top.begonia.wizardry.api.particle.CompositeQuadParticle;
-import top.begonia.wizardry.api.particle.renderer.CompositeQuadParticleFeatureRenderer;
-import top.begonia.wizardry.api.particle.renderer.CompositeQuadParticleGroup;
+import top.begonia.wizardry.api.particle.CompositeParticle;
+import top.begonia.wizardry.api.particle.renderer.CompositeParticleFeatureRenderer;
+import top.begonia.wizardry.api.particle.renderer.CompositeParticleGroup;
 import top.begonia.wizardry.client.constants.WizardryKeyMappings;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
 import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
@@ -155,16 +155,16 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onRegisterParticleGroups(@NonNull RegisterParticleGroupsEvent event) {
         event.register(
-                CompositeQuadParticle.RENDER_TYPE,
-                CompositeQuadParticleGroup::new
+                CompositeParticle.RENDER_TYPE,
+                CompositeParticleGroup::new
         );
     }
 
     @SubscribeEvent
     public static void onRegisterFeatureRenderers(@NonNull RegisterFeatureRenderersEvent event) {
         event.register(
-                CompositeQuadParticleFeatureRenderer.TYPE,
-                new CompositeQuadParticleFeatureRenderer()
+                CompositeParticleFeatureRenderer.TYPE,
+                new CompositeParticleFeatureRenderer()
         );
     }
 

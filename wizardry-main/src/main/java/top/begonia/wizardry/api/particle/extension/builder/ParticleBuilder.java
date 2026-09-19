@@ -4,7 +4,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.particle.CompositeQuadParticle;
+import top.begonia.wizardry.api.particle.CompositeParticle;
 import top.begonia.wizardry.api.particle.manager.WizardryParticleManager;
 
 /**
@@ -14,7 +14,7 @@ import top.begonia.wizardry.api.particle.manager.WizardryParticleManager;
  * 实现此接口的类通常由 {@link WizardryParticleManager} 创建并返回。
  * </p>
  *
- * @see CompositeQuadParticle
+ * @see CompositeParticle
  */
 @SuppressWarnings("UnusedReturnValue")
 public interface ParticleBuilder {
