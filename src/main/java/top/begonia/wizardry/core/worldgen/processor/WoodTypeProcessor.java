@@ -1,30 +1,24 @@
 package top.begonia.wizardry.core.worldgen.processor;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
+import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.constants.WizardryBlockStateProperties;
+import top.begonia.wizardry.api.constants.WoodTypeEnum;
+import top.begonia.wizardry.core.registry.WizardryBlocks;
+import top.begonia.wizardry.core.util.BlockUtils;
 
-public record WoodTypeProcessor(
-        String targetWood
-) implements StructureProcessor {
-
-    public static final MapCodec<WoodTypeProcessor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.STRING.fieldOf("target_wood").forGetter(WoodTypeProcessor::targetWood)
-    ).apply(instance, WoodTypeProcessor::new));
+public record WoodTypeProcessor() implements StructureProcessor {
+    public static final MapCodec<WoodTypeProcessor> CODEC = MapCodec.unit(new WoodTypeProcessor());
 
     @Override
     public @NonNull MapCodec<? extends StructureProcessor> codec() {
@@ -39,35 +33,95 @@ public record WoodTypeProcessor(
             StructureTemplate.@NonNull StructureBlockInfo originalBlockInfo,
             StructureTemplate.@NonNull StructureBlockInfo processedBlockInfo,
             @NonNull StructurePlaceSettings settings,
-            @Nullable StructureTemplate template
+            StructureTemplate template
     ) {
         BlockState state = processedBlockInfo.state();
-        BlockPos targetPos = processedBlockInfo.pos();
-        Identifier blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
-        if ("oak".equals(targetWood) || blockId.getNamespace().equals("minecraft") && !blockId.getPath().startsWith("oak_")) {
-            if (!blockId.getNamespace().equals("wizardry") || !blockId.getPath().startsWith("oak_")) {
-                return processedBlockInfo;
-            }
+        BlockPos rawPos = processedBlockInfo.pos();
+        CompoundTag rawNbt = processedBlockInfo.nbt();
+        WoodTypeEnum woodType = BlockUtils.getBiomeWoodType(level.getBiome(targetPosition));
+        // Why do these each have their own property key?
+        if (state.is(BlockTags.PLANKS)) { // This covers gilded wood too
+            BlockState finalState = BlockUtils.generateBlockState(
+                    woodType,
+                    typeEnum -> Identifier.fromNamespaceAndPath(
+                            BlockTags.PLANKS.location().getNamespace(),
+                            typeEnum.getSerializedName().concat("_" + BlockTags.PLANKS.location().getPath())
+                    ),
+                    (_, blockState) -> BlockUtils.copyPropertiesIf(state, blockState, _ -> true)
+            );
+            return new StructureTemplate.StructureBlockInfo(rawPos, finalState, rawNbt);
+        } else if (state.is(BlockTags.SLABS)) {
+            // This is a mess, no wonder the flattening happened
+            BlockState finalState = BlockUtils.generateBlockState(
+                    woodType,
+                    typeEnum -> Identifier.fromNamespaceAndPath(
+                            BlockTags.SLABS.location().getNamespace(),
+                            typeEnum.getSerializedName().concat("_" + BlockTags.SLABS.location().getPath())
+                    ),
+                    (_, blockState) -> BlockUtils.copyPropertiesIf(state, blockState, _ -> true)
+            );
+            return new StructureTemplate.StructureBlockInfo(rawPos, finalState, rawNbt);
+        } else if (state.is(BlockTags.DOORS)) {
+            BlockState finalState = BlockUtils.generateBlockState(
+                    woodType,
+                    typeEnum -> Identifier.fromNamespaceAndPath(
+                            BlockTags.DOORS.location().getNamespace(),
+                            typeEnum.getSerializedName().concat("_" + BlockTags.DOORS.location().getPath())
+                    ),
+                    (_, blockState) -> BlockUtils.copyPropertiesIf(state, blockState, _ -> true)
+            );
+            return new StructureTemplate.StructureBlockInfo(rawPos, finalState, rawNbt);
+        } else if (state.is(BlockTags.STAIRS)) {
+            BlockState finalState = BlockUtils.generateBlockState(
+                    woodType,
+                    typeEnum -> Identifier.fromNamespaceAndPath(
+                            BlockTags.STAIRS.location().getNamespace(),
+                            typeEnum.getSerializedName().concat("_" + BlockTags.STAIRS.location().getPath())
+                    ),
+                    (_, blockState) -> BlockUtils.copyPropertiesIf(state, blockState, _ -> true)
+            );
+            return new StructureTemplate.StructureBlockInfo(rawPos, finalState, rawNbt);
+        } else if (state.is(BlockTags.FENCES)) {
+            BlockState finalState = BlockUtils.generateBlockState(
+                    woodType,
+                    typeEnum -> Identifier.fromNamespaceAndPath(
+                            BlockTags.FENCES.location().getNamespace(),
+                            typeEnum.getSerializedName().concat("_" + BlockTags.FENCES.location().getPath())
+                    ),
+                    (_, blockState) -> BlockUtils.copyPropertiesIf(state, blockState, _ -> true)
+            );
+            return new StructureTemplate.StructureBlockInfo(rawPos, finalState, rawNbt);
+        } else if (state.is(BlockTags.FENCE_GATES)) {
+            BlockState finalState = BlockUtils.generateBlockState(
+                    woodType,
+                    typeEnum -> Identifier.fromNamespaceAndPath(
+                            BlockTags.FENCE_GATES.location().getNamespace(),
+                            typeEnum.getSerializedName().concat("_" + BlockTags.FENCE_GATES.location().getPath())
+                    ),
+                    (_, blockState) -> BlockUtils.copyPropertiesIf(state, blockState, _ -> true)
+            );
+            return new StructureTemplate.StructureBlockInfo(rawPos, finalState, rawNbt);
+        } else if (state.is(WizardryBlocks.BOOKSHELF)) {
+            BlockState finalState = BlockUtils.generateBlockState(
+                    woodType,
+                    _ -> Identifier.fromNamespaceAndPath(
+                            Wizardry.MODID,
+                            "bookshelf"
+                    ),
+                    (_, blockState) -> BlockUtils.copyPropertiesIf(state, blockState, property -> !property.equals(WizardryBlockStateProperties.WOOD_TYPE))
+            );
+            return new StructureTemplate.StructureBlockInfo(rawPos, finalState, rawNbt);
+        } else if (state.is(WizardryBlocks.LECTERN)) {
+            BlockState finalState = BlockUtils.generateBlockState(
+                    woodType,
+                    _ -> Identifier.fromNamespaceAndPath(
+                            Wizardry.MODID,
+                            "lectern"
+                    ),
+                    (_, blockState) -> BlockUtils.copyPropertiesIf(state, blockState, property -> !property.equals(WizardryBlockStateProperties.WOOD_TYPE))
+            );
+            return new StructureTemplate.StructureBlockInfo(rawPos, finalState, rawNbt);
         }
-        if (blockId.getPath().startsWith("oak_")) {
-            String newPath = blockId.getPath().replace("oak_", targetWood + "_");
-            Block targetBlock = BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath(blockId.getNamespace(), newPath)).map(Holder.Reference::value).orElse(Blocks.AIR);
-            if (targetBlock != Blocks.AIR) {
-                BlockState newState = copyProperties(state, targetBlock.defaultBlockState());
-                return new StructureTemplate.StructureBlockInfo(targetPos, newState, processedBlockInfo.nbt());
-            }
-        }
-
         return processedBlockInfo;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static BlockState copyProperties(BlockState from, BlockState state) {
-        for (Property<?> property : from.getProperties()) {
-            if (state.hasProperty(property)) {
-                state = state.setValue((Property) property, from.getValue(property));
-            }
-        }
-        return state;
     }
 }

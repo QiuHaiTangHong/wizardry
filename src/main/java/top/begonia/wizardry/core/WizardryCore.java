@@ -39,6 +39,7 @@ public class WizardryCore {
         WizardryParticles.register(modEventBus);
         WizardryEntities.register(modEventBus);
         WizardryLoots.register(modEventBus);
+        WizardryStructureProcessors.register(modEventBus);
         WizardryAdvancementTriggers.register(modEventBus);
         WizardryEntityDataSerializers.register(modEventBus);
         Wizardry.onInit(modContainer);
@@ -73,9 +74,9 @@ public class WizardryCore {
                 HandbookRecipesResultPayload.STREAM_CODEC,
                 ClientPayloadHandler::handleHandbookRecipesResultPayload
         );
-        registrar.versioned(SyncSlotPayload.VERSION).playToServer(
-                SyncSlotPayload.TYPE,
-                SyncSlotPayload.STREAM_CODEC,
+        registrar.versioned(SyncAllSlotPayload.VERSION).playToClient(
+                SyncAllSlotPayload.TYPE,
+                SyncAllSlotPayload.STREAM_CODEC,
                 ClientPayloadHandler::handleSyncSlotPayload
         );
         registrar.versioned(GlyphDataPayload.VERSION).playToClient(

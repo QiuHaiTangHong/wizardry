@@ -3,8 +3,8 @@ package top.begonia.wizardry.core.advancement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
-import top.begonia.wizardry.core.constants.ElementEnum;
-import top.begonia.wizardry.core.constants.TierEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.TierEnum;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
 import java.util.Arrays;

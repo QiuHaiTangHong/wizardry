@@ -30,7 +30,7 @@ import top.begonia.wizardry.api.event.ImbuementActivateEvent;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.core.block.ReceptacleBlock;
-import top.begonia.wizardry.core.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.core.item.WizardArmourItem;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.util.ItemStackHelper;

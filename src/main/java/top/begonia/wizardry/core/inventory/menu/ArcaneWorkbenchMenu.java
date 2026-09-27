@@ -205,12 +205,13 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu implements ISpell
 
     public void refreshBookshelfSlots(@NotNull Level level) {
         bookshelfItemHandlers.clear();
-        BookshelfBlock.findNearbyBookshelves(level, blockEntity.getBlockPos(), (itemResourceResourceHandler, blockEntity) -> {
-            if (itemResourceResourceHandler instanceof BookshelfItemHandler bookshelfItemHandler) {
-                this.bookshelfItemHandlers.add(bookshelfItemHandler);
-            }
-            return false;
-        }, blockEntity);
+        // TODO
+//        BookshelfBlock.findNearbyBookshelves(level, blockEntity.getBlockPos(), (nonNullList, blockEntity) -> {
+////            if (itemResourceResourceHandler instanceof BookshelfItemHandler bookshelfItemHandler) {
+////                this.bookshelfItemHandlers.add(bookshelfItemHandler);
+////            }
+//            return false;
+//        }, blockEntity);
         this.setHasBookshelves(!this.bookshelfItemHandlers.isEmpty());
         updateActiveBookshelfSlots();
     }

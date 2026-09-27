@@ -1,6 +1,5 @@
 package top.begonia.wizardry.core.entity.block;
 
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -8,39 +7,37 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.entity.atom.IBlockTickEntity;
 import top.begonia.wizardry.core.inventory.handler.BookshelfItemHandler;
 import top.begonia.wizardry.core.inventory.menu.BookshelfMenu;
+import top.begonia.wizardry.core.network.data.SyncAllSlotPayload;
 import top.begonia.wizardry.core.registry.WizardryBlockEntities;
 
-import java.util.Collections;
-import java.util.List;
-
-public class BookshelfBlockEntity extends RandomizableContainerBlockEntity implements IBlockTickEntity {
-    /**
-     * 自然生成标识符 key
-     */
-    private static final String NATURAL_NBT_KEY = "NaturallyGenerated";
+public class BookshelfBlockEntity extends RandomizableContainerBlockEntity implements BlockEntityTicker<BookshelfBlockEntity> {
     /**
      * 货架随机物品生成距离
      */
-    private static final int LOOT_GEN_DISTANCE = 32;
+    public static final int LOOT_GEN_DISTANCE = 32;
     /**
      * 货架内部库存槽数量
      */
     public static final int SLOT_COUNT = 12;
+    private NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
     private final BookshelfItemHandler inventory = new BookshelfItemHandler(this, SLOT_COUNT);
 
     public BookshelfBlockEntity(BlockPos worldPosition, BlockState blockState) {
@@ -62,13 +59,13 @@ public class BookshelfBlockEntity extends RandomizableContainerBlockEntity imple
     }
 
     @Override
-    protected @NonNull NonNullList<ItemStack> getItems() {
-        return this.inventory.getStacksList();
+    public @NonNull NonNullList<ItemStack> getItems() {
+        return this.items;
     }
 
     @Override
-    protected void setItems(@NonNull NonNullList<ItemStack> nonNullList) {
-        this.inventory.setStacksList(nonNullList);
+    public void setItems(@NonNull NonNullList<ItemStack> nonNullList) {
+        this.items = nonNullList;
     }
 
     @Override
@@ -85,17 +82,15 @@ public class BookshelfBlockEntity extends RandomizableContainerBlockEntity imple
     protected void saveAdditional(@NonNull ValueOutput output) {
         super.saveAdditional(output);
         if (!this.trySaveLootTable(output)) {
-            ContainerHelper.saveAllItems(output, this.inventory.getStacksList());
+            ContainerHelper.saveAllItems(output, this.items);
         }
     }
 
     @Override
     protected void loadAdditional(@NonNull ValueInput input) {
         super.loadAdditional(input);
-        List<ItemStack> stackList = this.inventory.getStacksList();
-        Collections.fill(stackList, ItemStack.EMPTY);
         if (!this.tryLoadLootTable(input)) {
-            ContainerHelper.loadAllItems(input, this.inventory.getStacksList());
+            ContainerHelper.loadAllItems(input, this.items);
         }
     }
 
@@ -110,10 +105,27 @@ public class BookshelfBlockEntity extends RandomizableContainerBlockEntity imple
     }
 
     @Override
-    public <T extends BlockEntity> void serverTick(@NonNull ServerLevel level, BlockPos pos, BlockState state, @NonNull T blockEntity) {
-    }
-
-    @Override
-    public <T extends BlockEntity> void clientTick(@NonNull ClientLevel level, BlockPos pos, BlockState state, @NonNull T blockEntity) {
+    public void tick(
+            @NonNull Level level,
+            @NonNull BlockPos blockPos,
+            @NonNull BlockState blockState,
+            @NonNull BookshelfBlockEntity blockEntity
+    ) {
+        // 当玩家靠近时生成战利品，只会生成一次
+        if (level instanceof ServerLevel) {
+            if (this.lootTable != null) {
+                Player player = level.getNearestPlayer(
+                        blockPos.getX() + 0.5,
+                        blockPos.getY() + 0.5,
+                        blockPos.getZ() + 0.5,
+                        LOOT_GEN_DISTANCE,
+                        false
+                );
+                if (player instanceof ServerPlayer serverPlayer) {
+                    this.unpackLootTable(player);
+                    PacketDistributor.sendToPlayer(serverPlayer, new SyncAllSlotPayload(this.getItems(), blockPos));
+                }
+            }
+        }
     }
 }

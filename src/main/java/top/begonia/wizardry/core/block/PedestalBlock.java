@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.core.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
 
 public class PedestalBlock extends BaseEntityBlock {
     public static final EnumProperty<ElementEnum> ELEMENT = EnumProperty.create("element", ElementEnum.class, e -> e != ElementEnum.MAGIC);

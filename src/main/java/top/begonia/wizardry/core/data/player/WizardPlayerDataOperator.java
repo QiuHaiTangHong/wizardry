@@ -17,7 +17,7 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.event.SpellCastEvent;
 import top.begonia.wizardry.core.config.ServerConfig;
-import top.begonia.wizardry.core.constants.TierEnum;
+import top.begonia.wizardry.api.constants.TierEnum;
 import top.begonia.wizardry.core.data.packet.CastContinuousSpellPacket;
 import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.enchantment.Imbuement;

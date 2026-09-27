@@ -16,8 +16,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.WizardryClient;
@@ -28,7 +28,8 @@ import top.begonia.wizardry.client.util.ClientHelper;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.client.util.ISpellSortable;
-import top.begonia.wizardry.core.block.BookshelfBlock;
+import top.begonia.wizardry.core.config.CommonConfig;
+import top.begonia.wizardry.core.entity.block.BookshelfBlockEntity;
 import top.begonia.wizardry.core.entity.block.LecternBlockEntity;
 import top.begonia.wizardry.core.item.SpellBookItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;
@@ -36,6 +37,7 @@ import top.begonia.wizardry.core.registry.WizardryParticles;
 import top.begonia.wizardry.core.registry.WizardrySounds;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
+import top.begonia.wizardry.core.util.EntityUtils;
 import top.begonia.wizardry.core.util.TextHelper;
 
 import java.util.ArrayList;
@@ -230,40 +232,46 @@ public class LecternScreen extends SpellInfoScreen implements ISpellSortable {
                         return;
                     }
                     ClientLevel level = this.minecraft.level;
-                    BookshelfBlock.findNearbyBookshelves(level, lectern.getBlockPos(), (itemResourceResourceHandler, blockEntity) -> {
-                        for (int i = 0; i < itemResourceResourceHandler.size(); i++) {
-                            ItemResource resource = itemResourceResourceHandler.getResource(i);
-                            if (resource.getItem() instanceof SpellBookItem spellBookItem) {
-                                AbstractSpell spell = spellBookItem.getCurrentSpell(resource);
-                                if (spell == this.currentSpell) {
-                                    for (Direction side : Direction.values()) {
-                                        Vec3 pos = GeometryUtils.getFaceCentre(blockEntity.getBlockPos(), side)
-                                                .add(new Vec3(side.getUnitVec3f())
-                                                .scale(GeometryUtils.ANTI_Z_FIGHTING_OFFSET));
-                                        WizardryClient.particleManager.getParticle(
-                                                level,
-                                                WizardryParticles.BLOCK_HIGHLIGHT.get(),
-                                                pos.x, pos.y, pos.z
-                                        ).ifPresent(p -> p.facing(side)
-                                                .color(0.9f, 0.5f, 0.8f)
-                                                .endColor(0.7f, 0.0f, 1.0f)
-                                                .spawn()
-                                        );
+                    EntityUtils.findNearbyBlockEntityContainer(
+                            CommonConfig.bookshelfSearchRadius,
+                            level,
+                            lectern.getBlockPos(),
+                            BookshelfBlockEntity.class,
+                            _ -> false,
+                            (nonNullList, blockEntity) -> {
+                                for (ItemStack stack : nonNullList) {
+                                    if (stack.getItem() instanceof SpellBookItem spellBookItem) {
+                                        AbstractSpell spell = spellBookItem.getCurrentSpell(stack);
+                                        if (spell == this.currentSpell) {
+                                            for (Direction side : Direction.values()) {
+                                                Vec3 pos = GeometryUtils.getFaceCentre(blockEntity.getBlockPos(), side)
+                                                        .add(new Vec3(side.getUnitVec3f())
+                                                                .scale(GeometryUtils.ANTI_Z_FIGHTING_OFFSET));
+                                                WizardryClient.particleManager.getParticle(
+                                                        level,
+                                                        WizardryParticles.BLOCK_HIGHLIGHT.get(),
+                                                        pos.x, pos.y, pos.z
+                                                ).ifPresent(p -> p.facing(side)
+                                                        .color(0.9f, 0.5f, 0.8f)
+                                                        .endColor(0.7f, 0.0f, 1.0f)
+                                                        .spawn()
+                                                );
+                                            }
+                                            level.playLocalSound(
+                                                    blockEntity.getBlockPos(),
+                                                    WizardrySounds.BLOCK_LECTERN_LOCATE_SPELL.get(),
+                                                    SoundSource.BLOCKS,
+                                                    1.0F,
+                                                    0.7F,
+                                                    false
+                                            );
+                                            return true;
+                                        }
                                     }
-                                    level.playLocalSound(
-                                            blockEntity.getBlockPos(),
-                                            WizardrySounds.BLOCK_LECTERN_LOCATE_SPELL.get(),
-                                            SoundSource.BLOCKS,
-                                            1.0F,
-                                            0.7F,
-                                            false
-                                    );
-                                    return true;
                                 }
+                                return false;
                             }
-                        }
-                        return false;
-                    });
+                    );
                     this.updateButtonVisibility();
                 }
         ));
@@ -447,18 +455,24 @@ public class LecternScreen extends SpellInfoScreen implements ISpellSortable {
     public void refreshAvailableSpells() {
         availableSpells.clear();
         if (lectern.getLevel() != null) {
-            BookshelfBlock.findNearbyBookshelves(lectern.getLevel(), lectern.getBlockPos(), (itemResourceResourceHandler, _) -> {
-                for (int i = 0; i < itemResourceResourceHandler.size(); i++) {
-                    ItemResource resource = itemResourceResourceHandler.getResource(i);
-                    if (resource.getItem() instanceof SpellBookItem) {
-                        AbstractSpell spell = resource.getOrDefault(WizardryComponents.SPELL.get(), WizardrySpells.NONE).value();
-                        if (spell != WizardrySpells.NONE.get() && !availableSpells.contains(spell)) {
-                            availableSpells.add(spell);
+            EntityUtils.findNearbyBlockEntityContainer(
+                    CommonConfig.bookshelfSearchRadius,
+                    lectern.getLevel(),
+                    lectern.getBlockPos(),
+                    BookshelfBlockEntity.class,
+                    _ -> false,
+                    (nonNullList, _) -> {
+                        for (ItemStack stack : nonNullList) {
+                            if (stack.getItem() instanceof SpellBookItem) {
+                                AbstractSpell spell = stack.getOrDefault(WizardryComponents.SPELL.get(), WizardrySpells.NONE).value();
+                                if (spell != WizardrySpells.NONE.get() && !availableSpells.contains(spell)) {
+                                    availableSpells.add(spell);
+                                }
+                            }
                         }
+                        return false;
                     }
-                }
-                return false;
-            });
+            );
         }
 
         if (!availableSpells.contains(currentSpell)) {

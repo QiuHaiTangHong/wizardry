@@ -23,7 +23,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.block.ReceptacleBlock;
-import top.begonia.wizardry.core.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.entity.atom.IAttachedEntity;
 import top.begonia.wizardry.api.entity.ai.control.VexMoveControl;
 import top.begonia.wizardry.core.entity.living.vex.AbstractVexFlavorEntity;

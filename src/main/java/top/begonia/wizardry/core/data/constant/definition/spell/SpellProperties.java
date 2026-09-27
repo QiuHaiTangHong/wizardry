@@ -7,10 +7,10 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.StringRepresentable;
 import top.begonia.wizardry.api.data.IResultData;
-import top.begonia.wizardry.core.constants.ElementEnum;
-import top.begonia.wizardry.core.constants.EnabledEnum;
-import top.begonia.wizardry.core.constants.SpellTypeEnum;
-import top.begonia.wizardry.core.constants.TierEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.EnabledEnum;
+import top.begonia.wizardry.api.constants.SpellTypeEnum;
+import top.begonia.wizardry.api.constants.TierEnum;
 import top.begonia.wizardry.core.data.constant.definition.spell.part.BaseProperties;
 import top.begonia.wizardry.core.data.constant.definition.spell.part.EnableProperties;
 

@@ -20,7 +20,7 @@ import net.minecraft.world.item.equipment.ArmorType;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.config.ServerConfig;
-import top.begonia.wizardry.core.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.item.IManaStoringItem;
 import top.begonia.wizardry.api.item.IWorkbenchItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;

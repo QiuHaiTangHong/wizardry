@@ -6,7 +6,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
 
 import javax.annotation.Nullable;
 import java.util.Objects;

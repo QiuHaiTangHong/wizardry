@@ -32,7 +32,7 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.model.armour.RobeArmourModel;
 import top.begonia.wizardry.client.model.armour.SageArmourModel;
 import top.begonia.wizardry.client.model.armour.WizardArmourModel;
-import top.begonia.wizardry.core.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.core.item.ArmourUpgradeItem;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardrySounds;

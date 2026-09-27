@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import top.begonia.wizardry.core.constants.EnabledEnum;
+import top.begonia.wizardry.api.constants.EnabledEnum;
 
 import java.util.Collections;
 import java.util.Map;

@@ -59,7 +59,7 @@ public class BookshelfRender implements BlockEntityRenderer<BookshelfBlockEntity
         }
         state.facing = facing;
         for (int i = 0; i < state.displayTextures.size(); i++) {
-            ItemStack itemStack = blockEntity.getInventory().getStack(i);
+            ItemStack itemStack = blockEntity.getItem(i);
             if (!itemStack.isEmpty()) {
                 state.bindTextureInSlot(itemStack, i, settings);
                 OnlyModelQuads onlyModelQuads = WizardryClientDataManager.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "books" + i), OnlyModelQuads.class).orElse(null);

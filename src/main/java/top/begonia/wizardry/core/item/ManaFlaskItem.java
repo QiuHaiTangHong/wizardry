@@ -8,7 +8,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.constants.ManaFlaskTypeEnum;
+import top.begonia.wizardry.api.constants.ManaFlaskTypeEnum;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.util.TextHelper;
 

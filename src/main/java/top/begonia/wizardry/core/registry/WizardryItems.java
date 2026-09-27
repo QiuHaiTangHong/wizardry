@@ -18,11 +18,10 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.block.BookshelfBlock;
+import top.begonia.wizardry.api.constants.WizardryBlockStateProperties;
 import top.begonia.wizardry.core.block.CrystalBlock;
 import top.begonia.wizardry.core.block.GildedWoodBlock;
-import top.begonia.wizardry.core.block.LecternBlock;
-import top.begonia.wizardry.core.constants.*;
+import top.begonia.wizardry.api.constants.*;
 import top.begonia.wizardry.core.item.*;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 import top.begonia.wizardry.core.util.ArmourHelper;
@@ -630,7 +629,7 @@ public final class WizardryItems {
                     BlockItemStateProperties stateProperties = itemStack.get(DataComponents.BLOCK_STATE);
                     String woodName = "";
                     if (stateProperties != null) {
-                        WoodTypeEnum woodType = stateProperties.get(BookshelfBlock.BOOKSHELF_WOOD_TYPE);
+                        WoodTypeEnum woodType = stateProperties.get(WizardryBlockStateProperties.WOOD_TYPE);
                         if (woodType != null) {
                             woodName = woodType.getSerializedName();
                         }
@@ -642,7 +641,7 @@ public final class WizardryItems {
             (buildCreativeModeTabContentsEvent, item) -> {
                 for (WoodTypeEnum wood : WoodTypeEnum.values()) {
                     ItemStack stack = new ItemStack(item);
-                    stack.set(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY.with(BookshelfBlock.BOOKSHELF_WOOD_TYPE, wood));
+                    stack.set(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY.with(WizardryBlockStateProperties.WOOD_TYPE, wood));
                     buildCreativeModeTabContentsEvent.accept(stack);
                 }
             }
@@ -655,7 +654,7 @@ public final class WizardryItems {
                     BlockItemStateProperties stateProperties = itemStack.get(DataComponents.BLOCK_STATE);
                     String woodName = "";
                     if (stateProperties != null) {
-                        WoodTypeEnum woodType = stateProperties.get(LecternBlock.LECTERN_WOOD_TYPE);
+                        WoodTypeEnum woodType = stateProperties.get(WizardryBlockStateProperties.WOOD_TYPE);
                         if (woodType != null) {
                             woodName = woodType.getSerializedName();
                         }
@@ -667,7 +666,7 @@ public final class WizardryItems {
             (buildCreativeModeTabContentsEvent, item) -> {
                 for (WoodTypeEnum wood : WoodTypeEnum.values()) {
                     ItemStack stack = new ItemStack(item);
-                    stack.set(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY.with(LecternBlock.LECTERN_WOOD_TYPE, wood));
+                    stack.set(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY.with(WizardryBlockStateProperties.WOOD_TYPE, wood));
                     buildCreativeModeTabContentsEvent.accept(stack);
                 }
             }

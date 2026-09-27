@@ -2,20 +2,18 @@ package top.begonia.wizardry.client.network;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import net.neoforged.neoforge.transfer.item.ItemResource;
-import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.core.network.data.GlyphDataPayload;
 import top.begonia.wizardry.core.network.data.HandbookRecipesResultPayload;
-import top.begonia.wizardry.core.entity.block.BookshelfBlockEntity;
-import top.begonia.wizardry.core.network.data.SyncSlotPayload;
+import top.begonia.wizardry.core.network.data.SyncAllSlotPayload;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,15 +39,15 @@ public class ClientPayloadHandler {
     }
 
     @Contract(pure = true)
-    public static void handleSyncSlotPayload(final @NonNull SyncSlotPayload payload, final @NonNull IPayloadContext context) {
+    public static void handleSyncSlotPayload(final @NonNull SyncAllSlotPayload payload, final @NonNull IPayloadContext context) {
         BlockPos blockPos = payload.blockPos();
         BlockEntity blockEntity = context.player().level().getBlockEntity(blockPos);
-        ItemStack itemStack = payload.stack();
-        int index = payload.index();
+        List<ItemStack> itemStack = payload.stacks();
         Wizardry.LOGGER.info("同步服务侧ItemHandlerResource到客户侧...");
-        if (blockEntity instanceof BookshelfBlockEntity bookshelfBlockEntity) {
-            ItemStacksResourceHandler itemStacksResourceHandler = bookshelfBlockEntity.getInventory();
-            itemStacksResourceHandler.set(index, ItemResource.of(itemStack), itemStack.getCount());
+        if (blockEntity instanceof Container container) {
+            for (int i = 0; i < itemStack.size(); i++) {
+                container.setItem(i, itemStack.get(i));
+            }
         }
     }
 

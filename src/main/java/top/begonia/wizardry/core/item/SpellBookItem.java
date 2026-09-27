@@ -19,7 +19,7 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.gui.SpellBookScreen;
 import top.begonia.wizardry.client.util.ClientHelper;
 import top.begonia.wizardry.client.util.GlyphGenerator;
-import top.begonia.wizardry.core.constants.TierEnum;
+import top.begonia.wizardry.api.constants.TierEnum;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;

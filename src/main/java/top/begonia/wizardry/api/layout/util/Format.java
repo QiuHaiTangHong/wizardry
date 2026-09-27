@@ -14,8 +14,8 @@ import top.begonia.wizardry.api.layout.atom.LinkElement;
 import top.begonia.wizardry.api.layout.atom.TextElement;
 import top.begonia.wizardry.api.layout.hybrid.CaptionImageElement;
 import top.begonia.wizardry.api.layout.hybrid.LineElement;
-import top.begonia.wizardry.core.constants.ElementEnum;
-import top.begonia.wizardry.core.constants.TierEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.TierEnum;
 import top.begonia.wizardry.core.config.ServerConfig;
 
 import java.net.URI;

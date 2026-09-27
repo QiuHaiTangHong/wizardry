@@ -11,7 +11,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.core.registry.WizardryBlockEntities;
 
 import javax.annotation.Nullable;

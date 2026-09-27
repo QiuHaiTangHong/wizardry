@@ -1,0 +1,16 @@
+{
+  "processors": [
+    {
+      "processor_type": "wizardry:stone_brick"
+    },
+    {
+      "processor_type": "wizardry:550w",
+      "mossiness": 0.4,
+      "height_weight": 0.04
+    },
+    {
+      "processor_type": "wizardry:cracked_stone",
+      "chance": 0.1
+    }
+  ]
+}

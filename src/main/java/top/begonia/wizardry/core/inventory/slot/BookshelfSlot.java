@@ -1,5 +1,8 @@
 package top.begonia.wizardry.core.inventory.slot;
 
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
@@ -16,7 +19,7 @@ import top.begonia.wizardry.core.util.ItemStackHelper;
  * @version 1.0.0
  * @date 2026.07.06
  */
-public class BookshelfSlot extends ResourceHandlerSlot {
+public class BookshelfSlot extends Slot {
 
     /**
      * 构造书架物品槽位实例
@@ -29,10 +32,10 @@ public class BookshelfSlot extends ResourceHandlerSlot {
      * @param onChanged                 配置更改时回调的 Runnable 接口实现类, 用于接收状态变化事件
      */
     public BookshelfSlot(
-            ItemStacksResourceHandler itemStacksResourceHandler,
+            Container container,
             int index, int x, int y
     ) {
-        super(itemStacksResourceHandler, itemStacksResourceHandler::set, index, x, y);
+        super(container, index, x, y);
     }
 
     /**
@@ -45,16 +48,5 @@ public class BookshelfSlot extends ResourceHandlerSlot {
     @Override
     public boolean mayPlace(@NonNull ItemStack stack) {
         return super.mayPlace(stack) && ItemStackHelper.isBook(stack);
-    }
-
-    /**
-     * 设置堆栈副本
-     * <p> 重写父类方法来复制项堆栈. 此方法会调用父类的同名方法进行实际操作.
-     *
-     * @param stack 要设置的堆栈副本
-     */
-    @Override
-    protected void setStackCopy(@NonNull ItemStack stack) {
-        super.setStackCopy(stack);
     }
 }

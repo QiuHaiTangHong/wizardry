@@ -9,8 +9,8 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.constants.ElementEnum;
-import top.begonia.wizardry.core.constants.TierEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.TierEnum;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
 import java.util.ArrayList;

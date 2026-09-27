@@ -1,11 +1,13 @@
 package top.begonia.wizardry.core.util;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
@@ -15,7 +17,9 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -23,20 +27,21 @@ import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.config.ServerConfig;
-import top.begonia.wizardry.core.constants.ElementEnum;
-import top.begonia.wizardry.core.constants.EnabledEnum;
-import top.begonia.wizardry.core.constants.TierEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.EnabledEnum;
+import top.begonia.wizardry.api.constants.TierEnum;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.constant.definition.DamageImmune;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 public final class EntityUtils {
     private EntityUtils() {
@@ -49,6 +54,35 @@ public final class EntityUtils {
             case HARD -> 2;
             default -> 10;
         };
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    @NullMarked
+    public static <T extends BlockEntity & Container> Optional<T> findNearbyBlockEntityContainer(
+            int radius,
+            Level level,
+            BlockPos centre,
+            Class<T> type,
+            Predicate<T> excludePredicate,
+            BiPredicate<ImmutableList<ItemStack>, T> processor
+    ) {
+        return BlockPos.betweenClosedStream(
+                        centre.offset(-radius, -radius, -radius),
+                        centre.offset(radius, radius, radius)
+                )
+                .map(BlockPos::immutable)
+                .map(level::getBlockEntity)
+                .filter(type::isInstance)
+                .map(type::cast)
+                .filter(excludePredicate.negate())
+                .filter(container -> {
+                    ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
+                    for (int i = 0; i < container.getContainerSize(); i++) {
+                        builder.add(container.getItem(i).copy());
+                    }
+                    return processor.test(builder.build(), container);
+                })
+                .findFirst();
     }
 
     public static boolean isEntityImmune(

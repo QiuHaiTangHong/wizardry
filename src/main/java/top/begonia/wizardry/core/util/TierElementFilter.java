@@ -1,9 +1,9 @@
 package top.begonia.wizardry.core.util;
 
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.constants.ElementEnum;
-import top.begonia.wizardry.core.constants.EnabledEnum;
-import top.begonia.wizardry.core.constants.TierEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.EnabledEnum;
+import top.begonia.wizardry.api.constants.TierEnum;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
 import java.util.function.Predicate;

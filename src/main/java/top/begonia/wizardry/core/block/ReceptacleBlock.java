@@ -14,22 +14,20 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.GeometryUtils;
-import top.begonia.wizardry.core.constants.ElementEnum;
 import top.begonia.wizardry.core.entity.block.ReceptacleBlockEntity;
 import top.begonia.wizardry.core.item.SpectralDustItem;
 import top.begonia.wizardry.core.registry.*;
@@ -39,7 +37,6 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class ReceptacleBlock extends BaseEntityBlock {
-    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
     protected static final VoxelShape STANDING_SHAPE = Block.box(4.0, 0.0, 4.0, 12.0, 8.0, 12.0);
     protected static final VoxelShape NORTH_WALL_SHAPE = Block.box(4.0, 2.0, 7.0, 12.0, 10.0, 16.0);
     protected static final VoxelShape SOUTH_WALL_SHAPE = Block.box(4.0, 2.0, 0.0, 12.0, 10.0, 9.0);
@@ -61,12 +58,17 @@ public class ReceptacleBlock extends BaseEntityBlock {
 
     public ReceptacleBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP));
+        this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.FACING, Direction.UP));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.@NonNull Builder<Block, BlockState> builder) {
+        builder.add(BlockStateProperties.FACING);
     }
 
     @Override
     public @NonNull VoxelShape getShape(@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @NonNull CollisionContext context) {
-        return switch (state.getValue(FACING)) {
+        return switch (state.getValue(BlockStateProperties.FACING)) {
             case EAST -> EAST_WALL_SHAPE;
             case WEST -> WEST_WALL_SHAPE;
             case SOUTH -> SOUTH_WALL_SHAPE;
@@ -135,7 +137,7 @@ public class ReceptacleBlock extends BaseEntityBlock {
         if (blockEntity instanceof ReceptacleBlockEntity receptacleBlockEntity) {
             ElementEnum element = receptacleBlockEntity.getElement();
             if (element != null) {
-                Direction facing = state.getValue(FACING).getOpposite();
+                Direction facing = state.getValue(BlockStateProperties.FACING).getOpposite();
                 Vec3 centre = GeometryUtils.getCentre(pos);
                 if (facing.getAxis().isHorizontal()) {
                     centre = centre.add(facing.getUnitVec3().scale(WALL_PARTICLE_OFFSET)).add(0, 0.125, 0);
@@ -175,31 +177,40 @@ public class ReceptacleBlock extends BaseEntityBlock {
     }
 
     @Override
+    public @NonNull BlockState rotate(@NonNull BlockState state, @NonNull Rotation rotation){
+        return state.setValue(
+                BlockStateProperties.FACING,
+                rotation.rotate(state.getValue(BlockStateProperties.FACING))
+        );
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    protected @NonNull BlockState mirror(@NonNull BlockState state, @NonNull Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(BlockStateProperties.FACING)));
+    }
+
+    @Override
     @Nullable
     public BlockState getStateForPlacement(@NonNull BlockPlaceContext context) {
         LevelReader level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         Direction clickedFace = context.getClickedFace();
         if (clickedFace != Direction.DOWN) {
-            BlockState state = this.defaultBlockState().setValue(FACING, clickedFace);
+            BlockState state = this.defaultBlockState().setValue(BlockStateProperties.FACING, clickedFace);
             if (this.canSurvive(state, level, pos)) {
                 return state;
             }
         }
         for (Direction direction : Direction.values()) {
             if (direction != Direction.DOWN) {
-                BlockState state = this.defaultBlockState().setValue(FACING, direction);
+                BlockState state = this.defaultBlockState().setValue(BlockStateProperties.FACING, direction);
                 if (this.canSurvive(state, level, pos)) {
                     return state;
                 }
             }
         }
         return null;
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.@NonNull Builder<Block, BlockState> builder) {
-        builder.add(FACING);
     }
 
     @Override

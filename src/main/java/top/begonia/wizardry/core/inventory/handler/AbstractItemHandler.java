@@ -18,6 +18,7 @@ public abstract class AbstractItemHandler<T extends BlockEntity> extends ItemSta
         this.blockEntity = blockEntity;
     }
 
+    @Override
     protected abstract void onContentsChanged(int index, @NonNull ItemStack previousContents);
 
     public ItemStack getStack(int index) {

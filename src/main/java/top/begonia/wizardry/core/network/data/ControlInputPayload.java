@@ -6,7 +6,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.constants.ControlType;
+import top.begonia.wizardry.api.constants.ControlType;
 
 public record ControlInputPayload(ControlType controlType) implements CustomPacketPayload {
     public static final Type<ControlInputPayload> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Wizardry.MODID, "control_input"));

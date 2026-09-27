@@ -1,0 +1,78 @@
+{
+    "name": "wizardry:shrine_template_pool",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:shrine_0",
+                "processors": "wizardry:shrine_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:shrine_1",
+                "processors": "wizardry:shrine_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:shrine_2",
+                "processors": "wizardry:shrine_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:shrine_3",
+                "processors": "wizardry:shrine_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:shrine_4",
+                "processors": "wizardry:shrine_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:shrine_5",
+                "processors": "wizardry:shrine_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:shrine_6",
+                "processors": "wizardry:shrine_processor",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "location": "wizardry:shrine_7",
+                "processors": "wizardry:shrine_processor",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

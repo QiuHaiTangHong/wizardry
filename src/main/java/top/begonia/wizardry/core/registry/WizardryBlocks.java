@@ -25,9 +25,8 @@ public final class WizardryBlocks {
             "crystal_ore",
             CrystalOreBlock::new,
             () -> BlockBehaviour.Properties
-                    .ofFullCopy(Blocks.ENCHANTING_TABLE)
-                    .noOcclusion()
-                    .lightLevel(_ -> 0)
+                    .ofFullCopy(Blocks.STONE)
+                    .requiresCorrectToolForDrops()
     );
 
     public static final DeferredBlock<CrystalBlock> CRYSTAL_BLOCK = BLOCKS.registerBlock(

@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
 
 public class CrystalBlock extends Block {
     public static final EnumProperty<ElementEnum> ELEMENT = EnumProperty.create("element", ElementEnum.class);

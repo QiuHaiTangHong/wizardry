@@ -8,12 +8,11 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.constants.ElementEnum;
+import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.core.loot.RandomSpell;
 import top.begonia.wizardry.core.loot.WizardSpell;
 

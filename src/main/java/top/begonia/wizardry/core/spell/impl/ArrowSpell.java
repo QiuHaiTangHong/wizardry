@@ -12,7 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.constants.SpellActions;
+import top.begonia.wizardry.api.constants.SpellActions;
 import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.api.entity.atom.ISpellCaster;
 import top.begonia.wizardry.core.entity.projectile.MagicArrowEntity;

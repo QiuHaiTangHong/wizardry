@@ -2,23 +2,38 @@ package top.begonia.wizardry.core.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.api.constants.WoodTypeEnum;
 import top.begonia.wizardry.client.util.GeometryUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -53,11 +68,27 @@ public final class BlockUtils {
     }
 
     @Nullable
-    public static BlockPos findNearbyFloorSpace(Entity entity, int horizontalRange, int verticalRange) {
-
+    public static BlockPos findNearbyFloorSpace(@NonNull Entity entity, int horizontalRange, int verticalRange) {
         Level level = entity.level();
         BlockPos origin = entity.blockPosition();
         return findNearbyFloorSpace(level, origin, horizontalRange, verticalRange);
+    }
+
+    public static boolean isDirection(Property<?> property){
+        return property == BlockStateProperties.FACING
+                || property == BlockStateProperties.FACING_HOPPER
+                || property == BlockStateProperties.HORIZONTAL_FACING;
+    }
+
+    public static <T> @NonNull BlockState generateBlockState(
+            @NonNull T benchmark,
+            @NonNull Function<T, Identifier> targetIdentifierFactory,
+            @NonNull BiFunction<T, BlockState, BlockState> blockStateFactory
+    ) {
+        Identifier targetIdentifier = targetIdentifierFactory.apply(benchmark);
+        Block targetBlock = BuiltInRegistries.BLOCK.getValue(targetIdentifier);
+        BlockState blockState = targetBlock.defaultBlockState();
+        return blockStateFactory.apply(benchmark, blockState);
     }
 
     @Nullable
@@ -118,6 +149,58 @@ public final class BlockUtils {
         }
 
         return surface;
+    }
+
+    /**
+     * 将源方块状态中符合条件的属性复制到目标方块状态。
+     *
+     * <p>用于方块替换时保留方向、形状等状态属性。</p>
+     *
+     * @param from 原始方块状态
+     * @param to 目标方块状态
+     * @param propertyTester 属性过滤条件
+     * @return 复制属性后的目标方块状态
+     */
+    public static BlockState copyPropertiesIf(
+            @NonNull BlockState from,
+            BlockState to,
+            Predicate<Property<?>> propertyTester
+    ) {
+        for (Property<?> property : from.getProperties()) {
+            if (propertyTester.test(property)){
+                to = BlockState.copyProperty(from, to, property);
+            }
+        }
+        return to;
+    }
+
+    public static WoodTypeEnum getBiomeWoodType(@NonNull Holder<Biome> biomeHolder) {
+        ResourceKey<Biome> biome = biomeHolder.getKey();
+        if (biome == Biomes.TAIGA
+                || biome == Biomes.SNOWY_TAIGA
+                || biome == Biomes.OLD_GROWTH_PINE_TAIGA
+                || biome == Biomes.OLD_GROWTH_SPRUCE_TAIGA) {
+            return WoodTypeEnum.SPRUCE;
+        }
+        if (biome == Biomes.BIRCH_FOREST
+                || biome == Biomes.OLD_GROWTH_BIRCH_FOREST) {
+            return WoodTypeEnum.BIRCH;
+        }
+        if (biome == Biomes.JUNGLE
+                || biome == Biomes.SPARSE_JUNGLE
+                || biome == Biomes.BAMBOO_JUNGLE) {
+            return WoodTypeEnum.JUNGLE;
+        }
+        if (biome == Biomes.SAVANNA
+                || biome == Biomes.SAVANNA_PLATEAU
+                || biome == Biomes.WINDSWEPT_SAVANNA) {
+            return WoodTypeEnum.ACACIA;
+        }
+        if (biome == Biomes.DARK_FOREST
+                || biome == Biomes.PALE_GARDEN) {
+            return WoodTypeEnum.DARK_OAK;
+        }
+        return WoodTypeEnum.OAK;
     }
 
     @FunctionalInterface
