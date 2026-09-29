@@ -2,19 +2,28 @@ package top.begonia.wizardry.core.registry;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElementType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.core.worldgen.pool.DelayedOperationPoolElement;
 import top.begonia.wizardry.core.worldgen.processor.*;
 
-public final class WizardryStructureProcessors {
+public final class WizardryStructures {
     public static final DeferredRegister<MapCodec<? extends StructureProcessor>> PROCESSORS = DeferredRegister.create(
             Registries.STRUCTURE_PROCESSOR,
             Wizardry.MODID
     );
 
+    public static final DeferredRegister<StructurePoolElementType<?>> POOL_ELEMENTS = DeferredRegister.create(
+            Registries.STRUCTURE_POOL_ELEMENT,
+            Wizardry.MODID
+    );
+
+    // StructureProcessor
     public static final DeferredHolder<MapCodec<? extends StructureProcessor>, MapCodec<WoodTypeProcessor>> WOOD_TYPE = PROCESSORS.register(
             "wood_type",
             () -> WoodTypeProcessor.CODEC
@@ -35,7 +44,7 @@ public final class WizardryStructureProcessors {
             () -> ObeliskProcessor.CODEC
     );
 
-    public static final DeferredHolder<MapCodec<? extends StructureProcessor>, MapCodec<ReplaceProcessor>> replace = PROCESSORS.register(
+    public static final DeferredHolder<MapCodec<? extends StructureProcessor>, MapCodec<ReplaceProcessor>> REPLACE = PROCESSORS.register(
             "replace",
             () -> ReplaceProcessor.CODEC
     );
@@ -50,10 +59,22 @@ public final class WizardryStructureProcessors {
             () -> Processor550W.CODEC
     );
 
-    private WizardryStructureProcessors() {
+    // StructurePoolElementType
+    public static final DeferredHolder<StructurePoolElementType<?>, StructurePoolElementType<DelayedOperationPoolElement>> DELAYED_OPERATION = POOL_ELEMENTS.register(
+            "delayed_operation",
+            () -> new StructurePoolElementType<>() {
+                @Override
+                public @NonNull MapCodec<DelayedOperationPoolElement> codec() {
+                    return DelayedOperationPoolElement.CODEC;
+                }
+            }
+    );
+
+    private WizardryStructures() {
     }
 
     public static void register(IEventBus eventBus) {
-        WizardryStructureProcessors.PROCESSORS.register(eventBus);
+        WizardryStructures.PROCESSORS.register(eventBus);
+        WizardryStructures.POOL_ELEMENTS.register(eventBus);
     }
 }

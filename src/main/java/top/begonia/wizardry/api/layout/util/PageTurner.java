@@ -1,7 +1,6 @@
 package top.begonia.wizardry.api.layout.util;
 
 import net.minecraft.resources.Identifier;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
@@ -17,14 +16,11 @@ import java.util.Map;
 public final class PageTurner {
     private Context context;
     private int currentPage = -1;
-    @NotNull
-    private final HandbookData handbookData;
     private final List<IContainerElement> displayPageElements = new ArrayList<>();
     private final Map<String, SectionFormatConverter> sectionMap = new LinkedHashMap<>();
     private final List<IContainerElement> pageElements = new ArrayList<>();
 
     public PageTurner() {
-        this.handbookData = WizardryClientDataManager.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "handbook"), HandbookData.class).orElse(HandbookData.DEFAULT);
     }
 
     public List<IContainerElement> getDisplayPageElements() {
@@ -61,10 +57,10 @@ public final class PageTurner {
         return displayPageElements.size();
     }
 
-    private @NonNull Map<String, SectionData> getStringSectionDataMap() {
+    private @NonNull Map<String, SectionData> getStringSectionDataMap(HandbookData handbookData) {
         Map<String, SectionData> noEmptySectionDataList = new LinkedHashMap<>();
         Map<String, Map<String, String>> catalogueEntry = new LinkedHashMap<>();
-        this.handbookData.sections().forEach((sectionName, sectionData) -> {
+        handbookData.sections().forEach((sectionName, sectionData) -> {
             if (sectionData.text().isPresent()) {
                 noEmptySectionDataList.put(sectionName, sectionData);
             }
@@ -94,10 +90,13 @@ public final class PageTurner {
 
     public void format(Context context) {
         this.context = context;
+        final HandbookData handbookData = WizardryClientDataManager.getInstance()
+                .getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "handbook"), HandbookData.class)
+                .orElse(HandbookData.DEFAULT);
         this.context.setColours(handbookData.colours());
         this.context.setImages(handbookData.images());
         this.context.setRecipes(handbookData.recipes());
-        Map<String, SectionData> noEmptySectionDataList = getStringSectionDataMap();
+        Map<String, SectionData> noEmptySectionDataList = getStringSectionDataMap(handbookData);
         for (Map.Entry<String, SectionData> entry : noEmptySectionDataList.entrySet()) {
             String key = entry.getKey();
             SectionData sectionData = entry.getValue();

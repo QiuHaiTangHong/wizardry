@@ -6,7 +6,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
@@ -16,7 +15,6 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.event.data.RegisterDataParserEvent;
-import top.begonia.wizardry.core.commond.DebugCommond;
 import top.begonia.wizardry.core.data.SpellGlyph;
 import top.begonia.wizardry.core.data.constant.parser.CurrencyParser;
 import top.begonia.wizardry.core.data.constant.parser.DamageImmuneParser;
@@ -56,16 +54,6 @@ public class CoreEvent {
             WizardPlayerData playerData = player.getData(WizardryAttachment.WIZARD_PLAYER_DATA.get());
             player.setData(WizardryAttachment.WIZARD_PLAYER_DATA.get(), playerData);
         }
-    }
-
-    /**
-     * 注册自定义命令
-     * @param event 注册命令事件
-     * @see RegisterCommandsEvent
-     */
-    @SubscribeEvent
-    public static void onRegisterCommands(@NonNull RegisterCommandsEvent event) {
-        DebugCommond.register(event.getDispatcher());
     }
 
     /**

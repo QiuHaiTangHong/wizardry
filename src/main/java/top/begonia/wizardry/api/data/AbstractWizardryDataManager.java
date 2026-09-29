@@ -55,7 +55,7 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
         return Optional.empty();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked") // 闭嘴IDEA
     public <T extends IResultData> Map<Identifier, T> getAllDataByType(Class<T> expectedType) {
         Map<Identifier, ? extends IResultData> typeMap = this.storageSnapshot.get(expectedType);
         if (typeMap != null) {
@@ -86,8 +86,11 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
     }
 
     protected @NonNull Map<Identifier, JsonElement> prepare(@NonNull ResourceManager resourceManager, @NonNull ProfilerFiller profilerFiller) {
+        profilerFiller.push("prepare");
         Map<Identifier, JsonElement> result = new HashMap<>();
         Codec<Optional<JsonElement>> conditionalCodec = ConditionalOps.createConditionalCodec(CODEC);
+
+        profilerFiller.push("listResources");
         for (Map.Entry<Identifier, Resource> entry : this.lister.listMatchingResources(resourceManager).entrySet()) {
             Identifier location = entry.getKey();
             Identifier originalId = this.lister.fileToId(location);
@@ -108,7 +111,9 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
                 Wizardry.LOGGER.error("从物理路径 '{}' 解析 Wizardry 数据时发生异常", location, e);
             }
         }
+        profilerFiller.pop(); // listResources
 
+        profilerFiller.pop(); // prepare
         return result;
     }
 

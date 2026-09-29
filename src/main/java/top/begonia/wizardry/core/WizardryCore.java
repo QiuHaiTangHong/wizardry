@@ -39,7 +39,7 @@ public class WizardryCore {
         WizardryParticles.register(modEventBus);
         WizardryEntities.register(modEventBus);
         WizardryLoots.register(modEventBus);
-        WizardryStructureProcessors.register(modEventBus);
+        WizardryStructures.register(modEventBus);
         WizardryAdvancementTriggers.register(modEventBus);
         WizardryEntityDataSerializers.register(modEventBus);
         Wizardry.onInit(modContainer);
