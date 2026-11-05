@@ -9,17 +9,17 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.MapColor;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.constants.ElementEnum;
-import top.begonia.wizardry.api.constants.WizardryBlockStateProperties;
+import top.begonia.wizardry.api.constants.BuiltBlockStateProperties;
 
 public class RunestoneBlock extends Block {
     public RunestoneBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(WizardryBlockStateProperties.ELEMENT, ElementEnum.FIRE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(BuiltBlockStateProperties.ELEMENT, ElementEnum.FIRE));
     }
 
     @Override
     public @NonNull MapColor getMapColor(@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @NonNull MapColor defaultColor) {
-        ElementEnum element = state.getValue(WizardryBlockStateProperties.ELEMENT);
+        ElementEnum element = state.getValue(BuiltBlockStateProperties.ELEMENT);
         return switch (element) {
             case FIRE -> MapColor.COLOR_RED;
             case ICE -> MapColor.COLOR_LIGHT_BLUE;
@@ -34,6 +34,6 @@ public class RunestoneBlock extends Block {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.@NonNull Builder<Block, BlockState> builder) {
-        builder.add(WizardryBlockStateProperties.ELEMENT);
+        builder.add(BuiltBlockStateProperties.ELEMENT);
     }
 }

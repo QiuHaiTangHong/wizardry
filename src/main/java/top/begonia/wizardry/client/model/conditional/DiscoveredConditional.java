@@ -11,7 +11,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.client.util.ClientHelper;
 import top.begonia.wizardry.core.config.ClientConfig;
-import top.begonia.wizardry.core.config.CommonConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.item.ArtefactItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.registry.WizardryItems;
@@ -40,7 +40,7 @@ public class DiscoveredConditional implements ConditionalItemModelProperty {
         AbstractSpell spell = itemStack.getOrDefault(WizardryComponents.SPELL.get(), WizardrySpells.NONE).value();
         boolean discovered = ClientHelper.shouldDisplayDiscovered(spell, null);
 
-        if (discovered && CommonConfig.spellBookColorsRequireArchivistsEyeglass) {
+        if (discovered && SyncedConfig.spellBookColorsRequireArchivistsEyeglass) {
             // Entity can be null so we have to check
             if (livingEntity instanceof Player player) {
                 return ArtefactItem.isArtefactActive(player, WizardryItems.CHARM_SPELL_DISCOVERY.get());

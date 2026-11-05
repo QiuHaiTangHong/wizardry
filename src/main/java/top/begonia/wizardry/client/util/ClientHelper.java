@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import top.begonia.wizardry.client.audio.MovingSoundEntity;
-import top.begonia.wizardry.core.config.CommonConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.registry.WizardryAttachment;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 
 public final class ClientHelper {
     public static boolean shouldDisplayDiscovered(AbstractSpell spell, @Nullable ItemStack stack) {
-        if (!CommonConfig.discoveryMode) {
+        if (!SyncedConfig.discoveryMode) {
             return true;
         }
         Player player = Minecraft.getInstance().player;

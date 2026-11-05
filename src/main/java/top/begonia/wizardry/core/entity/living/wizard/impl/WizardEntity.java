@@ -36,8 +36,7 @@ import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.config.CommonConfig;
-import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.constants.EnabledEnum;
 import top.begonia.wizardry.api.constants.TierEnum;
@@ -116,10 +115,10 @@ public class WizardEntity extends AbstractWizardEntity implements Merchant {
                                 && (((ISummonedCreature) entity).getOwner() instanceof Mob
                                 || ((ISummonedCreature) entity).getOwner() == this.getLastHurtByMob()
                                 || ((ISummonedCreature) entity).getOwner() == this.getTarget())
-                                || ServerConfig.summonedCreatureTargetsWhitelist
+                                || SyncedConfig.summonedCreatureTargetsWhitelist
                                 .contains(EntityUtils.getIdentifier(entity))
                 )
-                        && !ServerConfig.summonedCreatureTargetsBlacklist
+                        && !SyncedConfig.summonedCreatureTargetsBlacklist
                         .contains(EntityUtils.getIdentifier(entity));
             }
 
@@ -374,7 +373,7 @@ public class WizardEntity extends AbstractWizardEntity implements Merchant {
                 }
 
             case APPRENTICE:
-                randomiser = this.random.nextInt(CommonConfig.discoveryMode ? 12 : 10);
+                randomiser = this.random.nextInt(SyncedConfig.discoveryMode ? 12 : 10);
                 if (randomiser < 5 && !spells.isEmpty()) {
                     return extractSpell(spells, specialismSpells);
                 } else if (randomiser < 6) {

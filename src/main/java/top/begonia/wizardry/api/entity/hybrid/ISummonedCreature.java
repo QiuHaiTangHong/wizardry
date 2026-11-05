@@ -19,7 +19,7 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.item.ISpellCastingItem;
 import top.begonia.wizardry.client.WizardryClient;
-import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.data.player.WizardPlayerDataOperator;
@@ -72,8 +72,8 @@ public interface ISummonedCreature extends IOwnableEntity, ILifeTicksEntity, ISu
                     || target instanceof ISummonedCreature
                     || (target instanceof WizardEntity && !(this.getOwner() instanceof WizardEntity))
                     || (target instanceof LivingEntity livingEntity && livingEntity.getLastHurtByMob() == this.getOwner())
-                    || ServerConfig.summonedCreatureTargetsWhitelist.contains(BuiltInRegistries.ENTITY_TYPE.getKey(target.getType())))
-                    && !ServerConfig.summonedCreatureTargetsBlacklist.contains(BuiltInRegistries.ENTITY_TYPE.getKey(target.getType()));
+                    || SyncedConfig.summonedCreatureTargetsWhitelist.contains(BuiltInRegistries.ENTITY_TYPE.getKey(target.getType())))
+                    && !SyncedConfig.summonedCreatureTargetsBlacklist.contains(BuiltInRegistries.ENTITY_TYPE.getKey(target.getType()));
         }
         return false;
     }
@@ -97,7 +97,7 @@ public interface ISummonedCreature extends IOwnableEntity, ILifeTicksEntity, ISu
     }
 
     default boolean shouldLastHurtByMob(LivingEntity entity) {
-        return ServerConfig.minionRevengeTargeting || isValidTarget(entity);
+        return SyncedConfig.minionRevengeTargeting || isValidTarget(entity);
     }
 
     @Override

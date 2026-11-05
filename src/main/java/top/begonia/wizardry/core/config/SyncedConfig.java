@@ -14,9 +14,29 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
-public final class ServerConfig {
+public final class SyncedConfig {
     public static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
     public static final ModConfigSpec SPEC;
+    private static final ModConfigSpec.IntValue NOVICE_MAX_CHARGE;
+    private static final ModConfigSpec.IntValue APPRENTICE_MAX_CHARGE;
+    private static final ModConfigSpec.IntValue ADVANCED_MAX_CHARGE;
+    private static final ModConfigSpec.IntValue MASTER_MAX_CHARGE;
+    private static final ModConfigSpec.IntValue NOVICE_UPGRADE_LIMIT;
+    private static final ModConfigSpec.IntValue APPRENTICE_UPGRADE_LIMIT;
+    private static final ModConfigSpec.IntValue ADVANCED_UPGRADE_LIMIT;
+    private static final ModConfigSpec.IntValue MASTER_UPGRADE_LIMIT;
+    private static final ModConfigSpec.BooleanValue DISCOVERY_MODE;
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> PROGRESSION_REQUIREMENTS;
+    private static final ModConfigSpec.IntValue BOOKSHELF_SEARCH_RADIUS;
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> BOOKSHELF_BLOCKS;
+    private static final ModConfigSpec.BooleanValue FLESH_SPELLS_CAUSE_SLOWNESS;
+    private static final ModConfigSpec.DoubleValue DIAMOND_FLESH_ARMOR_BONUS;
+    private static final ModConfigSpec.DoubleValue DIAMOND_FLESH_ARMOR_TOUGHNESS_BONUS;
+    private static final ModConfigSpec.DoubleValue IRON_FLESH_ARMOR_BONUS;
+    private static final ModConfigSpec.DoubleValue OAK_FLESH_ARMOR_BONUS;
+    private static final ModConfigSpec.DoubleValue OAK_FLESH_HEALTH_BONUS;
+    private static final ModConfigSpec.DoubleValue CONDENSER_AMOUNT_MULTIPLIER;
+    public static final ModConfigSpec.BooleanValue SPELL_BOOK_COLORS_REQUIRE_ARCHIVISTS_EYEGLASS;
     private static final ModConfigSpec.BooleanValue WANDS_MUST_BE_HELD_TO_DECREMENT_COOLDOWN;
     private static final ModConfigSpec.BooleanValue DISPENSER_BLOCK_DAMAGE;
     private static final ModConfigSpec.BooleanValue PLAYER_BLOCK_DAMAGE;
@@ -61,8 +81,118 @@ public final class ServerConfig {
     public static boolean dispenserBlockDamage;
     public static boolean playerBlockDamage;
     public static boolean minionRevengeTargeting;
+    public static boolean spellBookColorsRequireArchivistsEyeglass;
 
     static {
+        BUILDER
+                .comment("Settings that affect the mod's difficulty. In multiplayer, the server/LAN host settings will apply.")
+                .translation("config." + Wizardry.MODID + ".category." + ConfigCategory.DIFFICULTY_CATEGORY)
+                .push(ConfigCategory.DIFFICULTY_CATEGORY);
+        NOVICE_MAX_CHARGE = BUILDER
+                .translation("config." + Wizardry.MODID + ".novice_max_charge")
+                .comment("Maximum mana a novice wand can store.")
+                .worldRestart()
+                .defineInRange("noviceMaxCharge", 700, 1, Integer.MAX_VALUE);
+        APPRENTICE_MAX_CHARGE = BUILDER
+                .translation("config." + Wizardry.MODID + ".apprentice_max_charge")
+                .comment("Maximum mana an apprentice wand can store.")
+                .worldRestart()
+                .defineInRange("apprenticeMaxCharge", 1000, 1, Integer.MAX_VALUE);
+        ADVANCED_MAX_CHARGE = BUILDER
+                .translation("config." + Wizardry.MODID + ".advanced_max_charge")
+                .comment("Maximum mana an advanced wand can store.")
+                .worldRestart()
+                .defineInRange("advancedMaxCharge", 1500, 1, Integer.MAX_VALUE);
+        MASTER_MAX_CHARGE = BUILDER
+                .translation("config." + Wizardry.MODID + ".master_max_charge")
+                .comment("Maximum mana a master wand can store.")
+                .worldRestart()
+                .defineInRange("masterMaxCharge", 2500, 1, Integer.MAX_VALUE);
+
+        NOVICE_UPGRADE_LIMIT = BUILDER
+                .translation("config." + Wizardry.MODID + ".novice_upgrade_limit")
+                .comment("Maximum number of upgrades a novice wand can have.")
+                .worldRestart()
+                .defineInRange("noviceUpgradeLimit", 3, 0, 100);
+        APPRENTICE_UPGRADE_LIMIT = BUILDER
+                .translation("config." + Wizardry.MODID + ".apprentice_upgrade_limit")
+                .comment("Maximum number of upgrades an apprentice wand can have.")
+                .worldRestart()
+                .defineInRange("apprenticeUpgradeLimit", 5, 0, 100);
+        ADVANCED_UPGRADE_LIMIT = BUILDER
+                .translation("config." + Wizardry.MODID + ".advanced_upgrade_limit")
+                .comment("Maximum number of upgrades an advanced wand can have.")
+                .worldRestart()
+                .defineInRange("advancedUpgradeLimit", 7, 0, 100);
+        MASTER_UPGRADE_LIMIT = BUILDER
+                .translation("config." + Wizardry.MODID + ".master_upgrade_limit")
+                .comment("Maximum number of upgrades a master wand can have.")
+                .worldRestart()
+                .defineInRange("masterUpgradeLimit", 9, 0, 100);
+
+        PROGRESSION_REQUIREMENTS = BUILDER
+                .comment("The amount of progression required to upgrade a wand to each tier (apprentice, advanced and master respectively).")
+                .translation("config." + Wizardry.MODID + ".progression_requirements")
+                .worldRestart()
+                .defineList("progressionRequirements", List.of(1500, 3500, 6000), o -> o instanceof Integer);
+
+        DISCOVERY_MODE = BUILDER
+                .comment("For those who like a sense of mystery! When set to true, spells you haven't cast yet will be unreadable until you cast them (on a per-world basis). Has no effect when in creative mode. Spells of identification will be unobtainable in survival mode if this is false.")
+                .translation("config." + Wizardry.MODID + ".discovery_mode")
+                .worldRestart()
+                .define("discoveryMode", true);
+
+        FLESH_SPELLS_CAUSE_SLOWNESS = BUILDER
+                .comment("Whether flesh spells (DiamondFlesh, IronFlesh, OakFlesh) apply slowness. When disabled, these spells only provide their defensive benefits without movement penalty.")
+                .translation("config." + Wizardry.MODID + ".flesh_spells_cause_slowness")
+                .worldRestart()
+                .define("fleshSpellsCauseSlowness", true);
+        IRON_FLESH_ARMOR_BONUS = BUILDER
+                .comment("Armor bonus provided by the IronFlesh spell.")
+                .translation("config." + Wizardry.MODID + ".iron_flesh_armor_bonus")
+                .worldRestart()
+                .defineInRange("ironFleshArmorBonus", 4.0, 0.0, Double.MAX_VALUE);
+        BOOKSHELF_SEARCH_RADIUS = BUILDER
+                .translation("config." + Wizardry.MODID + ".bookshelf_search_radius")
+                .comment("The maximum number of blocks a bookshelf can be from an arcane workbench or lectern to be able to link to it.")
+                .worldRestart()
+                .defineInRange("bookshelfSearchRadius", 4, 1, 10);
+        BOOKSHELF_BLOCKS = BUILDER
+                .translation("config." + Wizardry.MODID + ".bookshelf_blocks")
+                .comment("List of registry names of blocks that count as bookshelves for the arcane workbench and lectern. Block names are not case sensitive. For mod blocks, prefix with the mod ID (e.g. " + Wizardry.MODID + ":oak_bookshelf).")
+                .worldRestart()
+                .defineList("bookshelfBlocks", List.of("oak", "spruce", "birch", "jungle", "acacia", "dark_oak"), o -> o instanceof String);
+        DIAMOND_FLESH_ARMOR_BONUS = BUILDER
+                .translation("config." + Wizardry.MODID + ".diamond_flesh_armor_bonus")
+                .comment("Armor bonus provided by the DiamondFlesh spell.")
+                .worldRestart()
+                .defineInRange("diamondFleshArmorBonus", 4.0, 0.0, 100.0);
+        DIAMOND_FLESH_ARMOR_TOUGHNESS_BONUS = BUILDER
+                .translation("config." + Wizardry.MODID + ".diamond_flesh_armor_toughness_bonus")
+                .comment("Armor toughness bonus provided by the DiamondFlesh spell.")
+                .worldRestart()
+                .defineInRange("diamondFleshArmorToughnessBonus", 3.0, 0.0, 100.0);
+        OAK_FLESH_ARMOR_BONUS = BUILDER
+                .translation("config." + Wizardry.MODID + ".oak_flesh_armor_bonus")
+                .comment("Armor bonus provided by the OakFlesh spell.")
+                .worldRestart()
+                .defineInRange("oakFleshArmorBonus", 3.0, 0.0, 100.0);
+        OAK_FLESH_HEALTH_BONUS = BUILDER
+                .translation("config." + Wizardry.MODID + ".oak_flesh_health_bonus")
+                .comment("Health bonus provided by the OakFlesh spell (as a multiplier, e.g., 0.2 = 20% increase).")
+                .worldRestart()
+                .defineInRange("oakFleshHealthBonus", 0.2, 0.0, 100.0);
+        CONDENSER_AMOUNT_MULTIPLIER = BUILDER
+                .translation("config." + Wizardry.MODID + ".condenser_amount_multiplier")
+                .comment("Multiplier for condenser upgrade mana regeneration amount. Higher values make condensers more effective.")
+                .worldRestart()
+                .defineInRange("condenserAmountMultiplier", 1.0, 0.0, 100.0);
+        SPELL_BOOK_COLORS_REQUIRE_ARCHIVISTS_EYEGLASS = BUILDER
+                .comment("If true, spell book colors are only shown when the player has the charm of spell discovery equipped.")
+                .translation("config." + Wizardry.MODID + ".spell_book_colors_require_charm")
+                .worldRestart()
+                .define("spellBookColorsRequireArchivistsEyeglass", false);
+        BUILDER.pop();
         BUILDER
                 .comment("Global settings that affect game mechanics. In multiplayer, the server/LAN host settings will apply. Please note that changing some of these settings may make the mod very difficult to play.")
                 .translation("config." + Wizardry.MODID + ".category." + ConfigCategory.GAMEPLAY_CATEGORY)
@@ -222,19 +352,70 @@ public final class ServerConfig {
                         () -> "",
                         value -> value instanceof String str && Identifier.tryParse(str) != null
                 );
-
         SPEC = BUILDER.build();
     }
 
-    @SubscribeEvent
-    static void onLoad(final ModConfigEvent.@NonNull Loading event) {
-        if (event.getConfig().getSpec() == SPEC) {
-            valueChange();
-            Wizardry.LOGGER.info("服务器常量与配置同步.");
-        }
+    public static int noviceMaxCharge;
+    public static int apprenticeMaxCharge;
+    public static int advancedMaxCharge;
+    public static int masterMaxCharge;
+    public static int noviceUpgradeLimit;
+    public static int apprenticeUpgradeLimit;
+    public static int advancedUpgradeLimit;
+    public static int masterUpgradeLimit;
+    public static int[] progressionRequirements;
+    public static boolean discoveryMode;
+    public static int bookshelfSearchRadius;
+    public static List<? extends String> bookshelfBlocks;
+    public static boolean fleshSpellsCauseSlowness;
+    public static double diamondFleshArmorBonus;
+    public static double diamondFleshArmorToughnessBonus;
+    public static double ironFleshArmorBonus;
+    public static double oakFleshArmorBonus;
+    public static double oakFleshHealthBonus;
+    public static double condenserAmountMultiplier;
+
+    public static final class Constants {
+        public static final double DECAY_SLOWNESS_PER_LEVEL = 0.2;
+        public static final float FROST_FATIGUE_PER_LEVEL = 0.45f;
+        public static final int DECAY_SPREAD_INTERVAL = 8;
+        public static int manaPerShard;
+        public static int manaPerCrystal;
+        public static int grandCrystalMana;
+        public static int upgradeStackLimit;
+        public static int nonElementalUpgradeBonus;
+        public static float cooldownReductionPerLevel;
+        public static float storageIncreasePerLevel;
+        public static float potencyIncreasePerTier;
+        public static float durationIncreasePerLevel;
+        public static float rangeIncreasePerLevel;
+        public static float blastRadiusIncreasePerLevel;
+        public static double frostSlownessPerLevel;
+        public static int condenserTickInterval;
+        public static int siphonManaPerLevel;
     }
 
     private static void valueChange() {
+        noviceMaxCharge = NOVICE_MAX_CHARGE.get();
+        apprenticeMaxCharge = APPRENTICE_MAX_CHARGE.get();
+        advancedMaxCharge = ADVANCED_MAX_CHARGE.get();
+        masterMaxCharge = MASTER_MAX_CHARGE.get();
+        noviceUpgradeLimit = NOVICE_UPGRADE_LIMIT.get();
+        apprenticeUpgradeLimit = APPRENTICE_UPGRADE_LIMIT.get();
+        advancedUpgradeLimit = ADVANCED_UPGRADE_LIMIT.get();
+        masterUpgradeLimit = MASTER_UPGRADE_LIMIT.get();
+        progressionRequirements = PROGRESSION_REQUIREMENTS.get().stream().mapToInt(Integer::intValue).toArray();
+        discoveryMode = DISCOVERY_MODE.get();
+        fleshSpellsCauseSlowness = FLESH_SPELLS_CAUSE_SLOWNESS.get();
+        ironFleshArmorBonus = IRON_FLESH_ARMOR_BONUS.get();
+        bookshelfSearchRadius = BOOKSHELF_SEARCH_RADIUS.get();
+        bookshelfBlocks = BOOKSHELF_BLOCKS.get();
+        diamondFleshArmorBonus = DIAMOND_FLESH_ARMOR_BONUS.get();
+        diamondFleshArmorToughnessBonus = DIAMOND_FLESH_ARMOR_TOUGHNESS_BONUS.get();
+        oakFleshArmorBonus = OAK_FLESH_ARMOR_BONUS.get();
+        oakFleshHealthBonus = OAK_FLESH_HEALTH_BONUS.get();
+        condenserAmountMultiplier = CONDENSER_AMOUNT_MULTIPLIER.get();
+        spellBookColorsRequireArchivistsEyeglass = SPELL_BOOK_COLORS_REQUIRE_ARCHIVISTS_EYEGLASS.get();
         Constants.manaPerShard = MANA_PER_SHARD.get();
         Constants.manaPerCrystal = MANA_PER_CRYSTAL.get();
         Constants.grandCrystalMana = GRAND_CRYSTAL_MANA.get();
@@ -269,29 +450,18 @@ public final class ServerConfig {
     }
 
     @SubscribeEvent
-    static void onReload(final ModConfigEvent.@NonNull Reloading event) {
+    static void onLoad(final ModConfigEvent.@NonNull Loading event) {
         if (event.getConfig().getSpec() == SPEC) {
-            valueChange();
+            Wizardry.LOGGER.info("Loaded {} config file: {}", Wizardry.MODID, event.getConfig().getFileName());
+            SyncedConfig.valueChange();
         }
     }
 
-    public static final class Constants {
-        public static final double DECAY_SLOWNESS_PER_LEVEL = 0.2;
-        public static final float FROST_FATIGUE_PER_LEVEL = 0.45f;
-        public static final int DECAY_SPREAD_INTERVAL = 8;
-        public static int manaPerShard;
-        public static int manaPerCrystal;
-        public static int grandCrystalMana;
-        public static int upgradeStackLimit;
-        public static int nonElementalUpgradeBonus;
-        public static float cooldownReductionPerLevel;
-        public static float storageIncreasePerLevel;
-        public static float potencyIncreasePerTier;
-        public static float durationIncreasePerLevel;
-        public static float rangeIncreasePerLevel;
-        public static float blastRadiusIncreasePerLevel;
-        public static double frostSlownessPerLevel;
-        public static int condenserTickInterval;
-        public static int siphonManaPerLevel;
+    @SubscribeEvent
+    static void onReload(final ModConfigEvent.@NonNull Reloading event) {
+        if (event.getConfig().getSpec() == SPEC) {
+            Wizardry.LOGGER.info("Reloaded {} config file: {}", Wizardry.MODID, event.getConfig().getFileName());
+            SyncedConfig.valueChange();
+        }
     }
 }

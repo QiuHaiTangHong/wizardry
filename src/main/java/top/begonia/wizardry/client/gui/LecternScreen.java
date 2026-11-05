@@ -28,7 +28,7 @@ import top.begonia.wizardry.client.util.ClientHelper;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.client.util.ISpellSortable;
-import top.begonia.wizardry.core.config.CommonConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.entity.block.BookshelfBlockEntity;
 import top.begonia.wizardry.core.entity.block.LecternBlockEntity;
 import top.begonia.wizardry.core.item.SpellBookItem;
@@ -233,7 +233,7 @@ public class LecternScreen extends SpellInfoScreen implements ISpellSortable {
                     }
                     ClientLevel level = this.minecraft.level;
                     EntityUtils.findNearbyBlockEntityContainer(
-                            CommonConfig.bookshelfSearchRadius,
+                            SyncedConfig.bookshelfSearchRadius,
                             level,
                             lectern.getBlockPos(),
                             BookshelfBlockEntity.class,
@@ -456,7 +456,7 @@ public class LecternScreen extends SpellInfoScreen implements ISpellSortable {
         availableSpells.clear();
         if (lectern.getLevel() != null) {
             EntityUtils.findNearbyBlockEntityContainer(
-                    CommonConfig.bookshelfSearchRadius,
+                    SyncedConfig.bookshelfSearchRadius,
                     lectern.getLevel(),
                     lectern.getBlockPos(),
                     BookshelfBlockEntity.class,

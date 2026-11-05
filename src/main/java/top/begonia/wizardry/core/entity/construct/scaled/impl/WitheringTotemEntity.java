@@ -18,7 +18,7 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.ClientHelper;
 import top.begonia.wizardry.client.util.GeometryUtils;
-import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.entity.construct.scaled.ScaledConstructEntity;
@@ -141,7 +141,7 @@ public class WitheringTotemEntity extends ScaledConstructEntity {
         nearby.sort(Comparator.comparingDouble(e -> e.distanceToSqr(this)));
 
         int targetsRemaining = (int) (WizardrySpells.WITHERING_TOTEM.get().getBaseProperty(MAX_TARGETS)
-                + (int) ((this.getDamageMultiplier() - 1) / ServerConfig.Constants.potencyIncreasePerTier));
+                + (int) ((this.getDamageMultiplier() - 1) / SyncedConfig.Constants.potencyIncreasePerTier));
 
         while (!nearby.isEmpty() && targetsRemaining > 0) {
 

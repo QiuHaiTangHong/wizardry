@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
@@ -17,7 +16,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -29,7 +27,6 @@ import top.begonia.wizardry.client.util.GeometryUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -175,7 +172,7 @@ public final class BlockUtils {
     }
 
     public static WoodTypeEnum getBiomeWoodType(@NonNull Holder<Biome> biomeHolder) {
-        ResourceKey<Biome> biome = biomeHolder.getKey();
+        ResourceKey<Biome> biome = biomeHolder.key();
         if (biome == Biomes.TAIGA
                 || biome == Biomes.SNOWY_TAIGA
                 || biome == Biomes.OLD_GROWTH_PINE_TAIGA

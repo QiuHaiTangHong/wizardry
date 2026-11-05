@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.entity.LevitatingBlockEntity;
@@ -106,7 +106,7 @@ public class BlackHoleEntity extends ScaledConstructEntity {
             for (Entity target : targets) {
                 if (this.isValidTarget(target)) {
                     if (!(target instanceof Player
-                            && ((this.getOwner() instanceof Player && !ServerConfig.playersMoveEachOther)
+                            && ((this.getOwner() instanceof Player && !SyncedConfig.playersMoveEachOther)
                             || ArtefactItem.isArtefactActive((Player) target, WizardryItems.AMULET_ANCHORING.get())
                     ))) {
 

@@ -5,13 +5,13 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.config.CommonConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.effect.MagicMobEffect;
 
 public class DiamondFleshMobEffect extends MagicMobEffect {
     public DiamondFleshMobEffect(MobEffectCategory category, int color) {
         super(category, color);
-        if (CommonConfig.fleshSpellsCauseSlowness) {
+        if (SyncedConfig.fleshSpellsCauseSlowness) {
             this.addAttributeModifier(
                     Attributes.MOVEMENT_SPEED,
                     Identifier.fromNamespaceAndPath(Wizardry.MODID, "diamond_flesh_speed"),
@@ -22,13 +22,13 @@ public class DiamondFleshMobEffect extends MagicMobEffect {
         this.addAttributeModifier(
                 Attributes.ARMOR_TOUGHNESS,
                 Identifier.fromNamespaceAndPath(Wizardry.MODID, "diamond_flesh_toughness"),
-                CommonConfig.diamondFleshArmorToughnessBonus,
+                SyncedConfig.diamondFleshArmorToughnessBonus,
                 AttributeModifier.Operation.ADD_VALUE
         );
         this.addAttributeModifier(
                 Attributes.ARMOR,
                 Identifier.fromNamespaceAndPath(Wizardry.MODID, "diamond_flesh_armor"),
-                CommonConfig.diamondFleshArmorBonus,
+                SyncedConfig.diamondFleshArmorBonus,
                 AttributeModifier.Operation.ADD_VALUE
         );
     }

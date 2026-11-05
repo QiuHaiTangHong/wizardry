@@ -19,10 +19,10 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.equipment.ArmorType;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.item.IManaStoringItem;
 import top.begonia.wizardry.api.item.IWorkbenchItem;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.util.ArmourHelper;
@@ -224,22 +224,22 @@ public class WizardArmourItem extends Item implements IWorkbenchItem, IManaStori
             int chargeDepleted = this.getManaCapacity(centre.getItem()) - this.getMana(centre.getItem());
             int manaPerItem = crystals.getItem().getItem() instanceof IManaStoringItem ?
                     ((IManaStoringItem) crystals.getItem().getItem()).getMana(crystals.getItem()) :
-                    crystals.getItem().getItem() instanceof MagicCrystalItem ? ServerConfig.Constants.manaPerCrystal : ServerConfig.Constants.manaPerShard;
+                    crystals.getItem().getItem() instanceof MagicCrystalItem ? SyncedConfig.Constants.manaPerCrystal : SyncedConfig.Constants.manaPerShard;
 
             if (crystals.getItem().getItem() == WizardryItems.CRYSTAL_SHARD.get()) {
-                manaPerItem = ServerConfig.Constants.manaPerShard;
+                manaPerItem = SyncedConfig.Constants.manaPerShard;
             }
             if (crystals.getItem().getItem() == WizardryItems.GRAND_CRYSTAL.get()) {
-                manaPerItem = ServerConfig.Constants.grandCrystalMana;
+                manaPerItem = SyncedConfig.Constants.grandCrystalMana;
             }
 
             if (crystals.getItem().getCount() * manaPerItem < chargeDepleted) {
-                this.rechargeMana(centre.getItem(), crystals.getItem().getCount() * ServerConfig.Constants.manaPerCrystal);
+                this.rechargeMana(centre.getItem(), crystals.getItem().getCount() * SyncedConfig.Constants.manaPerCrystal);
                 crystals.getItem().shrink(crystals.getItem().getCount());
 
             } else {
                 this.setMana(centre.getItem(), this.getManaCapacity(centre.getItem()));
-                crystals.getItem().shrink((int) Math.ceil(((double) chargeDepleted) / ServerConfig.Constants.manaPerCrystal));
+                crystals.getItem().shrink((int) Math.ceil(((double) chargeDepleted) / SyncedConfig.Constants.manaPerCrystal));
             }
 
             changed = true;

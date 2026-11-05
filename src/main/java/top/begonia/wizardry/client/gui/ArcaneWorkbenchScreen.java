@@ -33,10 +33,10 @@ import top.begonia.wizardry.client.util.DrawingUtils;
 import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.client.gui.widget.SpellSortButton;
-import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.api.constants.ControlType;
 import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.constants.TierEnum;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.inventory.menu.ArcaneWorkbenchMenu;
 import top.begonia.wizardry.client.util.ISpellSortable;
 import top.begonia.wizardry.api.item.IManaStoringItem;
@@ -584,7 +584,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
         @Override
         protected boolean isVisible(@NonNull ItemStack stack) {
-            return stack.getItem() instanceof WandItem && !ServerConfig.legacyWandLevelling;
+            return stack.getItem() instanceof WandItem && !SyncedConfig.legacyWandLevelling;
         }
 
         @Override

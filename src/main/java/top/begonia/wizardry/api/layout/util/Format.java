@@ -16,7 +16,7 @@ import top.begonia.wizardry.api.layout.hybrid.CaptionImageElement;
 import top.begonia.wizardry.api.layout.hybrid.LineElement;
 import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.constants.TierEnum;
-import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -59,8 +59,8 @@ public final class Format {
     private static void initFormatTags() {
         addFormatTag("next_spell_key", WizardryKeyMappings.NEXT_SPELL.getKey().getDisplayName().getString());
         addFormatTag("previous_spell_key", WizardryKeyMappings.PREVIOUS_SPELL.getKey().getDisplayName().getString());
-        addFormatTag("example_charging_loss", "" + (ServerConfig.Constants.manaPerCrystal - 30));
-        addFormatTag("mana_per_crystal", "" + ServerConfig.Constants.manaPerCrystal);
+        addFormatTag("example_charging_loss", "" + (SyncedConfig.Constants.manaPerCrystal - 30));
+        addFormatTag("mana_per_crystal", "" + SyncedConfig.Constants.manaPerCrystal);
         addFormatTag("novice_max_charge", "" + TierEnum.NOVICE.getMaxCharge());
         addFormatTag("apprentice_max_charge", "" + TierEnum.APPRENTICE.getMaxCharge());
         addFormatTag("advanced_max_charge", "" + TierEnum.ADVANCED.getMaxCharge());

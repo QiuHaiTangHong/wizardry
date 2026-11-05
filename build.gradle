@@ -1,3 +1,5 @@
+import java.nio.charset.StandardCharsets;
+
 plugins {
     id 'java-library'
     id 'maven-publish'
@@ -6,11 +8,6 @@ plugins {
 }
 
 tasks.named('wrapper', Wrapper).configure {
-    // Define wrapper values here so as to not have to always do so when updating gradlew.properties.
-    // Switching this to Wrapper.DistributionType.ALL will download the full gradle sources that comes with
-    // documentation attached on cursor hover of gradle classes and methods. However, this comes with increased
-    // file size for Gradle. If you do switch this to ALL, run the Gradle wrapper task twice afterwards.
-    // (Verify by checking gradle/wrapper/gradle-wrapper.properties to see if distributionUrl now points to `-all`)
     distributionType = Wrapper.DistributionType.BIN
 }
 
@@ -29,23 +26,23 @@ neoForge {
     runs {
         client {
             client()
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.findProperty("mod_id").toString()
         }
 
         server {
             server()
             programArgument '--nogui'
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.findProperty("mod_id").toString()
         }
 
         gameTestServer {
             type = "gameTestServer"
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.findProperty("mod_id").toString()
         }
 
         data {
             clientData()
-            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+            programArguments.addAll '--mod', project.findProperty("mod_id").toString(), '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
 
         configureEach {
@@ -70,6 +67,7 @@ configurations {
 }
 
 repositories {
+    // Modrinth
     exclusiveContent {
         forRepository {
             maven {
@@ -82,10 +80,32 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
+
+    // JEI
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
 }
 
 dependencies {
-//    implementation "maven.modrinth:u6dRKJwZ:DoIPjtii" // JEI
+    // compile against the JEI API but do not include it at runtime
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+    // at runtime, use the full JEI jar for NeoForge
+    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+}
+
+static String toUTF8(Object property) {
+    return new String(
+            property.toString().getBytes(StandardCharsets.ISO_8859_1),
+            StandardCharsets.UTF_8
+    );
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
@@ -98,7 +118,8 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             mod_license            : mod_license,
             mod_version            : mod_version,
             mod_description        : mod_description,
-            mod_authors            : mod_authors
+            mod_authors            : toUTF8(mod_authors),
+            mod_credits            : toUTF8(mod_credits)
     ]
     inputs.properties replaceProperties
     expand replaceProperties
@@ -124,12 +145,12 @@ publishing {
 tasks.named('jar', Jar) {
     manifest {
         attributes([
-                'Specification-Title'   : project.mod_id,
+                'Specification-Title'   : project.findProperty("mod_id").toString(),
                 'Specification-Vendor'  : 'begonia',
                 'Specification-Version' : '1',
                 'Implementation-Title'  : project.name,
                 'Implementation-Version': project.version,
-                'Enable-Native-Access'  : project.mod_id
+                'Enable-Native-Access'  : project.findProperty("mod_id").toString()
         ])
     }
 }

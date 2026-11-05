@@ -19,13 +19,12 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.constants.WizardryBlockStateProperties;
+import top.begonia.wizardry.api.constants.BuiltBlockStateProperties;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.gui.LecternScreen;
 import top.begonia.wizardry.core.entity.block.LecternBlockEntity;
@@ -37,13 +36,13 @@ public class LecternBlock extends BaseEntityBlock {
 
     public LecternBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.@NonNull Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.HORIZONTAL_FACING);
-        builder.add(WizardryBlockStateProperties.WOOD_TYPE);
+        builder.add(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING);
+        builder.add(BuiltBlockStateProperties.WOOD_TYPE);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class LecternBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockState getStateForPlacement(@NonNull BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite());
+        return this.defaultBlockState().setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
@@ -76,15 +75,15 @@ public class LecternBlock extends BaseEntityBlock {
     @Override
     public @NonNull BlockState rotate(@NonNull BlockState state, @NonNull Rotation rotation){
         return state.setValue(
-                BlockStateProperties.HORIZONTAL_FACING,
-                rotation.rotate(state.getValue(BlockStateProperties.HORIZONTAL_FACING))
+                net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING,
+                rotation.rotate(state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING))
         );
     }
 
     @SuppressWarnings("deprecation")
     @Override
     protected @NonNull BlockState mirror(@NonNull BlockState state, @NonNull Mirror mirror) {
-        return state.rotate(mirror.getRotation(state.getValue(BlockStateProperties.HORIZONTAL_FACING)));
+        return state.rotate(mirror.getRotation(state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING)));
     }
 
     @Override

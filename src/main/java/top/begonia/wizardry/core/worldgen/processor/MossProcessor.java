@@ -15,20 +15,14 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.core.util.BlockUtils;
 
-/**
- * 来自流浪地球的小苔藓(MOSS (^_^))处理器
- *
- * @param mossiness
- * @param heightWeight
- */
-public record Processor550W(
+public record MossProcessor(
         float mossiness,
         float heightWeight
 ) implements StructureProcessor {
-    public static final MapCodec<Processor550W> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.FLOAT.fieldOf("mossiness").forGetter(Processor550W::mossiness),
-            Codec.FLOAT.fieldOf("height_weight").forGetter(Processor550W::heightWeight)
-    ).apply(instance, Processor550W::new));
+    public static final MapCodec<MossProcessor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Codec.FLOAT.fieldOf("mossiness").forGetter(MossProcessor::mossiness),
+            Codec.FLOAT.fieldOf("height_weight").forGetter(MossProcessor::heightWeight)
+    ).apply(instance, MossProcessor::new));
 
     @Override
     public @NonNull MapCodec<? extends StructureProcessor> codec() {

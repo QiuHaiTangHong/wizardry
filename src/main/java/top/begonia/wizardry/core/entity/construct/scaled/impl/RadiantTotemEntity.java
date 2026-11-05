@@ -10,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.ClientHelper;
-import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.entity.construct.scaled.ScaledConstructEntity;
@@ -120,7 +120,7 @@ public class RadiantTotemEntity extends ScaledConstructEntity {
         nearby.removeAll(nearbyAllies);
 
         int targetsRemaining = (int) (WizardrySpells.RADIANT_TOTEM.get().getBaseProperty(MAX_TARGETS)
-                + (int) ((this.getDamageMultiplier() - 1) / ServerConfig.Constants.potencyIncreasePerTier));
+                + (int) ((this.getDamageMultiplier() - 1) / SyncedConfig.Constants.potencyIncreasePerTier));
 
         while (!nearbyAllies.isEmpty() && targetsRemaining > 0) {
 

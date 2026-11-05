@@ -20,9 +20,9 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.item.IManaStoringItem;
 import top.begonia.wizardry.api.item.IWorkbenchItem;
-import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.constants.TierEnum;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.data.WandUpgradesData;
 import top.begonia.wizardry.core.item.*;
 import top.begonia.wizardry.core.registry.WizardryComponents;
@@ -575,12 +575,12 @@ public final class ItemStackHelper {
             int chargeDepleted = iManaStoringItem.getManaCapacity(centre.getItem()) - iManaStoringItem.getMana(centre.getItem());
             int manaPerItem = crystals.getItem().getItem() instanceof IManaStoringItem ?
                     ((IManaStoringItem) crystals.getItem().getItem()).getMana(crystals.getItem()) :
-                    crystals.getItem().getItem() instanceof MagicCrystalItem ? ServerConfig.Constants.manaPerCrystal : ServerConfig.Constants.manaPerShard;
+                    crystals.getItem().getItem() instanceof MagicCrystalItem ? SyncedConfig.Constants.manaPerCrystal : SyncedConfig.Constants.manaPerShard;
             if (crystals.getItem().getItem() == WizardryItems.CRYSTAL_SHARD.get()) {
-                manaPerItem = ServerConfig.Constants.manaPerShard;
+                manaPerItem = SyncedConfig.Constants.manaPerShard;
             }
             if (crystals.getItem().getItem() == WizardryItems.GRAND_CRYSTAL.get()) {
-                manaPerItem = ServerConfig.Constants.grandCrystalMana;
+                manaPerItem = SyncedConfig.Constants.grandCrystalMana;
             }
             if (crystals.getItem().getCount() * manaPerItem < chargeDepleted) {
                 iManaStoringItem.rechargeMana(centre.getItem(), crystals.getItem().getCount() * manaPerItem);

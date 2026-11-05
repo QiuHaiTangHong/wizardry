@@ -11,17 +11,17 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.StringRepresentable;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.core.config.CommonConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 
 import java.util.Random;
 import java.util.function.IntSupplier;
 
 public enum TierEnum implements StringRepresentable {
 
-    NOVICE(() -> CommonConfig.noviceMaxCharge, () -> CommonConfig.noviceUpgradeLimit, 12, Style.EMPTY.withColor(ChatFormatting.WHITE), "novice"),
-    APPRENTICE(() -> CommonConfig.apprenticeMaxCharge, () -> CommonConfig.apprenticeUpgradeLimit, 5, Style.EMPTY.withColor(ChatFormatting.AQUA), "apprentice"),
-    ADVANCED(() -> CommonConfig.advancedMaxCharge, () -> CommonConfig.advancedUpgradeLimit, 2, Style.EMPTY.withColor(ChatFormatting.DARK_BLUE), "advanced"),
-    MASTER(() -> CommonConfig.masterMaxCharge, () -> CommonConfig.masterUpgradeLimit, 1, Style.EMPTY.withColor(ChatFormatting.DARK_PURPLE), "master");
+    NOVICE(() -> SyncedConfig.noviceMaxCharge, () -> SyncedConfig.noviceUpgradeLimit, 12, Style.EMPTY.withColor(ChatFormatting.WHITE), "novice"),
+    APPRENTICE(() -> SyncedConfig.apprenticeMaxCharge, () -> SyncedConfig.apprenticeUpgradeLimit, 5, Style.EMPTY.withColor(ChatFormatting.AQUA), "apprentice"),
+    ADVANCED(() -> SyncedConfig.advancedMaxCharge, () -> SyncedConfig.advancedUpgradeLimit, 2, Style.EMPTY.withColor(ChatFormatting.DARK_BLUE), "advanced"),
+    MASTER(() -> SyncedConfig.masterMaxCharge, () -> SyncedConfig.masterUpgradeLimit, 1, Style.EMPTY.withColor(ChatFormatting.DARK_PURPLE), "master");
 
     public final IntSupplier maxChargeSupplier;
     public final IntSupplier upgradeLimitSupplier;
@@ -106,7 +106,7 @@ public enum TierEnum implements StringRepresentable {
     }
 
     public int getProgression() {
-        return CommonConfig.progressionRequirements[this.ordinal() - 1];
+        return SyncedConfig.progressionRequirements[this.ordinal() - 1];
     }
 
     public static TierEnum getWeightedRandomTier(Random random, TierEnum @NonNull ... tiers) {

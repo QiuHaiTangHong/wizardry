@@ -11,8 +11,7 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.network.ClientPayloadHandler;
 import top.begonia.wizardry.core.config.ClientConfig;
-import top.begonia.wizardry.core.config.CommonConfig;
-import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
 import top.begonia.wizardry.core.network.ServerPayloadHandler;
 import top.begonia.wizardry.core.network.data.*;
@@ -23,8 +22,7 @@ public class WizardryCore {
     public WizardryCore(@NonNull IEventBus modEventBus, @NonNull ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerPayload);
-        modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
-        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.SYNCED, SyncedConfig.SPEC);
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         WizardrySounds.register(modEventBus);
         WizardryBlocks.register(modEventBus);

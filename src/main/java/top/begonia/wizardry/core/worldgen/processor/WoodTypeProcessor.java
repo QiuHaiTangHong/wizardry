@@ -12,7 +12,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.constants.WizardryBlockStateProperties;
+import top.begonia.wizardry.api.constants.BuiltBlockStateProperties;
 import top.begonia.wizardry.api.constants.WoodTypeEnum;
 import top.begonia.wizardry.core.registry.WizardryBlocks;
 import top.begonia.wizardry.core.util.BlockUtils;
@@ -108,7 +108,7 @@ public record WoodTypeProcessor() implements StructureProcessor {
                             Wizardry.MODID,
                             "bookshelf"
                     ),
-                    (_, blockState) -> BlockUtils.copyPropertiesIf(state, blockState, property -> !property.equals(WizardryBlockStateProperties.WOOD_TYPE))
+                    (_, blockState) -> BlockUtils.copyPropertiesIf(state, blockState, property -> !property.equals(BuiltBlockStateProperties.WOOD_TYPE))
             );
             return new StructureTemplate.StructureBlockInfo(rawPos, finalState, rawNbt);
         } else if (state.is(WizardryBlocks.LECTERN)) {
@@ -118,7 +118,7 @@ public record WoodTypeProcessor() implements StructureProcessor {
                             Wizardry.MODID,
                             "lectern"
                     ),
-                    (_, blockState) -> BlockUtils.copyPropertiesIf(state, blockState, property -> !property.equals(WizardryBlockStateProperties.WOOD_TYPE))
+                    (_, blockState) -> BlockUtils.copyPropertiesIf(state, blockState, property -> !property.equals(BuiltBlockStateProperties.WOOD_TYPE))
             );
             return new StructureTemplate.StructureBlockInfo(rawPos, finalState, rawNbt);
         }

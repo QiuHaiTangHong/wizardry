@@ -11,11 +11,10 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.constants.WizardryBlockStateProperties;
+import top.begonia.wizardry.api.constants.BuiltBlockStateProperties;
 import top.begonia.wizardry.core.entity.block.BookshelfBlockEntity;
 import top.begonia.wizardry.core.registry.WizardryBlockEntities;
 
@@ -26,27 +25,27 @@ public class BookshelfBlock extends BaseEntityBlock {
 
     @Override
     public BlockState getStateForPlacement(@NonNull BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(BlockStateProperties.FACING, context.getHorizontalDirection().getOpposite());
+        return this.defaultBlockState().setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
     public @NonNull BlockState rotate(@NonNull BlockState state, @NonNull Rotation rotation) {
         return state.setValue(
-                BlockStateProperties.FACING,
-                rotation.rotate(state.getValue(BlockStateProperties.FACING))
+                net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING,
+                rotation.rotate(state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING))
         );
     }
 
     @SuppressWarnings("deprecation")
     @Override
     protected @NonNull BlockState mirror(@NonNull BlockState state, @NonNull Mirror mirror) {
-        return state.rotate(mirror.getRotation(state.getValue(BlockStateProperties.FACING)));
+        return state.rotate(mirror.getRotation(state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING)));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.@NonNull Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.FACING)
-                .add(WizardryBlockStateProperties.WOOD_TYPE);
+        builder.add(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING)
+                .add(BuiltBlockStateProperties.WOOD_TYPE);
     }
 
     @Override

@@ -25,7 +25,7 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
 import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.ClientHelper;
-import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.entity.construct.scaled.ScaledConstructEntity;
@@ -166,7 +166,7 @@ public class TornadoEntity extends ScaledConstructEntity {
             for (LivingEntity target : targets) {
 
                 if (target instanceof Player
-                        && ((this.getOwner() instanceof Player && !ServerConfig.playersMoveEachOther)
+                        && ((this.getOwner() instanceof Player && !SyncedConfig.playersMoveEachOther)
                         || ArtefactItem.isArtefactActive((Player) target, WizardryItems.AMULET_ANCHORING.get()))
                 ) {
                     continue;

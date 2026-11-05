@@ -1,5 +1,6 @@
 package top.begonia.wizardry.core.registry;
 
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -119,6 +120,15 @@ public final class WizardryBlocks {
             () -> BlockBehaviour.Properties
                     .ofFullCopy(Blocks.ENCHANTING_TABLE)
                     .noOcclusion()
+                    .lightLevel(_ -> 0)
+    );
+
+    public static final DeferredBlock<Block> DELAYED_OPERATION_BLOCK = BLOCKS.registerBlock(
+      "delayed_operation_block",
+            Block::new,
+            () -> BlockBehaviour.Properties
+                    .ofFullCopy(Blocks.STONE)
+                    .noCollision()
                     .lightLevel(_ -> 0)
     );
 

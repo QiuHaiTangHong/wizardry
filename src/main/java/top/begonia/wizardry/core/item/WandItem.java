@@ -20,8 +20,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.util.GlyphGenerator;
-import top.begonia.wizardry.core.config.CommonConfig;
-import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.constants.EnabledEnum;
 import top.begonia.wizardry.api.constants.TierEnum;
@@ -48,7 +47,7 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
     /**
      * The number of spell slots a wand has with no attunement upgrades applied.
      */
-    public static IntSupplier BASE_SPELL_SLOTS = () -> ServerConfig.baseSpellSlots;
+    public static IntSupplier BASE_SPELL_SLOTS = () -> SyncedConfig.baseSpellSlots;
     /**
      * The number of ticks between each time a continuous spell is added to the player's recently-cast spells.
      */
@@ -91,11 +90,11 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
         ElementEnum element = ItemStackHelper.getElement(itemStack);
         TierEnum tier = ItemStackHelper.getTier(itemStack);
         builder.accept(Component.translatable("item." + Wizardry.MODID + ".wand.buff",
-                (int) ((tier.level + 1) * ServerConfig.Constants.potencyIncreasePerTier * 100 + 0.5f), element.getDisplayName()).withStyle(ChatFormatting.DARK_GRAY));
+                (int) ((tier.level + 1) * SyncedConfig.Constants.potencyIncreasePerTier * 100 + 0.5f), element.getDisplayName()).withStyle(ChatFormatting.DARK_GRAY));
 
         AbstractSpell spell = ItemStackHelper.getCurrentSpell(itemStack);
 
-        boolean discovered = !CommonConfig.discoveryMode || player.isCreative() || player.getData(WizardryAttachment.WIZARD_PLAYER_DATA).hasSpellBeenDiscovered(spell);
+        boolean discovered = !SyncedConfig.discoveryMode || player.isCreative() || player.getData(WizardryAttachment.WIZARD_PLAYER_DATA).hasSpellBeenDiscovered(spell);
         builder.accept(TextHelper.componentWithComponent("item." + Wizardry.MODID + ".wand.spell", discovered ? spell.getDisplayNameWithFormatting() : GlyphGenerator.getGlyphName(spell).withStyle(ChatFormatting.BLUE)));
 
         //当且仅当Debug时启用
@@ -112,12 +111,12 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
             isHeld = ItemStack.matches(livingEntity.getItemInHand(InteractionHand.MAIN_HAND), itemStack) ||
                     ItemStack.matches(livingEntity.getItemInHand(InteractionHand.OFF_HAND), itemStack);
         }
-        if (!ServerConfig.wandsMustBeHeldToDecrementCooldown || isHeld) {
+        if (!SyncedConfig.wandsMustBeHeldToDecrementCooldown || isHeld) {
             ItemStackHelper.decrementCooldowns(itemStack);
         }
-        if (!this.isManaFull(itemStack) && level.getGameTime() % ServerConfig.Constants.condenserTickInterval == 0) {
+        if (!this.isManaFull(itemStack) && level.getGameTime() % SyncedConfig.Constants.condenserTickInterval == 0) {
             int baseAmount = ItemStackHelper.getUpgradeLevel(itemStack, WizardryItems.CONDENSER_UPGRADE.get());
-            int amount = (int) (baseAmount * CommonConfig.condenserAmountMultiplier);
+            int amount = (int) (baseAmount * SyncedConfig.condenserAmountMultiplier);
             this.rechargeMana(itemStack, amount);
         }
     }
@@ -239,11 +238,11 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
             TierEnum nextTier = ItemStackHelper.getTier(upgrade);
             TierEnum wandTier = ItemStackHelper.getTier(wand);
             ElementEnum wandElement = ItemStackHelper.getElement(wand);
-            if ((player == null || player.isCreative() || ServerConfig.legacyWandLevelling
+            if ((player == null || player.isCreative() || SyncedConfig.legacyWandLevelling
                     || ItemStackHelper.getProgression(wand) >= nextTier.getProgression())
                     && nextTier == wandTier.next() && wandTier != TierEnum.MASTER
             ) {
-                if (ServerConfig.legacyWandLevelling) {
+                if (SyncedConfig.legacyWandLevelling) {
                     ItemStackHelper.setProgression(wand, 0);
                 } else {
                     ItemStackHelper.setProgression(wand, nextTier.getProgression() - ItemStackHelper.getProgression(wand));
@@ -264,10 +263,10 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
             ElementEnum wandElement = ItemStackHelper.getElement(wand);
             int maxUpgrades = wandTier.getUpgradeLimit();
             if (wandElement == ElementEnum.DEFAULT) {
-                maxUpgrades += ServerConfig.Constants.nonElementalUpgradeBonus;
+                maxUpgrades += SyncedConfig.Constants.nonElementalUpgradeBonus;
             }
             if (ItemStackHelper.getTotalUpgrades(wand) < maxUpgrades
-                    && ItemStackHelper.getUpgradeLevel(wand, specialUpgrade) < ServerConfig.Constants.upgradeStackLimit) {
+                    && ItemStackHelper.getUpgradeLevel(wand, specialUpgrade) < SyncedConfig.Constants.upgradeStackLimit) {
                 int prevMana = this.getMana(wand);
                 ItemStackHelper.applyUpgrade(wand, specialUpgrade);
                 if (specialUpgrade == WizardryItems.STORAGE_UPGRADE.get()) {
@@ -319,12 +318,12 @@ public class WandItem extends Item implements IWorkbenchItem, ISpellCastingItem,
             if (itemStack != ItemStack.EMPTY && itemStack.getItem() instanceof SpellBookItem spellBookItem) {
                 AbstractSpell spell = spellBookItem.getCurrentSpell(itemStack);
                 if (!(spell.getTier().level > tier.level) && spells[i] != spell && spell.isEnabled(EnabledEnum.WANDS)) {
-                    if (ServerConfig.preventBindingSameSpellTwiceToWands && Arrays.stream(spells).anyMatch(s -> s == spell)) {
+                    if (SyncedConfig.preventBindingSameSpellTwiceToWands && Arrays.stream(spells).anyMatch(s -> s == spell)) {
                         continue;
                     }
                     spells[i] = spell;
                     changed = true;
-                    if (ServerConfig.singleUseSpellBooks) {
+                    if (SyncedConfig.singleUseSpellBooks) {
                         spellBooks[i].getItem().shrink(1);
                     }
                 }

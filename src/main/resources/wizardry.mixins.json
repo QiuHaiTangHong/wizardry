@@ -10,6 +10,5 @@
     "requireAnnotations": true
   },
   "client": [
-    "GuiGraphicsExtractorMixin"
   ]
 }

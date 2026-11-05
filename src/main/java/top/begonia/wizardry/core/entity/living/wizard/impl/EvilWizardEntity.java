@@ -16,8 +16,8 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.api.entity.hybrid.ISummonedCreature;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.entity.living.wizard.AbstractWizardEntity;
 import top.begonia.wizardry.core.registry.WizardrySounds;
 import top.begonia.wizardry.core.util.AllyDesignationSystem;
@@ -54,10 +54,10 @@ public class EvilWizardEntity extends AbstractWizardEntity {
                 return entity instanceof Player
                         || (entity instanceof ISummonedCreature
                         || entity instanceof WizardEntity
-                        || ServerConfig.summonedCreatureTargetsWhitelist
+                        || SyncedConfig.summonedCreatureTargetsWhitelist
                         .contains(EntityUtils.getIdentifier(entity))
                 )
-                        && !ServerConfig.summonedCreatureTargetsBlacklist
+                        && !SyncedConfig.summonedCreatureTargetsBlacklist
                         .contains(EntityUtils.getIdentifier(entity));
             }
             return false;

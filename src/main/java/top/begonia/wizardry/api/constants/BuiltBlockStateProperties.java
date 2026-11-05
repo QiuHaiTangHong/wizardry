@@ -2,7 +2,7 @@ package top.begonia.wizardry.api.constants;
 
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 
-public final class WizardryBlockStateProperties {
+public final class BuiltBlockStateProperties {
     public static final EnumProperty<WoodTypeEnum> WOOD_TYPE = EnumProperty.create(
             "wood_type",
             WoodTypeEnum.class

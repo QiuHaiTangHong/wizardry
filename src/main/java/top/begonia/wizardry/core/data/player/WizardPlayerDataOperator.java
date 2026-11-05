@@ -16,8 +16,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.event.SpellCastEvent;
-import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.api.constants.TierEnum;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.data.packet.CastContinuousSpellPacket;
 import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.core.enchantment.Imbuement;
@@ -96,7 +96,7 @@ public class WizardPlayerDataOperator {
 
     public int countRecentCasts(AbstractSpell spell) {
         long currentTime = this.player.level().getGameTime();
-        return (int) this.data.recentSpells().stream().filter(entry -> entry.spell() == spell && (currentTime - entry.timestamp()) < ServerConfig.recentSpellExpiryTime).count();
+        return (int) this.data.recentSpells().stream().filter(entry -> entry.spell() == spell && (currentTime - entry.timestamp()) < SyncedConfig.recentSpellExpiryTime).count();
     }
 
     public void setImbuementDuration(Holder<Enchantment> enchantmentHolder, int duration) {
@@ -208,7 +208,7 @@ public class WizardPlayerDataOperator {
         this.updateContinuousSpellCasting();
         if (this.player.tickCount % 60 == 0) {
             long currentTime = this.player.level().getGameTime();
-            this.data.recentSpells().removeIf(entry -> (currentTime - entry.timestamp()) >= ServerConfig.recentSpellExpiryTime);
+            this.data.recentSpells().removeIf(entry -> (currentTime - entry.timestamp()) >= SyncedConfig.recentSpellExpiryTime);
         }
     }
 

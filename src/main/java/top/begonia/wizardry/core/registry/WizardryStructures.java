@@ -7,9 +7,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.worldgen.pool.DelayedOperationPoolElement;
 import top.begonia.wizardry.core.worldgen.processor.*;
 
 public final class WizardryStructures {
@@ -54,20 +52,14 @@ public final class WizardryStructures {
             () -> BookshelfMarkerProcessor.CODEC
     );
 
-    public static final DeferredHolder<MapCodec<? extends StructureProcessor>, MapCodec<Processor550W>> MOSSIFIER = PROCESSORS.register(
-            "550w",
-            () -> Processor550W.CODEC
+    public static final DeferredHolder<MapCodec<? extends StructureProcessor>, MapCodec<MossProcessor>> MOSS = PROCESSORS.register(
+            "moss",
+            () -> MossProcessor.CODEC
     );
 
-    // StructurePoolElementType
-    public static final DeferredHolder<StructurePoolElementType<?>, StructurePoolElementType<DelayedOperationPoolElement>> DELAYED_OPERATION = POOL_ELEMENTS.register(
-            "delayed_operation",
-            () -> new StructurePoolElementType<>() {
-                @Override
-                public @NonNull MapCodec<DelayedOperationPoolElement> codec() {
-                    return DelayedOperationPoolElement.CODEC;
-                }
-            }
+    public static final DeferredHolder<MapCodec<? extends StructureProcessor>, MapCodec<WizardSpawnProcessor>> WIZARD_SPAWN = PROCESSORS.register(
+            "wizard_spawn",
+            () -> WizardSpawnProcessor.CODEC
     );
 
     private WizardryStructures() {

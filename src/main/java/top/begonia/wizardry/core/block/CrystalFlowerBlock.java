@@ -17,7 +17,7 @@ import net.neoforged.neoforge.event.entity.player.BonemealEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.WizardryClient;
-import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.registry.WizardryBlocks;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 
@@ -57,7 +57,7 @@ public class CrystalFlowerBlock extends BushBlock {
     public static void onBonemealEvent(@NonNull BonemealEvent event) {
         Level level = event.getLevel();
         BlockState clickedState = event.getState();
-        if (ServerConfig.bonemealGrowsCrystalFlowers && clickedState.is(Blocks.GRASS_BLOCK)) {
+        if (SyncedConfig.bonemealGrowsCrystalFlowers && clickedState.is(Blocks.GRASS_BLOCK)) {
             RandomSource random = level.getRandom();
             if (random.nextFloat() >= 0.45F) {
                 return;

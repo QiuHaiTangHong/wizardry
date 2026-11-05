@@ -12,7 +12,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.api.constants.ElementEnum;
-import top.begonia.wizardry.api.constants.WizardryBlockStateProperties;
+import top.begonia.wizardry.api.constants.BuiltBlockStateProperties;
 import top.begonia.wizardry.core.registry.WizardryBlocks;
 import top.begonia.wizardry.core.util.BlockUtils;
 
@@ -43,8 +43,8 @@ public record ShrineProcessor(
         if (rawState.is(WizardryBlocks.RUNESTONE)) {
             BlockState randomElementRunestone = WizardryBlocks.RUNESTONE.get()
                     .defaultBlockState()
-                    .trySetValue(WizardryBlockStateProperties.ELEMENT, element);
-            BlockUtils.copyPropertiesIf(rawState, randomElementRunestone, property -> property != WizardryBlockStateProperties.ELEMENT);
+                    .trySetValue(BuiltBlockStateProperties.ELEMENT, element);
+            BlockUtils.copyPropertiesIf(rawState, randomElementRunestone, property -> property != BuiltBlockStateProperties.ELEMENT);
             return new StructureTemplate.StructureBlockInfo(pos, randomElementRunestone, nbt);
         }
         return processedBlockInfo;

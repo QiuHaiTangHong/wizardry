@@ -29,10 +29,10 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.config.ServerConfig;
 import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.constants.EnabledEnum;
 import top.begonia.wizardry.api.constants.TierEnum;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.constant.definition.DamageImmune;
@@ -178,9 +178,9 @@ public final class EntityUtils {
 
     public static boolean canDamageBlocks(@Nullable Entity entity, ServerLevel serverLevel) {
         if (entity == null) {
-            return ServerConfig.dispenserBlockDamage;
+            return SyncedConfig.dispenserBlockDamage;
         } else if (entity instanceof Player player) {
-            return player.mayBuild() && ServerConfig.playerBlockDamage;
+            return player.mayBuild() && SyncedConfig.playerBlockDamage;
         }
         return EventHooks.canEntityGrief(serverLevel, entity);
     }

@@ -10,7 +10,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.core.config.ServerConfig;
+import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.effect.MagicMobEffect;
 import top.begonia.wizardry.core.entity.construct.DecayEntity;
 import top.begonia.wizardry.core.registry.WizardryMobEffects;
@@ -45,7 +45,7 @@ public class DecayMobEffect extends MagicMobEffect {
             return;
         }
         ServerLevel level = (ServerLevel) target.level();
-        if (target.tickCount % ServerConfig.Constants.DECAY_SPREAD_INTERVAL == 0 && !target.level().isClientSide()
+        if (target.tickCount % SyncedConfig.Constants.DECAY_SPREAD_INTERVAL == 0 && !target.level().isClientSide()
                 && target.hasEffect(WizardryMobEffects.DECAY) && target.onGround()) {
             List<DecayEntity> entities = level.getEntitiesOfClass(DecayEntity.class, target.getBoundingBox());
             if (!entities.isEmpty()) {
