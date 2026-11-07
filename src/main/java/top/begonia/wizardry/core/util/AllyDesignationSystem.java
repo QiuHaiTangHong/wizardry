@@ -1,7 +1,10 @@
 package top.begonia.wizardry.core.util;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.FakePlayer;
@@ -14,44 +17,7 @@ import top.begonia.wizardry.core.registry.WizardryMobEffects;
 public final class AllyDesignationSystem {
     private AllyDesignationSystem() {
     }
-
-    public enum FriendlyFire {
-        ALL("All", false, false),
-        ONLY_PLAYERS("Only players", false, true),
-        ONLY_OWNED("Only summoned/tamed creatures", true, false),
-        NONE("None", true, true);
-
-        public static final String[] names;
-
-        static {
-            names = new String[values().length];
-            for (FriendlyFire setting : values()) {
-                names[setting.ordinal()] = setting.name;
-            }
-        }
-
-        public final String name;
-        public final boolean blockPlayers;
-        public final boolean blockOwned;
-
-        FriendlyFire(String name, boolean blockPlayers, boolean blockOwned) {
-            this.name = name;
-            this.blockPlayers = blockPlayers;
-            this.blockOwned = blockOwned;
-        }
-
-        public static FriendlyFire fromName(String name) {
-
-            for (FriendlyFire setting : values()) {
-                if (setting.name.equalsIgnoreCase(name)) return setting;
-            }
-
-            Wizardry.LOGGER.info("Invalid string for the friendly fire setting. Using default (all) instead.");
-            return ALL;
-        }
-
-    }
-
+    
     public static boolean isValidTarget(Entity attacker, Entity target) {
         if (attacker instanceof OwnableEntity ownable) {
             if (!isValidTarget(ownable.getOwner(), target)) {

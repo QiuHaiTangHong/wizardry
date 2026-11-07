@@ -9,7 +9,6 @@ import net.minecraft.util.RandomSource;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.client.data.definition.hub.SpellHubConfigData;
-import top.begonia.wizardry.api.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.client.util.DrawingUtils;
 
 import java.util.Optional;

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.data.IResultData;
-import top.begonia.wizardry.api.data.manager.WizardryClientDataManager;
+import top.begonia.wizardry.api.data.manager.ClientDataManager;
 import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
 import top.begonia.wizardry.api.particle.manager.WizardryParticleManager;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
@@ -21,7 +21,7 @@ import java.util.Optional;
 
 public class WizardryClientApi {
     private static final WizardryClientApi INSTANCE = new WizardryClientApi();
-    private final WizardryClientDataManager dataManager = new WizardryClientDataManager();
+    private final ClientDataManager dataManager = new ClientDataManager();
     private final WizardryParticleManager particleManager = new WizardryParticleManager();
 
     private WizardryClientApi() {
@@ -42,7 +42,7 @@ public class WizardryClientApi {
         );
     }
 
-    public WizardryClientDataManager dataManager() {
+    public ClientDataManager dataManager() {
         return this.dataManager;
     }
 

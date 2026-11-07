@@ -8,13 +8,13 @@ import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.data.IResultData;
-import top.begonia.wizardry.api.data.manager.WizardryServerDataManager;
+import top.begonia.wizardry.api.data.manager.ServerDataManager;
 
 import java.util.Optional;
 
 public class WizardryApi {
     private static final WizardryApi INSTANCE = new WizardryApi();
-    private final WizardryServerDataManager dataManager = new WizardryServerDataManager();
+    private final ServerDataManager dataManager = new ServerDataManager();
 
     private WizardryApi() {
     }
@@ -34,7 +34,7 @@ public class WizardryApi {
         );
     }
 
-    public WizardryServerDataManager dataManager() {
+    public ServerDataManager dataManager() {
         return this.dataManager;
     }
 

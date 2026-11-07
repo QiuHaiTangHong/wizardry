@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-public abstract class AbstractWizardryDataManager extends ContextAwareReloadListener implements PreparableReloadListener {
+public abstract class AbstractDataManager extends ContextAwareReloadListener implements PreparableReloadListener {
     protected Map<Identifier, IDataParser<?, ? extends IParserContext, ? extends IResultData>> parserRegistry;
     protected Map<Class<? extends IResultData>, Map<Identifier, ? extends IResultData>> storageSnapshot;
     protected final static Codec<JsonElement> CODEC = Codec.PASSTHROUGH.xmap(
@@ -39,7 +39,7 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
     );
     protected final FileToIdConverter lister;
 
-    public AbstractWizardryDataManager(
+    public AbstractDataManager(
             FileToIdConverter path
     ) {
         this.lister = path;
@@ -206,7 +206,9 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
             @NonNull ResourceManager resourceManager,
             @NonNull ProfilerFiller profilerFiller
     ) {
+        profilerFiller.push("parserItem");
         P rawData = parser.parserItem(element);
+        profilerFiller.pop();
         return parser.transformItemToResult(identifier, rawData, context, currentReload, resourceManager);
     }
 }

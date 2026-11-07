@@ -5,7 +5,6 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
 import top.begonia.wizardry.client.data.definition.hub.SpellHubConfigData;
-import top.begonia.wizardry.api.data.manager.WizardryClientDataManager;
 
 import java.util.Optional;
 import java.util.function.Supplier;

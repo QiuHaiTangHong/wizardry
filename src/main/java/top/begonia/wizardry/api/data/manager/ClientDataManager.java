@@ -6,7 +6,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.neoforged.fml.ModLoader;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.data.AbstractWizardryDataManager;
+import top.begonia.wizardry.api.data.AbstractDataManager;
 import top.begonia.wizardry.api.data.IDataParser;
 import top.begonia.wizardry.api.data.IParserContext;
 import top.begonia.wizardry.api.data.IResultData;
@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class WizardryClientDataManager extends AbstractWizardryDataManager {
-    public WizardryClientDataManager() {
+public class ClientDataManager extends AbstractDataManager {
+    public ClientDataManager() {
         super(FileToIdConverter.json("custom"));
     }
 
