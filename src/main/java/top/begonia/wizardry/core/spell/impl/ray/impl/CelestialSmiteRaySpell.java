@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
@@ -47,7 +47,7 @@ public class CelestialSmiteRaySpell extends AbstractRaySpell {
                 target.setRemainingFireTicks((int) this.getBaseProperty(BURN_DURATION));
             }
         } else if (level instanceof ClientLevel clientLevel) {
-            WizardryClient.particleManager.getParticle(
+            WizardryClientApi.getInstance().getParticle(
                     clientLevel,
                     WizardryParticles.BEAM.get(),
                     hit.x, level.getHeight(), hit.z
@@ -58,7 +58,7 @@ public class CelestialSmiteRaySpell extends AbstractRaySpell {
                     .spawn()
             );
 
-            WizardryClient.particleManager.getParticle(
+            WizardryClientApi.getInstance().getParticle(
                     clientLevel,
                     WizardryParticles.SPHERE.get(),
                     hit.x, hit.y, hit.z
@@ -68,7 +68,7 @@ public class CelestialSmiteRaySpell extends AbstractRaySpell {
             );
             if (side == Direction.UP) {
                 Vec3 vec = hit.add(new Vec3(side.getUnitVec3f()).scale(GeometryUtils.ANTI_Z_FIGHTING_OFFSET));
-                WizardryClient.particleManager.getParticle(
+                WizardryClientApi.getInstance().getParticle(
                         clientLevel,
                         WizardryParticles.SCORCH.get(),
                         vec.x, vec.y, vec.z

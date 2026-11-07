@@ -24,8 +24,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.api.constants.BuiltBlockStateProperties;
-import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.gui.LecternScreen;
 import top.begonia.wizardry.core.entity.block.LecternBlockEntity;
 import top.begonia.wizardry.core.registry.WizardryBlockEntities;
@@ -100,7 +100,7 @@ public class LecternBlock extends BaseEntityBlock {
         );
 
         if (entityplayer != null && level instanceof ClientLevel clientLevel) {
-            WizardryClient.particleManager.getParticle(
+            WizardryClientApi.getInstance().getParticle(
                     clientLevel,
                     WizardryParticles.DUST.get(),
                     pos.getX() + random.nextFloat(), pos.getY() + 1, pos.getZ() + random.nextFloat()

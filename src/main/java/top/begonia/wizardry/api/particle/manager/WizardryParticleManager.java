@@ -1,22 +1,26 @@
 package top.begonia.wizardry.api.particle.manager;
 
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.fml.ModLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.WizardryClientApi;
+import top.begonia.wizardry.api.event.data.RegisterParticleEvent;
 import top.begonia.wizardry.api.particle.CompositeParticle;
 import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
 import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
 import top.begonia.wizardry.api.particle.type.ParticleTypeExtension;
-import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -35,11 +39,12 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
     public WizardryParticleManager() {
     }
 
-    /**
-     * 注入 Provider 映射表
-     */
-    public void updateProvider(Map<ParticleTypeExtension<?>, WizardryParticleProvider<? extends IParticleOptionsExtension>> providerRegistry) {
-        this.providerRegistry = providerRegistry;
+    protected void recollect() {
+        if (this.providerRegistry == null || this.providerRegistry.isEmpty()) {
+            Map<ParticleTypeExtension<?>, WizardryParticleProvider<? extends IParticleOptionsExtension>> result = new HashMap<>();
+            ModLoader.postEvent(new RegisterParticleEvent(result));
+            this.providerRegistry = ImmutableMap.copyOf(result);
+        }
     }
 
     @NotNull
@@ -76,6 +81,7 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
             double x, double y, double z
     ) {
         if (options.getType() instanceof ParticleTypeExtension<?> typeExtension) {
+            this.recollect();
             WizardryParticleProvider<?> provider = this.providerRegistry.get(typeExtension);
             if (provider != null) {
                 return dispatchCreate(provider, clientLevel, options, x, y, z);
@@ -152,7 +158,9 @@ public class WizardryParticleManager implements ParticleResourceAccessor {
     @Override
     @Nullable
     public MutableDoubleSpriteSet getSpriteSet(@NonNull ParticleTypeExtension<?> type) {
-        Map<Identifier, MutableDoubleSpriteSet> spriteSetMap = WizardryClientDataManager.getInstance().getAllDataByType(MutableDoubleSpriteSet.class);
+        Map<Identifier, MutableDoubleSpriteSet> spriteSetMap = WizardryClientApi.getInstance()
+                .dataManager()
+                .getAllDataByType(MutableDoubleSpriteSet.class);
         return spriteSetMap.get(type.identifier());
     }
 }

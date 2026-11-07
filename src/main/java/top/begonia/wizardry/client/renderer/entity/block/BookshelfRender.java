@@ -24,9 +24,9 @@ import org.joml.Matrix4f;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.client.data.definition.bookshelf.BookshelfBookSettings;
 import top.begonia.wizardry.client.data.definition.model.OnlyModelQuads;
-import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.client.renderer.entity.state.block.BookshelfRenderState;
 import top.begonia.wizardry.core.entity.block.BookshelfBlockEntity;
 
@@ -49,7 +49,7 @@ public class BookshelfRender implements BlockEntityRenderer<BookshelfBlockEntity
         state.clean();
         state.blockPos = blockEntity.getBlockPos();
         state.blockState = blockEntity.getBlockState();
-        BookshelfBookSettings settings = WizardryClientDataManager.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "bookshelf_book_settings"), BookshelfBookSettings.class).orElse(null);
+        BookshelfBookSettings settings = WizardryClientApi.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "bookshelf_book_settings"), BookshelfBookSettings.class).orElse(null);
         BlockState blockState = blockEntity.getBlockState();
         Direction facing = Direction.NORTH;
         if (blockState.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
@@ -62,7 +62,7 @@ public class BookshelfRender implements BlockEntityRenderer<BookshelfBlockEntity
             ItemStack itemStack = blockEntity.getItem(i);
             if (!itemStack.isEmpty()) {
                 state.bindTextureInSlot(itemStack, i, settings);
-                OnlyModelQuads onlyModelQuads = WizardryClientDataManager.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "books" + i), OnlyModelQuads.class).orElse(null);
+                OnlyModelQuads onlyModelQuads = WizardryClientApi.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "books" + i), OnlyModelQuads.class).orElse(null);
                 state.bindBlockStateModelPartInSlot(onlyModelQuads, i);
             }
         }

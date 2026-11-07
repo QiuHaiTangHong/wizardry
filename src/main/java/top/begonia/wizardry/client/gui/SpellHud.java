@@ -18,13 +18,13 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.joml.Matrix3x2fStack;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.WizardryClientApi;
+import top.begonia.wizardry.api.item.ISpellCastingItem;
 import top.begonia.wizardry.client.data.definition.hub.SpellHubDescriptionData;
-import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.client.gui.widget.Skin;
 import top.begonia.wizardry.client.util.DrawingUtils;
 import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.core.config.ClientConfig;
-import top.begonia.wizardry.api.item.ISpellCastingItem;
 import top.begonia.wizardry.core.registry.WizardryAttachment;
 import top.begonia.wizardry.core.registry.WizardryMobEffects;
 import top.begonia.wizardry.core.registry.WizardrySpells;
@@ -252,7 +252,7 @@ public class SpellHud {
     @Nullable
     public static Skin getSkin(String key) {
         if (skins.isEmpty()) {
-            Map<Identifier, SpellHubDescriptionData> spellHudDesc = WizardryClientDataManager.getInstance().getAllDataByType(SpellHubDescriptionData.class);
+            Map<Identifier, SpellHubDescriptionData> spellHudDesc = WizardryClientApi.getInstance().getAllDataByType(SpellHubDescriptionData.class);
             spellHudDesc.forEach((_, spellHubDescriptionData) ->
                     spellHubDescriptionData.item().forEach((name, value) ->
                             skins.put(name, new Skin(value.texture(), value.metadata()))

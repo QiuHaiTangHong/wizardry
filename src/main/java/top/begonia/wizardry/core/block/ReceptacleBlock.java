@@ -25,8 +25,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.api.constants.ElementEnum;
-import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.core.entity.block.ReceptacleBlockEntity;
 import top.begonia.wizardry.core.item.SpectralDustItem;
@@ -144,7 +144,7 @@ public class ReceptacleBlock extends BaseEntityBlock {
                 }
                 int[] colours = PARTICLE_COLOURS.get(element);
                 if (level instanceof ClientLevel clientLevel) {
-                    WizardryClient.particleManager.getParticle(
+                    WizardryClientApi.getInstance().getParticle(
                             clientLevel,
                             WizardryParticles.FLASH.get(),
                             centre.x, centre.y, centre.z
@@ -159,7 +159,7 @@ public class ReceptacleBlock extends BaseEntityBlock {
                         double x = r * (rand.nextDouble() * 2 - 1);
                         double y = r * (rand.nextDouble() * 2 - 1);
                         double z = r * (rand.nextDouble() * 2 - 1);
-                        WizardryClient.particleManager.getParticle(
+                        WizardryClientApi.getInstance().getParticle(
                                 clientLevel,
                                 WizardryParticles.DUST.get(),
                                 centre.x + x, centre.y + y, centre.z + z

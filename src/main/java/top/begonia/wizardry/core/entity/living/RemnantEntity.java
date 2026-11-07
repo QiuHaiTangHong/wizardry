@@ -21,7 +21,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.core.block.ReceptacleBlock;
 import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.entity.atom.IAttachedEntity;
@@ -74,7 +74,7 @@ public class RemnantEntity extends AbstractVexFlavorEntity implements IAttachedE
             int[] colours = ReceptacleBlock.PARTICLE_COLOURS.get(this.getElement());
 
             if (this.random.nextInt(10) == 0) {
-                WizardryClient.particleManager.getParticle(
+                WizardryClientApi.getInstance().getParticle(
                         clientLevel,
                         WizardryParticles.FLASH.get(),
                         0, this.getBbHeight() / 2, 0
@@ -93,7 +93,7 @@ public class RemnantEntity extends AbstractVexFlavorEntity implements IAttachedE
             if (this.deathTime > 0) {
                 // Spew out particles on death
                 for (int i = 0; i < 8; i++) {
-                    WizardryClient.particleManager.getParticle(
+                    WizardryClientApi.getInstance().getParticle(
                             clientLevel,
                             this.random,
                             WizardryParticles.DUST.get(),
@@ -106,7 +106,7 @@ public class RemnantEntity extends AbstractVexFlavorEntity implements IAttachedE
                     );
                 }
             } else {
-                WizardryClient.particleManager.getParticle(
+                WizardryClientApi.getInstance().getParticle(
                         clientLevel,
                         WizardryParticles.DUST.get(),
                         centre.x + x, centre.y + y, centre.z + z

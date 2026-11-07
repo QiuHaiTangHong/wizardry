@@ -4,15 +4,14 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.WizardryApi;
 import top.begonia.wizardry.client.network.ClientPayloadHandler;
 import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.core.config.SyncedConfig;
-import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
 import top.begonia.wizardry.core.network.ServerPayloadHandler;
 import top.begonia.wizardry.core.network.data.*;
 import top.begonia.wizardry.core.registry.*;
@@ -20,7 +19,6 @@ import top.begonia.wizardry.core.registry.*;
 @Mod(Wizardry.MODID)
 public class WizardryCore {
     public WizardryCore(@NonNull IEventBus modEventBus, @NonNull ModContainer modContainer) {
-        modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerPayload);
         modContainer.registerConfig(ModConfig.Type.SYNCED, SyncedConfig.SPEC);
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
@@ -41,10 +39,7 @@ public class WizardryCore {
         WizardryAdvancementTriggers.register(modEventBus);
         WizardryEntityDataSerializers.register(modEventBus);
         Wizardry.onInit(modContainer);
-    }
-
-    private void commonSetup(final @NonNull FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> WizardryServerDataManager.getInstance().fireRegisterEvents());
+        WizardryApi.getInstance().init(modEventBus, modContainer);
     }
 
     private void registerPayload(final @NonNull RegisterPayloadHandlersEvent event) {

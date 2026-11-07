@@ -26,8 +26,8 @@ import net.neoforged.neoforge.common.NeoForge;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.api.event.ImbuementActivateEvent;
-import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.core.block.ReceptacleBlock;
 import top.begonia.wizardry.api.constants.ElementEnum;
@@ -117,7 +117,7 @@ public class ImbuementAltarBlockEntity extends BlockEntity {
 
                         int[] colours = ReceptacleBlock.PARTICLE_COLOURS.get(elements[i]);
 
-                        WizardryClient.particleManager.getParticle(
+                        WizardryClientApi.getInstance().getParticle(
                                 clientLevel,
                                 clientLevel.getRandom(),
                                 WizardryParticles.DUST.get(),

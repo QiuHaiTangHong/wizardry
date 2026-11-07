@@ -20,11 +20,11 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.WizardryApi;
 import top.begonia.wizardry.client.util.ClientHelper;
-import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.constant.definition.spell.SpellProperties;
 import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.constants.EnabledEnum;
@@ -80,7 +80,7 @@ public abstract class AbstractSpell implements Comparable<AbstractSpell> {
     private final Identifier icon;
     private boolean enabled = true;
     @Nullable
-    protected final List<DeferredHolder<SoundEvent, SoundEvent>> sounds;
+    protected final SoundEvent[] sounds;
     protected float volume = 1;
     protected float pitch = 1;
     protected float pitchVariation = 0;
@@ -102,7 +102,7 @@ public abstract class AbstractSpell implements Comparable<AbstractSpell> {
         this.icon = Identifier.fromNamespaceAndPath(Wizardry.MODID, "textures/spells/" + this.identifier.getPath() + ".png");
         this.items(WizardryItems.SPELL_BOOK.get(), WizardryItems.SCROLL.get());
         this.npcSelector((e, o) -> false);
-        this.sounds = createSounds(Wizardry.MODID, this.identifier.getPath());
+        this.sounds = createSounds();
     }
 
     public boolean requiresPacket() {
@@ -117,10 +117,33 @@ public abstract class AbstractSpell implements Comparable<AbstractSpell> {
         return npcSelector.test(npc, override);
     }
 
-    public static List<DeferredHolder<SoundEvent, SoundEvent>> createSounds(String mod_id, String name) {
-        List<DeferredHolder<SoundEvent, SoundEvent>> sounds = new ArrayList<>();
-//        sounds.add(WizardrySounds.createSound(mod_id, name));
-        return sounds;
+    public final @Nullable SoundEvent[] getSounds() {
+        return this.sounds;
+    }
+
+    @Contract(pure = true)
+    protected @NonNull SoundEvent[] createSounds() {
+        return new SoundEvent[]{SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(
+                this.getIdentifier().getNamespace(),
+                "spell." + this.getIdentifier().getPath()
+        ))};
+    }
+
+    @Contract("_ -> new")
+    protected final @NonNull SoundEvent createSoundWithSuffix(String suffix) {
+        return SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(
+                this.getIdentifier().getNamespace(),
+                "spell." + this.getIdentifier().getPath() + "." + suffix
+        ));
+    }
+
+    @SuppressWarnings("SameParameterValue") // 闭嘴 IDEA
+    protected final SoundEvent @NonNull [] createSoundsWithSuffixes(String... suffixes) {
+        return Arrays.stream(suffixes).map(this::createSoundWithSuffix).toArray(SoundEvent[]::new);
+    }
+
+    protected final SoundEvent @NonNull [] createContinuousSpellSounds() {
+        return createSoundsWithSuffixes("start", "loop", "end");
     }
 
     public boolean matches(@Nonnull String text) {
@@ -180,7 +203,8 @@ public abstract class AbstractSpell implements Comparable<AbstractSpell> {
 
     private SpellProperties getProperties() {
         if (this.properties == null) {
-            Optional<SpellProperties> spellProperties = WizardryServerDataManager.getInstance().getData(this.identifier.withPrefix("spells/"), SpellProperties.class);
+            Optional<SpellProperties> spellProperties = WizardryApi.getInstance()
+                    .getData(this.identifier.withPrefix("spells/"), SpellProperties.class);
             spellProperties.ifPresentOrElse(
                     value -> this.properties = value,
                     () -> {
@@ -223,9 +247,8 @@ public abstract class AbstractSpell implements Comparable<AbstractSpell> {
 
     protected void playSound(Level level, double x, double y, double z, int ticksInUse, int duration, SpellContext context) {
         if (this.sounds != null) {
-            for (DeferredHolder<SoundEvent, SoundEvent> soundHolder : this.sounds) {
-                if (soundHolder.isBound()) {
-                    SoundEvent sound = soundHolder.get();
+            for (SoundEvent sound : this.sounds) {
+                if (sound != null) {
                     level.playSound(
                             null,
                             x, y, z,
@@ -241,10 +264,6 @@ public abstract class AbstractSpell implements Comparable<AbstractSpell> {
 
     public final Identifier getIcon() {
         return icon;
-    }
-
-    public final @Nullable List<DeferredHolder<SoundEvent, SoundEvent>> getSounds() {
-        return sounds;
     }
 
     public final TierEnum getTier() {
@@ -292,6 +311,7 @@ public abstract class AbstractSpell implements Comparable<AbstractSpell> {
         this.enabled = isEnabled;
     }
 
+    @SuppressWarnings("UnusedReturnValue") // 闭嘴 IDEA
     public AbstractSpell npcSelector(BiPredicate<LivingEntity, Boolean> selector) {
         this.npcSelector = selector;
         return this;
@@ -321,6 +341,7 @@ public abstract class AbstractSpell implements Comparable<AbstractSpell> {
         return Component.translatable(getTranslationKey()).withStyle(getElement().getStyle());
     }
 
+    @SuppressWarnings("UnusedReturnValue") // 闭嘴 IDEA
     public AbstractSpell soundValues(float volume, float pitch, float pitchVariation) {
         this.volume = volume;
         this.pitch = pitch;

@@ -14,12 +14,12 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.api.event.SpellCastEvent;
-import top.begonia.wizardry.client.WizardryClient;
-import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
-import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
 import top.begonia.wizardry.api.item.ISpellCastingItem;
 import top.begonia.wizardry.api.item.IWorkbenchItem;
+import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
+import top.begonia.wizardry.core.data.runtime.SpellContextFlow;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 import top.begonia.wizardry.core.registry.WizardrySpells;
@@ -50,8 +50,8 @@ public class ScrollItem extends Item implements ISpellCastingItem, IWorkbenchIte
         ItemStack handItem = player.getItemInHand(hand);
         AbstractSpell spell = this.getCurrentSpell(handItem);
         SpellContextFlow spellContextFlow = SpellContextFlow.create();
-        if (level instanceof ClientLevel clientLevel){
-            WizardryClient.particleManager.getParticle(
+        if (level instanceof ClientLevel clientLevel) {
+            WizardryClientApi.getInstance().getParticle(
                     clientLevel,
                     WizardryParticles.BEAM.get(),
                     player.getX(), player.getY(), player.getZ()

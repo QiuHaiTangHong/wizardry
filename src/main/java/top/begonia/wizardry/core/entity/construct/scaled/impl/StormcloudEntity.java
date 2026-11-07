@@ -8,7 +8,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.entity.construct.scaled.ScaledConstructEntity;
@@ -48,7 +48,7 @@ public class StormcloudEntity extends ScaledConstructEntity {
 
             for (int i = 0; i < 2 * areaFactor; i++) {
                 ClientLevel clientLevel = (ClientLevel) this.level();
-                WizardryClient.particleManager.getParticle(
+                WizardryClientApi.getInstance().getParticle(
                         clientLevel,
                         WizardryParticles.CLOUD.get(),
                         0, 0, 0
@@ -85,12 +85,12 @@ public class StormcloudEntity extends ScaledConstructEntity {
                     );
                 } else {
                     ClientLevel clientLevel = (ClientLevel) this.level();
-                    WizardryClient.particleManager.getParticle(
+                    WizardryClientApi.getInstance().getParticle(
                             clientLevel,
                             WizardryParticles.LIGHTNING.get(),
                             target.getX(), getY() + this.getBbHeight() / 2, target.getZ()
                     ).ifPresent(p -> p.targetEntity(target).scaleValue(2.0F).spawn());
-                    WizardryClient.particleManager.spawnShockParticles(
+                    WizardryClientApi.getInstance().spawnShockParticles(
                             clientLevel,
                             target.getX(),
                             target.getY() + target.getBbHeight(),

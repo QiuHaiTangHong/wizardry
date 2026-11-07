@@ -7,8 +7,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
-import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.entity.projectile.MagicArrowEntity;
 import top.begonia.wizardry.core.registry.WizardryEntities;
 import top.begonia.wizardry.core.registry.WizardryParticles;
@@ -53,7 +53,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
                 1.2F / (this.random.nextFloat() * 0.2F + 0.9F)
         );
         if (this.level() instanceof ClientLevel clientLevel) {
-            WizardryClient.particleManager.getParticle(
+            WizardryClientApi.getInstance().getParticle(
                     clientLevel,
                     WizardryParticles.FLASH.get(),
                     this.getX(), this.getY(), this.getZ()
@@ -67,7 +67,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
     protected void onHitBlockAfter(BlockHitResult hitResult) {
         if (this.level() instanceof ClientLevel clientLevel) {
             Vec3 vec = hitResult.getLocation().add(new Vec3(hitResult.getDirection().getUnitVec3f()).scale(0.15));
-            WizardryClient.particleManager.getParticle(
+            WizardryClientApi.getInstance().getParticle(
                     clientLevel,
                     WizardryParticles.FLASH.get(),
                     vec.x, vec.y, vec.z
@@ -85,7 +85,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
 
             if (Wizardry.tisTheSeason) {
 
-                WizardryClient.particleManager.getParticle(
+                WizardryClientApi.getInstance().getParticle(
                         clientLevel,
                         this.random,
                         WizardryParticles.SPARKLE.get(),
@@ -97,7 +97,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
                         .spawn()
                 );
 
-                WizardryClient.particleManager.getParticle(
+                WizardryClientApi.getInstance().getParticle(
                         clientLevel,
                         WizardryParticles.SNOW.get(),
                         this.getX(), this.getY(), this.getZ()
@@ -108,7 +108,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
                     double x = this.getX() - motion.x / 2;
                     double y = this.getY() - motion.y / 2;
                     double z = this.getZ() - motion.z / 2;
-                    WizardryClient.particleManager.getParticle(
+                    WizardryClientApi.getInstance().getParticle(
                             clientLevel,
                             this.random,
                             WizardryParticles.SPARKLE.get(),
@@ -123,7 +123,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
 
             } else {
 
-                WizardryClient.particleManager.getParticle(
+                WizardryClientApi.getInstance().getParticle(
                         clientLevel,
                         this.random,
                         WizardryParticles.SPARKLE.get(),
@@ -141,7 +141,7 @@ public class MagicMissileEntity extends MagicArrowEntity {
                     double x = this.getX() - motion.x / 2;
                     double y = this.getY() - motion.y / 2;
                     double z = this.getZ() - motion.z / 2;
-                    WizardryClient.particleManager.getParticle(
+                    WizardryClientApi.getInstance().getParticle(
                             clientLevel,
                             this.random,
                             WizardryParticles.SPARKLE.get(),

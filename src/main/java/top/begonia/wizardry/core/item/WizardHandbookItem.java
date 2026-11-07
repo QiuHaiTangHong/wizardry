@@ -12,7 +12,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.gui.WizardHandbookScreen;
+import top.begonia.wizardry.client.gui.HandbookScreen;
 
 import java.util.function.Consumer;
 
@@ -36,7 +36,7 @@ public class WizardHandbookItem extends Item {
     @Override
     public @NonNull InteractionResult use(@NonNull Level level, @NonNull Player player, @NonNull InteractionHand hand) {
         if (level.isClientSide()) {
-            Minecraft.getInstance().gui.setScreen(new WizardHandbookScreen());
+            Minecraft.getInstance().gui.setScreen(new HandbookScreen());
         }
         return InteractionResult.SUCCESS;
     }

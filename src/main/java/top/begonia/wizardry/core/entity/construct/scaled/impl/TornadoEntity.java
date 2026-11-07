@@ -22,8 +22,8 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
-import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.client.util.ClientHelper;
 import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
@@ -270,7 +270,7 @@ public class TornadoEntity extends ScaledConstructEntity {
 
                         if (type != null) {
                             double yPos1 = this.random.nextDouble() * 8;
-                            WizardryClient.particleManager.getParticle(
+                            WizardryClientApi.getInstance().getParticle(
                                     (ClientLevel) this.level(),
                                     type,
                                     this.getX() + (this.random.nextDouble() * 2 - 1) * (yPos1 / 3 + 0.5d),

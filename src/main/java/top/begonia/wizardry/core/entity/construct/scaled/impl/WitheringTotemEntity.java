@@ -15,7 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.client.util.ClientHelper;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.core.config.SyncedConfig;
@@ -89,7 +89,7 @@ public class WitheringTotemEntity extends ScaledConstructEntity {
         double radius = WizardrySpells.WITHERING_TOTEM.get().getBaseProperty(AbstractSpell.EFFECT_RADIUS) * this.getSizeMultiplier();
 
         if (this.level().isClientSide()) {
-            WizardryClient.particleManager.getParticle(
+            WizardryClientApi.getInstance().getParticle(
                     (ClientLevel) this.level(),
                     this.random,
                     WizardryParticles.DUST.get(),
@@ -119,7 +119,7 @@ public class WitheringTotemEntity extends ScaledConstructEntity {
                 );
 
                 if (y != null) {
-                    WizardryClient.particleManager.getParticle(
+                    WizardryClientApi.getInstance().getParticle(
                             (ClientLevel) this.level(),
                             WizardryParticles.DUST.get(),
                             x, y, z
@@ -185,7 +185,7 @@ public class WitheringTotemEntity extends ScaledConstructEntity {
 //                    );
 
                     for (int i = 0; i < 3; i++) {
-                        WizardryClient.particleManager.getParticle(
+                        WizardryClientApi.getInstance().getParticle(
                                 (ClientLevel) this.level(),
                                 this.random,
                                 WizardryParticles.DUST.get(),
@@ -237,7 +237,7 @@ public class WitheringTotemEntity extends ScaledConstructEntity {
 
         if (this.level().isClientSide()) {
             Vec3 pos = GeometryUtils.getCentre(this);
-            WizardryClient.particleManager.getParticle(
+            WizardryClientApi.getInstance().getParticle(
                     (ClientLevel) this.level(),
                     WizardryParticles.SPHERE.get(),
                     pos.x, pos.y, pos.z

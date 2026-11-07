@@ -7,7 +7,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.entity.construct.scaled.ScaledConstructEntity;
@@ -92,7 +92,7 @@ public class BlizzardEntity extends ScaledConstructEntity {
             ClientLevel clientLevel = (ClientLevel) this.level();
             for (int i = 0; i < 6; i++) {
                 double speed = (this.getRandom().nextBoolean() ? 1 : -1) * (0.1 + 0.05 * this.getRandom().nextDouble());
-                WizardryClient.particleManager.getParticle(
+                WizardryClientApi.getInstance().getParticle(
                         clientLevel,
                         WizardryParticles.SNOW.get(),
                         this.getX(), this.getY() + this.getRandom().nextDouble() * this.getBbHeight(), this.getZ()
@@ -107,7 +107,7 @@ public class BlizzardEntity extends ScaledConstructEntity {
 
             for (int i = 0; i < 3; i++) {
                 double speed = (this.getRandom().nextBoolean() ? 1 : -1) * (0.05 + 0.02 * this.getRandom().nextDouble());
-                WizardryClient.particleManager.getParticle(
+                WizardryClientApi.getInstance().getParticle(
                         clientLevel,
                         WizardryParticles.CLOUD.get(),
                         this.getX(), this.getY() + this.getRandom().nextDouble() * (this.getBbHeight() - 0.5), this.getZ()

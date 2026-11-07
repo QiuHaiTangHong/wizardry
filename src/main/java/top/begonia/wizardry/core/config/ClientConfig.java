@@ -31,11 +31,15 @@ public final class ClientConfig {
     public static boolean showSpellHUD;
     public static boolean showChargeMeter;
     public static GuiPosition spellHUDPosition;
-    public static String spellHUDSkin = DEFAULT_HUD_SKIN_KEY;
+    public static String spellHUDSkin;
     public static boolean summonedCreatureNames;
     public static boolean shiftScrolling;
     public static boolean reverseScrollDirection;
     public static boolean blinkEffect;
+
+    public record SpellHudSkinEntry(String name) {
+        public static final SpellHudSkinEntry DEFAULT = new SpellHudSkinEntry("default");
+    }
 
     static {
         BUILDER

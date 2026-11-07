@@ -8,7 +8,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.client.util.ClientHelper;
 import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
@@ -63,7 +63,7 @@ public class RadiantTotemEntity extends ScaledConstructEntity {
 
         if (this.level().isClientSide()) {
             ClientLevel clientLevel = (ClientLevel) this.level();
-            WizardryClient.particleManager.getParticle(
+            WizardryClientApi.getInstance().getParticle(
                     clientLevel,
                     this.random,
                     WizardryParticles.DUST.get(),
@@ -93,7 +93,7 @@ public class RadiantTotemEntity extends ScaledConstructEntity {
                 );
 
                 if (y != null) {
-                    WizardryClient.particleManager.getParticle(
+                    WizardryClientApi.getInstance().getParticle(
                             clientLevel,
                             WizardryParticles.DUST.get(),
                             x, y, z

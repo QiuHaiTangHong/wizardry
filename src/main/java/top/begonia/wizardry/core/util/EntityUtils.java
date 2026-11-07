@@ -29,17 +29,20 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.WizardryApi;
 import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.constants.EnabledEnum;
 import top.begonia.wizardry.api.constants.TierEnum;
 import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
-import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.constant.definition.DamageImmune;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -92,7 +95,7 @@ public final class EntityUtils {
         if (typeHolder == WizardryDamageTypes.FIRE && entity.fireImmune()) {
             return true;
         }
-        DamageImmune damageImmune = WizardryServerDataManager.getInstance()
+        DamageImmune damageImmune = WizardryApi.getInstance()
                 .getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "damage_immune/wizardry_damage_immune"), DamageImmune.class)
                 .orElse(DamageImmune.DEFAULT);
         Map<Identifier, List<Identifier>> entities = damageImmune.entries();

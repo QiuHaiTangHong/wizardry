@@ -8,7 +8,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.entity.construct.scaled.ScaledConstructEntity;
@@ -90,7 +90,7 @@ public class HealAuraEntity extends ScaledConstructEntity {
                 double radius = this.random.nextDouble() * (this.getBbWidth() / 2);
                 float angle = this.random.nextFloat() * (float) Math.PI * 2;
                 ClientLevel clientLevel = (ClientLevel) this.level();
-                WizardryClient.particleManager.getParticle(
+                WizardryClientApi.getInstance().getParticle(
                         clientLevel,
                         WizardryParticles.SPARKLE.get(),
                         this.getX() + radius * Mth.cos(angle),

@@ -10,7 +10,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.core.registry.WizardryItems;
 
 public class SparkBombEntity extends BombEntity {
@@ -41,7 +41,7 @@ public class SparkBombEntity extends BombEntity {
     @Override
     protected void createParticles(ClientLevel level) {
         Vec3 hitPos = this.position();
-        WizardryClient.particleManager.spawnShockParticles(level, hitPos.x(), hitPos.y() + this.getBbHeight() / 2, hitPos.z());
+        WizardryClientApi.getInstance().spawnShockParticles(level, hitPos.x(), hitPos.y() + this.getBbHeight() / 2, hitPos.z());
     }
 
     @Override

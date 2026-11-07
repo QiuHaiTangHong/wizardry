@@ -24,7 +24,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.constants.TierEnum;
 import top.begonia.wizardry.api.entity.atom.ISpellCaster;
@@ -105,7 +105,7 @@ public abstract class AbstractWizardEntity extends PathfinderMob implements ISpe
         } else if (healCooldown == -1 && this.deathTime == 0) {
             // Heal particles TODO: Change this so it uses the heal spell directly
             if (this.level() instanceof ClientLevel clientLevel) {
-                WizardryClient.particleManager.spawnHealParticles(
+                WizardryClientApi.getInstance().spawnHealParticles(
                         clientLevel,
                         this
                 );

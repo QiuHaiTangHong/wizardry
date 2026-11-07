@@ -16,7 +16,7 @@ import top.begonia.wizardry.api.layout.container.handbook.HandbookElement;
 import top.begonia.wizardry.api.layout.util.Context;
 import top.begonia.wizardry.core.registry.WizardrySounds;
 
-public class WizardHandbookScreen extends Screen {
+public class HandbookScreen extends Screen {
     private Button bookmark;
     private Button previous;
     private Button next;
@@ -26,7 +26,7 @@ public class WizardHandbookScreen extends Screen {
 
     private HandbookElement handbookElement;
 
-    public WizardHandbookScreen() {
+    public HandbookScreen() {
         super(Component.empty());
     }
 

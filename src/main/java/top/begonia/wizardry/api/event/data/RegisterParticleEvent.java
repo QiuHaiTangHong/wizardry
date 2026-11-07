@@ -1,6 +1,7 @@
 package top.begonia.wizardry.api.event.data;
 
 import net.neoforged.bus.api.Event;
+import net.neoforged.fml.event.IModBusEvent;
 import top.begonia.wizardry.api.particle.manager.SimpleParticleProvider;
 import top.begonia.wizardry.api.particle.manager.WizardryParticleProvider;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
@@ -38,7 +39,7 @@ import java.util.Map;
  * @see SimpleParticleProvider
  * @see ParticleTypeExtension
  */
-public class RegisterParticleEvent extends Event {
+public class RegisterParticleEvent extends Event implements IModBusEvent {
     /**
      * 存储已注册的粒子类型与对应提供程序的映射表。
      * Key 为粒子类型，Value 为用于创建该类型粒子的提供程序实例。

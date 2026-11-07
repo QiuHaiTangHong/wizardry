@@ -8,8 +8,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
-import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.entity.construct.scaled.ScaledConstructEntity;
@@ -97,7 +97,7 @@ public class LightningSigilEntity extends ScaledConstructEntity {
 
                                 if (this.level().isClientSide()) {
                                     ClientLevel clientLevel = (ClientLevel) this.level();
-                                    WizardryClient.particleManager.getParticle(
+                                    WizardryClientApi.getInstance().getParticle(
                                             clientLevel,
                                             WizardryParticles.SPARK.get(),
                                             0, target.getBbHeight() / 2, 0
@@ -105,7 +105,7 @@ public class LightningSigilEntity extends ScaledConstructEntity {
                                             .targetEntity(secondaryTarget)
                                             .spawn()
                                     );
-                                    WizardryClient.particleManager.spawnShockParticles(
+                                    WizardryClientApi.getInstance().spawnShockParticles(
                                             clientLevel,
                                             secondaryTarget.getX(),
                                             secondaryTarget.getY() + secondaryTarget.getBbHeight() / 2,
@@ -143,7 +143,7 @@ public class LightningSigilEntity extends ScaledConstructEntity {
             double radius = (0.5 + this.random.nextDouble() * 0.3) * this.getBbWidth() / 2;
             float angle = this.random.nextFloat() * (float) Math.PI * 2;
             ClientLevel clientLevel = (ClientLevel) this.level();
-            WizardryClient.particleManager.getParticle(
+            WizardryClientApi.getInstance().getParticle(
                     clientLevel,
                     WizardryParticles.SPARK.get(),
                     this.getX() + radius * Mth.cos(angle), this.getY() + 0.1, this.getZ() + radius * Mth.sin(angle)

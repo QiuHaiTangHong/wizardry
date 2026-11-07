@@ -11,7 +11,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.core.registry.WizardryItems;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 
@@ -47,7 +47,7 @@ public class PoisonBombEntity extends BombEntity {
     @Override
     protected void createParticles(ClientLevel level) {
         Vec3 hitPos = this.position();
-        WizardryClient.particleManager.getParticle(
+        WizardryClientApi.getInstance().getParticle(
                 level,
                 WizardryParticles.FLASH.get(),
                 hitPos.x, hitPos.y, hitPos.z
@@ -57,7 +57,7 @@ public class PoisonBombEntity extends BombEntity {
         );
 
         for (int i = 0; i < 60 * blastMultiplier; i++) {
-            WizardryClient.particleManager.getParticle(
+            WizardryClientApi.getInstance().getParticle(
                     level,
                     this.random,
                     WizardryParticles.SPARKLE.get(),
@@ -70,7 +70,7 @@ public class PoisonBombEntity extends BombEntity {
                     .spawn()
             );
 
-            WizardryClient.particleManager.getParticle(
+            WizardryClientApi.getInstance().getParticle(
                     level,
                     this.random,
                     WizardryParticles.DARK_MAGIC.get(),

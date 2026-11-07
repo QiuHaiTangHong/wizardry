@@ -7,8 +7,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.client.data.definition.hub.SpellHubConfigData;
-import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
+import top.begonia.wizardry.api.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.client.util.DrawingUtils;
 
 import java.util.Optional;
@@ -50,7 +51,7 @@ public class Skin {
 
     public Skin(Identifier texture, Identifier metadata) {
         this.texture = texture;
-        Optional<SpellHubConfigData> spellHubConfigData = WizardryClientDataManager.getInstance().getData(metadata, SpellHubConfigData.class);
+        Optional<SpellHubConfigData> spellHubConfigData = WizardryClientApi.getInstance().getData(metadata, SpellHubConfigData.class);
         spellHubConfigData.ifPresent(this::parseData);
     }
 
@@ -77,7 +78,6 @@ public class Skin {
         cooldownBarMirrorX = spellHubConfigData.cooldownBar().mirror().x();
         cooldownBarMirrorY = spellHubConfigData.cooldownBar().mirror().y();
         showCooldownWhenFull = spellHubConfigData.cooldownBar().showWhenFull();
-
     }
 
     public String getName() {

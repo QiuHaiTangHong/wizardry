@@ -20,7 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.api.entity.hybrid.ISummonedCreature;
 import top.begonia.wizardry.api.entity.ai.control.VexMoveControl;
 import top.begonia.wizardry.core.entity.living.vex.AbstractVexFlavorEntity;
@@ -137,7 +137,7 @@ public class VexMinionEntity extends AbstractVexFlavorEntity implements Traceabl
     private void spawnParticleEffect() {
         if (this.level() instanceof ClientLevel clientLevel) {
             for (int i = 0; i < 15; i++) {
-                WizardryClient.particleManager.getParticle(
+                WizardryClientApi.getInstance().getParticle(
                         clientLevel,
                         WizardryParticles.DARK_MAGIC.get(),
                         this.getX() + this.getRandom().nextFloat(),

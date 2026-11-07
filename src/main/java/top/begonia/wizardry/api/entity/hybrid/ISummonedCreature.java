@@ -17,15 +17,15 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.WizardryClientApi;
+import top.begonia.wizardry.api.entity.atom.ILifeTicksEntity;
+import top.begonia.wizardry.api.entity.atom.IOwnableEntity;
+import top.begonia.wizardry.api.entity.atom.ISummonEntity;
 import top.begonia.wizardry.api.item.ISpellCastingItem;
-import top.begonia.wizardry.client.WizardryClient;
 import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.data.player.WizardPlayerDataOperator;
-import top.begonia.wizardry.api.entity.atom.ILifeTicksEntity;
-import top.begonia.wizardry.api.entity.atom.IOwnableEntity;
-import top.begonia.wizardry.api.entity.atom.ISummonEntity;
 import top.begonia.wizardry.core.entity.living.wizard.impl.WizardEntity;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 import top.begonia.wizardry.core.util.AllyDesignationSystem;
@@ -116,7 +116,7 @@ public interface ISummonedCreature extends IOwnableEntity, ILifeTicksEntity, ISu
                 && thisEntity.level() instanceof ClientLevel clientLevel
                 && thisEntity.getRandom().nextInt(8) == 0
         ) {
-            WizardryClient.particleManager.getParticle(
+            WizardryClientApi.getInstance().getParticle(
                     clientLevel,
                     WizardryParticles.DARK_MAGIC.get(),
                     thisEntity.getX(), thisEntity.getY() + thisEntity.getRandom().nextDouble() * 1.5, thisEntity.getZ()

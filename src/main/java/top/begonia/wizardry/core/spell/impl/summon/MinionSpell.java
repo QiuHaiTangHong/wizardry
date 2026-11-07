@@ -146,5 +146,4 @@ public class MinionSpell<T extends LivingEntity & ISummonedCreature> extends Abs
 
     protected void addMinionExtras(T minion, BlockPos pos, @Nullable LivingEntity caster, SpellContext context, int alreadySpawned) {
     }
-
 }

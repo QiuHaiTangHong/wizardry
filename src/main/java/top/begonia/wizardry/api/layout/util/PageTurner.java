@@ -3,9 +3,9 @@ package top.begonia.wizardry.api.layout.util;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
 import top.begonia.wizardry.client.data.definition.handbook.part.SectionData;
-import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.api.layout.container.IContainerElement;
 
 import java.util.ArrayList;
@@ -90,7 +90,7 @@ public final class PageTurner {
 
     public void format(Context context) {
         this.context = context;
-        final HandbookData handbookData = WizardryClientDataManager.getInstance()
+        final HandbookData handbookData = WizardryClientApi.getInstance()
                 .getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "handbook"), HandbookData.class)
                 .orElse(HandbookData.DEFAULT);
         this.context.setColours(handbookData.colours());

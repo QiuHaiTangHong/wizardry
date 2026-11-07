@@ -36,11 +36,11 @@ import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.WizardryApi;
 import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.api.constants.ElementEnum;
 import top.begonia.wizardry.api.constants.EnabledEnum;
 import top.begonia.wizardry.api.constants.TierEnum;
-import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.constant.definition.currency.Currency;
 import top.begonia.wizardry.api.entity.ai.goal.LookAtTradePlayer;
 import top.begonia.wizardry.api.entity.ai.goal.TradePlayer;
@@ -337,7 +337,7 @@ public class WizardEntity extends AbstractWizardEntity implements Merchant {
     }
 
     private @NonNull ItemCost getRandomPrice(TierEnum tier) {
-        Optional<Currency> currencies = WizardryServerDataManager.getInstance()
+        Optional<Currency> currencies = WizardryApi.getInstance()
                 .getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "currency/wizardry_currency"), Currency.class);
         if (currencies.isPresent()) {
             List<Currency.UnpackEntry> itemCosts = currencies.get().unpack();

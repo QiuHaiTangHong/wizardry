@@ -1,10 +1,8 @@
 package top.begonia.wizardry.core.event;
 
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
@@ -19,7 +17,6 @@ import top.begonia.wizardry.core.data.SpellGlyph;
 import top.begonia.wizardry.core.data.constant.parser.CurrencyParser;
 import top.begonia.wizardry.core.data.constant.parser.DamageImmuneParser;
 import top.begonia.wizardry.core.data.player.WizardPlayerData;
-import top.begonia.wizardry.core.data.constant.WizardryServerDataManager;
 import top.begonia.wizardry.core.data.constant.parser.SpellPropertiesParser;
 import top.begonia.wizardry.core.effect.impl.DecayMobEffect;
 import top.begonia.wizardry.core.entity.construct.BubbleEntity;
@@ -31,14 +28,6 @@ import top.begonia.wizardry.core.util.DamageSafetyChecker;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
 public class CoreEvent {
-    @SubscribeEvent
-    public static void onAddReloadListeners(@NonNull AddServerReloadListenersEvent event) {
-        event.addListener(
-                Identifier.fromNamespaceAndPath(Wizardry.MODID, "server_data_manager"),
-                WizardryServerDataManager.getInstance()
-        );
-    }
-
     /**
      * 在玩家登入时添加逻辑
      * @param event 玩家登入事件

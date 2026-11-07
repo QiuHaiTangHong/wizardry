@@ -8,7 +8,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.entity.construct.scaled.ScaledConstructEntity;
@@ -54,17 +54,17 @@ public class FrostSigilEntity extends ScaledConstructEntity {
                             serverLevel,
                             target,
                             this.getOwner() != null
-                            ? WizardryDamageSource.causeIndirectMagicDamage(
+                                    ? WizardryDamageSource.causeIndirectMagicDamage(
                                     WizardryDamageTypes.FROST.apply(this.registryAccess()),
                                     this,
                                     this.getOwner(),
                                     false
                             )
-                            : new DamageSources(this.registryAccess()).magic(),
+                                    : new DamageSources(this.registryAccess()).magic(),
                             WizardrySpells.FROST_SIGIL.get().getBaseProperty(AbstractSpell.DAMAGE) * this.getDamageMultiplier()
                     );
 
-                    if(!EntityUtils.isEntityImmune(WizardryDamageTypes.FROST.apply(this.registryAccess()), target)){
+                    if (!EntityUtils.isEntityImmune(WizardryDamageTypes.FROST.apply(this.registryAccess()), target)) {
                         target.addEffect(new MobEffectInstance(
                                 WizardryMobEffects.FROST,
                                 (int) WizardrySpells.FROST_SIGIL.get().getBaseProperty(AbstractSpell.EFFECT_DURATION),
@@ -82,7 +82,7 @@ public class FrostSigilEntity extends ScaledConstructEntity {
             double radius = (0.5 + this.random.nextDouble() * 0.3) * this.getBbWidth() / 2;
             float angle = this.random.nextFloat() * (float) Math.PI * 2;
             ClientLevel clientLevel = (ClientLevel) this.level();
-            WizardryClient.particleManager.getParticle(
+            WizardryClientApi.getInstance().getParticle(
                     clientLevel,
                     WizardryParticles.SNOW.get(),
                     this.getX() + radius * Mth.cos(angle),

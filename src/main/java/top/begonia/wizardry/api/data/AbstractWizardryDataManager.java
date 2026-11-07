@@ -1,5 +1,6 @@
 package top.begonia.wizardry.api.data;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -22,26 +23,37 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.event.data.DataParserBefore;
 
 import java.io.Reader;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public abstract class AbstractWizardryDataManager extends ContextAwareReloadListener implements PreparableReloadListener {
-    protected final Map<Identifier, IDataParser<?, ? extends IParserContext, ? extends IResultData>> parserRegistry = new HashMap<>();
-    protected volatile Map<Class<? extends IResultData>, Map<Identifier, ? extends IResultData>> storageSnapshot = Map.of();
+    protected Map<Identifier, IDataParser<?, ? extends IParserContext, ? extends IResultData>> parserRegistry;
+    protected Map<Class<? extends IResultData>, Map<Identifier, ? extends IResultData>> storageSnapshot;
     protected final static Codec<JsonElement> CODEC = Codec.PASSTHROUGH.xmap(
             dynamic -> dynamic.convert(JsonOps.INSTANCE).getValue(),
             json -> new Dynamic<>(JsonOps.INSTANCE, json)
     );
     protected final FileToIdConverter lister;
 
-    public AbstractWizardryDataManager(FileToIdConverter path) {
+    public AbstractWizardryDataManager(
+            FileToIdConverter path
+    ) {
         this.lister = path;
+        this.storageSnapshot = new HashMap<>();
     }
 
-    public Map<Identifier, IDataParser<?, ? extends IParserContext, ? extends IResultData>> getParserRegistry() {
-        return this.parserRegistry;
+    protected void recollect() {
+        if (this.parserRegistry == null || this.parserRegistry.isEmpty()) {
+            Map<Identifier, IDataParser<?, ? extends IParserContext, ? extends IResultData>> result = this.getParserRegistry();
+            this.parserRegistry = ImmutableMap.copyOf(result);
+        }
     }
+
+    protected abstract Map<Identifier, IDataParser<?, ? extends IParserContext, ? extends IResultData>> getParserRegistry();
 
     public <T extends IResultData> Optional<T> getData(Identifier id, Class<T> expectedType) {
         Map<Class<? extends IResultData>, Map<Identifier, ? extends IResultData>> currentStorage = storageSnapshot;
@@ -121,6 +133,7 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
         Map<Identifier, IParserContext> parserContexts = new HashMap<>();
         ModLoader.postEvent(new DataParserBefore(parserContexts));
         Map<Class<? extends IResultData>, Map<Identifier, IResultData>> workingMap = new HashMap<>();
+        this.recollect();
         int totalLoaded = 0;
         int failedCount = 0;
         for (Map.Entry<Identifier, JsonElement> entry : identifierJsonElementMap.entrySet()) {
@@ -145,7 +158,7 @@ public abstract class AbstractWizardryDataManager extends ContextAwareReloadList
                 continue;
             }
             @SuppressWarnings("rawtypes")
-            IDataParser parser = parserRegistry.get(parserId);
+            IDataParser parser = this.parserRegistry.get(parserId);
             IParserContext context = parserContexts.get(parserId);
             if (parser == null) {
                 Wizardry.LOGGER.error("wizardry:解析数据 '{}' 失败: 找不到已注册的解析器 '{}'。请检查 SPI 配置或当前端(Dist)是否支持！", location, parserId);

@@ -27,6 +27,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.api.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.api.event.data.RegisterDelegateUnbakedModelEvent;
 import top.begonia.wizardry.api.event.data.RegisterParticleEvent;
@@ -35,7 +36,6 @@ import top.begonia.wizardry.api.particle.renderer.CompositeParticleFeatureRender
 import top.begonia.wizardry.api.particle.renderer.CompositeParticleGroup;
 import top.begonia.wizardry.client.constants.WizardryKeyMappings;
 import top.begonia.wizardry.client.data.definition.handbook.HandbookData;
-import top.begonia.wizardry.client.data.manager.WizardryClientDataManager;
 import top.begonia.wizardry.client.data.parser.*;
 import top.begonia.wizardry.client.gui.ArcaneWorkbenchScreen;
 import top.begonia.wizardry.client.gui.BookshelfScreen;
@@ -70,25 +70,6 @@ import top.begonia.wizardry.core.util.ArmourHelper;
 
 @EventBusSubscriber(modid = Wizardry.MODID, value = Dist.CLIENT)
 public class ClientEvents {
-//    private static MouseUniform mouseUniform;
-
-//    @SubscribeEvent
-//    public static void onRenderFramePre(RenderFrameEvent.Pre event) {
-//        if (mouseUniform == null) {
-//            mouseUniform = new MouseUniform();
-//        }
-//        Minecraft minecraft = Minecraft.getInstance();
-//        Window window = minecraft.getWindow();
-//        MouseHandler mouseHandler = minecraft.mouseHandler;
-//        float mouseX = (float) mouseHandler.xpos();
-//        float mouseY = (float) (window.getHeight() - mouseHandler.ypos());
-//        mouseUniform.update(mouseX, mouseY, window.getGuiScaledWidth(), window.getScreenHeight());
-//    }
-//
-//    public static MouseUniform getMouseUniform() {
-//        return mouseUniform;
-//    }
-
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.@NonNull RegisterLayerDefinitions event) {
         final CubeDeformation OUTER_ARMOR_DEFORMATION = new CubeDeformation(0.75F);
@@ -295,11 +276,6 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void onRegisterReloadListeners(@NonNull AddClientReloadListenersEvent event) {
-        event.addListener(Identifier.fromNamespaceAndPath(Wizardry.MODID, "data_manager"), WizardryClientDataManager.getInstance());
-    }
-
-    @SubscribeEvent
     public static void onClientRegisterDataParserEvent(RegisterDataParserEvent.@NonNull ClientRegisterDataParserEvent event) {
         event.register(new BookshelfBookSettingsParser());
         event.register(new HandbookDataParser());
@@ -324,11 +300,15 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onPlayerLoggedIn(ClientPlayerNetworkEvent.LoggingIn event) {
         ClientPayloadHandler.clearCache();
-        HandbookData handbookData = WizardryClientDataManager.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "handbook"), HandbookData.class).orElse(null);
-        if (handbookData != null && Minecraft.getInstance().getConnection() != null) {
-            Wizardry.LOGGER.info("正在向服务端发送手册配方同步请求...");
-            ClientPacketDistributor.sendToServer(new HandbookRecipesRequestPayload(handbookData.recipes()));
-        }
+        WizardryClientApi.getInstance().getData(
+                Identifier.fromNamespaceAndPath(Wizardry.MODID, "handbook"),
+                HandbookData.class
+        ).ifPresent(handbookData -> {
+            if (Minecraft.getInstance().getConnection() != null) {
+                Wizardry.LOGGER.info("正在向服务端发送手册配方同步请求...");
+                ClientPacketDistributor.sendToServer(new HandbookRecipesRequestPayload(handbookData.recipes()));
+            }
+        });
     }
 
     @SubscribeEvent

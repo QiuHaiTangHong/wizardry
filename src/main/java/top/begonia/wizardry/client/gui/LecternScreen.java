@@ -20,7 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.client.gui.widget.InvisibleButton;
 import top.begonia.wizardry.client.gui.widget.SpellSortButton;
 import top.begonia.wizardry.client.gui.widget.TurnPageButton;
@@ -247,7 +247,7 @@ public class LecternScreen extends SpellInfoScreen implements ISpellSortable {
                                                 Vec3 pos = GeometryUtils.getFaceCentre(blockEntity.getBlockPos(), side)
                                                         .add(new Vec3(side.getUnitVec3f())
                                                                 .scale(GeometryUtils.ANTI_Z_FIGHTING_OFFSET));
-                                                WizardryClient.particleManager.getParticle(
+                                                WizardryClientApi.getInstance().getParticle(
                                                         level,
                                                         WizardryParticles.BLOCK_HIGHLIGHT.get(),
                                                         pos.x, pos.y, pos.z
