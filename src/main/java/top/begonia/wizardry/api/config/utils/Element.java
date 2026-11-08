@@ -1,12 +1,11 @@
-package top.begonia.wizardry.client.gui.config.utils;
+package top.begonia.wizardry.api.config.utils;
 
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
-
-import javax.annotation.Nullable;
-import java.awt.*;
+import org.jspecify.annotations.Nullable;
 
 public record Element(
         @Nullable Component name,

@@ -1,4 +1,4 @@
-package top.begonia.wizardry.client.gui.config.utils;
+package top.begonia.wizardry.api.config.utils;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.locale.Language;
@@ -74,4 +74,3 @@ public class TranslationChecker {
         untranslatables.clear();
     }
 }
-

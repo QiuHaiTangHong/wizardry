@@ -1,8 +1,6 @@
-package top.begonia.wizardry.client.gui.config.utils;
+package top.begonia.wizardry.api.config.utils;
 
 import com.google.common.collect.ImmutableList;
-import org.jetbrains.annotations.Contract;
-import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +30,7 @@ public final class UndoManager {
     private final List<UndoManager.Step<?>> redos = new ArrayList<>();
 
     public void undo() {
-        if (canUndo()) {
+        if (this.canUndo()) {
             UndoManager.Step<?> step = undos.removeLast();
             step.runUndo();
             redos.add(step);
@@ -40,7 +38,7 @@ public final class UndoManager {
     }
 
     public void redo() {
-        if (canRedo()) {
+        if (this.canRedo()) {
             UndoManager.Step<?> step = redos.removeLast();
             step.runRedo();
             undos.add(step);
@@ -55,8 +53,7 @@ public final class UndoManager {
         }
     }
 
-    @Contract("_, _, _, _ -> new")
-    public <T> UndoManager.@NonNull Step<T> step(Consumer<T> run, T newValue, Consumer<T> undo, T oldValue) {
+    public <T> UndoManager.Step<T> step(Consumer<T> run, T newValue, Consumer<T> undo, T oldValue) {
         return new UndoManager.Step<>(run, newValue, undo, oldValue);
     }
 
@@ -73,14 +70,7 @@ public final class UndoManager {
     }
 
     public void add(final List<UndoManager.Step<?>> steps) {
-        add(new UndoManager.Step<>(
-                        _ -> steps.forEach(UndoManager.Step::runRedo),
-                        null,
-                        _ -> steps.forEach(UndoManager.Step::runUndo),
-                        null
-                ),
-                true
-        );
+        add(new UndoManager.Step<>(n -> steps.forEach(UndoManager.Step::runRedo), null, n -> steps.forEach(UndoManager.Step::runUndo), null), true);
     }
 
     public boolean canUndo() {

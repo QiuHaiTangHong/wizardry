@@ -1,10 +1,12 @@
-package top.begonia.wizardry.client.gui.config.utils;
+package top.begonia.wizardry.api.config.utils;
 
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import net.minecraft.client.gui.screens.Screen;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +27,8 @@ public record Context(
     public Context {
     }
 
-    public static Context top(
-            final String modId,
-            final Screen parent,
-            final ModConfig modConfig,
-            Filter filter
-    ) {
+    @Contract("_, _, _, _ -> new")
+    public static @NonNull Context top(final String modId, final Screen parent, final ModConfig modConfig, Filter filter) {
         return new Context(
                 modId,
                 parent,
@@ -43,26 +41,23 @@ public record Context(
         );
     }
 
-    public static Context section(
-            final Context parentContext,
+    @Contract("_, _, _, _, _ -> new")
+    public static @NonNull Context section(
+            final @NonNull Context parentContext,
             final Screen parent,
             final Set<? extends UnmodifiableConfig.Entry> entries,
             final Map<String, Object> valueSpecs,
             final String key
     ) {
-        return new Context(
-                parentContext.modId,
-                parent,
-                parentContext.modConfig,
-                parentContext.modSpec,
-                entries,
-                valueSpecs,
-                parentContext.makeKeyList(key),
-                parentContext.filter
-        );
+        return new Context(parentContext.modId, parent, parentContext.modConfig, parentContext.modSpec, entries, valueSpecs,
+                parentContext.makeKeyList(key), parentContext.filter);
     }
 
-    public static Context list(final Context parentContext, final Screen parent) {
+    @Contract(value = "_, _ -> new", pure = true)
+    public static @NonNull Context list(
+            final @NonNull Context parentContext,
+            final Screen parent
+    ) {
         return new Context(
                 parentContext.modId,
                 parent,
@@ -75,7 +70,7 @@ public record Context(
         );
     }
 
-    private ArrayList<String> makeKeyList(final String key) {
+    public @NonNull ArrayList<String> makeKeyList(final String key) {
         final ArrayList<String> result = new ArrayList<>(keylist);
         result.add(key);
         return result;
