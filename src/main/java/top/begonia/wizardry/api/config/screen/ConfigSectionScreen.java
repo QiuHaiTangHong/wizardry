@@ -16,12 +16,15 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.TranslatableEnum;
 import org.apache.logging.log4j.util.Strings;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.config.utils.*;
 
 import java.util.*;
@@ -32,8 +35,7 @@ import java.util.function.Supplier;
 
 public class ConfigSectionScreen extends OptionsSubScreen {
     protected final Context context;
-    // Ideally this should not be static, but we need it in the construtor's super() call
-    protected static final TranslationChecker translationChecker = new TranslationChecker();
+    protected final TranslationChecker translationChecker = new TranslationChecker();
     public ModConfigSpec.RestartType needsRestart = ModConfigSpec.RestartType.NONE;
     protected boolean changed = false;
     protected final Map<String, ConfigSectionScreen> sectionCache = new HashMap<>();
@@ -49,6 +51,15 @@ public class ConfigSectionScreen extends OptionsSubScreen {
     ) {
         super(context.parent(), Minecraft.getInstance().options, title);
         this.context = context;
+    }
+
+    public ConfigSectionScreen(
+            @NonNull Context context,
+            final ModConfig.Type type,
+            Component title
+    ) {
+        this(context, title);
+        this.needsRestart = type == ModConfig.Type.STARTUP ? ModConfigSpec.RestartType.GAME : ModConfigSpec.RestartType.NONE;
     }
 
     public ConfigSectionScreen(
@@ -69,62 +80,65 @@ public class ConfigSectionScreen extends OptionsSubScreen {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected ConfigSectionScreen rebuild() {
-        if (list != null) { // this may be called early, skip and wait for init() then
-            list.clearEntries();
+        if (this.list != null) { // this may be called early, skip and wait for init() then
+            this.list.clearEntries();
             boolean hasUndoableElements = false;
             final List<@Nullable Element> elements = new ArrayList<>();
-            for (final UnmodifiableConfig.Entry entry : context.entries()) {
+            for (final UnmodifiableConfig.Entry entry : this.context.entries()) {
                 final String key = entry.getKey();
                 final Object rawValue = entry.getRawValue();
                 switch (entry.getRawValue()) {
                     case ModConfigSpec.ConfigValue cv -> {
-                        var valueSpec = getValueSpec(key);
-                        var element = switch (valueSpec) {
-                            case ModConfigSpec.ListValueSpec listValueSpec -> {
-                                yield createList(key, listValueSpec, cv);
-                            }
-                            case ModConfigSpec.ValueSpec spec when cv.getClass() == ModConfigSpec.ConfigValue.class
-                                    && spec.getDefault() instanceof String -> {
-                                yield createStringValue(key, valueSpec::test, () -> (String) cv.getRaw(), cv::set);
-                            }
-                            case ModConfigSpec.ValueSpec spec when cv.getClass() == ModConfigSpec.ConfigValue.class
-                                    && spec.getDefault() instanceof Integer -> {
-                                yield createIntegerValue(key, valueSpec, () -> (Integer) cv.getRaw(), cv::set);
-                            }
-                            case ModConfigSpec.ValueSpec spec when cv.getClass() == ModConfigSpec.ConfigValue.class
-                                    && spec.getDefault() instanceof Long -> {
-                                yield createLongValue(key, valueSpec, () -> (Long) cv.getRaw(), cv::set);
-                            }
-                            case ModConfigSpec.ValueSpec spec when cv.getClass() == ModConfigSpec.ConfigValue.class
-                                    && spec.getDefault() instanceof Double -> {
-                                yield createDoubleValue(key, valueSpec, () -> (Double) cv.getRaw(), cv::set);
-                            }
-                            case ModConfigSpec.ValueSpec spec when cv.getClass() == ModConfigSpec.ConfigValue.class
-                                    && spec.getDefault() instanceof Enum<?> -> {
-                                yield createEnumValue(key, valueSpec, (Supplier) cv::getRaw, (Consumer) cv::set);
-                            }
-                            case null -> null;
-                            default -> switch (cv) {
-                                case ModConfigSpec.BooleanValue value -> {
-                                    yield createBooleanValue(key, valueSpec, value::getRaw, value::set);
+                        var valueSpec = this.getValueSpec(key);
+                        Element element = this.createSpecialValue(key, cv, valueSpec);
+                        if (element == null) {
+                            element = switch (valueSpec) {
+                                case ModConfigSpec.ListValueSpec listValueSpec -> {
+                                    yield this.createList(key, listValueSpec, cv);
                                 }
-                                case ModConfigSpec.IntValue value -> {
-                                    yield createIntegerValue(key, valueSpec, value::getRaw, value::set);
+                                case ModConfigSpec.ValueSpec spec when cv.getClass() == ModConfigSpec.ConfigValue.class
+                                        && spec.getDefault() instanceof String -> {
+                                    yield this.createStringValue(key, valueSpec::test, () -> (String) cv.getRaw(), cv::set);
                                 }
-                                case ModConfigSpec.LongValue value -> {
-                                    yield createLongValue(key, valueSpec, value::getRaw, value::set);
+                                case ModConfigSpec.ValueSpec spec when cv.getClass() == ModConfigSpec.ConfigValue.class
+                                        && spec.getDefault() instanceof Integer -> {
+                                    yield this.createIntegerValue(key, valueSpec, () -> (Integer) cv.getRaw(), cv::set);
                                 }
-                                case ModConfigSpec.DoubleValue value -> {
-                                    yield createDoubleValue(key, valueSpec, value::getRaw, value::set);
+                                case ModConfigSpec.ValueSpec spec when cv.getClass() == ModConfigSpec.ConfigValue.class
+                                        && spec.getDefault() instanceof Long -> {
+                                    yield this.createLongValue(key, valueSpec, () -> (Long) cv.getRaw(), cv::set);
                                 }
-                                case ModConfigSpec.EnumValue value -> {
-                                    yield createEnumValue(key, valueSpec, (Supplier) value::getRaw, (Consumer) value::set);
+                                case ModConfigSpec.ValueSpec spec when cv.getClass() == ModConfigSpec.ConfigValue.class
+                                        && spec.getDefault() instanceof Double -> {
+                                    yield this.createDoubleValue(key, valueSpec, () -> (Double) cv.getRaw(), cv::set);
                                 }
-                                default -> {
-                                    yield createOtherValue(key, cv);
+                                case ModConfigSpec.ValueSpec spec when cv.getClass() == ModConfigSpec.ConfigValue.class
+                                        && spec.getDefault() instanceof Enum<?> -> {
+                                    yield this.createEnumValue(key, valueSpec, (Supplier) cv::getRaw, (Consumer) cv::set);
                                 }
+                                case null -> null;
+                                default -> switch (cv) {
+                                    case ModConfigSpec.BooleanValue value -> {
+                                        yield this.createBooleanValue(key, valueSpec, value::getRaw, value::set);
+                                    }
+                                    case ModConfigSpec.IntValue value -> {
+                                        yield this.createIntegerValue(key, valueSpec, value::getRaw, value::set);
+                                    }
+                                    case ModConfigSpec.LongValue value -> {
+                                        yield this.createLongValue(key, valueSpec, value::getRaw, value::set);
+                                    }
+                                    case ModConfigSpec.DoubleValue value -> {
+                                        yield this.createDoubleValue(key, valueSpec, value::getRaw, value::set);
+                                    }
+                                    case ModConfigSpec.EnumValue value -> {
+                                        yield this.createEnumValue(key, valueSpec, (Supplier) value::getRaw, (Consumer) value::set);
+                                    }
+                                    default -> {
+                                        yield this.createOtherValue(key, cv);
+                                    }
+                                };
                             };
-                        };
+                        }
                         elements.add(context.filter().filterEntry(context, key, element));
                     }
                     case UnmodifiableConfig subsection when context.valueSpecs().get(key) instanceof UnmodifiableConfig subconfig -> {
@@ -185,6 +199,117 @@ public class ConfigSectionScreen extends OptionsSubScreen {
         }
     }
 
+    protected boolean isNonDefault(ModConfigSpec.@NonNull ConfigValue<?> cv) {
+        return !Objects.equals(cv.getRaw(), cv.getDefault());
+    }
+
+    protected boolean isAnyNondefault() {
+        for (final UnmodifiableConfig.Entry entry : this.context.entries()) {
+            if (entry.getRawValue() instanceof final ModConfigSpec.ConfigValue<?> cv) {
+                if (!(getValueSpec(entry.getKey()) instanceof ModConfigSpec.ListValueSpec) && isNonDefault(cv)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    protected void addFooter() {
+        if (this.undoButton != null || this.resetButton != null) {
+            LinearLayout linearlayout = this.layout.addToFooter(LinearLayout.horizontal().spacing(8));
+            if (this.undoButton != null) {
+                linearlayout.addChild(this.undoButton);
+            }
+            if (this.resetButton != null) {
+                linearlayout.addChild(this.resetButton);
+            }
+            linearlayout.addChild(this.doneButton);
+        } else {
+            super.addFooter();
+        }
+    }
+
+    protected void createUndoButton() {
+        this.undoButton = Button.builder(BuiltInConfig.UNDO, _ -> {
+            this.undoManager.undo();
+            rebuild();
+        }).tooltip(Tooltip.create(BuiltInConfig.UNDO_TOOLTIP)).width(Button.SMALL_WIDTH).build();
+        this.undoButton.active = false;
+    }
+
+    protected void setUndoButtonstate(boolean state) {
+        if (this.undoButton != null) {
+            this.undoButton.active = state;
+        }
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    protected void createResetButton() {
+        this.resetButton = Button.builder(BuiltInConfig.RESET, _ -> {
+            List<UndoManager.Step<?>> list = new ArrayList<>();
+            for (final UnmodifiableConfig.Entry entry : context.entries()) {
+                if (entry.getRawValue() instanceof final ModConfigSpec.ConfigValue cv
+                        && !(this.getValueSpec(entry.getKey()) instanceof ModConfigSpec.ListValueSpec)
+                        && this.isNonDefault(cv)
+                ) {
+                    final String key = entry.getKey();
+                    list.add(
+                            this.undoManager.step(
+                                    v -> {
+                                        cv.set(v);
+                                        this.onChanged(key);
+                                    },
+                                    this.getValueSpec(key).correct(null),
+                                    v -> {
+                                        cv.set(v);
+                                        this.onChanged(key);
+                                    },
+                                    cv.getRaw()
+                            )
+                    );
+                }
+            }
+            this.undoManager.add(list);
+            this.rebuild();
+        }).tooltip(Tooltip.create(BuiltInConfig.RESET_TOOLTIP)).width(Button.SMALL_WIDTH).build();
+    }
+
+    protected void setResetButtonstate(boolean state) {
+        if (resetButton != null) {
+            resetButton.active = state;
+        }
+    }
+
+    @Override
+    public void onClose() {
+        if (this.changed) {
+            if (this.lastScreen instanceof final ConfigSectionScreen parent) {
+                // "bubble up" the marker so the top-most section can change the ModConfig
+                parent.changed = true;
+            } else {
+                // we are a top-level per-type config screen, i.e. one specific config file. Save the config and tell the mod to reload.
+                this.context.modSpec().save();
+            }
+            // the restart flag only matters when there were actual changes
+            if (this.lastScreen instanceof final ConfigSectionScreen parent) {
+                parent.needsRestart = parent.needsRestart.with(this.needsRestart);
+            } else if (this.lastScreen instanceof final ConfigurationScreen parent) {
+                parent.needsRestart = parent.needsRestart.with(this.needsRestart);
+            }
+        }
+        super.onClose();
+    }
+
+    @Override
+    public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        this.setUndoButtonstate(this.undoManager.canUndo()); // in render()? Really? --- Yes! This is how vanilla does it.
+        this.setResetButtonstate(this.isAnyNondefault());
+        super.extractRenderState(graphics, mouseX, mouseY, a);
+    }
+
+    //region 翻译辅助方法
+    //@formatter:off
     protected String getTranslationKey(final String key) {
         final ModConfigSpec.ValueSpec valueSpec = getValueSpec(key);
         final String result = valueSpec != null
@@ -235,104 +360,44 @@ public class ConfigSectionScreen extends OptionsSubScreen {
         }
         return component;
     }
+    //@formatter:on
+    //endregion
 
-    protected boolean isNonDefault(ModConfigSpec.@NonNull ConfigValue<?> cv) {
-        return !Objects.equals(cv.getRaw(), cv.getDefault());
-    }
-
-    protected boolean isAnyNondefault() {
-        for (final UnmodifiableConfig.Entry entry : this.context.entries()) {
-            if (entry.getRawValue() instanceof final ModConfigSpec.ConfigValue<?> cv) {
-                if (!(getValueSpec(entry.getKey()) instanceof ModConfigSpec.ListValueSpec) && isNonDefault(cv)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    @Override
-    protected void addFooter() {
-        if (this.undoButton != null || this.resetButton != null) {
-            LinearLayout linearlayout = this.layout.addToFooter(LinearLayout.horizontal().spacing(8));
-            if (this.undoButton != null) {
-                linearlayout.addChild(this.undoButton);
-            }
-            if (this.resetButton != null) {
-                linearlayout.addChild(this.resetButton);
-            }
-            linearlayout.addChild(this.doneButton);
-        } else {
-            super.addFooter();
-        }
-    }
-
-    protected void createUndoButton() {
-        undoButton = Button.builder(BuiltInConfig.UNDO, button -> {
-            undoManager.undo();
-            rebuild();
-        }).tooltip(Tooltip.create(BuiltInConfig.UNDO_TOOLTIP)).width(Button.SMALL_WIDTH).build();
-        undoButton.active = false;
-    }
-
-    protected void setUndoButtonstate(boolean state) {
-        if (this.undoButton != null) {
-            this.undoButton.active = state;
-        }
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    protected void createResetButton() {
-        this.resetButton = Button.builder(BuiltInConfig.RESET, _ -> {
-            List<UndoManager.Step<?>> list = new ArrayList<>();
-            for (final UnmodifiableConfig.Entry entry : context.entries()) {
-                if (entry.getRawValue() instanceof final ModConfigSpec.ConfigValue cv
-                        && !(getValueSpec(entry.getKey()) instanceof ModConfigSpec.ListValueSpec)
-                        && isNonDefault(cv)
-                ) {
-                    final String key = entry.getKey();
-                    list.add(this.undoManager.step(v -> {
-                        cv.set(v);
-                        onChanged(key);
-                    }, getValueSpec(key).correct(null), v -> {
-                        cv.set(v);
-                        onChanged(key);
-                    }, cv.getRaw()));
-                }
-            }
-            this.undoManager.add(list);
-            this.rebuild();
-        }).tooltip(Tooltip.create(BuiltInConfig.RESET_TOOLTIP)).width(Button.SMALL_WIDTH).build();
-    }
-
-    protected void setResetButtonstate(boolean state) {
-        if (resetButton != null) {
-            resetButton.active = state;
-        }
-    }
-
-    @Override
-    public void onClose() {
-        if (this.changed) {
-            if (this.lastScreen instanceof final ConfigSectionScreen parent) {
-                // "bubble up" the marker so the top-most section can change the ModConfig
-                parent.changed = true;
-            } else {
-                // we are a top-level per-type config screen, i.e. one specific config file. Save the config and tell the mod to reload.
-                this.context.modSpec().save();
-            }
-            // the restart flag only matters when there were actual changes
-            if (this.lastScreen instanceof final ConfigSectionScreen parent) {
-                parent.needsRestart = parent.needsRestart.with(this.needsRestart);
-            } else if (this.lastScreen instanceof final ConfigurationScreen parent) {
-                parent.needsRestart = parent.needsRestart.with(this.needsRestart);
-            }
-        }
-        super.onClose();
-    }
-
+    //region 配置项UI构建方法
     protected Collection<? extends Element> createSyntheticValues() {
         return Collections.emptyList();
+    }
+
+    protected Element createSpecialValue(
+            final String key,
+            final ModConfigSpec.@NonNull ConfigValue<?> configValue,
+            final ModConfigSpec.ValueSpec valueSpec
+    ) {
+        List<String> path = configValue.getPath();
+        List<String> target = List.of("client", "spellHUDSkin");
+        if (path.getLast().equals(target.getLast())
+                && path.equals(target)
+        ) {
+            return new Element(
+                    this.getTranslationComponent(key),
+                    this.getTooltipComponent(key, null),
+                    Button.builder(
+                            Component.literal(
+                                    configValue.get().toString()
+                            ),
+                            _ -> this.minecraft.gui.setScreen(
+                                    new SelectHUDSkinScreen(
+                                            Context.value(
+                                                    this.context,
+                                                    this
+                                            ),
+                                            Component.translatable("config." + Wizardry.MODID + ".spell_hud_skin.preview")
+                                    )
+                            )
+                    ).build()
+            );
+        }
+        return null;
     }
 
     @Nullable
@@ -411,8 +476,14 @@ public class ConfigSectionScreen extends OptionsSubScreen {
      * A custom variant of OptionsInstance.Enum that doesn't show the key on the button, just the value
      */
     public record Custom<T>(List<T> values) implements OptionInstance.ValueSet<T> {
+        @Contract(pure = true)
         @Override
-        public Function<OptionInstance<T>, AbstractWidget> createButton(OptionInstance.TooltipSupplier<T> tooltip, Options options, int x, int y, int width, OptionInstance.ValueUpdateListener<? super T> target) {
+        public @NonNull Function<OptionInstance<T>, AbstractWidget> createButton(
+                OptionInstance.@NonNull TooltipSupplier<T> tooltip,
+                @NonNull Options options,
+                int x, int y, int width,
+                OptionInstance.@NonNull ValueUpdateListener<? super T> target
+        ) {
             return optionsInstance -> CycleButton.builder(optionsInstance.toString, (Supplier<T>) optionsInstance::get)
                     .withValues(CycleButton.ValueListSupplier.create(this.values))
                     .withTooltip(tooltip)
@@ -429,8 +500,9 @@ public class ConfigSectionScreen extends OptionsSubScreen {
             return values.contains(value) ? Optional.of(value) : Optional.empty();
         }
 
+        @Contract(pure = true)
         @Override
-        public Codec<T> codec() {
+        public @Nullable Codec<T> codec() {
             return null;
         }
 
@@ -438,20 +510,35 @@ public class ConfigSectionScreen extends OptionsSubScreen {
     }
 
     @Nullable
-    protected Element createBooleanValue(final String key, final ModConfigSpec.ValueSpec spec, final Supplier<Boolean> source, final Consumer<Boolean> target) {
-        return new Element(getTranslationComponent(key), getTooltipComponent(key, null),
-                new OptionInstance<>(getTranslationKey(key), getTooltip(key, null), OptionInstance.BOOLEAN_TO_STRING, ConfigurationScreen.ConfigurationSectionScreen.Custom.BOOLEAN_VALUES_NO_PREFIX, source.get(), newValue -> {
-                    // regarding change detection: new value always is different (cycle button)
-                    undoManager.add(v -> {
-                        target.accept(v);
-                        onChanged(key);
-                    }, newValue, v -> {
-                        target.accept(v);
-                        onChanged(key);
-                    }, source.get());
-                }));
+    protected Element createBooleanValue(final String key, final ModConfigSpec.ValueSpec spec, final @NonNull Supplier<Boolean> source, final Consumer<Boolean> target) {
+        return new Element(
+                getTranslationComponent(key),
+                getTooltipComponent(key, null),
+                new OptionInstance<>(
+                        getTranslationKey(key),
+                        getTooltip(key, null),
+                        OptionInstance.BOOLEAN_TO_STRING,
+                        Custom.BOOLEAN_VALUES_NO_PREFIX,
+                        source.get(),
+                        newValue -> {
+                            // regarding change detection: new value always is different (cycle button)
+                            undoManager.add(
+                                    v -> {
+                                        target.accept(v);
+                                        onChanged(key);
+                                    },
+                                    newValue,
+                                    v -> {
+                                        target.accept(v);
+                                        onChanged(key);
+                                    }, source.get()
+                            );
+                        }
+                )
+        );
     }
 
+    @SuppressWarnings("unchecked")
     @Nullable
     protected <T extends Enum<T>> Element createEnumValue(
             final String key,
@@ -459,7 +546,7 @@ public class ConfigSectionScreen extends OptionsSubScreen {
             final @NonNull Supplier<T> source,
             final Consumer<T> target
     ) {
-        @SuppressWarnings("unchecked") final Class<T> clazz = (Class<T>) spec.getClazz();
+        final Class<T> clazz = (Class<T>) spec.getClazz();
         assert clazz != null;
         final List<T> list = Arrays.stream(clazz.getEnumConstants()).filter(spec::test).toList();
         return new Element(
@@ -575,7 +662,7 @@ public class ConfigSectionScreen extends OptionsSubScreen {
             final T zero
     ) {
         final ModConfigSpec.Range<T> range = spec.getRange();
-        final EditBox box = new EditBox(font, Button.DEFAULT_WIDTH, Button.DEFAULT_HEIGHT, getTranslationComponent(key));
+        final EditBox box = new EditBox(this.font, Button.DEFAULT_WIDTH, Button.DEFAULT_HEIGHT, getTranslationComponent(key));
         box.setEditable(true);
         box.setTooltip(Tooltip.create(getTooltipComponent(key, range)));
         box.setValue(source.get() + "");
@@ -584,7 +671,7 @@ public class ConfigSectionScreen extends OptionsSubScreen {
                 final T newValue = parser.apply(newValueString);
                 if (tester != null ? tester.test(newValue) : (newValue != null && (range == null || range.test(newValue)) && spec.test(newValue))) {
                     if (!newValue.equals(source.get())) {
-                        undoManager.add(v -> {
+                        this.undoManager.add(v -> {
                             target.accept(v);
                             onChanged(key);
                         }, newValue, v -> {
@@ -634,7 +721,7 @@ public class ConfigSectionScreen extends OptionsSubScreen {
                                                 subconfig.valueMap(),
                                                 key,
                                                 subsection.entrySet(),
-                                                Component.translatable(getTranslationKey(key))
+                                                Component.translatable(this.getTranslationKey(key))
                                         ).rebuild())
                                 )
                         )
@@ -669,7 +756,7 @@ public class ConfigSectionScreen extends OptionsSubScreen {
                         _ -> minecraft.gui.setScreen(
                                 this.sectionCache.computeIfAbsent(
                                         key,
-                                        _ -> new ConfigurationListScreen<>(
+                                        _ -> new ConfigListScreen<>(
                                                 Context.list(context, this), key,
                                                 Component.translatable(
                                                         BuiltInConfig.CRUMB,
@@ -685,11 +772,5 @@ public class ConfigSectionScreen extends OptionsSubScreen {
                 false
         );
     }
-
-    @Override
-    public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-        this.setUndoButtonstate(this.undoManager.canUndo()); // in render()? Really? --- Yes! This is how vanilla does it.
-        this.setResetButtonstate(this.isAnyNondefault());
-        super.extractRenderState(graphics, mouseX, mouseY, a);
-    }
+    //endregion
 }

@@ -70,6 +70,22 @@ public record Context(
         );
     }
 
+    public static @NonNull Context value(
+            final @NonNull Context parentContext,
+            final Screen parent
+    ) {
+        return new Context(
+                parentContext.modId,
+                parent,
+                parentContext.modConfig,
+                parentContext.modSpec,
+                parentContext.entries,
+                parentContext.valueSpecs,
+                parentContext.keylist,
+                null
+        );
+    }
+
     public @NonNull ArrayList<String> makeKeyList(final String key) {
         final ArrayList<String> result = new ArrayList<>(keylist);
         result.add(key);

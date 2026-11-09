@@ -187,7 +187,7 @@ public abstract class AbstractDataManager extends ContextAwareReloadListener imp
         }
         Map<Class<? extends IResultData>, Map<Identifier, ? extends IResultData>> immutableStorage = new HashMap<>();
         workingMap.forEach((clazz, innerMap) -> immutableStorage.put(clazz, Map.copyOf(innerMap)));
-        storageSnapshot = Map.copyOf(immutableStorage);
+        this.storageSnapshot = Map.copyOf(immutableStorage);
         if (failedCount > 0) {
             Wizardry.LOGGER.warn("{} 数据重载完成: 成功加载 {} 项配置，🌟 发现 {} 项配置解析失败（请查看上方警告日志）",
                     Wizardry.MODID, totalLoaded, failedCount);

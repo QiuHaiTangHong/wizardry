@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public class ConfigurationListScreen<T> extends ConfigSectionScreen {
+public class ConfigListScreen<T> extends ConfigSectionScreen {
     protected final String key;
     protected final ModConfigSpec.ListValueSpec spec;
 
@@ -26,7 +26,7 @@ public class ConfigurationListScreen<T> extends ConfigSectionScreen {
     // the copy of the data we are working on
     protected List<T> cfgList;
 
-    public ConfigurationListScreen(
+    public ConfigListScreen(
             final Context context,
             final String key,
             final Component title,
