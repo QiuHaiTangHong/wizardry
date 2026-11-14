@@ -15,9 +15,7 @@ import top.begonia.wizardry.api.data.manager.ClientDataManager;
 import top.begonia.wizardry.api.particle.extension.builder.ParticleBuilder;
 import top.begonia.wizardry.api.particle.manager.WizardryParticleManager;
 import top.begonia.wizardry.api.particle.options.IParticleOptionsExtension;
-import top.begonia.wizardry.client.gui.widget.Skin;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,7 +23,6 @@ public class WizardryClientApi {
     private static final WizardryClientApi INSTANCE = new WizardryClientApi();
     private final ClientDataManager dataManager = new ClientDataManager();
     private final WizardryParticleManager particleManager = new WizardryParticleManager();
-    private final Map<String, Skin> skins = new HashMap<>();
 
     private WizardryClientApi() {
     }

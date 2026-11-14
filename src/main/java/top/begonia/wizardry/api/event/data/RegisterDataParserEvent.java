@@ -5,6 +5,8 @@ import net.neoforged.bus.api.Event;
 import net.neoforged.fml.event.IModBusEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.api.data.IDataParser;
+import top.begonia.wizardry.api.data.IParserContext;
+import top.begonia.wizardry.api.data.IResultData;
 
 import java.util.Map;
 
@@ -22,16 +24,16 @@ import java.util.Map;
  * @version 1.0.0
  */
 public class RegisterDataParserEvent extends Event implements IModBusEvent {
-    protected final Map<Identifier, IDataParser<?, ?, ?>> registry;
+    protected final Map<Identifier, IDataParser<IResultData, IParserContext, IResultData>> registry;
 
-    public RegisterDataParserEvent(Map<Identifier, IDataParser<?, ?, ?>> registry) {
+    public RegisterDataParserEvent(Map<Identifier, IDataParser<IResultData, IParserContext, IResultData>> registry) {
         this.registry = registry;
     }
 
-    public void register(@NonNull IDataParser<?, ?, ?> parser) {
+    public <P extends IResultData, C extends IParserContext, R extends IResultData> void register(@NonNull IDataParser<P, C, R> parser) {
         Identifier id = parser.getIdentifier();
         if (id != null) {
-            this.registry.put(id, parser);
+            this.registry.put(id, (IDataParser<IResultData, IParserContext, IResultData>) parser);
         }
     }
 
@@ -50,13 +52,13 @@ public class RegisterDataParserEvent extends Event implements IModBusEvent {
      * @since 1.0.0
      */
     public static class ClientRegisterDataParserEvent extends RegisterDataParserEvent {
-        public ClientRegisterDataParserEvent(Map<Identifier, IDataParser<?, ?, ?>> registry) {
+        public ClientRegisterDataParserEvent(Map<Identifier, IDataParser<IResultData, IParserContext, IResultData>> registry) {
             super(registry);
         }
     }
 
     public static class CommonRegisterDataParserEvent extends RegisterDataParserEvent {
-        public CommonRegisterDataParserEvent(Map<Identifier, IDataParser<?, ?, ?>> registry) {
+        public CommonRegisterDataParserEvent(Map<Identifier, IDataParser<IResultData, IParserContext, IResultData>> registry) {
             super(registry);
         }
     }

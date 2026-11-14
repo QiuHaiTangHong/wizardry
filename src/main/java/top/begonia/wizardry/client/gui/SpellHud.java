@@ -20,8 +20,7 @@ import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.WizardryClientApi;
 import top.begonia.wizardry.api.item.ISpellCastingItem;
-import top.begonia.wizardry.client.data.definition.hub.SpellHubDescriptionData;
-import top.begonia.wizardry.client.gui.widget.Skin;
+import top.begonia.wizardry.client.data.definition.hub.SkinsData;
 import top.begonia.wizardry.client.util.DrawingUtils;
 import top.begonia.wizardry.client.util.GlyphGenerator;
 import top.begonia.wizardry.core.config.ClientConfig;
@@ -31,7 +30,6 @@ import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.Map;
 
 public class SpellHud {
@@ -53,7 +51,6 @@ public class SpellHud {
     private static final int SPELL_SWITCH_TIME = 4;
     private static final int HALF_HOTBAR_WIDTH = 97;
     private static final int OFFHAND_SLOT_WIDTH = 29;
-    private static final Map<String, Skin> skins = new HashMap<>();
     private static float switchTimer = 0.0f;
     private static float prevSwitchTimer = 0.0f;
 
@@ -88,7 +85,7 @@ public class SpellHud {
             flipX = flipX == ((mainHand ? player.getMainArm() : player.getMainArm().getOpposite()) == HumanoidArm.LEFT);
         }
 
-        Skin skin = getSkin(ClientConfig.spellHUDSkin);
+        SkinsData.Skin skin = getSkin(ClientConfig.spellHUDSkin);
 
         if (skin == null) {
             return;
@@ -105,8 +102,8 @@ public class SpellHud {
                 && (player.getMainArm() == HumanoidArm.LEFT) == flipX) {
             xSpace -= OFFHAND_SLOT_WIDTH;
         }
-        if (!flipY && skin.getWidth() > xSpace) {
-            float scale = xSpace / (float) skin.getWidth();
+        if (!flipY && skin.width() > xSpace) {
+            float scale = xSpace / (float) skin.width();
             poseStack.scale(scale, scale);
             x = Mth.ceil(x / scale);
             y = Mth.ceil(y / scale);
@@ -250,19 +247,10 @@ public class SpellHud {
     }
 
     @Nullable
-    public static Skin getSkin(String key) {
-        if (skins.isEmpty()) {
-            Map<Identifier, SpellHubDescriptionData> spellHudDesc = WizardryClientApi.getInstance().getAllDataByType(SpellHubDescriptionData.class);
-            spellHudDesc.forEach((_, spellHubDescriptionData) ->
-                    spellHubDescriptionData.item().forEach((name, value) ->
-                            skins.put(name, new Skin(value.texture(), value.metadata()))
-                    )
-            );
-        }
-
-        Skin skin = skins.get(key);
+    public static SkinsData.Skin getSkin(String key) {
+        Map<String, SkinsData.Skin> skins = WizardryClientApi.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "spell_hud/index"), SkinsData.class).orElse(SkinsData.DEFAULT).skins();
+        SkinsData.Skin skin = skins.get(key);
         if (skin == null) {
-
             Wizardry.LOGGER.info("The spell HUD skin '{}' specified in the config did not match any of the loaded skins; using the default skin as a fallback.", ClientConfig.spellHUDSkin);
 
             skin = skins.get(ClientConfig.DEFAULT_HUD_SKIN_KEY);

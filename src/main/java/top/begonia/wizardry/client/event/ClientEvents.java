@@ -281,8 +281,9 @@ public class ClientEvents {
         event.register(new HandbookDataParser());
         event.register(new BookshelfModelParser());
         event.register(new ParticleParser());
-        event.register(new SpellHubConfigParser());
-        event.register(new SpellHubDescriptionParser());
+        event.register(new SkinDataParser());
+//        event.register(new SpellHubConfigParser());
+//        event.register(new SpellHubDescriptionParser());
     }
 
     @SubscribeEvent

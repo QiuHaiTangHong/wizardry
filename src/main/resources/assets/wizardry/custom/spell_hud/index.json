@@ -1,0 +1,91 @@
+{
+  "parser": "wizardry:skin_data_parser",
+  "default": {
+    "texture": "wizardry:textures/gui/spell_hud/default.png",
+    "metadata": "wizardry:spell_hud/metadata/default"
+  },
+  "classic": {
+    "texture": "wizardry:textures/gui/spell_hud/classic.png",
+    "metadata": "wizardry:spell_hud/metadata/classic"
+  },
+  "vanilla_style": {
+    "texture": "wizardry:textures/gui/spell_hud/vanilla_style.png",
+    "metadata": "wizardry:spell_hud/metadata/vanilla_style"
+  },
+  "redwood": {
+    "texture": "wizardry:textures/gui/spell_hud/redwood.png",
+    "metadata": "wizardry:spell_hud/metadata/redwood"
+  },
+  "silverwood": {
+    "texture": "wizardry:textures/gui/spell_hud/silverwood.png",
+    "metadata": "wizardry:spell_hud/metadata/silverwood"
+  },
+  "stone": {
+    "texture": "wizardry:textures/gui/spell_hud/stone.png",
+    "metadata": "wizardry:spell_hud/metadata/stone"
+  },
+  "sandstone": {
+    "texture": "wizardry:textures/gui/spell_hud/sandstone.png",
+    "metadata": "wizardry:spell_hud/metadata/sandstone"
+  },
+  "jungle": {
+    "texture": "wizardry:textures/gui/spell_hud/jungle.png",
+    "metadata": "wizardry:spell_hud/metadata/jungle"
+  },
+  "spell_book": {
+    "texture": "wizardry:textures/gui/spell_hud/spell_book.png",
+    "metadata": "wizardry:spell_hud/metadata/spell_book"
+  },
+  "minimal": {
+    "texture": "wizardry:textures/gui/spell_hud/minimal.png",
+    "metadata": "wizardry:spell_hud/metadata/minimal"
+  },
+  "compact": {
+    "texture": "wizardry:textures/gui/spell_hud/compact.png",
+    "metadata": "wizardry:spell_hud/metadata/compact"
+  },
+  "skyrim_style": {
+    "texture": "wizardry:textures/gui/spell_hud/skyrim_style.png",
+    "metadata": "wizardry:spell_hud/metadata/skyrim_style"
+  },
+  "futuristic": {
+    "texture": "wizardry:textures/gui/spell_hud/futuristic.png",
+    "metadata": "wizardry:spell_hud/metadata/futuristic"
+  },
+  "steampunk": {
+    "texture": "wizardry:textures/gui/spell_hud/steampunk.png",
+    "metadata": "wizardry:spell_hud/metadata/steampunk"
+  },
+  "dragon": {
+    "texture": "wizardry:textures/gui/spell_hud/dragon.png",
+    "metadata": "wizardry:spell_hud/metadata/dragon"
+  },
+  "compass": {
+    "texture": "wizardry:textures/gui/spell_hud/compass.png",
+    "metadata": "wizardry:spell_hud/metadata/compass"
+  },
+  "mahogany": {
+    "texture": "wizardry:textures/gui/spell_hud/mahogany.png",
+    "metadata": "wizardry:spell_hud/metadata/mahogany"
+  },
+  "oceanic": {
+    "texture": "wizardry:textures/gui/spell_hud/oceanic.png",
+    "metadata": "wizardry:spell_hud/metadata/oceanic"
+  },
+  "planks": {
+    "texture": "wizardry:textures/gui/spell_hud/planks.png",
+    "metadata": "wizardry:spell_hud/metadata/planks"
+  },
+  "festive": {
+    "texture": "wizardry:textures/gui/spell_hud/festive.png",
+    "metadata": "wizardry:spell_hud/metadata/festive"
+  },
+  "library": {
+    "texture": "wizardry:textures/gui/spell_hud/library.png",
+    "metadata": "wizardry:spell_hud/metadata/library"
+  },
+  "altar": {
+    "texture": "wizardry:textures/gui/spell_hud/altar.png",
+    "metadata": "wizardry:spell_hud/metadata/altar"
+  }
+}

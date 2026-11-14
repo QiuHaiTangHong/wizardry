@@ -33,8 +33,8 @@ public class ClientDataManager extends AbstractDataManager {
     }
 
     @Override
-    protected Map<Identifier, IDataParser<?, ? extends IParserContext, ? extends IResultData>> getParserRegistry() {
-        Map<Identifier, IDataParser<?, ? extends IParserContext, ? extends IResultData>> result = new HashMap<>();
+    protected Map<Identifier, IDataParser<IResultData, IParserContext, IResultData>> getParserRegistry() {
+        Map<Identifier, IDataParser<IResultData, IParserContext, IResultData>> result = new HashMap<>();
         ModLoader.postEvent(new RegisterDataParserEvent.ClientRegisterDataParserEvent(result));
         return result;
     }

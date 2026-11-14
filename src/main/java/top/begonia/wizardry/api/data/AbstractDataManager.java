@@ -18,7 +18,6 @@ import net.neoforged.fml.ModLoader;
 import net.neoforged.neoforge.common.conditions.ConditionalOps;
 import net.neoforged.neoforge.resource.ContextAwareReloadListener;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.api.event.data.DataParserBefore;
 
@@ -31,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public abstract class AbstractDataManager extends ContextAwareReloadListener implements PreparableReloadListener {
-    protected Map<Identifier, IDataParser<?, ? extends IParserContext, ? extends IResultData>> parserRegistry;
+    protected Map<Identifier, IDataParser<IResultData, IParserContext, IResultData>> parserRegistry;
     protected Map<Class<? extends IResultData>, Map<Identifier, ? extends IResultData>> storageSnapshot;
     protected final static Codec<JsonElement> CODEC = Codec.PASSTHROUGH.xmap(
             dynamic -> dynamic.convert(JsonOps.INSTANCE).getValue(),
@@ -48,12 +47,12 @@ public abstract class AbstractDataManager extends ContextAwareReloadListener imp
 
     protected void recollect() {
         if (this.parserRegistry == null || this.parserRegistry.isEmpty()) {
-            Map<Identifier, IDataParser<?, ? extends IParserContext, ? extends IResultData>> result = this.getParserRegistry();
+            Map<Identifier, IDataParser<IResultData, IParserContext, IResultData>> result = this.getParserRegistry();
             this.parserRegistry = ImmutableMap.copyOf(result);
         }
     }
 
-    protected abstract Map<Identifier, IDataParser<?, ? extends IParserContext, ? extends IResultData>> getParserRegistry();
+    protected abstract Map<Identifier, IDataParser<IResultData, IParserContext, IResultData>> getParserRegistry();
 
     public <T extends IResultData> Optional<T> getData(Identifier id, Class<T> expectedType) {
         Map<Class<? extends IResultData>, Map<Identifier, ? extends IResultData>> currentStorage = storageSnapshot;
@@ -130,63 +129,66 @@ public abstract class AbstractDataManager extends ContextAwareReloadListener imp
     }
 
     protected void apply(@NonNull Map<Identifier, JsonElement> identifierJsonElementMap, @NonNull ResourceManager resourceManager, @NonNull ProfilerFiller profilerFiller, PreparableReloadListener.@NonNull SharedState currentReload) {
+        ImmutableMap<Identifier, JsonElement> immutableJsonMap = ImmutableMap.copyOf(identifierJsonElementMap);
         Map<Identifier, IParserContext> parserContexts = new HashMap<>();
         ModLoader.postEvent(new DataParserBefore(parserContexts));
-        Map<Class<? extends IResultData>, Map<Identifier, IResultData>> workingMap = new HashMap<>();
+        Map<IDataParser<IResultData, IParserContext, IResultData>, Map<Identifier, IResultData>> workingMap = new HashMap<>();
         this.recollect();
         int totalLoaded = 0;
         int failedCount = 0;
         for (Map.Entry<Identifier, JsonElement> entry : identifierJsonElementMap.entrySet()) {
             Identifier location = entry.getKey();
             JsonElement element = entry.getValue();
-            if (!element.isJsonObject()) {
-                Wizardry.LOGGER.warn("wizardry:拒绝解析数据 '{}': 根节点必须是一个 JSON 对象", location);
-                failedCount++;
-                continue;
-            }
-            JsonObject jsonObject = element.getAsJsonObject();
-            if (!jsonObject.has("parser")) {
-                Wizardry.LOGGER.warn("wizardry:拒绝解析数据 '{}': 找不到必填的 \"parser\" 标识字段", location);
-                failedCount++;
-                continue;
-            }
-            String parserStr = jsonObject.get("parser").getAsString();
-            Identifier parserId = Identifier.tryParse(parserStr);
-            if (parserId == null) {
-                Wizardry.LOGGER.error("wizardry:解析数据 '{}' 失败: 声明的 parser 命名空间格式非法 -> '{}'", location, parserStr);
-                failedCount++;
-                continue;
-            }
-            @SuppressWarnings("rawtypes")
-            IDataParser parser = this.parserRegistry.get(parserId);
-            IParserContext context = parserContexts.get(parserId);
-            if (parser == null) {
-                Wizardry.LOGGER.error("wizardry:解析数据 '{}' 失败: 找不到已注册的解析器 '{}'。请检查 SPI 配置或当前端(Dist)是否支持！", location, parserId);
-                failedCount++;
-                continue;
-            }
-            try {
-                JsonObject cleanObject = element.getAsJsonObject().deepCopy();
-                cleanObject.remove("parser");
-                @SuppressWarnings("unchecked")
-                IResultData result = this.safeExecutePipeline(location, parser, cleanObject, context, currentReload, resourceManager, profilerFiller);
-                if (result == null) {
-                    Wizardry.LOGGER.error("wizardry:解析数据 '{}' 失败: 解析器 [{}] 无法反序列化此数据，返回了 null (请检查控制台上的 Codec 具体报错)",
-                            parser.getClass().getSimpleName(), location);
+            if (element instanceof JsonObject jsonObject && jsonObject.has("parser")) {
+                String parserStr = jsonObject.get("parser").getAsString();
+                Identifier parserId = Identifier.tryParse(parserStr);
+                if (parserId == null) {
+                    Wizardry.LOGGER.error("wizardry:解析数据 '{}' 失败: 声明的 parser 命名空间格式非法 -> '{}'", location, parserStr);
                     failedCount++;
                     continue;
                 }
-                workingMap.computeIfAbsent(result.getDataClass(), _ -> new HashMap<>()).put(location, result);
-                totalLoaded++;
-
-            } catch (Exception e) {
-                Wizardry.LOGGER.error("wizardry:解析数据 '{}' 时发生严重崩溃！正在使用的解析器: [{}]",
-                        location, parser.getClass().getName(), e);
-                failedCount++;
+                if (parserId.equals(Identifier.fromNamespaceAndPath(Wizardry.MODID, "skin_data_parser"))) {
+                    Wizardry.LOGGER.info("aaa");
+                }
+                jsonObject.remove("parser");
+                IDataParser<IResultData, IParserContext, IResultData> parser = this.parserRegistry.get(parserId);
+                if (parser == null) {
+                    Wizardry.LOGGER.error("wizardry:解析数据 '{}' 失败: 找不到已注册的解析器 '{}'.", location, parserId);
+                    failedCount++;
+                    continue;
+                }
+                JsonElement mergeResult = parser.mergeElement(jsonObject, immutableJsonMap);
+                if (mergeResult instanceof JsonObject mergeJson) {
+                    try {
+                        IResultData result = this.safeExecutePipeline(parser, mergeJson, profilerFiller);
+                        if (result == null) {
+                            Wizardry.LOGGER.error("wizardry:解析数据 '{}' 失败: 解析器 [{}] 无法反序列化此数据，返回了 null (请检查控制台上的 Codec 具体报错)",
+                                    parser.getClass().getSimpleName(), location);
+                            failedCount++;
+                            continue;
+                        }
+                        workingMap.computeIfAbsent(parser, _ -> new HashMap<>()).put(location, result);
+                        totalLoaded++;
+                    } catch (Exception e) {
+                        Wizardry.LOGGER.error("wizardry:解析数据 '{}' 时发生严重崩溃！正在使用的解析器: [{}]",
+                                location, parser.getClass().getName(), e);
+                        failedCount++;
+                    }
+                }
             }
         }
-        Map<Class<? extends IResultData>, Map<Identifier, ? extends IResultData>> immutableStorage = new HashMap<>();
-        workingMap.forEach((clazz, innerMap) -> immutableStorage.put(clazz, Map.copyOf(innerMap)));
+        Map<Class<IResultData>, Map<Identifier, IResultData>> immutableStorage = new HashMap<>();
+        for (Map.Entry<IDataParser<IResultData, IParserContext, IResultData>, Map<Identifier, IResultData>> entry : workingMap.entrySet()) {
+            IDataParser<IResultData, IParserContext, IResultData> parser = entry.getKey();
+            for (Map.Entry<Identifier, IResultData> idDataEntry : entry.getValue().entrySet()) {
+                Identifier id = idDataEntry.getKey();
+                IResultData tempData = idDataEntry.getValue();
+                IResultData result = parser.transformItemToResult(id, tempData, null, currentReload, resourceManager);
+                if (result.isResult()) {
+                    immutableStorage.computeIfAbsent((Class<IResultData>) result.getClass(), _ -> new HashMap<>()).put(id, result);
+                }
+            }
+        }
         this.storageSnapshot = Map.copyOf(immutableStorage);
         if (failedCount > 0) {
             Wizardry.LOGGER.warn("{} 数据重载完成: 成功加载 {} 项配置，🌟 发现 {} 项配置解析失败（请查看上方警告日志）",
@@ -197,18 +199,14 @@ public abstract class AbstractDataManager extends ContextAwareReloadListener imp
         }
     }
 
-    private <P, C extends IParserContext, R extends IResultData> R safeExecutePipeline(
-            Identifier identifier,
-            @NonNull IDataParser<P, C, R> parser,
+    private IResultData safeExecutePipeline(
+            @NonNull IDataParser<? extends IResultData, ? extends IParserContext, ? extends IResultData> parser,
             JsonElement element,
-            @Nullable C context,
-            PreparableReloadListener.SharedState currentReload,
-            @NonNull ResourceManager resourceManager,
             @NonNull ProfilerFiller profilerFiller
     ) {
         profilerFiller.push("parserItem");
-        P rawData = parser.parserItem(element);
+        IResultData rawData = parser.parserItem(element);
         profilerFiller.pop();
-        return parser.transformItemToResult(identifier, rawData, context, currentReload, resourceManager);
+        return rawData;
     }
 }
