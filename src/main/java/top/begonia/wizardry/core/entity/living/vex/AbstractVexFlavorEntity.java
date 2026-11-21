@@ -16,12 +16,12 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.entity.atom.IFlagEntity;
-import top.begonia.wizardry.api.entity.atom.ILifeTicksEntity;
-import top.begonia.wizardry.api.entity.atom.IOwnableEntity;
-import top.begonia.wizardry.api.entity.atom.IAttachedEntity;
-import top.begonia.wizardry.api.entity.ai.goal.VexChargeAttackGoal;
-import top.begonia.wizardry.api.entity.ai.goal.VexMoveRandomGoal;
+import top.begonia.wizardry.api.core.entity.atom.IFlagEntity;
+import top.begonia.wizardry.api.core.entity.atom.ILifeTicksEntity;
+import top.begonia.wizardry.api.core.entity.atom.IOwnableEntity;
+import top.begonia.wizardry.api.core.entity.atom.IAttachedEntity;
+import top.begonia.wizardry.api.core.entity.ai.goal.VexChargeAttackGoal;
+import top.begonia.wizardry.api.core.entity.ai.goal.VexMoveRandomGoal;
 
 public abstract class AbstractVexFlavorEntity extends Monster implements IAttachedEntity, ILifeTicksEntity, IOwnableEntity, IFlagEntity {
     protected static final EntityDataAccessor<Integer> FLAGS_ID = SynchedEntityData.defineId(
@@ -57,7 +57,7 @@ public abstract class AbstractVexFlavorEntity extends Monster implements IAttach
         super.tick();
         this.noPhysics = true;
         this.setNoGravity(true);
-        if (this.hasLifeTicks){
+        if (this.hasLifeTicks) {
             this.updateDelegate();
         }
     }
@@ -100,7 +100,7 @@ public abstract class AbstractVexFlavorEntity extends Monster implements IAttach
     }
 
     @Override
-    public @Nullable LivingEntity getOwner(){
+    public @Nullable LivingEntity getOwner() {
         return EntityReference.getLivingEntity(this.owner, this.level());
     }
 

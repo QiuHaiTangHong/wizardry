@@ -13,7 +13,7 @@ import net.minecraft.util.Mth;
 import org.joml.Quaternionf;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.entity.utils.EntityFlags;
+import top.begonia.wizardry.api.core.entity.utils.EntityFlags;
 import top.begonia.wizardry.client.model.entity.RemnantModel;
 import top.begonia.wizardry.client.renderer.entity.state.RemnantRenderState;
 import top.begonia.wizardry.client.util.EntityLayerLocations;

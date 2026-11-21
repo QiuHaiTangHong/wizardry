@@ -8,8 +8,8 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.constants.ConfigCategory;
-import top.begonia.wizardry.api.constants.FriendlyFire;
+import top.begonia.wizardry.api.core.constants.ConfigCategory;
+import top.begonia.wizardry.api.core.constants.FriendlyFire;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -1187,7 +1187,7 @@ public final class SyncedConfig {
         //@formatter:off
         //@formatter:on
         //endregion
-        
+
         SPEC = BUILDER.build();
     }
 

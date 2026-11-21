@@ -24,8 +24,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.WizardryClientApi;
-import top.begonia.wizardry.api.constants.BuiltBlockStateProperties;
+import top.begonia.wizardry.api.client.WizardryClientApi;
+import top.begonia.wizardry.api.core.constants.BuiltBlockStateProperties;
 import top.begonia.wizardry.client.gui.LecternScreen;
 import top.begonia.wizardry.core.entity.block.LecternBlockEntity;
 import top.begonia.wizardry.core.registry.WizardryBlockEntities;
@@ -73,7 +73,7 @@ public class LecternBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NonNull BlockState rotate(@NonNull BlockState state, @NonNull Rotation rotation){
+    public @NonNull BlockState rotate(@NonNull BlockState state, @NonNull Rotation rotation) {
         return state.setValue(
                 net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING,
                 rotation.rotate(state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING))

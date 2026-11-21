@@ -22,7 +22,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.constants.WoodTypeEnum;
+import top.begonia.wizardry.api.core.constants.WoodTypeEnum;
 import top.begonia.wizardry.client.util.GeometryUtils;
 
 import javax.annotation.Nullable;
@@ -71,7 +71,7 @@ public final class BlockUtils {
         return findNearbyFloorSpace(level, origin, horizontalRange, verticalRange);
     }
 
-    public static boolean isDirection(Property<?> property){
+    public static boolean isDirection(Property<?> property) {
         return property == BlockStateProperties.FACING
                 || property == BlockStateProperties.FACING_HOPPER
                 || property == BlockStateProperties.HORIZONTAL_FACING;
@@ -153,8 +153,8 @@ public final class BlockUtils {
      *
      * <p>用于方块替换时保留方向、形状等状态属性。</p>
      *
-     * @param from 原始方块状态
-     * @param to 目标方块状态
+     * @param from           原始方块状态
+     * @param to             目标方块状态
      * @param propertyTester 属性过滤条件
      * @return 复制属性后的目标方块状态
      */
@@ -164,7 +164,7 @@ public final class BlockUtils {
             Predicate<Property<?>> propertyTester
     ) {
         for (Property<?> property : from.getProperties()) {
-            if (propertyTester.test(property)){
+            if (propertyTester.test(property)) {
                 to = BlockState.copyProperty(from, to, property);
             }
         }

@@ -8,7 +8,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import top.begonia.wizardry.api.WizardryClientApi;
+import top.begonia.wizardry.api.client.WizardryClientApi;
 import top.begonia.wizardry.client.util.ClientHelper;
 import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;

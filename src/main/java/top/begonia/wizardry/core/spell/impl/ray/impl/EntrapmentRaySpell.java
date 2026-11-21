@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.WizardryClientApi;
+import top.begonia.wizardry.api.client.WizardryClientApi;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;

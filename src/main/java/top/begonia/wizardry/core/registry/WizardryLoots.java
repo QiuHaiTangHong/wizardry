@@ -12,7 +12,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.constants.ElementEnum;
+import top.begonia.wizardry.api.core.constants.ElementEnum;
 import top.begonia.wizardry.core.loot.RandomSpell;
 import top.begonia.wizardry.core.loot.WizardSpell;
 

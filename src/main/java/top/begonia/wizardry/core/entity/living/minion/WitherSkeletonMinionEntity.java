@@ -20,7 +20,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import top.begonia.wizardry.core.config.ClientConfig;
-import top.begonia.wizardry.api.entity.hybrid.ISummonedCreature;
+import top.begonia.wizardry.api.core.entity.hybrid.ISummonedCreature;
 import top.begonia.wizardry.core.registry.WizardryEntities;
 
 public class WitherSkeletonMinionEntity extends WitherSkeleton implements ISummonedCreature {

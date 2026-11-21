@@ -24,7 +24,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.WizardryClientApi;
+import top.begonia.wizardry.api.client.WizardryClientApi;
 import top.begonia.wizardry.client.data.definition.bookshelf.BookshelfBookSettings;
 import top.begonia.wizardry.client.data.definition.model.OnlyModelQuads;
 import top.begonia.wizardry.client.renderer.entity.state.block.BookshelfRenderState;

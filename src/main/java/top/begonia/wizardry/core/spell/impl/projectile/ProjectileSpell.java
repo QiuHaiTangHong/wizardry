@@ -16,7 +16,7 @@ import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.core.data.constant.definition.spell.part.SpellContext;
-import top.begonia.wizardry.api.entity.atom.ISpellCaster;
+import top.begonia.wizardry.api.core.entity.atom.ISpellCaster;
 import top.begonia.wizardry.core.entity.projectile.MagicProjectileEntity;
 import top.begonia.wizardry.core.entity.projectile.bomb.BombEntity;
 import top.begonia.wizardry.core.registry.WizardryItems;

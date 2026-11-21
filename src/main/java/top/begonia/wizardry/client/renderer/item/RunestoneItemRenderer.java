@@ -6,14 +6,13 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
-import net.minecraft.util.ARGB;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.renderer.WizardryRenderTypes;
+import top.begonia.wizardry.api.client.renderer.WizardryRenderTypes;
 
 import javax.annotation.Nullable;
 import java.util.List;

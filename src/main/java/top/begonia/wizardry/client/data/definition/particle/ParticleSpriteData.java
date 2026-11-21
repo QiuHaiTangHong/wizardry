@@ -2,8 +2,8 @@ package top.begonia.wizardry.client.data.definition.particle;
 
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.data.IResultData;
-import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
+import top.begonia.wizardry.api.core.data.IResultData;
+import top.begonia.wizardry.api.client.particle.extension.MutableDoubleSpriteSet;
 
 public record ParticleSpriteData(
         MutableDoubleSpriteSet spriteSet

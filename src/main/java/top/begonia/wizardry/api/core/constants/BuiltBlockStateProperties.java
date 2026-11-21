@@ -1,0 +1,15 @@
+package top.begonia.wizardry.api.core.constants;
+
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+
+public final class BuiltBlockStateProperties {
+    public static final EnumProperty<WoodTypeEnum> WOOD_TYPE = EnumProperty.create(
+            "wood_type",
+            WoodTypeEnum.class
+    );
+    public static final EnumProperty<ElementEnum> ELEMENT = EnumProperty.create(
+            "element",
+            ElementEnum.class,
+            e -> e != ElementEnum.MAGIC
+    );
+}

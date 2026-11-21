@@ -16,7 +16,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.BonemealEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.WizardryClientApi;
+import top.begonia.wizardry.api.client.WizardryClientApi;
 import top.begonia.wizardry.core.config.SyncedConfig;
 import top.begonia.wizardry.core.registry.WizardryBlocks;
 import top.begonia.wizardry.core.registry.WizardryParticles;

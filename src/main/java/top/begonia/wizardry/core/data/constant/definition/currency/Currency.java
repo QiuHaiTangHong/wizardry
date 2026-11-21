@@ -7,7 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.data.IResultData;
+import top.begonia.wizardry.api.core.data.IResultData;
 import top.begonia.wizardry.core.data.constant.definition.currency.part.CurrencyEntry;
 
 import java.util.List;

@@ -20,9 +20,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.WizardryClientApi;
-import top.begonia.wizardry.api.entity.hybrid.ISummonedCreature;
-import top.begonia.wizardry.api.entity.ai.control.VexMoveControl;
+import top.begonia.wizardry.api.client.WizardryClientApi;
+import top.begonia.wizardry.api.core.entity.hybrid.ISummonedCreature;
+import top.begonia.wizardry.api.core.entity.ai.control.VexMoveControl;
 import top.begonia.wizardry.core.entity.living.vex.AbstractVexFlavorEntity;
 import top.begonia.wizardry.core.registry.WizardryParticles;
 

@@ -6,8 +6,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.constants.ElementEnum;
-import top.begonia.wizardry.api.item.IMultiTexturedItem;
+import top.begonia.wizardry.api.core.constants.ElementEnum;
+import top.begonia.wizardry.api.core.item.IMultiTexturedItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;
 
 public class MagicCrystalItem extends Item implements IMultiTexturedItem {

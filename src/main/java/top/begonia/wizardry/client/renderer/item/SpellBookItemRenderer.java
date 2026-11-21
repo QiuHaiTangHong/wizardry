@@ -13,7 +13,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.renderer.WizardryRenderTypes;
+import top.begonia.wizardry.api.client.renderer.WizardryRenderTypes;
 
 import java.util.List;
 import java.util.function.Consumer;

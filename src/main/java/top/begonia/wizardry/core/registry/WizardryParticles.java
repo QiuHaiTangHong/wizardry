@@ -7,8 +7,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.particle.options.impl.QuadParticleOptions;
-import top.begonia.wizardry.api.particle.options.impl.TargetParticleOptions;
+import top.begonia.wizardry.api.client.particle.options.impl.QuadParticleOptions;
+import top.begonia.wizardry.api.client.particle.options.impl.TargetParticleOptions;
 
 public final class WizardryParticles {
     private WizardryParticles() {

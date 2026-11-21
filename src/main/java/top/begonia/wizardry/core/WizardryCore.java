@@ -8,7 +8,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.WizardryApi;
+import top.begonia.wizardry.api.core.WizardryApi;
 import top.begonia.wizardry.client.network.ClientPayloadHandler;
 import top.begonia.wizardry.core.config.ClientConfig;
 import top.begonia.wizardry.core.config.SyncedConfig;

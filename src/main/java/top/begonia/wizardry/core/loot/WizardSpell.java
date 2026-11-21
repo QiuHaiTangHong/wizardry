@@ -11,7 +11,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.entity.atom.ISpellCaster;
+import top.begonia.wizardry.api.core.entity.atom.ISpellCaster;
 import top.begonia.wizardry.core.item.ScrollItem;
 import top.begonia.wizardry.core.item.SpellBookItem;
 import top.begonia.wizardry.core.registry.WizardryComponents;

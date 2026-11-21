@@ -6,9 +6,9 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.constants.ConfigCategory;
-import top.begonia.wizardry.api.constants.ElementEnum;
-import top.begonia.wizardry.api.constants.GuiPosition;
+import top.begonia.wizardry.api.core.constants.ConfigCategory;
+import top.begonia.wizardry.api.core.constants.ElementEnum;
+import top.begonia.wizardry.api.core.constants.GuiPosition;
 
 @EventBusSubscriber(modid = Wizardry.MODID)
 public final class ClientConfig {

@@ -1,0 +1,26 @@
+package top.begonia.wizardry.api.client.particle.extension.extract;
+
+import net.minecraft.client.Camera;
+import net.minecraft.world.entity.Entity;
+import top.begonia.wizardry.api.client.particle.extension.Layer;
+import top.begonia.wizardry.api.client.particle.renderer.CompositeParticleRenderState;
+
+public interface IBaseFlowOperation {
+    Layer getLayer();
+
+    Camera getCamera();
+
+    CompositeParticleRenderState getState();
+
+    Entity getLinkEntity();
+
+    float getPartialTick();
+
+    float getAge();
+
+    float getLifetime();
+
+    <T> void putAdditionalData(String name, T data, Class<T> type);
+
+    <T> T getAdditionalData(String name, Class<T> type);
+}

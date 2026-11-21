@@ -18,8 +18,8 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.joml.Matrix3x2fStack;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.WizardryClientApi;
-import top.begonia.wizardry.api.item.ISpellCastingItem;
+import top.begonia.wizardry.api.client.data.BuiltInData;
+import top.begonia.wizardry.api.core.item.ISpellCastingItem;
 import top.begonia.wizardry.client.data.definition.hub.SkinsData;
 import top.begonia.wizardry.client.util.DrawingUtils;
 import top.begonia.wizardry.client.util.GlyphGenerator;
@@ -28,9 +28,6 @@ import top.begonia.wizardry.core.registry.WizardryAttachment;
 import top.begonia.wizardry.core.registry.WizardryMobEffects;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 import top.begonia.wizardry.core.spell.AbstractSpell;
-
-import javax.annotation.Nullable;
-import java.util.Map;
 
 public class SpellHud {
     /**
@@ -85,7 +82,7 @@ public class SpellHud {
             flipX = flipX == ((mainHand ? player.getMainArm() : player.getMainArm().getOpposite()) == HumanoidArm.LEFT);
         }
 
-        SkinsData.Skin skin = getSkin(ClientConfig.spellHUDSkin);
+        SkinsData.Skin skin = BuiltInData.getSkin(ClientConfig.spellHUDSkin);
 
         if (skin == null) {
             return;
@@ -119,7 +116,7 @@ public class SpellHud {
             Component spellName = getFormattedSpellName(spell, player, cooldown);
             Component nextSpellName = getFormattedSpellName(((ISpellCastingItem) wand.getItem()).getNextSpell(wand), player, 0);
 
-            skin.drawText(
+            skin.extractText(
                     guiGraphicsExtractor,
                     x, y,
                     flipX, flipY,
@@ -142,7 +139,7 @@ public class SpellHud {
                 progress = maxCooldown == 0 ? 1 : (maxCooldown - (float) cooldown + partialTicks) / maxCooldown;
             }
 
-            skin.drawBackground(
+            skin.extractBackground(
                     guiGraphicsExtractor,
                     x, y,
                     flipX, flipY,
@@ -244,24 +241,6 @@ public class SpellHud {
         } else if (event.getName().equals(VanillaGuiLayers.OVERLAY_MESSAGE)) {
             SpellHud.renderSpellHUD(guiGraphics, player, wand, mainHand, width, height, partialTicks, true);
         }
-    }
-
-    @Nullable
-    public static SkinsData.Skin getSkin(String key) {
-        Map<String, SkinsData.Skin> skins = WizardryClientApi.getInstance().getData(Identifier.fromNamespaceAndPath(Wizardry.MODID, "spell_hud/index"), SkinsData.class).orElse(SkinsData.DEFAULT).skins();
-        SkinsData.Skin skin = skins.get(key);
-        if (skin == null) {
-            Wizardry.LOGGER.info("The spell HUD skin '{}' specified in the config did not match any of the loaded skins; using the default skin as a fallback.", ClientConfig.spellHUDSkin);
-
-            skin = skins.get(ClientConfig.DEFAULT_HUD_SKIN_KEY);
-
-            if (skin == null) {
-                Wizardry.LOGGER.warn("The default spell HUD skin is missing! A resource pack must have overridden it"
-                        + " with an invalid JSON file (default.json), please try again without any resource packs.");
-                return null;
-            }
-        }
-        return skin;
     }
 
     private static Component getFormattedSpellName(AbstractSpell spell, @NonNull Player player, int cooldown) {

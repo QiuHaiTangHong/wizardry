@@ -7,7 +7,7 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.data.IStaticDataParser;
+import top.begonia.wizardry.api.core.data.IStaticDataParser;
 import top.begonia.wizardry.client.data.definition.hub.SkinsData;
 
 import java.util.Map;

@@ -8,7 +8,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
-import top.begonia.wizardry.api.data.IResultData;
+import top.begonia.wizardry.api.core.data.IResultData;
 import top.begonia.wizardry.client.util.DrawingUtils;
 
 import java.util.Map;
@@ -100,7 +100,7 @@ public record SkinsData(
                 ).apply(instance, Skin::new)
         );
 
-        public void drawBackground(
+        public void extractBackground(
                 GuiGraphicsExtractor guiGraphicsExtractor,
                 int x, int y,
                 boolean flipX, boolean flipY,
@@ -198,7 +198,13 @@ public record SkinsData(
             }
         }
 
-        public void drawText(GuiGraphicsExtractor guiGraphicsExtractor, int x, int y, boolean flipX, boolean flipY, Component prevSpellName, Component spellName, Component nextSpellName, float animationProgress) {
+        public void extractText(
+                GuiGraphicsExtractor guiGraphicsExtractor,
+                int x, int y,
+                boolean flipX, boolean flipY,
+                Component prevSpellName, Component spellName, Component nextSpellName,
+                float animationProgress
+        ) {
             if (flipX && !this.mirror.x) x -= width;
             if (flipY && !this.mirror.y) y += height;
             Font font = Minecraft.getInstance().font;

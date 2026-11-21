@@ -25,8 +25,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.WizardryClientApi;
-import top.begonia.wizardry.api.constants.ElementEnum;
+import top.begonia.wizardry.api.client.WizardryClientApi;
+import top.begonia.wizardry.api.core.constants.ElementEnum;
 import top.begonia.wizardry.client.util.GeometryUtils;
 import top.begonia.wizardry.core.entity.block.ReceptacleBlockEntity;
 import top.begonia.wizardry.core.item.SpectralDustItem;
@@ -177,7 +177,7 @@ public class ReceptacleBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NonNull BlockState rotate(@NonNull BlockState state, @NonNull Rotation rotation){
+    public @NonNull BlockState rotate(@NonNull BlockState state, @NonNull Rotation rotation) {
         return state.setValue(
                 BlockStateProperties.FACING,
                 rotation.rotate(state.getValue(BlockStateProperties.FACING))

@@ -11,9 +11,9 @@ import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.data.IDataParser;
-import top.begonia.wizardry.api.data.IParserContext;
-import top.begonia.wizardry.api.particle.extension.MutableDoubleSpriteSet;
+import top.begonia.wizardry.api.core.data.IDataParser;
+import top.begonia.wizardry.api.core.data.IParserContext;
+import top.begonia.wizardry.api.client.particle.extension.MutableDoubleSpriteSet;
 import top.begonia.wizardry.client.data.definition.particle.ParticleDescriptionData;
 
 import java.util.ArrayList;

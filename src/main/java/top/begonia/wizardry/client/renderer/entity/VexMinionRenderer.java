@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.state.VexRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.entity.utils.EntityFlags;
+import top.begonia.wizardry.api.core.entity.utils.EntityFlags;
 import top.begonia.wizardry.core.entity.living.minion.VexMinionEntity;
 
 public class VexMinionRenderer extends MobRenderer<VexMinionEntity, VexRenderState, VexModel> {

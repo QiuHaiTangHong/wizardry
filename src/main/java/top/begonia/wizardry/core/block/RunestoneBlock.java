@@ -8,8 +8,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.MapColor;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.constants.ElementEnum;
-import top.begonia.wizardry.api.constants.BuiltBlockStateProperties;
+import top.begonia.wizardry.api.core.constants.ElementEnum;
+import top.begonia.wizardry.api.core.constants.BuiltBlockStateProperties;
 
 public class RunestoneBlock extends Block {
     public RunestoneBlock(BlockBehaviour.Properties properties) {

@@ -13,7 +13,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.WizardryClientApi;
+import top.begonia.wizardry.api.client.WizardryClientApi;
 import top.begonia.wizardry.core.damage.WizardryDamageSource;
 import top.begonia.wizardry.core.damage.WizardryDamageTypes;
 import top.begonia.wizardry.core.registry.WizardryItems;

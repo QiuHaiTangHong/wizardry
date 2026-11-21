@@ -12,7 +12,7 @@ import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.event.data.RegisterDataParserEvent;
+import top.begonia.wizardry.api.core.event.data.RegisterDataParserEvent;
 import top.begonia.wizardry.core.data.SpellGlyph;
 import top.begonia.wizardry.core.data.constant.parser.CurrencyParser;
 import top.begonia.wizardry.core.data.constant.parser.DamageImmuneParser;
@@ -30,6 +30,7 @@ import top.begonia.wizardry.core.util.DamageSafetyChecker;
 public class CoreEvent {
     /**
      * 在玩家登入时添加逻辑
+     *
      * @param event 玩家登入事件
      * @see PlayerEvent.PlayerLoggedInEvent
      */
@@ -47,6 +48,7 @@ public class CoreEvent {
 
     /**
      * 当方块被玩家破坏时触发
+     *
      * @param event 方块破坏事件
      * @see BreakBlockEvent
      */
@@ -73,6 +75,7 @@ public class CoreEvent {
 
     /**
      * 注册数据解析器
+     *
      * @param event Wizardry的数据解析器注册事件
      * @see RegisterDataParserEvent.CommonRegisterDataParserEvent
      */
@@ -85,6 +88,7 @@ public class CoreEvent {
 
     /**
      * 创造模式标签页构造时触发
+     *
      * @param event 构建创造模式标签页事件
      * @see BuildCreativeModeTabContentsEvent
      */
@@ -116,6 +120,7 @@ public class CoreEvent {
 
     /**
      * 为实体创建默认属性
+     *
      * @param event 实体属性创建事件
      * @see EntityAttributeCreationEvent
      */

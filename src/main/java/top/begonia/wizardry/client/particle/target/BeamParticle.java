@@ -5,11 +5,11 @@ import net.minecraft.util.ARGB;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.particle.extension.Layer;
-import top.begonia.wizardry.api.particle.extension.extract.ExtractFlow;
-import top.begonia.wizardry.api.particle.impl.CompositeTargetedParticle;
-import top.begonia.wizardry.api.particle.options.impl.TargetParticleOptions;
-import top.begonia.wizardry.api.particle.renderer.CompositeParticleRenderState;
+import top.begonia.wizardry.api.client.particle.extension.Layer;
+import top.begonia.wizardry.api.client.particle.extension.extract.ExtractFlow;
+import top.begonia.wizardry.api.client.particle.impl.CompositeTargetedParticle;
+import top.begonia.wizardry.api.client.particle.options.impl.TargetParticleOptions;
+import top.begonia.wizardry.api.client.particle.renderer.CompositeParticleRenderState;
 
 public class BeamParticle extends CompositeTargetedParticle<TargetParticleOptions> {
     private static final float THICKNESS = 0.1f;

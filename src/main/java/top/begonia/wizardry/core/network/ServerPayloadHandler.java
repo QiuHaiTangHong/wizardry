@@ -15,7 +15,7 @@ import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.core.network.data.HandbookRecipesRequestPayload;
 import top.begonia.wizardry.core.network.data.HandbookRecipesResultPayload;
 import top.begonia.wizardry.core.inventory.menu.ArcaneWorkbenchMenu;
-import top.begonia.wizardry.api.item.ISpellCastingItem;
+import top.begonia.wizardry.api.core.item.ISpellCastingItem;
 import top.begonia.wizardry.core.network.data.ControlInputPayload;
 import top.begonia.wizardry.core.network.data.SpellQuickAccessPayload;
 

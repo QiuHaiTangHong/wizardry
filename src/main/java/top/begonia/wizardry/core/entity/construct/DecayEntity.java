@@ -6,8 +6,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import top.begonia.wizardry.api.WizardryClientApi;
-import top.begonia.wizardry.client.WizardryClient;
+import top.begonia.wizardry.api.client.WizardryClientApi;
 import top.begonia.wizardry.core.registry.*;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 

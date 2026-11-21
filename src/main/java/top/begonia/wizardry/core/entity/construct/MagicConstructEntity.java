@@ -15,9 +15,9 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.entity.atom.ILifeTicksEntity;
-import top.begonia.wizardry.api.entity.atom.IOwnableEntity;
-import top.begonia.wizardry.api.item.ISpellCastingItem;
+import top.begonia.wizardry.api.core.entity.atom.ILifeTicksEntity;
+import top.begonia.wizardry.api.core.entity.atom.IOwnableEntity;
+import top.begonia.wizardry.api.core.item.ISpellCastingItem;
 import top.begonia.wizardry.core.registry.WizardryEntityDataSerializers;
 import top.begonia.wizardry.core.util.AllyDesignationSystem;
 

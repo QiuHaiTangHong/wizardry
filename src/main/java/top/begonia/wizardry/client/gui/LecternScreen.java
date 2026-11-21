@@ -20,7 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.WizardryClientApi;
+import top.begonia.wizardry.api.client.WizardryClientApi;
 import top.begonia.wizardry.client.gui.widget.InvisibleButton;
 import top.begonia.wizardry.client.gui.widget.SpellSortButton;
 import top.begonia.wizardry.client.gui.widget.TurnPageButton;

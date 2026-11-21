@@ -7,8 +7,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.WizardryClientApi;
-import top.begonia.wizardry.api.config.screen.ConfigScreen;
+import top.begonia.wizardry.api.client.WizardryClientApi;
+import top.begonia.wizardry.api.client.config.screen.ConfigScreen;
 
 @Mod(value = Wizardry.MODID, dist = Dist.CLIENT)
 public class WizardryClient {

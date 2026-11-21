@@ -13,7 +13,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.entity.atom.ICustomHitbox;
+import top.begonia.wizardry.api.core.entity.atom.ICustomHitbox;
 import top.begonia.wizardry.core.entity.construct.MagicConstructEntity;
 import top.begonia.wizardry.core.entity.construct.scaled.ScaledConstructEntity;
 import top.begonia.wizardry.core.registry.WizardryEntities;

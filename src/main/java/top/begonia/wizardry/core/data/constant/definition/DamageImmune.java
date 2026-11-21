@@ -3,7 +3,7 @@ package top.begonia.wizardry.core.data.constant.definition;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
-import top.begonia.wizardry.api.data.IResultData;
+import top.begonia.wizardry.api.core.data.IResultData;
 
 import java.util.HashMap;
 import java.util.List;

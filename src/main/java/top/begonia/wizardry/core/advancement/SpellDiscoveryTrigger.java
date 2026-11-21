@@ -7,7 +7,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.event.DiscoverSpellEvent;
+import top.begonia.wizardry.api.core.event.DiscoverSpellEvent;
 import top.begonia.wizardry.core.spell.AbstractSpell;
 
 import java.util.Optional;

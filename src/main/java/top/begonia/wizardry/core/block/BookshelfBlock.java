@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.constants.BuiltBlockStateProperties;
+import top.begonia.wizardry.api.core.constants.BuiltBlockStateProperties;
 import top.begonia.wizardry.core.entity.block.BookshelfBlockEntity;
 import top.begonia.wizardry.core.registry.WizardryBlockEntities;
 

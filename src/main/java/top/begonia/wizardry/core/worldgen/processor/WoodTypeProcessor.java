@@ -12,8 +12,8 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.constants.BuiltBlockStateProperties;
-import top.begonia.wizardry.api.constants.WoodTypeEnum;
+import top.begonia.wizardry.api.core.constants.BuiltBlockStateProperties;
+import top.begonia.wizardry.api.core.constants.WoodTypeEnum;
 import top.begonia.wizardry.core.registry.WizardryBlocks;
 import top.begonia.wizardry.core.util.BlockUtils;
 

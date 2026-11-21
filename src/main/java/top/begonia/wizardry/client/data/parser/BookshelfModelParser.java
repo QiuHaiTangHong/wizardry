@@ -9,7 +9,7 @@ import org.joml.Vector3fc;
 import top.begonia.wizardry.Wizardry;
 import top.begonia.wizardry.client.data.definition.model.BookshelfModel;
 import top.begonia.wizardry.client.data.definition.model.OnlyModelQuads;
-import top.begonia.wizardry.api.data.IStaticDataParser;
+import top.begonia.wizardry.api.core.data.IStaticDataParser;
 
 import java.util.ArrayList;
 import java.util.List;

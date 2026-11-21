@@ -3,10 +3,10 @@ package top.begonia.wizardry.client.particle.quad;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.particle.extension.extract.IColorFlowOperation;
-import top.begonia.wizardry.api.particle.extension.extract.ISizeFlowOperation;
-import top.begonia.wizardry.api.particle.impl.OneQuadParticle;
-import top.begonia.wizardry.api.particle.options.impl.QuadParticleOptions;
+import top.begonia.wizardry.api.client.particle.extension.extract.IColorFlowOperation;
+import top.begonia.wizardry.api.client.particle.extension.extract.ISizeFlowOperation;
+import top.begonia.wizardry.api.client.particle.impl.OneQuadParticle;
+import top.begonia.wizardry.api.client.particle.options.impl.QuadParticleOptions;
 
 public class FlashParticle extends OneQuadParticle {
     public FlashParticle(ClientLevel level, @NonNull QuadParticleOptions options, double x, double y, double z) {

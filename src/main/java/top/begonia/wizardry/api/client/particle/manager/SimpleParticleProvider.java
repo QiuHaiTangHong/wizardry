@@ -1,0 +1,16 @@
+package top.begonia.wizardry.api.client.particle.manager;
+
+import net.minecraft.client.multiplayer.ClientLevel;
+import org.jetbrains.annotations.Nullable;
+import top.begonia.wizardry.api.client.particle.CompositeParticle;
+import top.begonia.wizardry.api.client.particle.options.IParticleOptionsExtension;
+
+@FunctionalInterface
+public interface SimpleParticleProvider<T extends IParticleOptionsExtension> {
+    @Nullable
+    CompositeParticle<T> createParticle(
+            ClientLevel clientLevel,
+            T options,
+            double x, double y, double z
+    );
+}
