@@ -1,4 +1,4 @@
-package top.begonia.wizardry.api.client.data;
+package top.begonia.wizardry.api.client.constants;
 
 import net.minecraft.resources.Identifier;
 import top.begonia.wizardry.Wizardry;

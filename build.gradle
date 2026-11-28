@@ -48,6 +48,10 @@ neoForge {
         configureEach {
             systemProperty 'forge.logging.markers', 'REGISTRIES'
 
+            // Minecraft debug flags
+            systemProperty 'MC_DEBUG_ENABLED', 'true'
+            systemProperty 'MC_DEBUG_RENDER_UI_LAYERING_RECTANGLES', 'false'
+
             // Recommended logging level for the console
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels

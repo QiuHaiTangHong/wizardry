@@ -19,7 +19,7 @@ import net.neoforged.fml.config.ModConfigs;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.client.config.utils.BuiltInConfig;
+import top.begonia.wizardry.api.client.config.utils.ConfigShared;
 import top.begonia.wizardry.api.client.config.utils.Context;
 import top.begonia.wizardry.api.client.config.utils.TranslationChecker;
 
@@ -44,7 +44,7 @@ public class ConfigScreen extends OptionsSubScreen {
                 Component.translatable(
                         translationChecker.check(
                                 mod.getModId() + ".configuration.title",
-                                BuiltInConfig.LANG_PREFIX + "title"
+                                ConfigShared.LANG_PREFIX + "title"
                         ),
                         mod.getModInfo().getDisplayName()
                 )
@@ -95,7 +95,7 @@ public class ConfigScreen extends OptionsSubScreen {
                             Button btn = Button.builder(
                                     message,
                                     _ -> this.minecraft.gui.setScreen(this.sectionScreen.apply(context, type, subScreenTitle))
-                            ).width(BuiltInConfig.BIG_BUTTON_WIDTH).build();
+                            ).width(ConfigShared.BIG_BUTTON_WIDTH).build();
                             if (list != null) {
                                 this.list.addSmall(btn, null);
                             }
@@ -127,7 +127,7 @@ public class ConfigScreen extends OptionsSubScreen {
                     } else {
                         super.onClose();
                     }
-                }, BuiltInConfig.GAME_RESTART_TITLE, BuiltInConfig.GAME_RESTART_MESSAGE, BuiltInConfig.GAME_RESTART_YES, BuiltInConfig.RESTART_NO));
+                }, ConfigShared.GAME_RESTART_TITLE, ConfigShared.GAME_RESTART_MESSAGE, ConfigShared.GAME_RESTART_YES, ConfigShared.RESTART_NO));
                 return;
             }
             case WORLD -> {
@@ -141,12 +141,12 @@ public class ConfigScreen extends OptionsSubScreen {
                                             super.onClose();
                                         }
                                     },
-                                    BuiltInConfig.SERVER_RESTART_TITLE,
-                                    BuiltInConfig.SERVER_RESTART_MESSAGE,
+                                    ConfigShared.SERVER_RESTART_TITLE,
+                                    ConfigShared.SERVER_RESTART_MESSAGE,
                                     minecraft.isLocalServer()
-                                            ? BuiltInConfig.RETURN_TO_MENU
+                                            ? ConfigShared.RETURN_TO_MENU
                                             : CommonComponents.GUI_DISCONNECT,
-                                    BuiltInConfig.RESTART_NO
+                                    ConfigShared.RESTART_NO
                             )
                     );
                     return;

@@ -18,7 +18,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.joml.Matrix3x2fStack;
 import org.jspecify.annotations.NonNull;
 import top.begonia.wizardry.Wizardry;
-import top.begonia.wizardry.api.client.data.BuiltInData;
+import top.begonia.wizardry.api.client.constants.BuiltInData;
 import top.begonia.wizardry.api.core.item.ISpellCastingItem;
 import top.begonia.wizardry.client.data.definition.hub.SkinsData;
 import top.begonia.wizardry.client.util.DrawingUtils;

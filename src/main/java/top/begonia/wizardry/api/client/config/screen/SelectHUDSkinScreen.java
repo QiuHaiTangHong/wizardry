@@ -1,5 +1,6 @@
 package top.begonia.wizardry.api.client.config.screen;
 
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
@@ -9,45 +10,70 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jspecify.annotations.NonNull;
-import top.begonia.wizardry.api.client.config.utils.BuiltInConfig;
-import top.begonia.wizardry.api.client.config.utils.Context;
+import top.begonia.wizardry.api.client.config.utils.ConfigShared;
 import top.begonia.wizardry.api.client.config.utils.UndoManager;
 
 public class SelectHUDSkinScreen extends Screen {
-    private final Context context;
     protected final HeaderAndFooterLayout layout;
-    private final SkinSelectionList skinSelectionList;
+    private final Screen parentScreen;
+    protected final SkinSelectionList skinSelectionList;
     protected final Button undoButton, resetButton, done;
-    protected final String key;
     protected final UndoManager undoManager;
     protected final ModConfigSpec.ConfigValue<String> skinValue;
     protected final ModConfigSpec.ValueSpec skinSpec;
 
     public SelectHUDSkinScreen(
-            @NonNull Context context,
+            @NonNull Screen parentScreen,
             Component title,
-            String key,
             ModConfigSpec.ValueSpec skinSpec,
-            ModConfigSpec.ConfigValue<String> skinValue
+            ModConfigSpec.ConfigValue<String> skinValue,
+            UndoManager undoManager
     ) {
         super(title);
-        this.context = context;
-        this.key = key;
-        this.undoManager = new UndoManager();
+        this.parentScreen = parentScreen;
+        this.undoManager = undoManager;
         this.skinSpec = skinSpec;
         this.skinValue = skinValue;
         this.layout = new HeaderAndFooterLayout(this);
+        this.skinSelectionList = new SkinSelectionList(
+                this.minecraft,
+                entry -> this.undoManager.add(
+                        this.skinValue::set,
+                        entry.getKey(),
+                        this.skinValue::set,
+                        this.skinValue.getRaw()
+                ),
+                this.skinValue.get(),
+                this.layout.getWidth(),
+                this.layout.getContentHeight(),
+                18
+        );
         this.undoButton = Button.builder(
-                        BuiltInConfig.UNDO,
-                        _ -> this.undoManager.undo()
-                ).tooltip(Tooltip.create(BuiltInConfig.UNDO_TOOLTIP))
+                        ConfigShared.UNDO,
+                        _ -> {
+                            this.undoManager.undo();
+                            this.skinSelectionList.setFocused(this.skinSelectionList.toEntry(this.skinValue.get()));
+                        }
+                ).tooltip(Tooltip.create(ConfigShared.UNDO_TOOLTIP))
                 .width(Button.SMALL_WIDTH)
                 .build();
         this.undoButton.active = false;
         this.resetButton = Button.builder(
-                        BuiltInConfig.RESET,
-                        _ -> this.undoManager.redo()
-                ).tooltip(Tooltip.create(BuiltInConfig.RESET_TOOLTIP))
+                        ConfigShared.RESET,
+                        _ -> {
+                            if (
+                                    ConfigShared.isNonDefault(this.skinValue)
+                            ) {
+                                this.undoManager.add(
+                                        this.skinValue::set,
+                                        this.skinValue.getDefault(),
+                                        this.skinValue::set,
+                                        this.skinValue.getRaw()
+                                );
+                                this.skinSelectionList.setFocused(this.skinSelectionList.toEntry(this.skinValue.get()));
+                            }
+                        }
+                ).tooltip(Tooltip.create(ConfigShared.RESET_TOOLTIP))
                 .width(Button.SMALL_WIDTH)
                 .build();
         this.resetButton.active = false;
@@ -57,19 +83,30 @@ public class SelectHUDSkinScreen extends Screen {
                 )
                 .width(Button.SMALL_WIDTH)
                 .build();
-        this.skinSelectionList = new SkinSelectionList(
-                this.minecraft,
-                this,
-                this.layout.getWidth(),
-                this.layout.getContentHeight(),
-                18
-        );
+    }
+
+    @Override
+    public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        this.setUndoButtonState(this.undoManager.canUndo());
+        this.setResetButtonState(ConfigShared.isNonDefault(this.skinValue));
+        super.extractRenderState(graphics, mouseX, mouseY, a);
+    }
+
+    protected void setUndoButtonState(boolean state) {
+        if (this.undoButton != null) {
+            this.undoButton.active = state;
+        }
+    }
+
+    protected void setResetButtonState(boolean state) {
+        if (this.resetButton != null) {
+            this.resetButton.active = state;
+        }
     }
 
     @Override
     public void onClose() {
-        if (this.context.parent() instanceof ConfigSectionScreen screen) {
-            this.skinValue.save();
+        if (this.parentScreen instanceof ConfigSectionScreen screen) {
             this.minecraft.gui.setScreen(screen.rebuild());
         } else {
             this.minecraft.gui.setScreen(null);
@@ -85,6 +122,7 @@ public class SelectHUDSkinScreen extends Screen {
         this.repositionElements();
     }
 
+    @Override
     protected void repositionElements() {
         this.layout.arrangeElements();
         this.skinSelectionList.updateSize(this.width, this.layout);

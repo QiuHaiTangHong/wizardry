@@ -198,14 +198,10 @@ public class ConfigSectionScreen extends OptionsSubScreen {
         }
     }
 
-    protected boolean isNonDefault(ModConfigSpec.@NonNull ConfigValue<?> cv) {
-        return !Objects.equals(cv.getRaw(), cv.getDefault());
-    }
-
     protected boolean isAnyNondefault() {
         for (final UnmodifiableConfig.Entry entry : this.context.entries()) {
             if (entry.getRawValue() instanceof final ModConfigSpec.ConfigValue<?> cv) {
-                if (!(getValueSpec(entry.getKey()) instanceof ModConfigSpec.ListValueSpec) && isNonDefault(cv)) {
+                if (!(getValueSpec(entry.getKey()) instanceof ModConfigSpec.ListValueSpec) && ConfigShared.isNonDefault(cv)) {
                     return true;
                 }
             }
@@ -230,14 +226,14 @@ public class ConfigSectionScreen extends OptionsSubScreen {
     }
 
     protected void createUndoButton() {
-        this.undoButton = Button.builder(BuiltInConfig.UNDO, _ -> {
+        this.undoButton = Button.builder(ConfigShared.UNDO, _ -> {
             this.undoManager.undo();
             rebuild();
-        }).tooltip(Tooltip.create(BuiltInConfig.UNDO_TOOLTIP)).width(Button.SMALL_WIDTH).build();
+        }).tooltip(Tooltip.create(ConfigShared.UNDO_TOOLTIP)).width(Button.SMALL_WIDTH).build();
         this.undoButton.active = false;
     }
 
-    protected void setUndoButtonstate(boolean state) {
+    protected void setUndoButtonState(boolean state) {
         if (this.undoButton != null) {
             this.undoButton.active = state;
         }
@@ -245,21 +241,23 @@ public class ConfigSectionScreen extends OptionsSubScreen {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected void createResetButton() {
-        this.resetButton = Button.builder(BuiltInConfig.RESET, _ -> {
+        this.resetButton = Button.builder(ConfigShared.RESET, _ -> {
             List<UndoManager.Step<?>> list = new ArrayList<>();
             for (final UnmodifiableConfig.Entry entry : context.entries()) {
+                final String key = entry.getKey();
+                ModConfigSpec.ValueSpec spec = this.getValueSpec(key);
                 if (entry.getRawValue() instanceof final ModConfigSpec.ConfigValue cv
-                        && !(this.getValueSpec(entry.getKey()) instanceof ModConfigSpec.ListValueSpec)
-                        && this.isNonDefault(cv)
+                        && !(spec instanceof ModConfigSpec.ListValueSpec)
+                        && spec != null
+                        && ConfigShared.isNonDefault(cv)
                 ) {
-                    final String key = entry.getKey();
                     list.add(
                             this.undoManager.step(
                                     v -> {
                                         cv.set(v);
                                         this.onChanged(key);
                                     },
-                                    this.getValueSpec(key).correct(null),
+                                    spec.correct(null),
                                     v -> {
                                         cv.set(v);
                                         this.onChanged(key);
@@ -271,12 +269,12 @@ public class ConfigSectionScreen extends OptionsSubScreen {
             }
             this.undoManager.add(list);
             this.rebuild();
-        }).tooltip(Tooltip.create(BuiltInConfig.RESET_TOOLTIP)).width(Button.SMALL_WIDTH).build();
+        }).tooltip(Tooltip.create(ConfigShared.RESET_TOOLTIP)).width(Button.SMALL_WIDTH).build();
     }
 
-    protected void setResetButtonstate(boolean state) {
-        if (resetButton != null) {
-            resetButton.active = state;
+    protected void setResetButtonState(boolean state) {
+        if (this.resetButton != null) {
+            this.resetButton.active = state;
         }
     }
 
@@ -302,8 +300,8 @@ public class ConfigSectionScreen extends OptionsSubScreen {
 
     @Override
     public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-        this.setUndoButtonstate(this.undoManager.canUndo()); // in render()? Really? --- Yes! This is how vanilla does it.
-        this.setResetButtonstate(this.isAnyNondefault());
+        this.setUndoButtonState(this.undoManager.canUndo()); // in render()? Really? --- Yes! This is how vanilla does it.
+        this.setResetButtonState(this.isAnyNondefault());
         super.extractRenderState(graphics, mouseX, mouseY, a);
     }
 
@@ -326,7 +324,7 @@ public class ConfigSectionScreen extends OptionsSubScreen {
     protected String getComment(final String key) {
         final ModConfigSpec.ValueSpec valueSpec = this.getValueSpec(key);
         return valueSpec != null
-                ? this.getValueSpec(key).getComment()
+                ? valueSpec.getComment()
                 : this.context.modSpec().getLevelComment(this.context.makeKeyList(key));
     }
 
@@ -342,20 +340,20 @@ public class ConfigSectionScreen extends OptionsSubScreen {
                 .append(getTranslationComponent(key)
                         .withStyle(ChatFormatting.BOLD));
         if (hasTranslatedTooltip || !Strings.isBlank(comment)) {
-            component.append(BuiltInConfig.EMPTY_LINE)
+            component.append(ConfigShared.EMPTY_LINE)
                     .append(Component.translatableWithFallback(tooltipKey, comment));
         }
         // The "tooltip.warning" key is to be considered an internal API. It will be removed once Neo has a
         // generic styling mechanism for translation texts. Use at your own risk.
         component.append(
-                translationChecker.optional(BuiltInConfig.EMPTY_LINE,
+                translationChecker.optional(ConfigShared.EMPTY_LINE,
                         tooltipKey + ".warning", ChatFormatting.RED, ChatFormatting.BOLD
                 )
         );
         if (hasTranslatedTooltip && range != null) {
-            component.append(BuiltInConfig.EMPTY_LINE)
-                    .append(Component.translatable(BuiltInConfig.RANGE_TOOLTIP, range.toString())
-                            .withStyle(BuiltInConfig.RANGE_TOOLTIP_STYLE));
+            component.append(ConfigShared.EMPTY_LINE)
+                    .append(Component.translatable(ConfigShared.RANGE_TOOLTIP, range.toString())
+                            .withStyle(ConfigShared.RANGE_TOOLTIP_STYLE));
         }
         return component;
     }
@@ -390,13 +388,10 @@ public class ConfigSectionScreen extends OptionsSubScreen {
                             ),
                             _ -> this.minecraft.gui.setScreen(
                                     new SelectHUDSkinScreen(
-                                            Context.value(
-                                                    this.context,
-                                                    this
-                                            ),
+                                            this,
                                             keyTranslation,
-                                            key,
-                                            valueSpec, (ModConfigSpec.ConfigValue<String>) configValue
+                                            valueSpec, (ModConfigSpec.ConfigValue<String>) configValue,
+                                            this.undoManager
                                     )
                             )
                     ).tooltip(Tooltip.create(tooltip)).build()
@@ -419,7 +414,7 @@ public class ConfigSectionScreen extends OptionsSubScreen {
                     Component.literal(source.get().substring(0, 128)),
                     this.font
             );
-            label.setTooltip(Tooltip.create(BuiltInConfig.LONG_STRING));
+            label.setTooltip(Tooltip.create(ConfigShared.LONG_STRING));
             return new Element(getTranslationComponent(key), getTooltipComponent(key, null), label, false);
         }
         final EditBox box = new EditBox(
@@ -478,7 +473,7 @@ public class ConfigSectionScreen extends OptionsSubScreen {
                 Component.literal(Objects.toString(value.getRaw())),
                 this.font
         );
-        label.setTooltip(Tooltip.create(BuiltInConfig.UNSUPPORTED_ELEMENT));
+        label.setTooltip(Tooltip.create(ConfigShared.UNSUPPORTED_ELEMENT));
         return new Element(getTranslationComponent(key), getTooltipComponent(key, null), label, false);
     }
 
@@ -716,15 +711,15 @@ public class ConfigSectionScreen extends OptionsSubScreen {
             return null;
         }
         return new Element(
-                Component.translatable(BuiltInConfig.SECTION, getTranslationComponent(key)),
+                Component.translatable(ConfigShared.SECTION, getTranslationComponent(key)),
                 this.getTooltipComponent(key, null),
                 Button.builder(
                                 Component.translatable(
-                                        BuiltInConfig.SECTION,
+                                        ConfigShared.SECTION,
                                         Component.translatable(
                                                 translationChecker.check(
                                                         this.getTranslationKey(key) + ".button",
-                                                        BuiltInConfig.SECTION_TEXT
+                                                        ConfigShared.SECTION_TEXT
                                                 )
                                         )
                                 ),
@@ -754,17 +749,17 @@ public class ConfigSectionScreen extends OptionsSubScreen {
     ) {
         return new Element(
                 Component.translatable(
-                        BuiltInConfig.SECTION,
+                        ConfigShared.SECTION,
                         getTranslationComponent(key)
                 ),
                 this.getTooltipComponent(key, null),
                 Button.builder(
                         Component.translatable(
-                                BuiltInConfig.SECTION,
+                                ConfigShared.SECTION,
                                 Component.translatable(
                                         translationChecker.check(
                                                 getTranslationKey(key) + ".button",
-                                                BuiltInConfig.SECTION_TEXT
+                                                ConfigShared.SECTION_TEXT
                                         )
                                 )
                         ),
@@ -774,9 +769,9 @@ public class ConfigSectionScreen extends OptionsSubScreen {
                                         _ -> new ConfigListScreen<>(
                                                 Context.list(context, this), key,
                                                 Component.translatable(
-                                                        BuiltInConfig.CRUMB,
+                                                        ConfigShared.CRUMB,
                                                         this.getTitle(),
-                                                        BuiltInConfig.CRUMB_SEPARATOR,
+                                                        ConfigShared.CRUMB_SEPARATOR,
                                                         this.getTranslationComponent(key)
                                                 ),
                                                 spec, list

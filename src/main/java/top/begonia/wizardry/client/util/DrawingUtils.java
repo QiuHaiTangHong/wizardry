@@ -12,7 +12,9 @@ import org.jspecify.annotations.NonNull;
 
 public final class DrawingUtils {
     public static void drawScaledStringToWidth(
-            GuiGraphicsExtractor guiGraphics, @NonNull Font font, Component text,
+            GuiGraphicsExtractor guiGraphics,
+            @NonNull Font font,
+            Component text,
             float x, float y, float scale, int colour,
             float width, boolean centre, boolean alignR
     ) {

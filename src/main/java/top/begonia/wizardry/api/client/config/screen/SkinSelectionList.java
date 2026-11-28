@@ -6,10 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.AbstractContainerWidget;
-import net.minecraft.client.gui.components.AbstractScrollArea;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
@@ -26,12 +23,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.neoforged.neoforge.common.ModConfigSpec;
 import org.joml.Matrix3x2fStack;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.client.config.utils.BuiltInConfig;
-import top.begonia.wizardry.api.client.data.BuiltInData;
+import top.begonia.wizardry.api.client.config.utils.ConfigShared;
+import top.begonia.wizardry.api.client.constants.BuiltInData;
 import top.begonia.wizardry.client.data.definition.hub.SkinsData;
 import top.begonia.wizardry.core.registry.WizardrySpells;
 
@@ -46,17 +42,18 @@ public class SkinSelectionList extends AbstractContainerWidget {
     private static final Identifier MENU_LIST_BACKGROUND = Identifier.withDefaultNamespace("textures/gui/menu_list_background.png");
     private static final Identifier INWORLD_MENU_LIST_BACKGROUND = Identifier.withDefaultNamespace("textures/gui/inworld_menu_list_background.png");
     private static final int SEPARATOR_HEIGHT = 2;
-    private static final int SEPARATOR_WIDTH = 2;
+    private static final int SEPARATOR_WIDTH = 4;
     protected final Minecraft minecraft;
     protected final int defaultEntryHeight;
     private final List<Entry> children = new ArrayList<>();
     private @Nullable Entry selected;
     private @Nullable Entry hovered;
-    protected final SelectHUDSkinScreen containerScreen;
+    private final Consumer<Entry> onChange;
 
     public SkinSelectionList(
             Minecraft minecraft,
-            SelectHUDSkinScreen containerScreen,
+            Consumer<Entry> onChange,
+            String currentKey,
             int width, int height, int defaultEntryHeight
     ) {
         super(
@@ -66,32 +63,27 @@ public class SkinSelectionList extends AbstractContainerWidget {
                 AbstractScrollArea.defaultSettings(defaultEntryHeight / 2)
         );
         this.minecraft = minecraft;
+        this.onChange = onChange;
         this.defaultEntryHeight = defaultEntryHeight;
-        this.containerScreen = containerScreen;
-        ModConfigSpec.ConfigValue<String> value = this.containerScreen.skinValue;
         for (Map.Entry<String, SkinsData.Skin> stringSkinEntry : BuiltInData.getSkins().skins().entrySet()) {
             Entry entry = new Entry(this.minecraft.font, List.of(), stringSkinEntry);
             this.addEntry(entry);
-            if (entry.getKey().equals(value.get())) {
+            if (stringSkinEntry.getKey().equals(currentKey)) {
                 this.setFocused(entry);
             }
         }
     }
 
-    //region 组件相关方法
-    public void onChange() {
-        String currentValue = this.selected != null ? this.selected.skinEntry.getKey() : null;
-        ModConfigSpec.ConfigValue<String> skinValue = this.containerScreen.skinValue;
-        if (currentValue != null) {
-            this.containerScreen.undoManager.add(
-                    skinValue::set,
-                    currentValue,
-                    skinValue::set,
-                    skinValue.getDefault()
-            );
+    public Entry toEntry(String key) {
+        for (Entry child : this.children) {
+            if (child.skinEntry.getKey().equals(key)) {
+                return child;
+            }
         }
+        return null;
     }
 
+    //region 组件相关方法
     @Override
     public boolean mouseClicked(@NonNull MouseButtonEvent event, boolean doubleClick) {
         boolean scrolling = this.updateScrolling(event);
@@ -103,15 +95,33 @@ public class SkinSelectionList extends AbstractContainerWidget {
             return false;
         } else {
             GuiEventListener widget = child.get();
-            if (widget.mouseClicked(event, doubleClick) && widget.shouldTakeFocusAfterInteraction()) {
+            if (widget.mouseClicked(event, doubleClick)
+                    && widget.shouldTakeFocusAfterInteraction()
+                    && !(widget instanceof Button) // 对于这个组件来说必须阻止SelectHUDSkinScreen的按钮获得焦点
+            ) {
                 this.setFocused(widget);
-                this.onChange();
+                if (widget instanceof Entry entry) {
+                    this.onChange.accept(entry);
+                }
                 if (event.button() == 1) {
                     this.setDragging(true);
                 }
             }
-
             return true;
+        }
+    }
+
+    public void setSelected(Entry selected) {
+        int index = this.children.indexOf(selected);
+        if (index >= 0) {
+            this.selected = selected;
+            boolean topClipped = selected.getContentY() < this.getY();
+            boolean bottomClipped = selected.getContentBottom() > this.getBottom();
+            if (this.minecraft.getLastInputType().isKeyboard() || topClipped || bottomClipped) {
+                this.scrollToEntry(selected);
+            }
+        } else {
+            this.selected = null;
         }
     }
 
@@ -121,17 +131,8 @@ public class SkinSelectionList extends AbstractContainerWidget {
         if (oldFocus != focused && oldFocus instanceof ContainerEventHandler oldFocusContainer) {
             oldFocusContainer.setFocused(null);
         }
-        this.selected = null;
         if (focused instanceof Entry entry) {
-            int index = this.children.indexOf(entry);
-            if (index >= 0) {
-                this.selected = entry;
-                boolean topClipped = selected.getContentY() < this.getY();
-                boolean bottomClipped = selected.getContentBottom() > this.getBottom();
-                if (this.minecraft.getLastInputType().isKeyboard() || topClipped || bottomClipped) {
-                    this.scrollToEntry(selected);
-                }
-            }
+            this.setSelected(entry);
         }
         super.setFocused(focused);
     }
@@ -197,6 +198,7 @@ public class SkinSelectionList extends AbstractContainerWidget {
         this.setScrollAmount(this.scrollAmount() + (double) amount);
     }
 
+    @Override
     public void setScrollAmount(double scrollAmount) {
         super.setScrollAmount(scrollAmount);
         this.repositionEntries();
@@ -312,7 +314,7 @@ public class SkinSelectionList extends AbstractContainerWidget {
 
     @Override
     protected int scrollBarX() {
-        return this.getListRight() + this.scrollbarWidth() + SEPARATOR_WIDTH;
+        return this.getListRight() + SEPARATOR_WIDTH;
     }
 
     protected int scrollBarRight() {
@@ -320,19 +322,11 @@ public class SkinSelectionList extends AbstractContainerWidget {
     }
 
     protected int getImageContentWidth() {
-        return this.width - this.scrollBarRight() - 2 * SEPARATOR_WIDTH;
+        return this.getRowWidth() - this.getListWidth() - this.scrollbarWidth() - 2 * SEPARATOR_WIDTH;
     }
 
     protected int getImageContentHeight() {
         return this.height - 2 * SEPARATOR_HEIGHT;
-    }
-
-    protected int getImageContentXMiddle() {
-        return this.scrollBarRight() + SEPARATOR_WIDTH + this.getImageContentWidth() / 2;
-    }
-
-    protected int getImageContentYMiddle() {
-        return this.getY() + SEPARATOR_HEIGHT + this.getImageContentHeight() / 2;
     }
 
     public void updateSize(
@@ -451,14 +445,13 @@ public class SkinSelectionList extends AbstractContainerWidget {
     protected void extractSelectedImage(GuiGraphicsExtractor graphics) {
         if (this.selected != null) {
             SkinsData.Skin skin = this.selected.skinEntry.getValue();
-            int previewBorder = 10;
             int previewLeft = this.scrollBarRight() + SEPARATOR_WIDTH;
-            int previewRight = previewLeft + this.getImageContentWidth() - previewBorder;
-            int previewTop = this.getY() + previewBorder;
-            int previewBottom = previewTop + this.getImageContentHeight() - previewBorder;
+            int previewRight = previewLeft + this.getImageContentWidth();
+            int previewTop = this.getY();
+            int previewBottom = previewTop + this.getImageContentHeight();
 
-            float scale = Math.min((previewRight - previewLeft - 2 * previewBorder) / (float) skin.width(),
-                    (previewBottom - previewTop - 2 * previewBorder) / (float) skin.height());
+            float scale = Math.min((previewRight - previewLeft - 2 * SEPARATOR_WIDTH) / (float) skin.width(),
+                    (previewBottom - previewTop - 2 * SEPARATOR_WIDTH) / (float) skin.height());
             float x = (previewLeft + previewRight) / 2f - (skin.width() * scale) / 2;
             float y = (previewBottom + previewTop) / 2f + (skin.height() * scale) / 2;
             Matrix3x2fStack pose = graphics.pose();
@@ -529,10 +522,10 @@ public class SkinSelectionList extends AbstractContainerWidget {
         ) {
             this.font = font;
             this.skinEntry = skinEntry;
-            this.name = Component.literal(BuiltInConfig.toTitleWords(skinEntry.getValue().name()));
+            this.name = Component.literal(ConfigShared.toTitleWords(skinEntry.getValue().name()));
             MutableComponent tooltip = this.name.copy().withStyle(ChatFormatting.GREEN);
             MutableComponent description = Component.literal(skinEntry.getValue().description()).withStyle(ChatFormatting.YELLOW);
-            tooltip.append(BuiltInConfig.EMPTY_LINE).append(description);
+            tooltip.append(ConfigShared.EMPTY_LINE).append(description);
             this.tooltip = Tooltip.create(tooltip);
         }
 

@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import top.begonia.wizardry.api.client.config.utils.BuiltInConfig;
+import top.begonia.wizardry.api.client.config.utils.ConfigShared;
 import top.begonia.wizardry.api.client.config.utils.Context;
 import top.begonia.wizardry.api.client.config.utils.Element;
 
@@ -60,7 +60,7 @@ public class ConfigListScreen<T> extends ConfigSectionScreen {
                 if (element != null) {
                     final AbstractWidget widget = element.getWidget(options);
                     if (widget instanceof EditBox box) {
-                        // Force our responder to check content and set text colour.
+                        // Force our responder to check content and set text color.
                         // This is only needed on lists, as section cannot have new UI elements added with bad data.
                         // Here, this can happen when a new element is added to the list.
                         // As the new value is the old value, no undo record will be created.
@@ -99,7 +99,7 @@ public class ConfigListScreen<T> extends ConfigSectionScreen {
                                 font
                         ),
                         Button.builder(
-                                BuiltInConfig.NEW_LIST_ELEMENT,
+                                ConfigShared.NEW_LIST_ELEMENT,
                                 _ -> {
                                     List<T> newValue = new ArrayList<>(cfgList);
                                     newValue.add((T) newElement.get());
@@ -120,13 +120,13 @@ public class ConfigListScreen<T> extends ConfigSectionScreen {
 
 
     protected AbstractWidget createListLabel(int idx) {
-        return new ListLabelWidget(0, 0, Button.DEFAULT_WIDTH, Button.DEFAULT_HEIGHT, Component.translatable(BuiltInConfig.LIST_ELEMENT, idx), idx);
+        return new ListLabelWidget(0, 0, Button.DEFAULT_WIDTH, Button.DEFAULT_HEIGHT, Component.translatable(ConfigShared.LIST_ELEMENT, idx), idx);
     }
 
     @Nullable
     protected Element createOtherValue(final int idx, final T entry) {
         final StringWidget label = new StringWidget(Button.DEFAULT_WIDTH, Button.DEFAULT_HEIGHT, Component.literal(Objects.toString(entry)), font);
-        label.setTooltip(Tooltip.create(BuiltInConfig.UNSUPPORTED_ELEMENT));
+        label.setTooltip(Tooltip.create(ConfigShared.UNSUPPORTED_ELEMENT));
         return new Element(getTranslationComponent(key), getTooltipComponent(key, null), label, false);
     }
 
@@ -214,24 +214,30 @@ public class ConfigListScreen<T> extends ConfigSectionScreen {
     @SuppressWarnings("unchecked")
     @Override
     protected void createResetButton() {
-        resetButton = Button.builder(BuiltInConfig.RESET, button -> {
-            undoManager.add(
-                    v -> {
-                        cfgList = v;
-                        onChanged(key);
-                    }, new ArrayList<>((List<T>) getValueSpec(key).correct(null)),
-                    v -> {
-                        cfgList = v;
-                        onChanged(key);
-                    }, cfgList);
+        resetButton = Button.builder(ConfigShared.RESET, _ -> {
+            ModConfigSpec.ValueSpec valueSpec = getValueSpec(key);
+            if (valueSpec != null) {
+                undoManager.add(
+                        v -> {
+                            cfgList = v;
+                            onChanged(key);
+                        },
+                        new ArrayList<>((List<T>) valueSpec.correct(null)),
+                        v -> {
+                            cfgList = v;
+                            onChanged(key);
+                        },
+                        cfgList
+                );
+            }
             rebuild();
-        }).tooltip(Tooltip.create(BuiltInConfig.RESET_TOOLTIP)).width(Button.SMALL_WIDTH).build();
+        }).tooltip(Tooltip.create(ConfigShared.RESET_TOOLTIP)).width(Button.SMALL_WIDTH).build();
     }
 
     public class ListLabelWidget extends AbstractContainerWidget {
-        protected final Button upButton = Button.builder(BuiltInConfig.MOVE_LIST_ELEMENT_UP, this::up).build();
-        protected final Button downButton = Button.builder(BuiltInConfig.MOVE_LIST_ELEMENT_DOWN, this::down).build();
-        protected final Button delButton = Button.builder(BuiltInConfig.REMOVE_LIST_ELEMENT, this::rem).build();
+        protected final Button upButton = Button.builder(ConfigShared.MOVE_LIST_ELEMENT_UP, this::up).build();
+        protected final Button downButton = Button.builder(ConfigShared.MOVE_LIST_ELEMENT_DOWN, this::down).build();
+        protected final Button delButton = Button.builder(ConfigShared.REMOVE_LIST_ELEMENT, this::rem).build();
         protected final StringWidget label = new StringWidget(0, 0, 0, 0, Component.empty(), font);
         protected final int idx;
         protected final boolean isFirst;
@@ -312,7 +318,7 @@ public class ConfigListScreen<T> extends ConfigSectionScreen {
         }
 
         @Override
-        public List<? extends GuiEventListener> children() {
+        public @NonNull List<? extends GuiEventListener> children() {
             return List.of(upButton, label, downButton, delButton);
         }
 

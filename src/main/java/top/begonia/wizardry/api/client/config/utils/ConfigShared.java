@@ -3,11 +3,14 @@ package top.begonia.wizardry.api.client.config.utils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
-public final class BuiltInConfig {
+public final class ConfigShared {
     /**
      * Prefix for static keys the configuration screens use internally.
      */
@@ -77,11 +80,9 @@ public final class BuiltInConfig {
         if (input == null || input.isEmpty()) {
             return input;
         }
-
         String separated = WORD_BOUNDARY.matcher(input)
                 .replaceAll(" ")
                 .replace("_", "   ");
-
         String[] words = separated.split("\\s+");
         StringBuilder result = new StringBuilder();
 
@@ -89,15 +90,17 @@ public final class BuiltInConfig {
             if (word.isEmpty()) {
                 continue;
             }
-
             if (!result.isEmpty()) {
                 result.append(input.contains("_") ? "   " : " ");
             }
-
             result.append(word.substring(0, 1).toUpperCase(Locale.ROOT));
             result.append(word.substring(1).toLowerCase(Locale.ROOT));
         }
 
         return result.toString();
+    }
+
+    public static boolean isNonDefault(ModConfigSpec.@NonNull ConfigValue<?> cv) {
+        return !Objects.equals(cv.getRaw(), cv.getDefault());
     }
 }
